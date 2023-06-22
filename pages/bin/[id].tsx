@@ -263,7 +263,7 @@ function switchTheme(e) {
 
       <Script onLoad={() => detectColorScheme()} id="dark-mode">
           {`console.log("Loaded")`}
-        />
+        </Script>
     </div>
   );
 }
