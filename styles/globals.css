@@ -50,7 +50,7 @@ body {
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-h1, h2, h3, h4, button, a, {
+h1, h2, h3, h4, button, a {
   font-family: "DM Sans";
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -536,11 +536,9 @@ dialog::backdrop {
   grid-template-rows: 1fr 1fr 1fr; 
   gap: 18px; 
   grid-template-areas: 
-  "
-  .
-  .
-  .
-  "; 
+    "."
+    "."
+    "."; 
 }
 
 .optionGrid div {
@@ -662,14 +660,14 @@ input:checked + .slider:before {
   padding: 0px 2px 0px 0px !important;
 }
 
-.tooltip {
+div.tooltip {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
+span.tooltiptext {
   visibility: hidden;
   width: auto;
   background-color: var(--background-dark);
@@ -779,9 +777,10 @@ input:checked + .slider:before {
    display: none;
   }
 
-.bin-copy {
+.file-holder.bin-copy {
   justify-content: space-between;
 }
+
 .copypasta {
   display: flex;
   align-items: center;

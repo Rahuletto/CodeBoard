@@ -1,13 +1,11 @@
 // NextJS Stuff
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useEffect } from 'react';
-import Head from 'next/head';
-import Script from 'next/script';
+import React, { useRef, useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from '../styles/Home.module.css';
 
 // Load Languages
-import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
 import { FaPlus, FaCaretDown, FaBackward } from 'react-icons-ng/fa';
@@ -17,8 +15,11 @@ import { LuTimer, LuTimerOff } from 'react-icons-ng/lu';
 import { SiPrettier } from 'react-icons-ng/si';
 
 // Our Imports
-import { ext } from './_app';
+import { extensions } from '../utils/extensions';
 import CodeBoard from '../components/Code';
+import { BoardFile } from '../utils/board';
+import ThemeSwitch from '../components/ThemeSwitch';
+import Header from '../components/Header';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const Home: NextPage = () => {
   const [code, setCode] = useState('');
 
   // mode
-  const [theme, setTheme] = useState('');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   // Inputs
   const [title, setTitle] = useState('Untitled');
@@ -51,18 +52,18 @@ const Home: NextPage = () => {
   let file = files.find((a) => a.name == fileName);
   if (!file) file = files[0];
 
-  const [language, setLanguage] = useState(
+  const [language, setLanguage] = useState( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     loadLanguage(file.language == 'none' ? 'markdown' : file.language)
   );
 
   useEffect(() => {
-    setLanguage(
+    setLanguage( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
       loadLanguage(file.language == 'none' ? 'markdown' : file.language)
     );
   }, [file.language]);
 
   const onChange = React.useCallback(
-    (value, viewUpdate) => {
+    (value: string, viewUpdate: any) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       if (file.language == 'none') setFileName(fileName.split('.')[0] + '.md');
 
@@ -70,12 +71,13 @@ const Home: NextPage = () => {
 
       changed.value = value;
       setCode(value);
+      return;
     },
     [fileName]
   );
 
   useEffect(() => {
-    function deleteFile(name) {
+    function deleteFile(name: string) {
       const ff = files.filter(function (item) {
         return item.name !== name;
       });
@@ -85,22 +87,22 @@ const Home: NextPage = () => {
       setFiles(ff);
     }
 
-    const fileButtons = [];
+    const fileButtons: JSX.Element[] = [];
 
     const tmpFiles = [...files];
 
-    tmpFiles.map((obj) => {
-      if (obj.language == 'none') {
-        obj.name = obj.name.split('.').join('-') + '.md';
+    tmpFiles.map((file) => {
+      if (file.language == 'none') {
+        file.name = file.name.split('.').join('-') + '.md';
       }
 
-      const cls = `edit-${obj.name.split('.').join('-')} edit`;
+      const cls = `edit-${file.name.split('.').join('-')} edit`;
 
       fileButtons.push(
-        <div key={obj.name}>
+        <div key={file.name}>
           <div className="fileSelect">
-            <button onClick={() => setFileName(obj.name)}>{obj.name}</button>
-            <button onClick={() => showEdit(obj)}>
+            <button onClick={() => setFileName(file.name)}>{file.name}</button>
+            <button onClick={() => showEdit(file)}>
               <FaCaretDown />
             </button>
           </div>
@@ -108,25 +110,25 @@ const Home: NextPage = () => {
           <div className={cls}>
             {' '}
             {/** eslint-disable-next-line react-hooks/exhaustive-deps */}
-            <form className="editForm" onSubmit={(event) => edit(event, obj)}>
+            <form className="editForm" onSubmit={(event) => edit(event, file)}>
               <input
                 pattern="^[^~)('!*<>:;,?*|/]+$"
                 onChange={(event) => updateEditLanguage(event)}
                 className="file-name"
                 name="filename"
                 type="text"
-                placeholder={obj.name}
+                placeholder={file.name}
                 autoComplete="off"
               ></input>
               <p>
                 <span className="language-show-edit">
-                  {obj.language.charAt(0).toUpperCase() + obj.language.slice(1)}
+                  {file.language.charAt(0).toUpperCase() + file.language.slice(1)}
                 </span>
               </p>
 
               <button
                 disabled={files.length <= 1}
-                onClick={() => setTimeout(() => deleteFile(obj.name), 400)}
+                onClick={() => setTimeout(() => deleteFile(file.name), 400)}
               >
                 Delete
               </button>
@@ -141,67 +143,68 @@ const Home: NextPage = () => {
 
   function closeEdit() {
     const div = document.querySelectorAll(`div.edit`);
-    const back = document.querySelector(`.backdrop`);
+    const back = document.querySelector<HTMLElement>(`.backdrop`);
 
     div.forEach((cls) => {
-      cls.style['display'] = 'none';
+      (cls as HTMLElement).style['display'] = 'none';
     });
     back.style['display'] = 'none';
   }
 
-  function showEdit(obj) {
-    const div = document.querySelector(
-      `div.edit-${obj.name.split('.').join('-')}`
+  function showEdit(file: BoardFile) {
+    const div = document.querySelector<HTMLElement>(
+      `div.edit-${file.name.split('.').join('-')}`
     );
-    const back = document.querySelector(`.backdrop`);
+    const back = document.querySelector<HTMLElement>(`.backdrop`);
     div.style['display'] = 'flex';
     back.style['display'] = 'block';
   }
 
-  function edit(event, obj) {
+  function edit(event: FormEvent<HTMLFormElement>, file: BoardFile) {
     event.preventDefault();
     closeEdit();
-
+    // @ts-ignore
     const name = event.target[0].value;
 
-    const box = document.querySelector(
-      `.edit-${obj.name.split('.').join('-')} form .language-show-edit`
+    const box = document.querySelector<HTMLElement>(
+      `.edit-${file.name.split('.').join('-')} form .language-show-edit`
     );
 
     if (!name) return;
     if (files.find((a) => a.name === name))
       return alert('Name already taken !');
     else {
-      if (file.name == obj.name) {
+      if (file.name == file.name) {
         file.name = name;
         file.language = (box.innerText || box.textContent).toLowerCase();
       } else {
-        obj.name = name;
-        obj.language = (box.innerText || box.textContent).toLowerCase();
+        file.name = name;
+        file.language = (box.innerText || box.textContent).toLowerCase();
       }
 
       setFileName(name);
     }
   }
 
-  function updateEditLanguage(e) {
+  function updateEditLanguage(e: ChangeEvent<HTMLInputElement>) {
     const n = e.target.value;
     const box = document.querySelector('.language-show-edit');
 
     const l =
-      ext.find((x) => x.key.includes('.' + n.replace('.', '^').split('^')[1]))
+      extensions.find((x) => x.key.includes('.' + n.replace('.', '^').split('^')[1]))
         ?.name || 'none';
 
     box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
   }
 
-  function newFile(event) {
+  function newFile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const dialog = document.querySelector('dialog#newFile');
-    const box = document.querySelector('.language-show');
+    const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
+    const box = document.querySelector<HTMLElement>('.language-show');
 
-    if (event.target[0].value == '') return dialog.close(name);
-
+    // @ts-ignore
+    if (event.target[0].value == '') return dialog.close();
+    // @ts-ignore
     const name = event.target[0].value;
 
     dialog.close(name);
@@ -222,60 +225,23 @@ const Home: NextPage = () => {
   }
 
   function showDialog() {
-    const dialog = document.querySelector('dialog#newFile');
+    const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
 
     dialog.showModal();
   }
 
-  function updateLanguage(e) {
+  function updateLanguage(e: ChangeEvent<HTMLInputElement>) {
     const n = e.target.value;
     const box = document.querySelector('.language-show');
 
-    const l = ext.find((x) => x.name === '.' + n.split('.')[1])?.key || 'none';
+    const l = extensions.find((x) => x.key.includes('.' + n.replace('.', '^').split('^')[1]))
+      ?.name || 'none';
 
     box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
   }
 
-  // DARK MODE & LIGHT MODE
-
-  function detectColorScheme() {
-    //local storage is used to override OS theme settings
-    if (localStorage.getItem('theme')) {
-      if (localStorage.getItem('theme') == 'light') {
-        setTheme('light');
-      }
-    } else if (!window.matchMedia) {
-      //matchMedia method not supported
-      return false;
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      //OS theme setting detected as dark
-      setTheme('light');
-    }
-
-    //dark theme preferred, set document with a `data-theme` attribute
-    if (theme == 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme == 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-  function switchTheme(e) {
-    const toggleSwitch = e.target;
-    if (e.target.checked) {
-      localStorage.setItem('theme', 'dark');
-      document.documentElement.setAttribute('data-theme', 'dark');
-      toggleSwitch.checked = true;
-      setTheme('dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-      document.documentElement.setAttribute('data-theme', 'light');
-      toggleSwitch.checked = false;
-      setTheme('light');
-    }
-  }
-
   // HANDLE SUMBIT ----------------------------------------------------
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
@@ -302,6 +268,7 @@ const Home: NextPage = () => {
       // Tell the server we're sending JSON.
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': process.env['KEY']
       },
       // Body of the request is the JSON data we created above.
       body: JSONdata,
@@ -318,31 +285,32 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>CodeBoard</title>
-        <meta name="description" content="CodeBoard" />
-        <link rel="icon" href="/sus.png" />
-        <link
-          href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
-        />
-      </Head>
+      <Header />
 
       <main className={styles.main}>
         <div
           onClick={() => {
             closeEdit();
-            const form = document.querySelector(`.editForm`);
+            const form = document.querySelector<HTMLFormElement>(`.editForm`);
             form.requestSubmit();
           }}
           className="backdrop"
         ></div>
 
-        <dialog id="newFile" close="true">
+        <header>
+          <h1 className="title">CodeBoard</h1>
+          <div className="buttons">
+            <a href="/" className="newProject mobile">
+              <FaPlus />
+            </a>
+            <a href="/" className="newProject pc">
+              <FaPlus style={{ marginRight: '10px' }} /> New board
+            </a>
+            <ThemeSwitch theme={theme} setTheme={setTheme} />
+          </div>
+        </header>
+
+        <dialog id="newFile" open={false}>
           <div>
             <button
               style={{
@@ -351,7 +319,7 @@ const Home: NextPage = () => {
                 justifyContent: 'center',
               }}
               onClick={() => {
-                document.querySelector('#newFile').close();
+                document.querySelector<HTMLDialogElement>('#newFile').close();
               }}
               className="back"
             >
@@ -379,30 +347,14 @@ const Home: NextPage = () => {
           </form>
         </dialog>
 
-        <header>
-          <h1 className="title">CodeBoard</h1>
-          <div className="buttons">
-            <a href="/" className="newProject mobile">
-              <FaPlus />
-            </a>
-            <a href="/" className="newProject pc">
-              <FaPlus style={{ marginRight: '10px' }} /> New board
-            </a>
-            <label id="themeSwitch">
-              <input
-                onChange={(event) => switchTheme(event)}
-                type="checkbox"
-              ></input>
-            </label>
-          </div>
-        </header>
+
 
         <div className="grid">
           <button
             className="info mobile"
             onClick={(event) => {
               document.querySelector('.projectForm').classList.toggle('show');
-              event.target.classList.toggle('opened');
+              (event.target as HTMLButtonElement).classList.toggle('opened');
             }}
           >
             <GoGear /> <span>Metadata</span>
@@ -472,7 +424,7 @@ const Home: NextPage = () => {
                 className="save"
                 disabled={code == ''}
                 onClick={() => {
-                  const form = document.querySelector(`.details form`);
+                  const form = document.querySelector<HTMLFormElement>(`.details form`);
                   form.requestSubmit();
                 }}
               >
@@ -541,21 +493,21 @@ const Home: NextPage = () => {
                   onClick={(event) => {
                     const colors = ['#f8bc45', '#c596c7', '#56b3b4'];
 
-                    event.target.style.color =
+                    (event.target as HTMLElement).style.color =
                       colors[Math.floor(Math.random() * colors.length)];
-                    event.target.disabled = true;
+                    (event.target as HTMLButtonElement).disabled = true;
                     formatCode(code)
                       .then((formatted) => {
                         file.value = formatted;
                         setCode(formatted);
                       })
                       .catch(() => {
-                        event.target.style.color = '#ea5e5e';
+                        (event.target as HTMLElement).style.color = '#ea5e5e';
                       });
 
                     setInterval(() => {
-                      event.target.style.color = 'var(--special-color)';
-                      event.target.disabled = false;
+                      (event.target as HTMLElement).style.color = 'var(--special-color)';
+                      (event.target as HTMLButtonElement).disabled = false;
                     }, 5000);
                   }}
                 >
@@ -574,9 +526,6 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      <Script onLoad={() => detectColorScheme()} id="dark-mode">
-        {`console.log("Loaded")`}
-      </Script>
     </div>
   );
 };

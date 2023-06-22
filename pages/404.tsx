@@ -1,82 +1,34 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useEffect } from 'react';
-import Head from 'next/head';
-import Script from 'next/script'
-import Link from 'next/link'
+import React, { useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
+import ThemeSwitch from '../components/ThemeSwitch';
+import Header from '../components/Header';
 
 const Error: NextPage = () => {
-  const router = useRouter();
 
   // DARK MODE & LIGHT MODE
-  const [theme, setTheme] = useState('dark');
-
-  function detectColorScheme() {
-    //local storage is used to override OS theme settings
-    if (localStorage.getItem('theme')) {
-      if (localStorage.getItem('theme') == 'light') {
-        setTheme('light');
-      }
-    } else if (!window.matchMedia) {
-      //matchMedia method not supported
-      return false;
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      //OS theme setting detected as dark
-      setTheme('light');
-    }
-
-    //dark theme preferred, set document with a `data-theme` attribute
-    if (theme == 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme == 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-  // Theme switcher
-  function switchTheme(e) {
-    const toggleSwitch = e.target;
-    if (e.target.checked) {
-      localStorage.setItem('theme', 'dark');
-      document.documentElement.setAttribute('data-theme', 'dark');
-      toggleSwitch.checked = true;
-      setTheme('dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-      document.documentElement.setAttribute('data-theme', 'light');
-      toggleSwitch.checked = false;
-      setTheme('light');
-    }
-  }
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Uhhh ?</title>
-        <meta name="description" content="CodeBoard" />
-        <link rel="icon" href="/sus.png" />
-      </Head>
+      <Header title="Uhhm ??" description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)." />
 
       <main className={styles.main}>
         <header>
           <h1 className="title">CodeBoard</h1>
           <div className="buttons">
-            <Link href="/" className="newProject mobile">
+            <a href="/" className="newProject mobile">
               <FaPlus />
-            </Link>
-            <Link href="/" className="newProject pc">
+            </a>
+            <a href="/" className="newProject pc">
               <FaPlus style={{ marginRight: '10px' }} /> New board
-            </Link>
-            <label id="themeSwitch">
-              <input
-                onChange={(event) => switchTheme(event)}
-                type="checkbox"
-              ></input>
-            </label>
+            </a>
+            <ThemeSwitch theme={theme} setTheme={setTheme} />
           </div>
         </header>
 
@@ -90,30 +42,26 @@ const Error: NextPage = () => {
                 Boards that delete after a day.
               </span>
             </div>
-            .<br></br>Anyways, Wanna sip some coffee ?<br></br>
-            <br></br>Do you need cookies for the coffee ? but sadly i dont have
-            one {'>'}:({' '}
-            <italic
+            .<br></br>Anyways, Wanna sip some coffee and have cookies ?<br></br>
+            <br></br>but sadly i dont have
+            cookies {'>'}:{"("}
+            <span
               style={{ fontStyle: 'italic', opacity: 0.6, marginLeft: '10px' }}
             >
               blame my developer
-            </italic>
+            </span>
           </p>
           <hr></hr>
 
-          <Link
+          <a
             style={{ width: 'fit-content', marginTop: '12px' }}
             href="/"
             className="newProject"
           >
             <FaPlus style={{ marginRight: '10px' }} /> New board
-          </Link>
+          </a>
         </div>
       </main>
-
-       <Script onLoad={() => detectColorScheme()} id="dark-mode">
-          {`console.log("Loaded")`}
-        </Script>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
-var code = new Schema({
+var board = new Schema({
   name: {
     type: String,
     required: true
@@ -31,7 +31,7 @@ var code = new Schema({
 
 mongoose.models = {};
 
-var Code = mongoose.model('CodeBoard', code);
+var Code = mongoose.model('CodeBoard', board);
 
 
 export default Code

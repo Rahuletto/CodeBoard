@@ -20,10 +20,12 @@ type res = {
 
 
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest , res: NextApiResponse) {
   // Get data submitted in request's body.
   const db = await connectDB()
   const body = req.body
+  if(req.method != "POST") return res.status(405).json({ message: "Invaid Method ! EXPECTED: POST method." })
+  if(req.headers.authorization != process.env['KEY']) return res.status(400).json({ message: "Not Authorized !", status: 400 })
 
     Code.create({
       name: req.body.name,
@@ -36,5 +38,5 @@ export default async function handler(req, res) {
 
 
   
-  res.status(200).json({ bin: `/bin/${req.body.key}`, state: true })
+  res.status(201).json({ bin: `/bin/${req.body.key}`, status: 201, workDone: true })
 }

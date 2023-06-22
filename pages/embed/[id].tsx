@@ -3,24 +3,23 @@
 import { useRouter } from 'next/router';
 import React, { memo, useEffect, useState } from 'react';
 import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
 
 // Languages
-import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Our Imports
-import Code from '../../model/code';
 import connectDB from '../../middleware/mongodb';
-import { ext } from '../_app';
 import CodeBoard from '../../components/Code';
+import { Board } from '../../utils/board';
+import Header from '../../components/Header';
 
-function Embed({ bin }) {
+function Embed({ board }) {
   const router = useRouter();
   const { id } = router.query;
 
-  bin = JSON.parse(bin);
+  board = JSON.parse(board);
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const { asPath } = useRouter();
   const origin =
@@ -28,51 +27,13 @@ function Embed({ bin }) {
       ? window.location.origin
       : '';
 
-  const URL = `${origin}${asPath}`;
-
   useEffect(() => {
-    if (!bin) router.push('/404');
-  }, [bin, id]);
+    if (!board) router.push('/404');
+  }, [board, id]);
 
   // DARK MODE & LIGHT MODE
 
-  function detectColorScheme() {
-    //local storage is used to override OS theme settings
-    if (localStorage.getItem('theme')) {
-      if (localStorage.getItem('theme') == 'light') {
-        setTheme('light');
-      }
-    } else if (!window.matchMedia) {
-      //matchMedia method not supported
-      return false;
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      //OS theme setting detected as dark
-      setTheme('light');
-    }
-
-    //dark theme preferred, set document with a `data-theme` attribute
-    if (theme == 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme == 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-  function switchTheme(e) {
-    const toggleSwitch = e.target;
-    if (e.target.checked) {
-      localStorage.setItem('theme', 'dark');
-      document.documentElement.setAttribute('data-theme', 'dark');
-      toggleSwitch.checked = true;
-      setTheme('dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-      document.documentElement.setAttribute('data-theme', 'light');
-      toggleSwitch.checked = false;
-      setTheme('light');
-    }
-  }
-
-  const [fileName, setFileName] = useState(bin.files[0].name);
+  const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
 
   // Props
@@ -80,8 +41,8 @@ function Embed({ bin }) {
   const [width, setWidth] = useState(1028)
   
 
-  let file = bin.files.find((a) => a.name == fileName);
-  if (!file) file = bin.files[0];
+  let file = board.files.find((a) => a.name == fileName);
+  if (!file) file = board.files[0];
 
   let language = loadLanguage(
     file.language == 'none' ? 'markdown' : file.language
@@ -89,15 +50,15 @@ function Embed({ bin }) {
 
   const fileButtons = [];
 
-  bin.files.map((obj) => {
-    if (obj.language == 'none') {
-      obj.name = obj.name.split('.')[0] + '.md';
+  board.files.map((f) => {
+    if (file.language == 'none') {
+      file.name = file.name.split('.')[0] + '.md';
     }
 
     fileButtons.push(
-      <div key={obj.name}>
+      <div key={file.name}>
         <div className="fileSelect">
-          <button onClick={() => setFileName(obj.name)}>{obj.name}</button>
+          <button onClick={() => setFileName(file.name)}>{file.name}</button>
         </div>
       </div>
     );
@@ -110,21 +71,17 @@ function Embed({ bin }) {
       setHeight(window.innerHeight)
       setWidth(window.innerWidth)
       
-      const code = document.querySelector('.codeWrapper')
-      code.style.height = height
-      code.style.width = width
+      const code = document.querySelector<HTMLElement>('.codeWrapper')
+      code.style.height = height.toString()
+      code.style.width = width.toString()
 
       
     });
   }, []);
 
   return (
-    <div onLoad={() => detectColorScheme()}>
-      <Head>
-        <title>CodeBoard Embeds</title>
-        <meta name="description" content="CodeBoard" />
-        <link rel="icon" href="/sus.png" />
-      </Head>
+    <div>
+      <Header title="CodeBoard Embeds" description="Embed your code in your desired website as however you want with beautiful iframes" />
 
       <div
         className="codeWrapper"
@@ -133,7 +90,7 @@ function Embed({ bin }) {
           border: '5px solid var(--background-dark)',
           position: "inherit",
           width: width + "px",
-          heigh: height + "px",
+          height: height + "px",
         }}
       >
         <div className="file-holder">{btns}</div>
@@ -148,7 +105,7 @@ function Embed({ bin }) {
         />
       </div>
 
-      <style jsx global>
+      <style>
         {`
         html,
         body {
@@ -165,16 +122,18 @@ function Embed({ bin }) {
 
 
 
-export default memo(function EmbedPage({ bin }) {
-  return <Embed bin={bin} />
+export default memo(function EmbedPage({ board }: {board: Board}) {
+  return <Embed board={board} />
 })
 
 export async function getServerSideProps(context: any) {
   await connectDB();
 
-  const bin = await Code.findOne({ key: context.params.id });
+  const board = await fetch(`https://project-code.rahuldumbman.repl.co/api/fetch?id=${context.params.id}`);
 
-  if (bin) return { props: { bin: JSON.stringify(bin) } };
+  if(board.status == 200) {
+    return { props: { board: JSON.stringify(board.json()) } }
+  }
   else
     return {
       redirect: {

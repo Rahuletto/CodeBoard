@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "codeboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "18.0.1",
+    "@types/prettier": "^2.7.3",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "eslint": "8.19.0",

@@ -1,9 +1,6 @@
 // NextJS Stuff
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import Script from 'next/script';
 import styles from '../../styles/Home.module.css';
 
 // Icons
@@ -14,16 +11,19 @@ import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
 import Code from '../../model/code';
 
 // Our Imports
-import { ext } from '../_app';
 import CodeBoard from '../../components/Code';
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
+import { ExtensionType } from '../../utils/extensions';
+import ThemeSwitch from '../../components/ThemeSwitch';
+import Header from '../../components/Header';
 
-export default function Bin({ bin }) {
+export default function Bin({ board }: { board: any }) {
   const router = useRouter();
   const { id } = router.query;
 
-  bin = JSON.parse(bin);
+  board = JSON.parse(board);
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const { asPath } = useRouter();
   const origin =
@@ -36,7 +36,7 @@ export default function Bin({ bin }) {
   const [isCopied, setIsCopied] = useState(false);
 
   // This is the function we wrote earlier
-  async function copyTextToClipboard(text) {
+  async function copyTextToClipboard(text: string) {
     if ('clipboard' in navigator) {
       return await navigator.clipboard.writeText(text);
     } else {
@@ -59,60 +59,23 @@ export default function Bin({ bin }) {
       });
   };
   useEffect(() => {
-    if (!bin) router.push('/404');
-  }, [bin, id]);
+    if (!board) router.push('/404');
+  }, [board, id]);
 
-  // DARK MODE & LIGHT MODE
 
-  function detectColorScheme() {
-    //local storage is used to override OS theme settings
-    if (localStorage.getItem('theme')) {
-      if (localStorage.getItem('theme') == 'light') {
-        setTheme('light');
-      }
-    } else if (!window.matchMedia) {
-      //matchMedia method not supported
-      return false;
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      //OS theme setting detected as dark
-      setTheme('light');
-    }
-
-    //dark theme preferred, set document with a `data-theme` attribute
-    if (theme == 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme == 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-  function switchTheme(e) {
-    const toggleSwitch = e.target;
-    if (e.target.checked) {
-      localStorage.setItem('theme', 'dark');
-      document.documentElement.setAttribute('data-theme', 'dark');
-      toggleSwitch.checked = true;
-      setTheme('dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-      document.documentElement.setAttribute('data-theme', 'light');
-      toggleSwitch.checked = false;
-      setTheme('light');
-    }
-  }
-
-  const [fileName, setFileName] = useState(bin.files[0].name);
+  const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
 
-  let file = bin.files.find((a) => a.name == fileName);
-  if (!file) file = bin.files[0];
+  let file = board.files.find((a: ExtensionType) => a.name == fileName);
+  if (!file) file = board.files[0];
 
   let language = loadLanguage(
     file.language == 'none' ? 'markdown' : file.language
   );
 
-  const fileButtons = [];
+  const fileButtons: JSX.Element[] = [];
 
-  bin.files.map((obj) => {
+  board.files.map((obj) => {
     if (obj.language == 'none') {
       obj.name = obj.name.split('.')[0] + '.md';
     }
@@ -130,28 +93,19 @@ export default function Bin({ bin }) {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>{bin.name}/CodeBoard</title>
-        <meta name="description" content="CodeBoard" />
-        <link rel="icon" href="/sus.png" />
-      </Head>
+      <Header title={board.name + "/CodeBoard"} description={board.description || "No Description. Just the source code."} />
 
       <main className={styles.main}>
         <header>
           <h1 className="title">CodeBoard</h1>
           <div className="buttons">
-            <Link href="/" className="newProject mobile">
+            <a href="/" className="newProject mobile">
               <FaPlus />
-            </Link>
-            <Link href="/" className="newProject pc">
+            </a>
+            <a href="/" className="newProject pc">
               <FaPlus style={{ marginRight: '10px' }} /> New board
-            </Link>
-            <label id="themeSwitch">
-              <input
-                onChange={(event) => switchTheme(event)}
-                type="checkbox"
-              ></input>
-            </label>
+            </a>
+            <ThemeSwitch theme={theme} setTheme={setTheme} />
           </div>
         </header>
 
@@ -160,7 +114,7 @@ export default function Bin({ bin }) {
             className="info mobile"
             onClick={(event) => {
               document.querySelector('.projectForm').classList.toggle('show');
-              event.target.classList.toggle('opened');
+              (event.target as HTMLElement).classList.toggle('opened');
             }}
           >
             <GoGear /> <span>Metadata</span>
@@ -170,17 +124,17 @@ export default function Bin({ bin }) {
               <form>
                 <div className="formName">
                   <input
-                    value={bin.name}
+                    value={board.name}
                     readOnly
                     placeholder="Untitled."
                     name="project-name"
                   ></input>{' '}
-                  {bin.options[0]?.encrypt ? (
+                  {board.options[0]?.encrypt ? (
                     <GoShieldCheck className="enc icon" />
                   ) : null}
                 </div>
                 <textarea
-                  value={bin.description}
+                  value={board.description}
                   readOnly
                   placeholder="Enter a short description."
                   maxLength={128}
@@ -207,19 +161,19 @@ export default function Bin({ bin }) {
           </div>
 
           <div className="codeWrapper">
-            <div className="file-holder bin-copy">
+            <div className="file-holder board-copy">
               <div>{btns}</div>
               <div className="copypasta">
                 <button
                   onClick={(event) => {
                     handleCopyClick();
-                    event.target.innerHTML = 'Copied !';
-                    event.target.style.background = 'var(--green)';
-                    event.target.style.color = '#17191b';
+                    (event.target as HTMLElement).innerHTML = 'Copied !';
+                    (event.target as HTMLElement).style.background = 'var(--green)';
+                    (event.target as HTMLElement).style.color = '#17191b';
                     setTimeout(() => {
-                      event.target.innerHTML = 'Copy URL';
-                      event.target.style.background = 'transparent';
-                      event.target.style.color = 'var(--special-color)';
+                      (event.target as HTMLElement).innerHTML = 'Copy URL';
+                      (event.target as HTMLElement).style.background = 'transparent';
+                      (event.target as HTMLElement).style.color = 'var(--special-color)';
                     }, 5000);
                   }}
                 >
@@ -227,21 +181,20 @@ export default function Bin({ bin }) {
                 </button>
                 <button
                   onClick={(event) => {
-                    const iframe = `<iframe
-  src="${location.origin}/embed/${bin.key}"
-  style="width: 1024px; height: 473px; border:0; transform: scale(1); overflow:hidden;"
-  sandbox="allow-scripts allow-same-origin">
-</iframe>
-`;
+                    const iframe = `<iframe 
+                      src="${location.origin}/embed/${board.key}" 
+                      style="width: 1024px; height: 473px; border:0; transform: scale(1); overflow:hidden;" 
+                      sandbox="allow-scripts allow-same-origin">
+                    </iframe>`;
 
                     navigator.clipboard.writeText(iframe);
-                    event.target.innerHTML = 'Copied !';
-                    event.target.style.background = 'var(--green)';
-                    event.target.style.color = '#17191b';
+                    (event.target as HTMLElement).innerHTML = 'Copied !';
+                    (event.target as HTMLElement).style.background = 'var(--green)';
+                    (event.target as HTMLElement).style.color = '#17191b';
                     setTimeout(() => {
-                      event.target.innerHTML = 'Embed';
-                      event.target.style.background = 'transparent';
-                      event.target.style.color = 'var(--special-color)';
+                      (event.target as HTMLElement).innerHTML = 'Embed';
+                      (event.target as HTMLElement).style.background = 'transparent';
+                      (event.target as HTMLElement).style.color = 'var(--special-color)';
                     }, 5000);
                   }}
                 >
@@ -260,10 +213,6 @@ export default function Bin({ bin }) {
           </div>
         </div>
       </main>
-
-      <Script onLoad={() => detectColorScheme()} id="dark-mode">
-        {`console.log("Loaded")`}
-      </Script>
     </div>
   );
 }
@@ -271,9 +220,9 @@ export default function Bin({ bin }) {
 export async function getServerSideProps(context: any) {
   fetch('https://project-code.rahuldumbman.repl.co/api/connect');
 
-  const bin = await Code.findOne({ key: context.params.id });
+  const board = await Code.findOne({ key: context.params.id });
 
-  if (bin) return { props: { bin: JSON.stringify(bin) } };
+  if (board) return { props: { board: JSON.stringify(board) } };
   else
     return {
       redirect: {
