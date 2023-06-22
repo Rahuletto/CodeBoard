@@ -22,7 +22,8 @@ export default function Bin({ board }: { board: any }) {
   const router = useRouter();
   const { id } = router.query;
 
-
+  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_ENCRPT)
+  console.log(board)
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   const { asPath } = useRouter();
@@ -90,8 +91,6 @@ export default function Bin({ board }: { board: any }) {
   });
 
   setTimeout(() => setBtns(fileButtons), 20);
-
-  const cryptr = new Cryptr(process.env['ENCRPT']);
 
   return (
     <div className={styles.container}>
@@ -224,8 +223,9 @@ export async function getServerSideProps(context: any) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
-  if(promiseBoard.statusText == '200') {
-    const board = await promiseBoard.json()
+  let board = await promiseBoard.json()
+
+  if(board.status == 200) {
     return { props: { board: board } }
   }
   else

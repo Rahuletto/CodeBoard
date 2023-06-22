@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest , res: NextApiResponse
   const db = await connectDB()
   const body = req.body
   if(req.method != "POST") return res.status(405).json({ message: "Invaid Method ! EXPECTED: POST method." })
-  if(req.headers.authorization != process.env['KEY']) return res.status(400).json({ message: "Not Authorized !", status: 400 })
+  if(req.headers.authorization != process.env.NEXT_PUBLIC_KEY) return res.status(401).json({ message: "Not Authorized !", status: 401 })
 
     Code.create({
       name: req.body.name,

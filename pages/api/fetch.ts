@@ -9,15 +9,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const boardRaw = await Code.findOne({ key: queries.id });
 
-    const board = {
+    if (boardRaw) return res.status(200).json({
         createdAt: boardRaw.createdAt,
         description: boardRaw.description,
         files: boardRaw.files,
         key: boardRaw.key,
         name: boardRaw.name,
-        encrypted: boardRaw.options[0].encrypt
-    }
+        encrypted: boardRaw.options[0].encrypt,
+        status: 200
+    });
 
-    if (board) return res.status(200).json({ board: board, status: 200 });
     else return res.status(404).json({ board: "NOT FOUND", status: 404 })
 }

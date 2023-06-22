@@ -25,6 +25,7 @@ import Header from '../components/Header';
 import Cryptr from 'cryptr'
 
 const Home: NextPage = () => {
+  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_ENCRPT);
   const router = useRouter();
 
   // Items
@@ -247,8 +248,6 @@ const Home: NextPage = () => {
   const handleSubmit = async (event: FormEvent) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
-    
-    const cryptr = new Cryptr(process.env['ENCRPT']);
 
     const keyId = makeid(8);
 
@@ -283,7 +282,7 @@ const Home: NextPage = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': process.env['KEY']
+        'Authorization': process.env.NEXT_PUBLIC_KEY
       },
       body: JSONdata,
     };
@@ -506,19 +505,18 @@ const Home: NextPage = () => {
 
                     (event.target as HTMLElement).style.color =
                       colors[Math.floor(Math.random() * colors.length)];
-                    (event.target as HTMLButtonElement).disabled = true;
                     formatCode(code)
                       .then((formatted) => {
                         file.value = formatted;
                         setCode(formatted);
                       })
-                      .catch(() => {
+                      .catch((err) => {
                         (event.target as HTMLElement).style.color = '#ea5e5e';
+                        console.log(err)
                       });
 
                     setInterval(() => {
                       (event.target as HTMLElement).style.color = 'var(--special-color)';
-                      (event.target as HTMLButtonElement).disabled = false;
                     }, 5000);
                   }}
                 >

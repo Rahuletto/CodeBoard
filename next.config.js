@@ -7,11 +7,9 @@ const nextConfig = {
         ENCRPT: process.env['ENCRPT']
     },
   webpack: {
-    
     experiments: {
       topLevelAwait: true
     }
-    
   },
 }
 

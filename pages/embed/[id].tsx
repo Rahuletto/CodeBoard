@@ -19,6 +19,8 @@ function Embed({ board }) {
   const router = useRouter();
   const { id } = router.query;
 
+  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_ENCRPT)
+
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
@@ -73,8 +75,6 @@ function Embed({ board }) {
     });
   }, []);
 
-  const cryptr = new Cryptr(process.env['ENCRPT']);
-
   return (
     <div>
       <Header title="CodeBoard Embeds" description="Embed your code in your desired website as however you want with beautiful iframes" />
@@ -127,9 +127,9 @@ export async function getServerSideProps(context: any) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
-  
-  if(promiseBoard.statusText == '200') {
-    const board = await promiseBoard.json()
+  let board = await promiseBoard.json()
+
+  if(board.status == 200) {
     return { props: { board: board } }
   }
   else
