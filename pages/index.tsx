@@ -20,8 +20,7 @@ import { ext, languages } from './_app';
 import CodeBoard from '../components/Code';
 
 const Home: NextPage = () => {
-  const router = useRouter();
-
+  // Items
   const [fileName, setFileName] = useState('untitled.js');
   const [btns, setBtns] = useState([]);
 
@@ -49,18 +48,20 @@ const Home: NextPage = () => {
   let file = files.find((a) => a.name == fileName);
   if (!file) file = files[0];
 
-  let language = loadLanguage(
+  const [language, setLanguage] = useState(loadLanguage(
     file.language == 'none' ? 'markdown' : file.language
-  );
+  ))
 
   useEffect(() => {
-    language = loadLanguage(
+    
+    setLanguage(loadLanguage(
       file.language == 'none' ? 'markdown' : file.language
-    );
+    ));
   }, [file.language]);
 
   const onChange = React.useCallback(
     (value, viewUpdate) => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (file.language == 'none') setFileName(fileName.split('.')[0] + '.md');
 
       const changed = files.find((a) => a.name === fileName);
@@ -72,6 +73,16 @@ const Home: NextPage = () => {
   );
 
   useEffect(() => {
+    function deleteFile(name) {
+    const ff = files.filter(function (item) {
+      return item.name !== name;
+    });
+
+    setFileName(ff[0].name);
+
+    setFiles(ff);
+  }
+    
     const fileButtons = [];
 
     const tmpFiles = [...files];
@@ -92,7 +103,7 @@ const Home: NextPage = () => {
             </button>
           </div>
 
-          <div className={cls}>
+          <div className={cls}> // eslint-disable-next-line react-hooks/exhaustive-deps
             <form className="editForm" onSubmit={(event) => edit(event, obj)}>
               <input
                 pattern="^[^~)('!*<>:;,?*|/]+$"
@@ -121,7 +132,7 @@ const Home: NextPage = () => {
         </div>
       );
     });
-
+    
     setTimeout(() => setBtns(fileButtons), 20);
   }, [fileName, files]);
 
@@ -170,15 +181,7 @@ const Home: NextPage = () => {
     }
   }
 
-  function deleteFile(name) {
-    const ff = files.filter(function (item) {
-      return item.name !== name;
-    });
-
-    setFileName(ff[0].name);
-
-    setFiles(ff);
-  }
+  
 
   function updateEditLanguage(e) {
     const n = e.target.value;
@@ -272,6 +275,7 @@ const Home: NextPage = () => {
 
   // HANDLE SUMBIT ----------------------------------------------------
   const handleSubmit = async (event) => {
+    const router = useRouter();
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
@@ -406,7 +410,7 @@ const Home: NextPage = () => {
           <div className="projectForm">
             <div className="details">
               <form onSubmit={(event) => handleSubmit(event)}>
-                <div class="formName">
+                <div className="formName">
                   <input
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
