@@ -3,6 +3,7 @@ import Code from '../../model/code'
 import connectDB from '../../middleware/mongodb'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 
 import { atomone, atomoneInit } from "@uiw/codemirror-theme-atomone";
@@ -143,12 +144,12 @@ function switchTheme(e) {
         <header>
           <h1 className="title">CodeBoard</h1>
           <div className="buttons">
-            <a href="/" className="newProject mobile">
+            <Link href="/" className="newProject mobile">
               <FaPlus />
-            </a>
-            <a href="/" className="newProject pc">
+            </Link>
+            <Link href="/" className="newProject pc">
               <FaPlus style={{marginRight: "10px"}} />   New board
-            </a>
+            </Link>
             <label id="themeSwitch">
               <input onChange={(event) => switchTheme(event)} type="checkbox"></input>
             </label>
@@ -163,7 +164,7 @@ function switchTheme(e) {
           <div className="projectForm">
           <div className="details">
             <form>
-              <div class="formName">
+              <div className="formName">
                 <input
                   value={bin.name} readOnly placeholder="Untitled." name="project-name"
                 ></input> {bin.options[0]?.encrypt ? <GoShieldCheck className="enc icon" /> : null }
