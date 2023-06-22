@@ -247,6 +247,7 @@ const Home: NextPage = () => {
   const handleSubmit = async (event: FormEvent) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
+    
     const cryptr = new Cryptr(process.env['ENCRPT']);
 
     const keyId = makeid(8);

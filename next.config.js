@@ -2,7 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   serverRuntimeConfig: {
-        MONGO: process.env['MONGO']
+        MONGO: process.env['MONGO'],
+        KEY: process.env['KEY'],
+        ENCRPT: process.env['ENCRPT']
     },
   webpack: {
     
