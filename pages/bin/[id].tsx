@@ -4,6 +4,7 @@ import connectDB from '../../middleware/mongodb'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import Script from 'next/script'
 import styles from '../../styles/Home.module.css'
 
 import { atomone, atomoneInit } from "@uiw/codemirror-theme-atomone";
@@ -132,7 +133,7 @@ function switchTheme(e) {
     setTimeout(() => setBtns(fileButtons), 20);
   
   return (
-    <div onLoad={() => detectColorScheme()} className={styles.container}>
+    <div className={styles.container}>
       <Head>
         <title>{bin.name}/CodeBoard</title>
         <meta name="description" content="CodeBoard" />
@@ -259,6 +260,10 @@ function switchTheme(e) {
             </div>
         </div>
       </main>
+
+      <Script onLoad={() => detectColorScheme()} id="dark-mode">
+          {`console.log("Loaded")`}
+        />
     </div>
   );
 }
