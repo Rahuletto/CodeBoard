@@ -21,10 +21,8 @@ import { BoardFile } from '../utils/board';
 import ThemeSwitch from '../components/ThemeSwitch';
 import Header from '../components/Header';
 
-
 // Encrypt
-import Cryptr from 'cryptr'
-const cryptr = new Cryptr(process.env['ENCRPT']);
+import cryptr from '../utils/encrypt'
 
 const Home: NextPage = () => {
   const router = useRouter();

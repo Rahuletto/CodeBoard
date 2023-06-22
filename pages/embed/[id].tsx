@@ -8,24 +8,18 @@ import Head from 'next/head';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Our Imports
-import connectDB from '../../middleware/mongodb';
 import CodeBoard from '../../components/Code';
 import { Board } from '../../utils/board';
 import Header from '../../components/Header';
+
+// Encrypt
+import cryptr from '../../utils/encrypt'
 
 function Embed({ board }) {
   const router = useRouter();
   const { id } = router.query;
 
-  board = JSON.parse(board);
-
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-
-  const { asPath } = useRouter();
-  const origin =
-    typeof window !== 'undefined' && window.location.origin
-      ? window.location.origin
-      : '';
 
   useEffect(() => {
     if (!board) router.push('/404');
@@ -98,7 +92,7 @@ function Embed({ board }) {
           width={width + "px"}
           height={height + "px"}
           language={language}
-          code={file.value}
+          code={cryptr.decrypt(file.value)}
           readOnly={true}
           theme={theme}
           onChange={() => "ok"}
@@ -132,7 +126,7 @@ export async function getServerSideProps(context: any) {
   const board = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
   if(board.status == 200) {
-    return { props: { board: JSON.stringify(board.json()) } }
+    return { props: { board: board.json() } }
   }
   else
     return {

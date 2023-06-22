@@ -16,12 +16,12 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { ExtensionType } from '../../utils/extensions';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import Header from '../../components/Header';
+import cryptr from '../../utils/encrypt';
 
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
   const { id } = router.query;
 
-  board = JSON.parse(board);
 
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
@@ -205,7 +205,7 @@ export default function Bin({ board }: { board: any }) {
             </div>
             <CodeBoard
               language={language}
-              code={file.value}
+              code={cryptr.decrypt(file.value)}
               readOnly={true}
               theme={theme}
               onChange={() => 'ok'}
@@ -223,7 +223,8 @@ export async function getServerSideProps(context: any) {
   const board = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
   if(board.status == 200) {
-    return { props: { board: JSON.stringify(board.json()) } }
+    console.log(board.json())
+    return { props: { board: board.json() } }
   }
   else
     return {
