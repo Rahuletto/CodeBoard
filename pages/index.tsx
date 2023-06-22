@@ -20,6 +20,8 @@ import { ext, languages } from './_app';
 import CodeBoard from '../components/Code';
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  
   // Items
   const [fileName, setFileName] = useState('untitled.js');
   const [btns, setBtns] = useState([]);
@@ -103,7 +105,7 @@ const Home: NextPage = () => {
             </button>
           </div>
 
-          <div className={cls}> // eslint-disable-next-line react-hooks/exhaustive-deps
+          <div className={cls}> {/** eslint-disable-next-line react-hooks/exhaustive-deps */ }
             <form className="editForm" onSubmit={(event) => edit(event, obj)}>
               <input
                 pattern="^[^~)('!*<>:;,?*|/]+$"
@@ -113,7 +115,6 @@ const Home: NextPage = () => {
                 type="text"
                 placeholder={obj.name}
                 autoComplete="off"
-                pattern="^[^~)('!*<>:;,?*|/]+$"
               ></input>
               <p>
                 <span className="language-show-edit">
@@ -122,7 +123,7 @@ const Home: NextPage = () => {
               </p>
 
               <button
-                disabled={files.length <= 1}
+                disabled={files.length <= 1} 
                 onClick={() => setTimeout(() => deleteFile(obj.name), 400)}
               >
                 Delete
@@ -275,7 +276,7 @@ const Home: NextPage = () => {
 
   // HANDLE SUMBIT ----------------------------------------------------
   const handleSubmit = async (event) => {
-    const router = useRouter();
+    
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
@@ -317,7 +318,7 @@ const Home: NextPage = () => {
   // ------------------------------------------------------------------------------
 
   return (
-    <div onLoad={() => detectColorScheme()} className={styles.container}>
+    <div className={styles.container}>
       <Head>
         <title>CodeBoard</title>
         <meta name="description" content="CodeBoard" />
