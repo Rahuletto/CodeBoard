@@ -16,7 +16,7 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { ExtensionType } from '../../utils/extensions';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import Header from '../../components/Header';
-import cryptr from '../../utils/encrypt';
+import Cryptr from 'cryptr'
 
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
@@ -90,6 +90,8 @@ export default function Bin({ board }: { board: any }) {
   });
 
   setTimeout(() => setBtns(fileButtons), 20);
+
+  const cryptr = new Cryptr(process.env['ENCRPT']);
 
   return (
     <div className={styles.container}>

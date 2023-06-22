@@ -22,7 +22,7 @@ import ThemeSwitch from '../components/ThemeSwitch';
 import Header from '../components/Header';
 
 // Encrypt
-import cryptr from '../utils/encrypt'
+import Cryptr from 'cryptr'
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -247,6 +247,7 @@ const Home: NextPage = () => {
   const handleSubmit = async (event: FormEvent) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
+    const cryptr = new Cryptr(process.env['ENCRPT']);
 
     const keyId = makeid(8);
 

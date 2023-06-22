@@ -13,7 +13,7 @@ import { Board } from '../../utils/board';
 import Header from '../../components/Header';
 
 // Encrypt
-import cryptr from '../../utils/encrypt'
+import Cryptr from 'cryptr'
 
 function Embed({ board }) {
   const router = useRouter();
@@ -72,6 +72,8 @@ function Embed({ board }) {
       
     });
   }, []);
+
+  const cryptr = new Cryptr(process.env['ENCRPT']);
 
   return (
     <div>
