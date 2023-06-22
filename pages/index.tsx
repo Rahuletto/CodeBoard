@@ -17,7 +17,7 @@ import { LuTimer, LuTimerOff } from 'react-icons-ng/lu';
 import { SiPrettier } from 'react-icons-ng/si';
 
 // Our Imports
-import { ext, languages } from './_app';
+import { ext } from './_app';
 import CodeBoard from '../components/Code';
 
 const Home: NextPage = () => {

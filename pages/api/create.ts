@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Code from '../../model/code'
 import connectDB from '../../middleware/mongodb'
-import {languages} from "../index"
 
 type Data = {
   name: string,

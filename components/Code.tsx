@@ -1,11 +1,24 @@
+// CodeMirror
 import { atomone, atomoneInit } from "@uiw/codemirror-theme-atomone";
 import { githubLight } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 import { langs, loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";
 
+// React
+import React from 'react';
 
-export default function CodeBoard({language, code, theme, onChange, readOnly, height, width }) {
+interface CodeBoardProps {
+  language?: Function | any;
+  code?: string;
+  theme?: "light" | "dark";
+  onChange?: Function | any;
+  readOnly?: boolean;
+  height?: string;
+  width?: string;
+}
+
+export default function CodeBoard({language, code, theme, onChange, readOnly, height, width }): React.FC<CodeBoardProps> {
   return (
     <>
     <CodeMirror

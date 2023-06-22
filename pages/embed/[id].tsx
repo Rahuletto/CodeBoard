@@ -1,18 +1,17 @@
 
 // NextJS stuff
 import { useRouter } from 'next/router';
-import Code from '../../model/code';
-import connectDB from '../../middleware/mongodb';
 import React, { memo, useEffect, useState } from 'react';
 import Head from 'next/head';
 import styles from '../../styles/Home.module.css';
-import { withRouter } from 'next/router';
 
 // Languages
 import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Our Imports
-import { ext, languages } from '../_app';
+import Code from '../../model/code';
+import connectDB from '../../middleware/mongodb';
+import { ext } from '../_app';
 import CodeBoard from '../../components/Code';
 
 function Embed({ bin }) {
