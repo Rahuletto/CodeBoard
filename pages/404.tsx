@@ -3,6 +3,8 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useRef, useState, useEffect } from 'react';
 import Head from 'next/head';
+import Script from 'next/script'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css';
 
 // Icons
@@ -52,7 +54,7 @@ const Error: NextPage = () => {
   }
 
   return (
-    <div onLoad={() => detectColorScheme()} className={styles.container}>
+    <div className={styles.container}>
       <Head>
         <title>Uhhh ?</title>
         <meta name="description" content="CodeBoard" />
@@ -63,12 +65,12 @@ const Error: NextPage = () => {
         <header>
           <h1 className="title">CodeBoard</h1>
           <div className="buttons">
-            <a href="/" className="newProject mobile">
+            <Link href="/" className="newProject mobile">
               <FaPlus />
-            </a>
-            <a href="/" className="newProject pc">
+            </Link>
+            <Link href="/" className="newProject pc">
               <FaPlus style={{ marginRight: '10px' }} /> New board
-            </a>
+            </Link>
             <label id="themeSwitch">
               <input
                 onChange={(event) => switchTheme(event)}
@@ -79,7 +81,7 @@ const Error: NextPage = () => {
         </header>
 
         <div className="lander">
-          <h1 style={{ fontSize: '48px' }}> Something's wrong here.</h1>
+          <h1 style={{ fontSize: '48px' }}> Something{"\&#39"}s wrong here.</h1>
           <p>
             The board you are looking for never existed, Or just got{' '}
             <div className="tooltip rick">
@@ -99,27 +101,19 @@ const Error: NextPage = () => {
           </p>
           <hr></hr>
 
-          <iframe
-            src="https://project-code.rahuldumbman.repl.co/embed/fc7iO9j2"
-            style={{
-              width: '1024px',
-              height: '473px',
-              border: '0',
-              transform: 'scale(1)',
-              overflow: 'hidden',
-            }}
-            sandbox="allow-scripts allow-same-origin"
-          />
-
-          <a
+          <Link
             style={{ width: 'fit-content', marginTop: '12px' }}
             href="/"
             className="newProject"
           >
             <FaPlus style={{ marginRight: '10px' }} /> New board
-          </a>
+          </Link>
         </div>
       </main>
+
+       <Script onLoad={() => detectColorScheme()} id="dark-mode">
+          {`console.log("Loaded")`}
+        </Script>
     </div>
   );
 };
