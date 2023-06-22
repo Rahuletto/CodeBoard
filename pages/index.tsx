@@ -22,7 +22,7 @@ import CodeBoard from '../components/Code';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  
+
   // Items
   const [fileName, setFileName] = useState('untitled.js');
   const [btns, setBtns] = useState([]);
@@ -51,15 +51,14 @@ const Home: NextPage = () => {
   let file = files.find((a) => a.name == fileName);
   if (!file) file = files[0];
 
-  const [language, setLanguage] = useState(loadLanguage(
-    file.language == 'none' ? 'markdown' : file.language
-  ))
+  const [language, setLanguage] = useState(
+    loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+  );
 
   useEffect(() => {
-    
-    setLanguage(loadLanguage(
-      file.language == 'none' ? 'markdown' : file.language
-    ));
+    setLanguage(
+      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    );
   }, [file.language]);
 
   const onChange = React.useCallback(
@@ -77,15 +76,15 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     function deleteFile(name) {
-    const ff = files.filter(function (item) {
-      return item.name !== name;
-    });
+      const ff = files.filter(function (item) {
+        return item.name !== name;
+      });
 
-    setFileName(ff[0].name);
+      setFileName(ff[0].name);
 
-    setFiles(ff);
-  }
-    
+      setFiles(ff);
+    }
+
     const fileButtons = [];
 
     const tmpFiles = [...files];
@@ -106,7 +105,9 @@ const Home: NextPage = () => {
             </button>
           </div>
 
-          <div className={cls}> {/** eslint-disable-next-line react-hooks/exhaustive-deps */ }
+          <div className={cls}>
+            {' '}
+            {/** eslint-disable-next-line react-hooks/exhaustive-deps */}
             <form className="editForm" onSubmit={(event) => edit(event, obj)}>
               <input
                 pattern="^[^~)('!*<>:;,?*|/]+$"
@@ -124,7 +125,7 @@ const Home: NextPage = () => {
               </p>
 
               <button
-                disabled={files.length <= 1} 
+                disabled={files.length <= 1}
                 onClick={() => setTimeout(() => deleteFile(obj.name), 400)}
               >
                 Delete
@@ -134,7 +135,7 @@ const Home: NextPage = () => {
         </div>
       );
     });
-    
+
     setTimeout(() => setBtns(fileButtons), 20);
   }, [fileName, files]);
 
@@ -182,8 +183,6 @@ const Home: NextPage = () => {
       setFileName(name);
     }
   }
-
-  
 
   function updateEditLanguage(e) {
     const n = e.target.value;
@@ -277,7 +276,6 @@ const Home: NextPage = () => {
 
   // HANDLE SUMBIT ----------------------------------------------------
   const handleSubmit = async (event) => {
-    
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
@@ -577,9 +575,8 @@ const Home: NextPage = () => {
       </main>
 
       <Script onLoad={() => detectColorScheme()} id="dark-mode">
-          {`console.log("Loaded")`}
-        </Script>
-      
+        {`console.log("Loaded")`}
+      </Script>
     </div>
   );
 };
