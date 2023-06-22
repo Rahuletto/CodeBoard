@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useRef, useState, useEffect } from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 import styles from '../styles/Home.module.css';
 
 // Load Languages
