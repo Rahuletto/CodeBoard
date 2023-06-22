@@ -574,6 +574,11 @@ const Home: NextPage = () => {
           </div>
         </div>
       </main>
+
+      <Script onLoad={() => detectColorScheme()} id="dark-mode">
+          {`console.log("Loaded")`}
+        </Script>
+      
     </div>
   );
 };
