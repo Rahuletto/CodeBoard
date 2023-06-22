@@ -90,7 +90,7 @@ const Error: NextPage = () => {
             </div>
             .<br></br>Anyways, Wanna sip some coffee ?<br></br>
             <br></br>Do you need cookies for the coffee ? but sadly i dont have
-            one >:({' '}
+            one {'>'}:({' '}
             <italic
               style={{ fontStyle: 'italic', opacity: 0.6, marginLeft: '10px' }}
             >
