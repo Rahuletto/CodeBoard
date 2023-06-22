@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false)
   
-  fetch('https://project-code.rahuldumbman.repl.co/api/connect');
+  fetch('https://cdeboard.vercel.app/api/connect');
   
   useEffect(() => {
     setLoading(true)

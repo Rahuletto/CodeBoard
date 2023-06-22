@@ -1,7 +1,7 @@
 // NextJS Stuff
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import styles from '../styles/Home.module.css';
 
 // Load Languages
@@ -20,6 +20,11 @@ import CodeBoard from '../components/Code';
 import { BoardFile } from '../utils/board';
 import ThemeSwitch from '../components/ThemeSwitch';
 import Header from '../components/Header';
+
+
+// Encrypt
+import Cryptr from 'cryptr'
+const cryptr = new Cryptr(process.env['ENCRPT']);
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -245,39 +250,45 @@ const Home: NextPage = () => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    // Get data from the form.
     const keyId = makeid(8);
+
+    let encryptedFiles: BoardFile[] = [];
+
+    if(encrypt) {
+      files.forEach(file => {
+        encryptedFiles.push(
+          {
+            name: file.name,
+            language: file.language,
+            value: String(cryptr.encrypt(file.value))
+          }
+        )
+      })
+
+    } else encryptedFiles = files;
+
     const data = {
       name: title || 'Untitled',
       description: description || 'No Description',
       options: [{ autoVanish: vanish, encrypt: encrypt }],
-      files: files,
+      files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
     };
 
-    // Send the data to the server in JSON format.
     const JSONdata = JSON.stringify(data);
-    // API endpoint where we send form data.
     const endpoint = '/api/create';
 
-    // Form the request for sending data  the server.
     const options = {
-      // The method is POST because we are sending data.
       method: 'POST',
-      // Tell the server we're sending JSON.
       headers: {
         'Content-Type': 'application/json',
         'Authorization': process.env['KEY']
       },
-      // Body of the request is the JSON data we created above.
       body: JSONdata,
     };
-    // Send the form data to our forms API on Vercel and get a response.
     const response = await fetch(endpoint, options);
 
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
     const result = await response.json();
     router.push(`/bin/${keyId}`);
   };

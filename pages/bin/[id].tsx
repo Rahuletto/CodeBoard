@@ -218,11 +218,13 @@ export default function Bin({ board }: { board: any }) {
 }
 
 export async function getServerSideProps(context: any) {
-  fetch('https://project-code.rahuldumbman.repl.co/api/connect');
+  fetch('https://cdeboard.vercel.app/api/connect');
 
-  const board = await Code.findOne({ key: context.params.id });
+  const board = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
-  if (board) return { props: { board: JSON.stringify(board) } };
+  if(board.status == 200) {
+    return { props: { board: JSON.stringify(board.json()) } }
+  }
   else
     return {
       redirect: {
