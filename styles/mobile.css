@@ -1,0 +1,107 @@
+@media only screen and (max-width: 750px) {
+  .projectForm {
+    z-index: 10;
+    background: var(--background);
+    border-radius: 20px;
+    position: absolute;
+    left: -750px;
+    height: 100vh;
+    top: 0;
+    border: 0px none;
+    border-right: 6px solid #17191b;
+    border-radius: 0px;
+    box-shadow: 0px 0px 40px #17191b;
+    padding-bottom: 69px;
+    width: 65vw;
+  }
+
+  .projectForm .details {
+    width: 60vw;
+    padding: 18px 12px;
+  }
+
+  .formName input {
+    width: 46vw;
+    font-size: 24px;
+  }
+
+  .projectForm.show {
+    left: 0;
+    margin-bottom: 40px;
+  }
+
+  .mobile {
+    display: inline-block;
+  }
+
+  .pc {
+    display: none;
+  }
+
+  .grid {
+    display: flex;
+    padding: 0px 12px;
+  }
+
+  .lander {
+    padding: 1.5rem 3rem; 
+  }
+  .codeWrapper {
+    width: 96vw;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 2vw;
+    bottom: 8px;
+    border-right: 5px solid var(--background-dark);
+    border-bottom: 5px solid var(--background-dark);
+    border-radius: 38px;
+    height:76vh;
+
+  }
+
+  .file-holder {
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+
+  .newProject.mobile  {
+    padding: 12px 14px;
+    display: flex;
+  }
+
+  .info {
+    display: flex;
+    background: var(--background-dark);
+    color: var(--special-color);
+    font-family: "JetBrains Mono";
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 16px;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 20px;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .info.opened {
+    justify-content: right !important;
+    background: var(--red);
+    color: #17191b;
+  }
+
+  .opened span {
+    display: none;
+  }
+
+  .opened:after {
+    content: "Close";
+  }
+  
+  header {
+    padding: 16px 14px;
+  }
+}
