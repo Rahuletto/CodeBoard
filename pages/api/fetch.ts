@@ -2,6 +2,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Code from '../../model/code'
 import connectDB from '../../middleware/mongodb'
+import { Board } from '../../utils/board';
+
+export interface FetchResponse extends Omit<Board, 'options'>{
+    status: number;
+    encrypted: boolean;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const db = await connectDB()

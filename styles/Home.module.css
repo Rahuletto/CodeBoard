@@ -5,6 +5,26 @@
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.loader {
+  padding: 0;
+  background: var(--background);
+  height: 100vh;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+}
+
+.loadTitle {
+  font-family: 'JetBrains Mono';
+  color: var(--special-color);
+  opacity: 0.8;
+  font-weight: 600;
+}
+
 .main {
   overflow: hidden;
   max-height: 100vh;

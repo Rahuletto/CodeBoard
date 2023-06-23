@@ -11,7 +11,7 @@ import Header from '../components/Header';
 const Error: NextPage = () => {
 
   // DARK MODE & LIGHT MODE
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'light' | 'dark' | string>(localStorage.getItem('theme') || "dark");
 
   return (
     <div className={styles.container}>
@@ -32,7 +32,7 @@ const Error: NextPage = () => {
         </header>
 
         <div className="lander">
-          <h1 style={{ fontSize: '48px' }}> Something{"\&#39"}s wrong here.</h1>
+          <h1 style={{ fontSize: '48px' }}> Something{"'"}s wrong here.</h1>
           <p>
             The board you are looking for never existed, Or just got{' '}
             <div className="tooltip rick">

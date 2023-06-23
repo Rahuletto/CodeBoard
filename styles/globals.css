@@ -1,42 +1,88 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-:root {
-  --primary: #8D40BC;
-  --primary-dark: #692D8E;
-}
 
 .mobile {
   display: none !important;
 }
 
 .pc {
-  display: inline-block;
+  display: inherit !important;
 }
+
+@media (prefers-color-scheme: light) {
+  html {
+    --font-color: #17191B;
+    --special-color: #17191B;
+    --hsl-special-color: hsl(210, 8%, 10%);
+    --hsl-special-color-end: hsl(204, 14%, 14%);
+    
+    --background: #EAEAEB;
+    --background-light: #DEDEDE;
+    --background-slight-dark: #EAEAEB;
+    --background-dark: #C2C2C2;
+
+    --hsl-background-slight-dark: hsl(240, 2%, 92%);
+    --hsl-background-dark: hsl(0, 0%, 76%);
+
+    --red: #ee4646;
+    --green: #45DB4B;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --font-color: #dde1e3;
+    --special-color: #ABB8CC;
+    --hsl-special-color: hsl(216, 24%, 74%);
+    --hsl-special-color-end: hsl(217, 16%, 51%);
+
+    --background: #212428;
+    --background-light: #31353E;
+    --background-slight-dark: #282c33;
+    --background-dark: #17191B;
+
+    --hsl-background-slight-dark: hsl(218, 12%, 18%);
+    --hsl-background-dark: hsl(210, 8%, 10%);
+
+    --red: #DB4545;
+    --green: #45DB4B;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+}
+
 html[data-theme="light"] {
   --font-color: #17191B;
   --special-color: #17191B;
+  --hsl-special-color: hsl(210, 8%, 10%);
 
   --background: #EAEAEB;
   --background-light: #DEDEDE;
   --background-slight-dark: #EAEAEB;
   --background-dark: #C2C2C2;
+  --hsl-background-dark: hsl(0, 0%, 76%);
 
   --red: #ee4646;
   --green: #45DB4B;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-html {
+html[data-theme="dark"] {
   --font-color: #dde1e3;
   --special-color: #ABB8CC;
+  --hsl-special-color: hsl(216, 24%, 74%);
 
   --background: #212428;
   --background-light: #31353E;
   --background-slight-dark: #282c33;
-  --background-dark: #17191B;  
+  --background-dark: #17191B;
+  --hsl-background-dark: hsl(210, 8%, 10%);
+
   --red: #DB4545;
   --green: #45DB4B;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
 
 html,
 body {
@@ -50,7 +96,13 @@ body {
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-h1, h2, h3, h4, button, a {
+h1,
+h2,
+h3,
+h4,
+button,
+a {
+
   font-family: "DM Sans";
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -60,6 +112,7 @@ a {
   text-decoration: none;
   font-weight: 500;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 16px;
 }
 
 * {
@@ -70,15 +123,15 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 ::-moz-selection {
-  background: var(--background-dark);
+  background: #841bb4;
 }
 
 ::selection {
-  background: var(--background-dark);
+  background: #841bb4;
 }
 
 
@@ -130,12 +183,12 @@ header {
 }
 
 .grid {
-  display: grid; 
-  grid-template-columns: 0.2fr 1.8fr; 
-  grid-template-rows: 1fr; 
-  gap: 0px 0px; 
-  grid-template-areas: 
-  ". ."; 
+  display: grid;
+  grid-template-columns: 0.2fr 1.8fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". .";
   max-height: 88.6vh;
   overflow: hidden;
   max-width: 100vw;
@@ -148,6 +201,7 @@ header {
 }
 
 .newProject {
+  font-size: 18px;
   background: var(--background-dark);
   font-family: "JetBrains Mono";
   color: var(--special-color);
@@ -200,7 +254,8 @@ input {
   border: 2px solid var(--background-light) !important;
 }
 
-.edit form input, .edit form p {
+.edit form input,
+.edit form p {
   padding: 6px 12px;
   border-radius: 50px;
   border: 3px solid var(--background-light) !important;
@@ -229,22 +284,26 @@ input::placeholder {
   color: #17191B;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 .edit form button:hover {
   transform: scale(0.98);
   cursor: pointer;
   box-shadow: 0px 0px 24px var(--red);
 }
 
-.edit form button:active, dialog form button:active {
+.edit form button:active,
+dialog form button:active {
   transform: scale(0.93);
 }
 
-a:hover, button:hover {
+a:hover,
+button:hover {
   transform: scale(0.98);
   cursor: pointer;
 }
 
-a:active, button:active {
+a:active,
+button:active {
   transform: scale(0.93);
 }
 
@@ -255,7 +314,7 @@ a:active, button:active {
   left: 0;
   height: 100vh;
   width: 100vw;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: none;
 }
 
@@ -274,8 +333,9 @@ a:active, button:active {
 }
 
 [data-theme="dark"] .cm-activeLineGutter {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
+
 .codeWrapper {
   overflow: hidden;
   background: var(--background-light);
@@ -297,6 +357,7 @@ a:active, button:active {
 
 button {
   border: none;
+  font-size: 17px;
   background: transparent;
 }
 
@@ -353,7 +414,8 @@ button {
   margin-top: -9px;
 }
 
-.plus:has(button:disabled), .plus button:disabled {
+.plus:has(button:disabled),
+.plus button:disabled {
   visibility: hidden;
 }
 
@@ -435,7 +497,8 @@ dialog h2 {
   margin: 0px;
 }
 
-dialog form input, dialog form p {
+dialog form input,
+dialog form p {
   padding: 6px 12px;
   border-radius: 50px;
   border: 3px solid #17191B !important;
@@ -451,7 +514,7 @@ dialog form input, dialog form p {
 }
 
 dialog::backdrop {
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 100;
 }
 
@@ -488,7 +551,7 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  
+
 }
 
 .details form div input {
@@ -531,14 +594,14 @@ dialog::backdrop {
 }
 
 .optionGrid {
-  display: grid; 
-  grid-template-columns: 1fr; 
-  grid-template-rows: 1fr 1fr 1fr; 
-  gap: 18px; 
-  grid-template-areas: 
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 18px;
+  grid-template-areas:
     "."
     "."
-    "."; 
+    ".";
 }
 
 .optionGrid div {
@@ -557,7 +620,7 @@ dialog::backdrop {
 }
 
 #themeSwitch {
-  border: 4px solid var(--background-dark); 
+  border: 4px solid var(--background-dark);
   border-radius: 50px;
   height: 48px;
   width: 68px;
@@ -566,14 +629,17 @@ dialog::backdrop {
   align-items: center;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
+  font-size: 1.3rem;
 }
 
 #themeSwitch input {
-   display: none;
+  display: none;
 }
 
 [data-theme="light"] #themeSwitch:before {
-  content: '☀';
+  content: '\f185';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 600;
   transform: rotate(-45deg);
 }
 
@@ -584,7 +650,7 @@ dialog::backdrop {
   transform: rotate(0deg);
 }
 
-  /* The switch - the box around the slider */
+/* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -632,12 +698,12 @@ dialog::backdrop {
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   content: "\f00c";
   font-family: 'Font Awesome 5 Free';
   font-weight: 600;
   font-size: 16px;
-  
+
   background-color: var(--green);
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
@@ -663,7 +729,8 @@ input:checked + .slider:before {
 div.tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  border-bottom: 1px dotted black;
+  /* If you want dots under the hoverable text */
 }
 
 /* Tooltip text */
@@ -697,12 +764,12 @@ span.tooltiptext {
 }
 
 .tooltiptext.gridy {
-  display: grid; 
-  grid-template-columns: 1.6fr 0.4fr; 
-  grid-template-rows: 1fr; 
-  gap: 6px 12px; 
-  grid-template-areas: 
-  ". ."; 
+  display: grid;
+  grid-template-columns: 1.6fr 0.4fr;
+  grid-template-rows: 1fr;
+  gap: 6px 12px;
+  grid-template-areas:
+    ". .";
 }
 
 /* Tooltip arrow */
@@ -731,7 +798,8 @@ span.tooltiptext {
   padding-bottom: 32px;
 }
 
-.details form, .details {
+.details form,
+.details {
   transition: 0.3s ease-in-out;
 }
 
@@ -767,18 +835,29 @@ span.tooltiptext {
   cursor: not-allowed;
 }
 
-  .rick:hover:before {
-    content: "rick-rolled x-x";
-  }
+.rick:hover:before {
+  content: "rick-rolled x-x";
+}
+
 .rick p {
   margin: 0;
 }
- .rick:hover p {
-   display: none;
-  }
+
+.rick:hover p {
+  display: none;
+}
 
 .file-holder.bin-copy {
   justify-content: space-between;
+}
+
+.clicked-copy {
+  color: var(--background-dark) !important;
+  background-color: var(--green) !important;
+}
+
+[data-theme="light"] .clicked-copy {
+  color: var(--special-color) !important;
 }
 
 .copypasta {
@@ -788,11 +867,110 @@ span.tooltiptext {
 }
 
 .copypasta button {
-  color: var(--special-color);
   font-family: "JetBrains Mono";
-  border: 2px solid var(--background-dark);
-  padding: 6px 12px;
+  border: 2px solid #17191B;
   border-radius: 12px;
   font-weight: 800;
+  font-size: 18px;
+  padding: 10px;
+  display: flex;
+  color: var(--special-color);
+  background-color: initial;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+
+
+.pl,
+.pl__worm {
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.pl {
+  animation-name: bump;
+  animation-timing-function: linear;
+  width: 8em;
+  height: 8em;
+}
+
+.pl__ring {
+  stroke: var(--background-dark);
+  transition: stroke 0.3s;
+}
+
+.pl__worm {
+  animation-name: worm;
+  animation-timing-function: cubic-bezier(0.42, 0.17, 0.75, 0.83);
+}
+
+
+/* Animations */
+@keyframes bump {
+
+  from,
+  42%,
+  46%,
+  51%,
+  55%,
+  59%,
+  63%,
+  67%,
+  71%,
+  74%,
+  78%,
+  81%,
+  85%,
+  88%,
+  92%,
+  to {
+    transform: translate(0, 0);
+  }
+
+  44% {
+    transform: translate(1.33%, 6.75%);
+  }
+
+  53% {
+    transform: translate(-16.67%, -0.54%);
+  }
+
+  61% {
+    transform: translate(3.66%, -2.46%);
+  }
+
+  69% {
+    transform: translate(-0.59%, 15.27%);
+  }
+
+  76% {
+    transform: translate(-1.92%, -4.68%);
+  }
+
+  83% {
+    transform: translate(9.38%, 0.96%);
+  }
+
+  90% {
+    transform: translate(-4.55%, 1.98%);
+  }
+}
+
+@keyframes worm {
+  from {
+    stroke-dashoffset: 10;
+  }
+
+  25% {
+    stroke-dashoffset: 295;
+  }
+
+  to {
+    stroke-dashoffset: 1165;
+  }
+}
+
+.loading-brr {
+  z-index: 1000;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

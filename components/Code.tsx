@@ -10,7 +10,7 @@ import React from 'react';
 interface CodeBoardProps {
   language?: Function | any;
   code?: string;
-  theme?: "light" | "dark";
+  theme?: "light" | "dark" | string;
   onChange?: Function | any;
   readOnly?: boolean;
   height?: string;

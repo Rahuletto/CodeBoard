@@ -17,6 +17,7 @@
     "@uiw/codemirror-theme-atomone": "^4.21.2",
     "@uiw/codemirror-theme-github": "^4.21.2",
     "@uiw/react-codemirror": "^4.21.2",
+    "crypto-js": "^4.1.1",
     "cryptr": "^6.2.0",
     "mongoose": "^7.2.2",
     "next": "12.2.0",

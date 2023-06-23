@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import Code from '../../model/code'
 import connectDB from '../../middleware/mongodb'
 
-type Data = {
+type CreateRequestBody = {
   name: string,
   description: string,
   options: any,
@@ -12,18 +12,10 @@ type Data = {
   createdAt: number
 }
 
-type res = {
-  bin: string;
-  state: boolean;
-  data: any;
-}
-
-
-
 export default async function handler(req: NextApiRequest , res: NextApiResponse) {
   // Get data submitted in request's body.
   const db = await connectDB()
-  const body = req.body
+  const body: CreateRequestBody = req.body
   if(req.method != "POST") return res.status(405).json({ message: "Invaid Method ! EXPECTED: POST method." })
   if(req.headers.authorization != process.env.NEXT_PUBLIC_KEY) return res.status(401).json({ message: "Not Authorized !", status: 401 })
 
@@ -36,7 +28,5 @@ export default async function handler(req: NextApiRequest , res: NextApiResponse
       createdAt: req.body.createdAt
     })
 
-
-  
-  res.status(201).json({ bin: `/bin/${req.body.key}`, status: 201, workDone: true })
+  res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })
 }

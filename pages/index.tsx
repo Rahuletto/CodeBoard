@@ -21,11 +21,11 @@ import { BoardFile } from '../utils/board';
 import ThemeSwitch from '../components/ThemeSwitch';
 import Header from '../components/Header';
 
-// Encrypt
-import Cryptr from 'cryptr'
+// Encrypt-Decrypt
+import { AESEncrypt } from '../utils/aes'
 
 const Home: NextPage = () => {
-  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_ENCRPT);
+
   const router = useRouter();
 
   // Items
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
   const [code, setCode] = useState('');
 
   // mode
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'light' | 'dark' | string>(localStorage.getItem('theme') || "dark");
 
   // Inputs
   const [title, setTitle] = useState('Untitled');
@@ -68,7 +68,6 @@ const Home: NextPage = () => {
 
   const onChange = React.useCallback(
     (value: string, viewUpdate: any) => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (file.language == 'none') setFileName(fileName.split('.')[0] + '.md');
 
       const changed = files.find((a) => a.name === fileName);
@@ -97,7 +96,7 @@ const Home: NextPage = () => {
 
     tmpFiles.map((file) => {
       if (file.language == 'none') {
-        file.name = file.name.split('.').join('-') + '.md';
+        file.name = file.name.split('.')[0] + '.md';
       }
 
       const cls = `edit-${file.name.split('.').join('-')} edit`;
@@ -116,7 +115,6 @@ const Home: NextPage = () => {
             {/** eslint-disable-next-line react-hooks/exhaustive-deps */}
             <form className="editForm" onSubmit={(event) => edit(event, file)}>
               <input
-                pattern="^[^~)('!*<>:;,?*|/]+$"
                 onChange={(event) => updateEditLanguage(event)}
                 className="file-name"
                 name="filename"
@@ -178,13 +176,8 @@ const Home: NextPage = () => {
     if (files.find((a) => a.name === name))
       return alert('Name already taken !');
     else {
-      if (file.name == file.name) {
         file.name = name;
         file.language = (box.innerText || box.textContent).toLowerCase();
-      } else {
-        file.name = name;
-        file.language = (box.innerText || box.textContent).toLowerCase();
-      }
 
       setFileName(name);
     }
@@ -259,7 +252,7 @@ const Home: NextPage = () => {
           {
             name: file.name,
             language: file.language,
-            value: String(cryptr.encrypt(file.value))
+            value: String(AESEncrypt(file.value))
           }
         )
       })
@@ -340,7 +333,6 @@ const Home: NextPage = () => {
           <form method="dialog" onSubmit={(event) => newFile(event)}>
             <input
               autoComplete="off"
-              pattern="^[^~)('!*<>:;,?*|/]+$"
               onChange={(event) => updateLanguage(event)}
               className="file-name"
               name="filename"
