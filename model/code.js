@@ -4,34 +4,32 @@ var Schema = mongoose.Schema;
 var board = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: false
+    required: false,
   },
   files: {
     type: Array,
-    required: true
+    required: true,
   },
   options: {
     type: Array,
-    required: false
+    required: false,
   },
   key: {
     type: String,
-    required: true
+    required: true,
   },
   createdAt: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
-
 
 mongoose.models = {};
 
 var Code = mongoose.model('Encrypted-CodeBoard', board);
 
-
-export default Code
+export default Code;

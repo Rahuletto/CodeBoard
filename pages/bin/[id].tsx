@@ -24,12 +24,12 @@ import { AESDecrypt } from '../../utils/aes'
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
 
-  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
+  const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme'))
+    setTheme(localStorage.getItem('theme') || "dark")
   }, [])
-  
+
   useEffect(() => {
     if (!board) router.push('/404');
   }, [board]);

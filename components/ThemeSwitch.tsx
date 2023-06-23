@@ -1,3 +1,4 @@
+// NextJS stuff
 import { ChangeEvent, useEffect } from 'react';
 
 interface ThemeSwitchProps {
@@ -22,11 +23,14 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
     }
   }
 
+  // To let window to load
   useEffect(() => {
     function detectColorScheme() {
       if (!window || !window.matchMedia) return false;
-
-      else if (window && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      else if (
+        window &&
+        window.matchMedia('(prefers-color-scheme: light)').matches
+      ) {
         setTheme('light');
       }
 
@@ -37,8 +41,8 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
       }
     }
 
-    detectColorScheme()
-  }, [])
+    detectColorScheme();
+  }, []);
 
   return (
     <>
@@ -49,7 +53,6 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
           checked={theme == 'dark'}
         ></input>
       </label>
-
     </>
   );
 };

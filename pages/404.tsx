@@ -11,10 +11,10 @@ import Header from '../components/Header';
 const Error: NextPage = () => {
 
   // DARK MODE & LIGHT MODE
-  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
-  
+  const [theme, setTheme] = useState<'light' | 'dark' | string>();
+
   useEffect(() => {
-    setTheme(localStorage.getItem('theme'))
+    setTheme(localStorage.getItem('theme') || "dark")
   }, [])
 
   return (
@@ -37,7 +37,7 @@ const Error: NextPage = () => {
 
         <div className="lander">
           <h1 style={{ fontSize: '48px' }}> Something{"'"}s wrong here.</h1>
-          <p>
+          <div style={{fontSize: "18px"}}>
             The board you are looking for never existed, Or just got{' '}
             <div className="tooltip rick">
               <p>AutoVanished</p>
@@ -53,7 +53,7 @@ const Error: NextPage = () => {
             >
               blame my developer
             </span>
-          </p>
+          </div>
           <hr></hr>
 
           <a

@@ -18,10 +18,10 @@ import { GetServerSidePropsContext } from 'next';
 export function Embed({ board }) {
   const router = useRouter();
 
-  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
+  const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme'))
+    setTheme(localStorage.getItem('theme') || "dark")
   }, [])
 
   useEffect(() => {
@@ -128,7 +128,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
 
   const file = context.query
-  console.log(context.query)
   const maybeBoard: FetchResponse = await promiseBoard.json()
 
   let board: FetchResponse = maybeBoard;

@@ -1,41 +1,67 @@
 // CodeMirror
-import { atomoneInit } from "@uiw/codemirror-theme-atomone";
-import { githubLight } from "@uiw/codemirror-theme-github";
-import CodeMirror from "@uiw/react-codemirror";
-import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";
+import { atomoneInit } from '@uiw/codemirror-theme-atomone';
+import { githubLight } from '@uiw/codemirror-theme-github';
+import CodeMirror from '@uiw/react-codemirror';
+import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
+import { tags as t } from '@lezer/highlight';
 
 // React
 import React from 'react';
 
+// Props
 interface CodeBoardProps {
   language?: Function | any;
   code?: string;
-  theme?: "light" | "dark" | string;
+  theme?: 'light' | 'dark' | string;
   onChange?: Function | any;
   readOnly?: boolean;
   height?: string;
   width?: string;
 }
 
-const CodeBoard: React.FC<CodeBoardProps> = ({ language, code, theme, onChange, readOnly, height, width }) => {
+const CodeBoard: React.FC<CodeBoardProps> = ({
+  language,
+  code,
+  theme,
+  onChange,
+  readOnly,
+  height,
+  width,
+}) => {
   return (
     <>
       <CodeMirror
         placeholder="Paste your code here."
         theme={
-          theme == "light"
+          theme == 'light'
             ? githubLight
             : atomoneInit({
               settings: {
-                caret: "#c6c6c6",
-                fontFamily: "JetBrains Mono",
+                foreground: '#ABB2BF',
+                selection: '#646464',
+                selectionMatch: '#646464',
+                caret: '#C6C6C6',
+                fontFamily: 'JetBrains Mono',
               },
-              styles: [],
+              styles: [
+                { tag: t.content, color: '#7D8799' },
+                { tag: t.processingInstruction, color: '#98C379' },
+                { tag: t.name, color: '#61AFEF' },
+                { tag: t.variableName, color: '#D19A66'},
+                { tag: t.definitionOperator, color: '#56B6C2' },
+                { tag: t.propertyName, color: '#E06C75' },
+                { tag: t.punctuation, color: '#C678DD'},
+                { tag: t.brace, color: '#ABB2BF' },
+                { tag: t.paren, color: '#ABB2BF' },
+                { tag: t.angleBracket, color: '#ABB2BF' },
+                { tag: t.variableName, color: '#E06C75' },
+                { tag: t.definition(t.variableName), color: '#D19A66'}
+              ]
             })
         }
         value={code}
-        width={width || "auto"}
-        height={height || "200px"}
+        width={width || 'auto'}
+        height={height || '200px'}
         readOnly={readOnly}
         extensions={[language, hyperLink]}
         onChange={onChange}
@@ -56,7 +82,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({ language, code, theme, onChange, 
         }}
       />
     </>
-  )
-}
+  );
+};
 
 export default CodeBoard;
