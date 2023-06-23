@@ -1,24 +1,23 @@
-Welcome to the NextJS base template bootstrapped using the `create-next-app`. This template supports TypeScript, but you can use normal JavaScript as well.
+# CodeBoard
+(Rebranded from SimplyBin)
 
-## Getting Started
+## A new way to share your code.
 
-Hit the run button to start the development server.
+# Why CodeBoard ?
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- Supports 120+ Languages ! (Previously Supported 20 languages 😂)
+- Prettier Formatting support
+- AutoVanish (made-up name) feature
+- Encryption on the line (First in segment)
+- Embed your board (bin in our words) to your website
+- 100% Open Source !
+- Efficient, No crap
+- Support for Mobile devices !
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on `/api/hello`. This endpoint can be edited in `pages/api/hello.ts`.
+### Not just a simple sourcebin. Its a full on code editor
+We don't have facility to run the code ;(
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Want to Contribute ?
+We would love you to contribute to such a young project. We don't have any contribution guides in the moment. But we will have one in the near future. 
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-## Productionizing your Next App
-
-To make your next App run smoothly in production make sure to [turn this repl to an always-on repl.](https://docs.replit.com/hosting/enabling-always-on)
-
-You can also produce a production build by running `npm run build` and [changing the run command](https://docs.replit.com/programming-ide/configuring-repl#run) to `npm run start`.
+Now, If you know what you are doing, YES ! You can contribute and support our work with Pull Requests. Thank you in advance !
