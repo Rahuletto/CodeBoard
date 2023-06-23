@@ -24,8 +24,12 @@ import { AESDecrypt } from '../../utils/aes'
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
 
-  const [theme, setTheme] = useState<'light' | 'dark' | string>(localStorage.getItem('theme') || "dark");
+  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
 
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme'))
+  }, [])
+  
   useEffect(() => {
     if (!board) router.push('/404');
   }, [board]);
@@ -180,7 +184,7 @@ export default function Bin({ board }: { board: any }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
+  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
 
   const maybeBoard: FetchResponse = await promiseBoard.json()
 

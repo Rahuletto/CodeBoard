@@ -1,5 +1,4 @@
-import Script from 'next/script';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 
 interface ThemeSwitchProps {
   theme?: 'light' | 'dark' | string;
@@ -23,21 +22,23 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
     }
   }
 
-  function detectColorScheme() {
-    if (!window.matchMedia) return false;
+  useEffect(() => {
+    function detectColorScheme() {
+      if (!window || !window.matchMedia) return false;
 
-    else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      else if (window && window.matchMedia('(prefers-color-scheme: light)').matches) {
         setTheme('light');
-    }
+      }
 
-    if (theme == 'light') {
+      if (theme == 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme == 'dark') {
+      } else if (theme == 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
+      }
     }
-}
 
-detectColorScheme()
+    detectColorScheme()
+  }, [])
 
   return (
     <>

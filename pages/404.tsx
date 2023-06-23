@@ -1,6 +1,6 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 // Icons
@@ -11,7 +11,11 @@ import Header from '../components/Header';
 const Error: NextPage = () => {
 
   // DARK MODE & LIGHT MODE
-  const [theme, setTheme] = useState<'light' | 'dark' | string>(localStorage.getItem('theme') || "dark");
+  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
+  
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme'))
+  }, [])
 
   return (
     <div className={styles.container}>

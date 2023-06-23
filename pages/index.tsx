@@ -36,7 +36,11 @@ const Home: NextPage = () => {
   const [code, setCode] = useState('');
 
   // mode
-  const [theme, setTheme] = useState<'light' | 'dark' | string>(localStorage.getItem('theme') || "dark");
+  const [theme, setTheme] = useState<'light' | 'dark' | string>("dark");
+
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme'))
+  }, [])
 
   // Inputs
   const [title, setTitle] = useState('Untitled');
