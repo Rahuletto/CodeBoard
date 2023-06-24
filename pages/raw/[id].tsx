@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
+export const runtime = 'edge'
 export default function MyComponent({ text }) {
   return (
     <textarea
