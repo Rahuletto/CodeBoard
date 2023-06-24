@@ -4,7 +4,6 @@ import { GetServerSidePropsContext } from 'next';
 // Our stuff
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
-import { Board } from '../../utils/board';
 
 export default function MyComponent({ runtime, text } : { runtime: any, text: string })  {
   return (
