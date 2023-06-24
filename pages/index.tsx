@@ -9,9 +9,8 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
 import { FaPlus, FaCaretDown, FaBackward } from 'react-icons-ng/fa';
-import { GoShieldCheck, GoShieldSlash, GoGear } from 'react-icons-ng/go';
-import { VscNewFile } from 'react-icons-ng/vsc';
-import { LuTimer, LuTimerOff } from 'react-icons-ng/lu';
+import { LuShieldCheck, LuShieldOff, LuTimer, LuTimerOff } from 'react-icons-ng/lu';
+import { GoGear } from 'react-icons-ng/go'
 import { SiPrettier } from 'react-icons-ng/si';
 
 // Our Imports
@@ -109,8 +108,8 @@ const Home: NextPage = () => {
 			fileButtons.push(
 				<div key={file.name}>
 					<div className="fileSelect">
-						<button onClick={() => setFileName(file.name)}>{file.name}</button>
-						<button onClick={() => showEdit(file)}>
+						<button title={file.name} onClick={() => setFileName(file.name)}>{file.name}</button>
+						<button title="Edit" onClick={() => showEdit(file)}>
 							<FaCaretDown />
 						</button>
 					</div>
@@ -134,6 +133,7 @@ const Home: NextPage = () => {
 							</p>
 
 							<button
+								title="Delete the file"
 								disabled={files.length <= 1}
 								onClick={() => setTimeout(() => deleteFile(file.name), 400)}>
 								Delete
@@ -306,10 +306,10 @@ const Home: NextPage = () => {
 				<header>
 					<h1 className="title">CodeBoard</h1>
 					<div className="buttons">
-						<a href="/" className="newProject mobile">
+						<a title="New project" href="/" className="newProject mobile">
 							<FaPlus />
 						</a>
-						<a href="/" className="newProject pc">
+						<a href="/" title="New project" className="newProject pc">
 							<FaPlus style={{ marginRight: '10px' }} /> New board
 						</a>
 						<ThemeSwitch theme={theme} setTheme={setTheme} />
@@ -319,6 +319,7 @@ const Home: NextPage = () => {
 				<dialog id="newFile" open={false}>
 					<div>
 						<button
+							title='Back'
 							style={{
 								alignItems: 'center',
 								display: 'flex',
@@ -344,14 +345,15 @@ const Home: NextPage = () => {
 							<span className="language-show">Javascript</span>
 						</p>
 
-						<button className="create">
-							<VscNewFile style={{ marginRight: '4px' }} /> Create
+						<button title="Create new file" className="create">
+							Create
 						</button>
 					</form>
 				</dialog>
 
 				<div className="grid">
 					<button
+						title="More info about the project"
 						className="info mobile"
 						onClick={(event) => {
 							document.querySelector('.projectForm').classList.toggle('show');
@@ -369,9 +371,9 @@ const Home: NextPage = () => {
 										placeholder="Untitled."
 										name="project-name"></input>{' '}
 									{encrypt ? (
-										<GoShieldCheck className="enc icon" />
+										<LuShieldCheck className="enc icon" />
 									) : (
-										<GoShieldSlash
+										<LuShieldOff
 											style={{ color: 'var(--red)' }}
 											className="enc icon"
 										/>
@@ -419,6 +421,7 @@ const Home: NextPage = () => {
 						</div>
 						<div className="tooltip">
 							<button
+								title="Save the board"
 								className="save"
 								disabled={code == ''}
 								onClick={() => {
@@ -449,12 +452,12 @@ const Home: NextPage = () => {
 								)}
 								Encryption:{' '}
 								{encrypt ? (
-									<GoShieldCheck
+									<LuShieldCheck
 										style={{ opacity: 1, fontSize: '22px' }}
 										className="enc icon"
 									/>
 								) : (
-									<GoShieldSlash
+									<LuShieldOff
 										style={{
 											color: 'var(--red)',
 											opacity: 1,
@@ -473,6 +476,7 @@ const Home: NextPage = () => {
 								{btns}
 								<div className="fileSelect plus">
 									<button
+										title="New file"
 										disabled={files.length >= 2}
 										onClick={() => showDialog()}>
 										<FaPlus style={{ fontSize: '22px' }} />
@@ -481,6 +485,7 @@ const Home: NextPage = () => {
 							</div>
 							<div className="copypasta">
 								<button
+									title="Format the code"
 									style={{
 										display: 'inline-flex',
 										alignItems: 'center',

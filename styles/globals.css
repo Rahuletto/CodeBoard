@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
+@import url('https://use.fontawesome.com/releases/v6.0.0/css/all.css');
 
 .mobile {
   display: none !important;
@@ -20,6 +20,7 @@
     --background-light: #DEDEDE;
     --background-slight-dark: #EAEAEB;
     --background-dark: #C2C2C2;
+    --background-darker: #8f8f8f;
 
     --hsl-background-slight-dark: hsl(240, 2%, 92%);
     --hsl-background-dark: hsl(0, 0%, 76%);
@@ -42,6 +43,7 @@
     --background-light: #31353E;
     --background-slight-dark: #282c33;
     --background-dark: #17191B;
+    --background-darker: #141618;
 
     --hsl-background-slight-dark: hsl(218, 12%, 18%);
     --hsl-background-dark: hsl(210, 8%, 10%);
@@ -61,6 +63,8 @@ html[data-theme="light"] {
   --background-light: #DEDEDE;
   --background-slight-dark: #EAEAEB;
   --background-dark: #C2C2C2;
+  --background-darker: #8f8f8f;
+
   --hsl-background-dark: hsl(0, 0%, 76%);
 
   --red: #ee4646;
@@ -77,6 +81,8 @@ html[data-theme="dark"] {
   --background-light: #31353E;
   --background-slight-dark: #282c33;
   --background-dark: #17191B;
+  --background-darker: #141618;
+
   --hsl-background-dark: hsl(210, 8%, 10%);
 
   --red: #DB4545;
@@ -355,7 +361,7 @@ button {
 
 .fileSelect {
   background: var(--background-slight-dark);
-  border: 3px solid #17191B;
+  border: 3px solid var(--background-darker);
   border-radius: 50px;
   padding: 6px 18px;
   display: flex;
@@ -389,7 +395,7 @@ button {
 
 .fileSelect.plus {
   background: var(--background-slight-dark);
-  border: 3px solid #17191B;
+  border: 3px solid var(--background-darker);
   border-radius: 50px;
   height: 44px;
   width: 44px;
@@ -493,7 +499,7 @@ dialog form input,
 dialog form p {
   padding: 6px 12px;
   border-radius: 50px;
-  border: 3px solid #17191B !important;
+  border: 3px solid var(--background-darker) !important;
   color: var(--special-color);
   background: var(--background-dark);
   font-size: 18px;
@@ -860,7 +866,7 @@ span.tooltiptext {
 
 .copypasta button {
   font-family: "JetBrains Mono";
-  border: 2px solid #17191B;
+  border: 2px solid var(--background-darker);
   border-radius: 12px;
   font-weight: 800;
   font-size: 18px;
@@ -965,4 +971,46 @@ span.tooltiptext {
 .loading-brr {
   z-index: 1000;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.codeButtons {
+  opacity: 0; 
+  position: absolute;
+  display: flex;
+  z-index: 4;
+  background: rgb(39 44 53 / 90%);
+  border-radius: 12px;
+  right: 6px;
+  margin-top: 0px;
+  border: 3px solid var(--background-dark);
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.codeWrapper:hover .codeButtons {
+  margin-top: 10px;
+  opacity: 1;
+}
+
+.codeButtons button:nth-of-type(1) {
+  padding: 6px 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: 2px solid var(--background-darker);
+}
+
+
+.codeButtons button:nth-of-type(2) {
+  padding: 6px 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.codeButtons button {
+  color: var(--special-color);
+  border-radius: 9px;
+  font-family: 'JetBrains Mono';
+}
+
+.codeButtons button:hover {
+  background: rgba(255,255,255,0.1);
 }

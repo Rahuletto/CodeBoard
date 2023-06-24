@@ -55,7 +55,7 @@ export function Embed({ board }) {
     fileButtons.push(
       <div key={file.name}>
         <div className="fileSelect">
-          <button onClick={() => setFileName(file.name)}>{file.name}</button>
+          <button title={file.name} onClick={() => setFileName(file.name)}>{file.name}</button>
         </div>
       </div>
     );

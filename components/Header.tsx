@@ -38,10 +38,7 @@ const Header: React.FC<HeaderProps> = ({ title, description }) => {
 
         <link rel="icon" href="/sus.png" />
       </Head>
-      <link
-        href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"
-        rel="stylesheet"
-      />
+
     </>
   );
 };

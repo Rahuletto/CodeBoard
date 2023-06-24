@@ -10,6 +10,7 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 // Icons
 import { FaPlus, FaLink, FaCode } from 'react-icons-ng/fa';
 import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
+import { CoCopy } from 'react-icons-ng/co';
 
 // Our Imports
 import CodeBoard from '../../components/Code';
@@ -55,7 +56,7 @@ export default function Bin({ board }: { board: any }) {
     fileButtons.push(
       <div key={obj.name}>
         <div className="fileSelect">
-          <button onClick={() => setFileName(obj.name)}>{obj.name}</button>
+          <button title={obj.name} onClick={() => setFileName(obj.name)}>{obj.name}</button>
         </div>
       </div>
     );
@@ -80,10 +81,10 @@ export default function Bin({ board }: { board: any }) {
         <header>
           <h1 className="title">CodeBoard</h1>
           <div className="buttons">
-            <a href="/" className="newProject mobile">
+            <a title="New project" href="/" className="newProject mobile">
               <FaPlus />
             </a>
-            <a href="/" className="newProject pc">
+            <a title="New project" href="/" className="newProject pc">
               <FaPlus style={{ marginRight: '10px' }} /> New board
             </a>
             <ThemeSwitch theme={theme} setTheme={setTheme} />
@@ -92,6 +93,7 @@ export default function Bin({ board }: { board: any }) {
 
         <div className="grid">
           <button
+            title="More info about the project"
             className="info mobile"
             onClick={(event) => {
               document.querySelector('.projectForm').classList.toggle('show');
@@ -148,13 +150,16 @@ export default function Bin({ board }: { board: any }) {
               </div>
               <div className="copypasta">
                 <button
+                  title="Copy URL"
                   onClick={(event) => {
                     handleCopies(event, `${location.origin}/bin/${board.key}`);
                   }}
                 >
-                  <FaLink />
+                  <FaLink title="Copy URL" />
                 </button>
                 <button
+                  
+                  title="Embed the board"
                   onClick={(event) => {
                     handleCopies(event, `<iframe 
                     src="${location.origin}/embed/${board.key}" 
@@ -163,10 +168,28 @@ export default function Bin({ board }: { board: any }) {
                   </iframe>`);
                   }}
                 >
-                  <FaCode />
+                  <FaCode title="Embed the board" />
                 </button>
 
               </div>
+            </div>
+            <div className="codeButtons">
+            <button
+                  title="Copy the whole program"
+                  onClick={(event) => {
+                    handleCopies(event, file.value.toString());
+                  }}
+                >
+                  Copy
+                </button>
+                <button
+                  title="Open RAW file"
+                  onClick={() => {
+                    router.push(`/raw/${board.key}?file=${file.name}`)
+                  }}
+                >
+                  Raw
+                </button>
             </div>
             <CodeBoard
               language={language}

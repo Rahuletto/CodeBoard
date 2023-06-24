@@ -47,7 +47,7 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   return (
     <>
       <label id="themeSwitch">
-        <input
+        <input title='Switch theme'
           onChange={(event) => switchTheme(event)}
           type="checkbox"
           checked={theme == 'dark'}

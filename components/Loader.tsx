@@ -1,6 +1,7 @@
 // NextJS Stuff
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
+import Header from './Header';
 
 export const Loader: React.FC = () => {
   // Random texts to show in loading screen. Do a pr and add more ;)
@@ -35,6 +36,7 @@ export const Loader: React.FC = () => {
 
   return (
     <div className="loading-brr">
+      <Header />
       <div className={styles.loader}>
         <svg
           className="pl"
