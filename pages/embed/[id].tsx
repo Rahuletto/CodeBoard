@@ -41,7 +41,7 @@ export function Embed({ runtime, board } : { runtime: any, board: FetchResponse 
   let file = board.files.find((a) => a.name == fileName);
   if (!file) file = board.files[0];
 
-  let language = loadLanguage(
+  let language = loadLanguage( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     file.language == 'none' ? 'markdown' : file.language
   );
 
