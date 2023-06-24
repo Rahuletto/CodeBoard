@@ -183,10 +183,6 @@ export default function Bin({ runtime, board } : { runtime: any, board: FetchRes
   );
 }
 
-export const config = {
-	runtime: 'edge',
-};
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
@@ -230,3 +226,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
 }
+
+export const config = {
+	runtime: 'edge',
+};
