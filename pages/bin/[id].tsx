@@ -21,6 +21,7 @@ import { FetchResponse } from '../api/fetch';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
 
+export const runtime = 'edge'
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
 
