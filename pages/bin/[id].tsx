@@ -14,7 +14,7 @@ import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
 // Our Imports
 import CodeBoard from '../../components/Code';
 import { ExtensionType } from '../../utils/extensions';
-import { Board } from '../../utils/board';
+import { Board, BoardFile } from '../../utils/board';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import Header from '../../components/Header';
 import { FetchResponse } from '../api/fetch';
