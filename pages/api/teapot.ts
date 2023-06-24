@@ -1,10 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export const config = {
-    runtime: 'edge',
-};
-
 export default async function handler(
     _req: NextApiRequest,
     res: NextApiResponse
@@ -18,3 +14,6 @@ export default async function handler(
         });
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export const config = { runtime: 'edge' };

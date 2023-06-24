@@ -5,10 +5,6 @@ import connectDB from '../../middleware/mongodb';
 
 let interval: NodeJS.Timer;
 
-export const config = {
-	runtime: 'edge',
-};
-
 export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse
@@ -43,3 +39,6 @@ export default async function handler(
   )
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export const config = { runtime: 'edge' };

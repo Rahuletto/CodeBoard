@@ -9,9 +9,6 @@ export interface FetchResponse extends Omit<Board, 'options'> {
   encrypted: boolean;
 }
 
-export const config = {
-  runtime: 'edge',
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -49,3 +46,6 @@ export default async function handler(
     }
   });
 }
+
+// noinspection JSUnusedGlobalSymbols
+export const config = { runtime: 'edge' };

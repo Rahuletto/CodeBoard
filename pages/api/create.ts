@@ -12,9 +12,6 @@ type CreateRequestBody = {
   createdAt: number,
 };
 
-export const config = {
-	runtime: 'edge',
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -70,3 +67,5 @@ export default async function handler(
   )
   
 }
+// noinspection JSUnusedGlobalSymbols
+export const config = { runtime: 'edge' };
