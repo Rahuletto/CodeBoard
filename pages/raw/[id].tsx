@@ -3,7 +3,7 @@ import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
 
-export default function MyComponent({ text }) {
+export default function MyComponent({ runtime, text }) {
   return (
     <textarea
       disabled
@@ -19,7 +19,9 @@ export default function MyComponent({ text }) {
   );
 }
 
-export const runtime = 'edge';
+export const config = {
+	runtime: 'edge',
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const promiseBoard = await fetch(
@@ -40,6 +42,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (maybeBoard.encrypted) text = AESDecrypt(file.value);
 
-    return { props: { text: text } };
+    return { props: { runtime: process.env.NEXT_RUNTIME, text: text } };
   } else return { props: { text: 'Board not found !' } };
 }

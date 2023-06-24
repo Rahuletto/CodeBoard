@@ -15,7 +15,7 @@ import { AESDecrypt } from '../../utils/aes'
 import { FetchResponse } from '../api/fetch';
 import { GetServerSidePropsContext } from 'next';
 
-export function Embed({ board }) {
+export function Embed({ runtime, board }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -119,11 +119,13 @@ export function Embed({ board }) {
 
 
 
-export default memo(function EmbedPage({ board }: {board: Board}) {
-  return <Embed board={board} />
+export default memo(function EmbedPage({ runtime, board }: {board: Board}) {
+  return <Embed runtime={runtime} board={board} />
 })
 
-export const runtime = 'edge';
+export const config = {
+	runtime: 'edge',
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
@@ -159,7 +161,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   if(board.status == 200) {
-    return { props: { board: board } }
+    return { props: { runtime: process.env.NEXT_RUNTIME, board: board } }
   }
   else
     return {
