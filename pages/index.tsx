@@ -489,7 +489,7 @@ const Home: NextPage = () => {
 									style={{
 										display: 'inline-flex',
 										alignItems: 'center',
-										fontSize: '22px',
+										fontSize: '20px',
 									}}
 									onClick={(event) => {
 										const colors = ['#f8bc45', '#c596c7', '#56b3b4'];

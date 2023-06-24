@@ -1,8 +1,11 @@
+// NextJS Stuff
 import { GetServerSidePropsContext } from 'next';
+
+// Our stuff
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
-export default function MyComponent({ text }) {
+export default function MyComponent({ text } : { text: string })  {
   return (
     <textarea
       disabled
@@ -24,9 +27,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     { cache: 'force-cache' }
   );
 
-  const maybeBoard: FetchResponse = await promiseBoard.json();
 
   if (promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json();
+
     let text: string;
 
     const file = maybeBoard.files.find((a) => a.name == context.query.file);

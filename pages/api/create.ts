@@ -12,6 +12,7 @@ type CreateRequestBody = {
   createdAt: number,
 };
 
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -20,11 +21,15 @@ export default async function handler(
   const db = await connectDB();
   const body: CreateRequestBody = req.body;
   if (req.method != 'POST')
-    return res
-      .status(405)
-      .json({ message: 'Invaid Method ! EXPECTED: POST method.' });
+    return res.status(405).json({
+      message: 'Invaid Method ! EXPECTED: POST method.',
+    })
+
   if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return res.status(401).json({ message: 'Not Authorized !', status: 401 });
+    return res.status(401).json({
+      message: 'Not Authorized !',
+      status: 401
+    })
 
   Code.create({
     name: req.body.name,
@@ -35,7 +40,7 @@ export default async function handler(
     createdAt: req.body.createdAt,
   });
 
-  res
-    .status(201)
-    .json({ board: `/bin/${req.body.key}`, status: 201, workDone: true });
+  if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
+    return res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })
+
 }

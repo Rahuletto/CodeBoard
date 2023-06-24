@@ -1,7 +1,7 @@
 {
   "name": "codeboard",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "private": false,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
@@ -18,7 +18,6 @@
     "@uiw/codemirror-theme-github": "^4.21.2",
     "@uiw/react-codemirror": "^4.21.2",
     "crypto-js": "^4.1.1",
-    "cryptr": "^6.2.0",
     "mongoose": "^7.2.2",
     "next": "12.2.0",
     "prettier": "^2.8.8",
@@ -27,6 +26,7 @@
     "react-icons-ng": "^4.8.4"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.1.0",
     "@types/node": "18.0.1",
     "@types/prettier": "^2.7.3",
     "@types/react": "18.0.14",

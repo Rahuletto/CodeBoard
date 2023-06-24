@@ -14,7 +14,7 @@ import { CoCopy } from 'react-icons-ng/co';
 
 // Our Imports
 import CodeBoard from '../../components/Code';
-import { ExtensionType } from '../../utils/extensions';
+import { BoardFile } from '../../utils/board';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import Header from '../../components/Header';
 import { FetchResponse } from '../api/fetch';
@@ -22,7 +22,7 @@ import { FetchResponse } from '../api/fetch';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
 
-export default function Bin({ board }: { board: any }) {
+export default function Bin({ board } : { board: FetchResponse }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -39,10 +39,10 @@ export default function Bin({ board }: { board: any }) {
   const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
 
-  let file = board.files.find((a: ExtensionType) => a.name == fileName);
+  let file = board.files.find((a: BoardFile) => a.name == fileName);
   if (!file) file = board.files[0];
 
-  let language = loadLanguage(
+  let language = loadLanguage( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     file.language == 'none' ? 'markdown' : file.language
   );
 
@@ -209,35 +209,34 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
 
-  const maybeBoard: FetchResponse = await promiseBoard.json()
+  if (promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json()
+    let board: FetchResponse = maybeBoard;
 
-  let board: FetchResponse = maybeBoard;
-
-  if (maybeBoard.encrypted) {
-    try {
-      const decryptedFiles = [];
-
-      maybeBoard.files.forEach(f => {
-        decryptedFiles.push({
-          name: f.name,
-          language: f.language,
-          value: AESDecrypt(f.value)
+    if (maybeBoard.encrypted) {
+      try {
+        const decryptedFiles = [];
+  
+        maybeBoard.files.forEach(f => {
+          decryptedFiles.push({
+            name: f.name,
+            language: f.language,
+            value: AESDecrypt(f.value)
+          })
         })
-      })
+  
+        board = {
+          name: maybeBoard.name,
+          description: maybeBoard.description,
+          files: decryptedFiles,
+          key: maybeBoard.key,
+          createdAt: maybeBoard.createdAt,
+          status: 200,
+          encrypted: true
+        }
+      } catch (err) { }
+    }
 
-      board = {
-        name: maybeBoard.name,
-        description: maybeBoard.description,
-        files: decryptedFiles,
-        key: maybeBoard.key,
-        createdAt: maybeBoard.createdAt,
-        status: 200,
-        encrypted: true
-      }
-    } catch (err) { }
-  }
-
-  if (board.status == 200) {
     return { props: { board: board } }
   }
   else
