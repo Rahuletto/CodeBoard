@@ -1,7 +1,17 @@
 {
   "name": "codeboard",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": false,
+  "author": "Rahuletto",
+  "homepage": "https://cdeboard.vercel.app",
+  "license": "CC-BY-NC-ND-4.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Rahuletto/CodeBoard"
+	},
+	"bugs": {
+		"url": "https://github.com/Rahuletto/CodeBoard/issues"
+	},
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
