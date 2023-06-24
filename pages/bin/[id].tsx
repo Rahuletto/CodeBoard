@@ -39,7 +39,7 @@ export default function Bin({ runtime, board } : { runtime: any, board: Board })
   const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
 
-  let file = board.files.find((a: ExtensionType) => a.name == fileName);
+  let file = board.files.find((a: BoardFile) => a.name == fileName);
   if (!file) file = board.files[0];
 
   let language = loadLanguage(
