@@ -534,7 +534,7 @@ dialog::backdrop {
 }
 
 .details {
-  width: 300px;
+  width: 280px;
   padding: 24px;
 }
 
@@ -547,7 +547,7 @@ dialog::backdrop {
 }
 
 .details form div input {
-  max-width: 220px;
+  max-width: 200px;
   font-size: 32px;
   background: transparent;
   border-radius: 0px;
