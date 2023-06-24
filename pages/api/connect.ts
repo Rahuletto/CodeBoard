@@ -28,17 +28,6 @@ export default async function handler(
     }, 10000);
   }
 
-  return new Response(
-    JSON.stringify({ started: db }),
-    {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-      },
-    }
-  )
+  return res.status(200).json({ started: db })
 
 }
-
-// noinspection JSUnusedGlobalSymbols
-export const config = { runtime: 'edge' };

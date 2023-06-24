@@ -13,8 +13,7 @@ import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
 
 // Our Imports
 import CodeBoard from '../../components/Code';
-import { ExtensionType } from '../../utils/extensions';
-import { Board, BoardFile } from '../../utils/board';
+import { BoardFile } from '../../utils/board';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import Header from '../../components/Header';
 import { FetchResponse } from '../api/fetch';
@@ -22,7 +21,7 @@ import { FetchResponse } from '../api/fetch';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
 
-export default function Bin({ runtime, board } : { runtime: any, board: FetchResponse }) {
+export default function Bin({ board } : { board: FetchResponse }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -187,36 +186,35 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
 
-  const maybeBoard: FetchResponse = await promiseBoard.json()
+  if (promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json()
+    let board: FetchResponse = maybeBoard;
 
-  let board: FetchResponse = maybeBoard;
-
-  if (maybeBoard.encrypted) {
-    try {
-      const decryptedFiles = [];
-
-      maybeBoard.files.forEach(f => {
-        decryptedFiles.push({
-          name: f.name,
-          language: f.language,
-          value: AESDecrypt(f.value)
+    if (maybeBoard.encrypted) {
+      try {
+        const decryptedFiles = [];
+  
+        maybeBoard.files.forEach(f => {
+          decryptedFiles.push({
+            name: f.name,
+            language: f.language,
+            value: AESDecrypt(f.value)
+          })
         })
-      })
+  
+        board = {
+          name: maybeBoard.name,
+          description: maybeBoard.description,
+          files: decryptedFiles,
+          key: maybeBoard.key,
+          createdAt: maybeBoard.createdAt,
+          status: 200,
+          encrypted: true
+        }
+      } catch (err) { }
+    }
 
-      board = {
-        name: maybeBoard.name,
-        description: maybeBoard.description,
-        files: decryptedFiles,
-        key: maybeBoard.key,
-        createdAt: maybeBoard.createdAt,
-        status: 200,
-        encrypted: true
-      }
-    } catch (err) { }
-  }
-
-  if (board.status == 200) {
-    return { props: { runtime: process.env.NEXT_RUNTIME, board: board } }
+    return { props: { board: board } }
   }
   else
     return {
@@ -226,7 +224,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
 }
-
-export const config = {
-	runtime: 'edge',
-};

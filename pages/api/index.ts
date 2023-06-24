@@ -6,17 +6,8 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse
 ) {
-  return new Response(JSON.stringify({
+  return res.status(303).json({
     info: 'Welcome to CodeBoard API. You have 1 endpoint to use with CodeBoard',
-    get: [{ endpoint: '/fetch', usage: '/fetch?id={key}' }],
-  }), {
-    status: 303,
-    headers: {
-      'content-type': 'application/json',
-    }
-  });
-
+    get: [{ endpoint: '/fetch', usage: '/fetch?id={key}' }, { endpoint: '/teapot', usage: '/teapot' }],
+  })
 }
-
-// noinspection JSUnusedGlobalSymbols
-export const config = { runtime: 'edge' };

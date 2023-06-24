@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
-export default function MyComponent({ runtime, text } : { runtime: any, text: string })  {
+export default function MyComponent({ text } : { text: string })  {
   return (
     <textarea
       disabled
@@ -21,19 +21,16 @@ export default function MyComponent({ runtime, text } : { runtime: any, text: st
   );
 }
 
-export const config = {
-	runtime: 'edge',
-};
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const promiseBoard = await fetch(
     `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
     { cache: 'force-cache' }
   );
 
-  const maybeBoard: FetchResponse = await promiseBoard.json();
 
   if (promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json();
+
     let text: string;
 
     const file = maybeBoard.files.find((a) => a.name == context.query.file);
@@ -44,6 +41,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (maybeBoard.encrypted) text = AESDecrypt(file.value);
 
-    return { props: { runtime: process.env.NEXT_RUNTIME, text: text } };
+    return { props: { text: text } };
   } else return { props: { text: 'Board not found !' } };
 }

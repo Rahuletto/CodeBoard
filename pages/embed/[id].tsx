@@ -7,7 +7,6 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Our Imports
 import CodeBoard from '../../components/Code';
-import { Board } from '../../utils/board';
 import Header from '../../components/Header';
 
 // Encrypt-Decrypt
@@ -15,7 +14,7 @@ import { AESDecrypt } from '../../utils/aes'
 import { FetchResponse } from '../api/fetch';
 import { GetServerSidePropsContext } from 'next';
 
-export function Embed({ runtime, board } : { runtime: any, board: FetchResponse }) {
+export function Embed({ board } : { board: FetchResponse }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -119,20 +118,19 @@ export function Embed({ runtime, board } : { runtime: any, board: FetchResponse 
 
 
 
-export default memo(function EmbedPage({ runtime, board }: { runtime: any, board: FetchResponse }) {
-  return <Embed runtime={runtime} board={board} />
+export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
+  return <Embed board={board} />
 })
 
-export const config = {
-	runtime: 'edge',
-};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
 
-  const file = context.query
-  const maybeBoard: FetchResponse = await promiseBoard.json()
+  
+
+  if(promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json()
 
   let board: FetchResponse = maybeBoard;
 
@@ -160,8 +158,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     } catch (err) { }
   }
 
-  if(board.status == 200) {
-    return { props: { runtime: process.env.NEXT_RUNTIME, board: board } }
+    return { props: { board: board } }
   }
   else
     return {

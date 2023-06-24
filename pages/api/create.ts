@@ -21,31 +21,15 @@ export default async function handler(
   const db = await connectDB();
   const body: CreateRequestBody = req.body;
   if (req.method != 'POST')
-  return new Response(
-    JSON.stringify({
+    return res.status(405).json({
       message: 'Invaid Method ! EXPECTED: POST method.',
-    }),
-    {
-      status: 405,
-      headers: {
-        'content-type': 'application/json',
-      },
-    }
-  )
+    })
 
   if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return new Response(
-      JSON.stringify({
-        message: 'Not Authorized !',
-        status: 401
-      }),
-      {
-        status: 401,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    )
+    return res.status(401).json({
+      message: 'Not Authorized !',
+      status: 401
+    })
 
   Code.create({
     name: req.body.name,
@@ -56,16 +40,7 @@ export default async function handler(
     createdAt: req.body.createdAt,
   });
 
-  return new Response(
-    JSON.stringify({ board: `/bin/${req.body.key}`, status: 201, workDone: true }),
-    {
-      status: 201,
-      headers: {
-        'content-type': 'application/json',
-      },
-    }
-  )
-  
+  if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
+    return res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })
+
 }
-// noinspection JSUnusedGlobalSymbols
-export const config = { runtime: 'edge' };

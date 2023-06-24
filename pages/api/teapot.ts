@@ -5,15 +5,5 @@ export default async function handler(
     _req: NextApiRequest,
     res: NextApiResponse
 ) {
-    return new Response("Im a teapot",
-        {
-            status: 418,
-            headers: {
-                'content-type': 'application/json',
-            }
-        });
-
+    return res.status(418).send("Im a teapot now")
 }
-
-// noinspection JSUnusedGlobalSymbols
-export const config = { runtime: 'edge' };
