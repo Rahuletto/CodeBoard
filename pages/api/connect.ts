@@ -32,5 +32,14 @@ export default async function handler(
     }, 10000);
   }
 
-  res.status(200).send({ started: db });
+  return new Response(
+    JSON.stringify({ started: db }),
+    {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  )
+
 }

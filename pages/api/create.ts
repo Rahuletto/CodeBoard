@@ -24,11 +24,31 @@ export default async function handler(
   const db = await connectDB();
   const body: CreateRequestBody = req.body;
   if (req.method != 'POST')
-    return res
-      .status(405)
-      .json({ message: 'Invaid Method ! EXPECTED: POST method.' });
+  return new Response(
+    JSON.stringify({
+      message: 'Invaid Method ! EXPECTED: POST method.',
+    }),
+    {
+      status: 405,
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  )
+
   if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return res.status(401).json({ message: 'Not Authorized !', status: 401 });
+    return new Response(
+      JSON.stringify({
+        message: 'Not Authorized !',
+        status: 401
+      }),
+      {
+        status: 401,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    )
 
   Code.create({
     name: req.body.name,
@@ -39,7 +59,14 @@ export default async function handler(
     createdAt: req.body.createdAt,
   });
 
-  res
-    .status(201)
-    .json({ board: `/bin/${req.body.key}`, status: 201, workDone: true });
+  return new Response(
+    JSON.stringify({ board: `/bin/${req.body.key}`, status: 201, workDone: true }),
+    {
+      status: 201,
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  )
+  
 }

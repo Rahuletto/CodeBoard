@@ -10,7 +10,7 @@ export interface FetchResponse extends Omit<Board, 'options'> {
 }
 
 export const config = {
-	runtime: 'edge',
+  runtime: 'edge',
 };
 
 export default async function handler(
@@ -23,14 +23,28 @@ export default async function handler(
   const boardRaw = await Code.findOne({ key: queries.id });
 
   if (boardRaw)
-    return res.status(200).json({
-      createdAt: boardRaw.createdAt,
-      description: boardRaw.description,
-      files: boardRaw.files,
-      key: boardRaw.key,
-      name: boardRaw.name,
-      encrypted: boardRaw.options[0].encrypt,
-      status: 200,
-    });
-  else return res.status(404).json({ board: 'NOT FOUND', status: 404 });
+    return new Response(
+      JSON.stringify({
+        createdAt: boardRaw.createdAt,
+        description: boardRaw.description,
+        files: boardRaw.files,
+        key: boardRaw.key,
+        name: boardRaw.name,
+        encrypted: boardRaw.options[0].encrypt,
+        status: 200,
+      }),
+      {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    )
+
+  else return new Response({ board: 'NOT FOUND', status: 404 }, {
+    status: 404,
+    headers: {
+      'content-type': 'application/json',
+    }
+  });
 }
