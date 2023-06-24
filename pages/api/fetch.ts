@@ -41,7 +41,8 @@ export default async function handler(
       }
     )
 
-  else return new Response({ board: 'NOT FOUND', status: 404 }, {
+  else return new Response(
+    JSON.stringify({ board: 'NOT FOUND', status: 404 }), {
     status: 404,
     headers: {
       'content-type': 'application/json',
