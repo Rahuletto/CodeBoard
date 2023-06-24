@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ title, description }) => {
         />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://board.is-an.app" />
+        <meta property="og:url" content="https://cdeboard.vercel.app" />
         <meta property="og:title" content="CodeBoard" />
         <meta
           property="og:description"
@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ title, description }) => {
         />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://board.is-an.app" />
+        <meta property="twitter:url" content="https://cdeboard.vercel.app" />
         <meta property="twitter:title" content="CodeBoard" />
         <meta
           property="twitter:description"
