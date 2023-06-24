@@ -15,6 +15,7 @@ import { AESDecrypt } from '../../utils/aes'
 import { FetchResponse } from '../api/fetch';
 import { GetServerSidePropsContext } from 'next';
 
+export const runtime = 'edge'
 export function Embed({ board }) {
   const router = useRouter();
 
