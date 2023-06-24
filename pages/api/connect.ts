@@ -5,6 +5,7 @@ import connectDB from '../../middleware/mongodb';
 
 let interval: NodeJS.Timer;
 
+export const runtime = 'edge';
 export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse

@@ -2,7 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
-export const runtime = 'edge'
+
 export default function MyComponent({ text }) {
   return (
     <textarea
@@ -18,6 +18,8 @@ export default function MyComponent({ text }) {
     ></textarea>
   );
 }
+
+export const runtime = 'edge';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const promiseBoard = await fetch(

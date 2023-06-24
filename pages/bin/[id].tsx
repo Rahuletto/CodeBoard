@@ -21,7 +21,6 @@ import { FetchResponse } from '../api/fetch';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
 
-export const runtime = 'edge'
 export default function Bin({ board }: { board: any }) {
   const router = useRouter();
 
@@ -183,6 +182,7 @@ export default function Bin({ board }: { board: any }) {
   );
 }
 
+export const runtime = 'edge'
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
