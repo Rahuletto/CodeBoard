@@ -21,7 +21,7 @@ import { FetchResponse } from '../api/fetch';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
 
-export default function Bin({ runtime, board }: { board: any }) {
+export default function Bin({ runtime, board } : { runtime: any, board: Board }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();

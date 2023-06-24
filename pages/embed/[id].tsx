@@ -119,7 +119,7 @@ export function Embed({ runtime, board }) {
 
 
 
-export default memo(function EmbedPage({ runtime, board }: {board: Board}) {
+export default memo(function EmbedPage({ runtime, board }: { runtime: any, board: Board }) {
   return <Embed runtime={runtime} board={board} />
 })
 
