@@ -15,7 +15,7 @@ import { AESDecrypt } from '../../utils/aes'
 import { FetchResponse } from '../api/fetch';
 import { GetServerSidePropsContext } from 'next';
 
-export function Embed({ runtime, board }) {
+export function Embed({ runtime, board } : { runtime: any, board: FetchResponse }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
