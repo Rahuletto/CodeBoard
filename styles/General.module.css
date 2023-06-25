@@ -1,0 +1,49 @@
+.container {
+  padding: 0;
+  background: var(--background);
+  background: linear-gradient(135deg, var(--background) 0%, var(--background-dark) 100%);
+  height: 100vh;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.main {
+  overflow: hidden;
+  max-height: 100vh;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.newProject {
+  font-size: 18px;
+  background: var(--background-dark);
+  font-family: "JetBrains Mono";
+  color: var(--special-color);
+  padding: 6px 24px;
+  border-radius: 50px;
+  display: flex;
+  height: 48px;
+  align-items: center;
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96) color background-color;
+}
+
+.lander {
+  height: auto;
+  padding: 5rem 6rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 0.2fr 1.8fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". .";
+  max-height: 88.6vh;
+  overflow: hidden;
+  max-width: 100vw;
+}
+
+@media only screen and (max-width: 750px) {
+  .lander {
+    padding: 2rem 3rem;
+  }
+}

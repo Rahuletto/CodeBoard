@@ -23,6 +23,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://cdeboard.vercel.app" />
         <meta property="og:title" content={title || 'CodeBoard'} />
+        <meta property="og:color" content="#8d40bc" />
         <meta
           property="og:description"
           content={

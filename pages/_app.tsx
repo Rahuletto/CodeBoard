@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		}, 1800);
 	}, []);
 
-	const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500']; // blacklist these urls
+	const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home']; // blacklist these urls
 	if (
 		!loading &&
 		!blacklist.some((substring) => router.pathname.includes(substring))

@@ -331,7 +331,7 @@ button {
 }
 
 
-.active-file { 
+.active-file {
   opacity: 1;
   background: var(--background-slight-dark);
   border: 3px solid var(--background-darker);
@@ -670,4 +670,23 @@ span.tooltiptext {
   margin-left: auto;
   margin-right: auto;
   display: flex;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--special-color);
+  font-family: 'JetBrains Mono';
+  gap: 8px;
+  border-top: 2px solid var(--special-color);
+  padding-top: 10px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+footer a {
+  font-size: 22px;
+  color: var(--special-color);
+  font-family: 'JetBrains Mono';
 }

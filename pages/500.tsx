@@ -1,7 +1,7 @@
 // NextJS stuff
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import homeStyles from '../styles/Home.module.css';
+import generalStyles from '../styles/General.module.css';
 
 // Icons
 import MetaTags from '../components/Metatags';
@@ -16,16 +16,16 @@ const Error: NextPage = () => {
 	}, []);
 
 	return (
-		<div className={homeStyles.container}>
+		<div className={generalStyles.container}>
 			<MetaTags
 				title="500: Internal Server Error"
 				description="Uhh. We encountered some issues with our servers. Lets hope its not the rain messing things up"
 			/>
 
-			<main className={homeStyles.main}>
+			<main className={generalStyles.main}>
 				<Header ISE={true} theme={theme} setTheme={setTheme} />
 
-				<div className={homeStyles.lander}>
+				<div className={generalStyles.lander}>
 					<h1 style={{ fontSize: '48px' }}> Brokn s3rvers x-x</h1>
 					<div style={{ fontSize: '18px' }}>
 						Uhh. We encountered some issues with our servers. Lets hope its not
@@ -39,6 +39,9 @@ const Error: NextPage = () => {
 
 					<code className="errorCode">Error Code: 500</code>
 				</div>
+				<footer>
+                    Made by <a href='https://rahuletto.thedev.id'>Rahuletto</a>
+                </footer>
 			</main>
 		</div>
 	);

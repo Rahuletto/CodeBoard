@@ -14,7 +14,7 @@
     box-shadow: 0px 0px 40px #17191b;
     padding-bottom: 69px;
     width: 65vw;
-    
+
     margin-bottom: 40px;
   }
 
@@ -49,8 +49,9 @@
   }
 
   .lander {
-    padding: 1.5rem 3rem; 
+    padding: 1.5rem 3rem;
   }
+
   .codeWrapper {
     width: 96vw;
     position: absolute;
@@ -61,7 +62,7 @@
     border-right: 5px solid var(--background-dark);
     border-bottom: 5px solid var(--background-dark);
     border-radius: 24px;
-    height:76vh;
+    height: 76vh;
     padding-bottom: 100px;
 
   }
@@ -76,7 +77,7 @@
     scrollbar-width: thin;
   }
 
-  .newProject.mobile  {
+  .newProject.mobile {
     padding: 12px 14px;
     display: flex;
   }
@@ -111,7 +112,7 @@
   .opened:after {
     content: "Close";
   }
-  
+
   header {
     padding: 16px 14px;
   }

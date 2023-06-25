@@ -1,7 +1,7 @@
 // NextJS Stuff
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
-import homeStyles from '../../styles/Home.module.css';
+import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
 import boardStyles from '../../styles/Board.module.css';
 
@@ -76,13 +76,13 @@ export default function Bin({ board } : { board: FetchResponse }) {
     }, 5000);
   }
   return (
-    <div className={homeStyles.container}>
+    <div className={generalStyles.container}>
       <MetaTags title={board.name + "/CodeBoard"} description={board.description || "No Description. Just the source code."} />
 
-      <main className={homeStyles.main}>
+      <main className={generalStyles.main}>
       <Header theme={theme} setTheme={setTheme} />
 
-        <div className={[homeStyles.grid, 'grid'].join(' ')}>
+        <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <button
             title="More info about the project"
             className="info mobile"

@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import homeStyles from '../styles/Home.module.css';
+import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Index.module.css';
 
 // Load Languages
@@ -258,11 +258,15 @@ const Index: NextPage = () => {
 
 		if (encrypt) {
 			files.forEach((file) => {
-				encryptedFiles.push({
-					name: file.name,
-					language: file.language,
-					value: String(AESEncrypt(file.value)),
-				});
+				formatCode(file.value, file.language).then(code => {
+					encryptedFiles.push({
+						name: file.name,
+						language: file.language,
+						value: String(AESEncrypt(code)),
+					});
+				})
+
+				
 			});
 		} else encryptedFiles = files;
 
@@ -294,10 +298,10 @@ const Index: NextPage = () => {
 	// ------------------------------------------------------------------------------
 
 	return (
-		<div className={homeStyles.container}>
+		<div className={generalStyles.container}>
 			<MetaTags />
 
-			<main className={homeStyles.main}>
+			<main className={generalStyles.main}>
 				<div
 					onClick={() => {
 						closeEdit();
@@ -343,7 +347,7 @@ const Index: NextPage = () => {
 					</form>
 				</dialog>
 
-				<div className={[homeStyles.grid, 'grid'].join(' ')}>
+				<div className={[generalStyles.grid, 'grid'].join(' ')}>
 					<button
 						title="More info about the project"
 						className="info mobile"
