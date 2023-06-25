@@ -40,7 +40,6 @@ export default async function handler(
     createdAt: req.body.createdAt,
   });
 
-  if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })
+  return res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })
 
 }
