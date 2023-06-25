@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       
     <>
       <Loader />
-      <Component {...pageProps} />
+      <Component style={{opacity: 0}} {...pageProps} />
     </>
     ) 
   }
