@@ -6,6 +6,10 @@
 }
 
 .loader {
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  top: 0;
   padding: 0;
   background: var(--background);
   height: 100vh;
