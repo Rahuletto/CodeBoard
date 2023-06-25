@@ -15,14 +15,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      const elem = document.querySelector<HTMLElement>('.loading-brr');
-      if (elem) elem.style.opacity = '0';
-    }, 2999);
-    setTimeout(() => setLoading(true), 3000);
+    setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
   }, []);
 
-  const blacklist = ['/raw/[id]', '/embed/[id]', '/404'];
+  const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500']; // blacklist these urls
   if (
     !loading &&
     !blacklist.some((substring) => router.pathname.includes(substring))
@@ -31,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       
     <>
       <Loader />
-      <Component {...pageProps} />
+      <Component {...pageProps} /> // For getting its meta tags
     </>
     ) 
   }
