@@ -27,7 +27,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     !loading &&
     !blacklist.some((substring) => router.pathname.includes(substring))
   ) {
-    return <Loader />;
+    return (
+      
+    <>
+      <Loader />
+      <Component {...pageProps} />
+    </>
+    ) 
   }
 
   return (
