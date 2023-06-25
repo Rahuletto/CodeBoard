@@ -1,6 +1,6 @@
 @media only screen and (max-width: 750px) {
   .projectForm {
-    z-index: 10;
+    z-index: -1;
     background: var(--background);
     border-radius: 20px;
     position: absolute;
@@ -29,6 +29,7 @@
   }
 
   .projectForm.show {
+    z-index: 10;
     opacity: 1;
     left: 0;
     margin-bottom: 40px;
