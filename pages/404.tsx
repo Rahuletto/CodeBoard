@@ -57,12 +57,14 @@ const Error: NextPage = () => {
           <hr></hr>
 
           <a
-            style={{ width: 'fit-content', marginTop: '12px' }}
+            style={{ width: 'fit-content', marginTop: '18px' }}
             href="/"
             className="newProject"
           >
             <FaPlus style={{ marginRight: '10px' }} /> New board
           </a>
+
+          <code className='errorCode' >Error Code: 404</code>
         </div>
       </main>
     </div>
