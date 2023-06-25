@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		return (
 			<>
 				<Loader />
-				<Component {...pageProps} /> // For getting its meta tags
+				<Component {...pageProps} /> {/** For getting its meta tags */}
 			</>
 		);
 	}
