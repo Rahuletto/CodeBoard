@@ -82,7 +82,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
       <main className={homeStyles.main}>
       <Header theme={theme} setTheme={setTheme} />
 
-        <div className={homeStyles.grid}>
+        <div className={[homeStyles.grid, 'grid'].join(' ')}>
           <button
             title="More info about the project"
             className="info mobile"
@@ -93,8 +93,8 @@ export default function Bin({ board } : { board: FetchResponse }) {
           >
             <GoGear /> <span>Metadata</span>
           </button>
-          <div className={styles.project}>
-            <div className={styles.details}>
+          <div className={[styles.project, 'projectForm'].join(' ')}>
+            <div className={[styles.details, 'details'].join(' ')}>
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
                   <input

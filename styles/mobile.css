@@ -44,7 +44,7 @@
   }
 
   .grid {
-    display: flex;
+    display: flex !important;
     padding: 0px 12px;
   }
 
@@ -60,7 +60,7 @@
     bottom: 8px;
     border-right: 5px solid var(--background-dark);
     border-bottom: 5px solid var(--background-dark);
-    border-radius: 38px;
+    border-radius: 24px;
     height:76vh;
     padding-bottom: 100px;
 
