@@ -48,14 +48,14 @@ export function Embed({ board }: { board: FetchResponse }) {
   const fileButtons = [];
 
   board.files.map((f) => {
-    if (file.language == 'none') {
-      file.name = file.name.split('.')[0] + '.md';
+    if (f.language == 'none') {
+      f.name = f.name.split('.')[0] + '.md';
     }
 
     fileButtons.push(
-      <div key={file.name}>
-        <div className="fileSelect">
-          <button title={file.name} onClick={() => setFileName(file.name)}>{file.name}</button>
+      <div key={f.name}>
+        <div className={(f.name == fileName ? "fileSelect active-file" : "fileSelect")}>
+          <button title={f.name} onClick={() => setFileName(f.name)}>{f.name}</button>
         </div>
       </div>
     );

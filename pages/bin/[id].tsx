@@ -50,17 +50,6 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
   const fileButtons: JSX.Element[] = [];
 
-  useEffect(() => {
-    const selects = document.querySelectorAll('.fileSelect')
-
-    selects.forEach((slt) => {
-      if(slt.classList.contains(fileName.replaceAll('.', '-'))) {
-        slt.classList.add('active-file')
-      } else slt.classList.remove('active-file')
-    })
-
-  }, [fileName, board])
-
   board.files.map((f) => {
     if (f.language == 'none') {
       f.name = f.name.split('.')[0] + '.md';
@@ -68,7 +57,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <div className={[f.name.replaceAll('.', '-'), "fileSelect"].join(' ')}>
+        <div className={[f.name.replaceAll('.', '-'), (f.name == fileName ? "fileSelect active-file" : "fileSelect")].join(' ')}>
           <button title={f.name} onClick={() => setFileName(f.name)}>{f.name}</button>
         </div>
       </div>

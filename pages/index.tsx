@@ -105,10 +105,10 @@ const Index: NextPage = () => {
 			}
 
 			const cls = `edit-${file.name.split('.').join('-')} edit`;
-
+			
 			fileButtons.push(
 				<div key={file.name}>
-					<div className="fileSelect">
+					<div className={(file.name === fileName ? "fileSelect active-file" : "fileSelect")}>
 						<button title={file.name} onClick={() => setFileName(file.name)}>{file.name}</button>
 						<button title="Edit" onClick={() => showEdit(file)}>
 							<FaCaretDown />
@@ -470,7 +470,7 @@ const Index: NextPage = () => {
 						<div className="file-holder bin-copy">
 							<div style={{ display: 'flex', gap: '12px' }}>
 								{btns}
-								<div className="fileSelect plus">
+								<div className="fileSelect plus active-file">
 									<button
 										title="New file"
 										disabled={files.length >= 2}
