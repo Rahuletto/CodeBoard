@@ -145,7 +145,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
           <div className="codeWrapper">
             <div className="file-holder bin-copy">
-              <div>
+              <div style={{ display: 'flex', gap: '12px' }} >
                 {btns}
               </div>
               <div className="copypasta">
