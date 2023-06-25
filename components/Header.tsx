@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ title, description }) => {
             'Codeboard is an open source source code bin website thats better in every way '
           }
         />
-        <meta property="og:image" content="/sus.png" />
+        <meta property="og:image" content="/favicon.ico" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://cdeboard.vercel.app" />
@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ title, description }) => {
           }
         />
 
-        <link rel="icon" href="/sus.png" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
     </>
