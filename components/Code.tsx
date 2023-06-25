@@ -1,6 +1,6 @@
 // CodeMirror
 import { atomoneInit } from '@uiw/codemirror-theme-atomone';
-import { githubLight } from '@uiw/codemirror-theme-github';
+import { githubLightInit } from '@uiw/codemirror-theme-github';
 import CodeMirror from '@uiw/react-codemirror';
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
 import { tags as t } from '@lezer/highlight';
@@ -34,7 +34,12 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         placeholder="Paste your code here."
         theme={
           theme == 'light'
-            ? githubLight
+            ? githubLightInit({
+              settings: {
+                background: '#F6F6F6',
+                gutterBackground: '#F1F1F1'
+              }
+            })
             : atomoneInit({
               settings: {
                 foreground: '#ABB2BF',
