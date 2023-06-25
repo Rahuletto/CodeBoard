@@ -36,7 +36,7 @@ export const Loader: React.FC = () => {
 
   return (
     <div className="loading-brr">
-      <Header />
+      
       <div className={styles.loader}>
         <svg
           className="pl"
