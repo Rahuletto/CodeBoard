@@ -1,0 +1,25 @@
+.buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  .newProject {
+    font-size: 18px;
+    background: var(--background-dark);
+    font-family: "JetBrains Mono";
+    color: var(--special-color);
+    padding: 6px 24px;
+    border-radius: 50px;
+    display: flex;
+    height: 48px;
+    align-items: center;
+    transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96) color background-color;
+  }
+  
+  .title {
+    margin: 0px;
+    font-family: "JetBrains Mono";
+    color: var(--special-color);
+  }
+  

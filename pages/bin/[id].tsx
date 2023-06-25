@@ -1,26 +1,28 @@
 // NextJS Stuff
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
-import styles from '../../styles/Home.module.css';
+import homeStyles from '../../styles/Home.module.css';
+import styles from '../../styles/Index.module.css';
+import boardStyles from '../../styles/Board.module.css';
+
 import { GetServerSidePropsContext } from 'next';
 
 // CodeMirror Language
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaPlus, FaLink, FaCode } from 'react-icons-ng/fa';
+import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
-import { CoCopy } from 'react-icons-ng/co';
 
 // Our Imports
-import CodeBoard from '../../components/Code';
+import CodeBoard from '../../components/CodeBoard';
 import { BoardFile } from '../../utils/board';
-import ThemeSwitch from '../../components/ThemeSwitch';
-import Header from '../../components/Header';
+import MetaTags from '../../components/Metatags';
 import { FetchResponse } from '../api/fetch';
 
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes'
+import Header from '../../components/Header';
 
 export default function Bin({ board } : { board: FetchResponse }) {
   const router = useRouter();
@@ -48,15 +50,26 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
   const fileButtons: JSX.Element[] = [];
 
-  board.files.map((obj) => {
-    if (obj.language == 'none') {
-      obj.name = obj.name.split('.')[0] + '.md';
+  useEffect(() => {
+    const selects = document.querySelectorAll('.fileSelect')
+
+    selects.forEach((slt) => {
+      if(slt.classList.contains(fileName.replaceAll('.', '-'))) {
+        slt.classList.add('active-file')
+      } else slt.classList.remove('active-file')
+    })
+
+  }, [fileName, board])
+
+  board.files.map((f) => {
+    if (f.language == 'none') {
+      f.name = f.name.split('.')[0] + '.md';
     }
 
     fileButtons.push(
-      <div key={obj.name}>
-        <div className="fileSelect">
-          <button title={obj.name} onClick={() => setFileName(obj.name)}>{obj.name}</button>
+      <div key={f.name}>
+        <div className={[f.name.replaceAll('.', '-'), "fileSelect"].join(' ')}>
+          <button title={f.name} onClick={() => setFileName(f.name)}>{f.name}</button>
         </div>
       </div>
     );
@@ -74,24 +87,13 @@ export default function Bin({ board } : { board: FetchResponse }) {
     }, 5000);
   }
   return (
-    <div className={styles.container}>
-      <Header title={board.name + "/CodeBoard"} description={board.description || "No Description. Just the source code."} />
+    <div className={homeStyles.container}>
+      <MetaTags title={board.name + "/CodeBoard"} description={board.description || "No Description. Just the source code."} />
 
-      <main className={styles.main}>
-        <header>
-          <h1 className="title">CodeBoard</h1>
-          <div className="buttons">
-            <a title="New project" href="/" className="newProject mobile">
-              <FaPlus />
-            </a>
-            <a title="New project" href="/" className="newProject pc">
-              <FaPlus style={{ marginRight: '10px' }} /> New board
-            </a>
-            <ThemeSwitch theme={theme} setTheme={setTheme} />
-          </div>
-        </header>
+      <main className={homeStyles.main}>
+      <Header theme={theme} setTheme={setTheme} />
 
-        <div className="grid">
+        <div className={homeStyles.grid}>
           <button
             title="More info about the project"
             className="info mobile"
@@ -102,10 +104,10 @@ export default function Bin({ board } : { board: FetchResponse }) {
           >
             <GoGear /> <span>Metadata</span>
           </button>
-          <div className="projectForm">
-            <div className="details">
-              <form>
-                <div className="formName">
+          <div className={styles.project}>
+            <div className={styles.details}>
+              <form className={styles.detailsForm}>
+                <div className={styles.name}>
                   <input
                     value={board.name}
                     readOnly
@@ -127,7 +129,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
             </div>
             <div className="tooltip">
               <button
-                className="save"
+                className={styles.save}
                 disabled
                 style={{
                   display: 'flex',
@@ -148,7 +150,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
               <div style={{ display: 'flex', gap: '12px' }} >
                 {btns}
               </div>
-              <div className="copypasta">
+              <div className={boardStyles.copy}>
                 <button
                   title="Copy URL"
                   onClick={(event) => {
@@ -173,7 +175,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
               </div>
             </div>
-            <div className="codeButtons">
+            <div className={[boardStyles.inCode, 'codeCopy'].join(' ')}>
             <button
                   title="Copy the whole program"
                   onClick={(event) => {

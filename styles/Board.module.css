@@ -1,0 +1,61 @@
+.copy {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .copy button {
+    font-family: "JetBrains Mono";
+    border: 2px solid var(--background-darker);
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 18px;
+    padding: 10px;
+    display: flex;
+    color: var(--special-color);
+    background-color: initial;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .inCode {
+    opacity: 0;
+    position: absolute;
+    display: flex;
+    z-index: 4;
+    background: rgb(39 44 53 / 90%);
+    border-radius: 12px;
+    right: 6px;
+    margin-top: 0px;
+    border: 3px solid var(--background-dark);
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  [data-theme="light"] .inCode {
+    background: rgb(270 270 270 / 90%);
+  }
+  
+  .inCode button:nth-of-type(1) {
+    padding: 6px 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-right: 2px solid var(--background-darker);
+  }
+  
+  
+  .inCode button:nth-of-type(2) {
+    padding: 6px 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+  
+  .inCode button {
+    color: var(--special-color);
+    border-radius: 9px;
+    font-family: 'JetBrains Mono';
+  }
+  
+  .inCode button:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  
+  

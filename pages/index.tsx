@@ -2,7 +2,8 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import styles from '../styles/Home.module.css';
+import homeStyles from '../styles/Home.module.css';
+import styles from '../styles/Index.module.css';
 
 // Load Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
@@ -15,15 +16,15 @@ import { SiPrettier } from 'react-icons-ng/si';
 
 // Our Imports
 import { extensions } from '../utils/extensions';
-import CodeBoard from '../components/Code';
+import CodeBoard from '../components/CodeBoard';
 import { BoardFile } from '../utils/board';
-import ThemeSwitch from '../components/ThemeSwitch';
-import Header from '../components/Header';
+import MetaTags from '../components/Metatags';
 
 // Encrypt-Decrypt
 import { AESEncrypt } from '../utils/aes';
+import Header from '../components/Header';
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
 	const router = useRouter();
 
 	// Items
@@ -194,7 +195,9 @@ const Home: NextPage = () => {
 		const l =
 			extensions.find((x) =>
 				x.key.includes('.' + n.replace('.', '^').split('^')[1])
-			)?.name || 'none';
+			)?.name ||  extensions.find((x) =>
+			x.key.includes('.' + n.split('.')[n.split('.').length - 1])
+		)?.name || 'none';
 
 		box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
 	}
@@ -291,30 +294,19 @@ const Home: NextPage = () => {
 	// ------------------------------------------------------------------------------
 
 	return (
-		<div className={styles.container}>
-			<Header />
+		<div className={homeStyles.container}>
+			<MetaTags />
 
-			<main className={styles.main}>
+			<main className={homeStyles.main}>
 				<div
 					onClick={() => {
 						closeEdit();
 						const form = document.querySelector<HTMLFormElement>(`.editForm`);
 						form.requestSubmit();
 					}}
-					className="backdrop"></div>
+					className={[styles.backdrop, "backdrop"].join(' ')}></div>
 
-				<header>
-					<h1 className="title">CodeBoard</h1>
-					<div className="buttons">
-						<a title="New project" href="/" className="newProject mobile">
-							<FaPlus />
-						</a>
-						<a href="/" title="New project" className="newProject pc">
-							<FaPlus style={{ marginRight: '10px' }} /> New board
-						</a>
-						<ThemeSwitch theme={theme} setTheme={setTheme} />
-					</div>
-				</header>
+				<Header theme={theme} setTheme={setTheme} />
 
 				<dialog id="newFile" open={false}>
 					<div>
@@ -328,7 +320,7 @@ const Home: NextPage = () => {
 							onClick={() => {
 								document.querySelector<HTMLDialogElement>('#newFile').close();
 							}}
-							className="back">
+							className={styles.denyCreate}>
 							<FaBackward />
 						</button>
 						<h2>Add new file</h2>
@@ -345,13 +337,13 @@ const Home: NextPage = () => {
 							<span className="language-show">Javascript</span>
 						</p>
 
-						<button title="Create new file" className="create">
+						<button title="Create new file" className={styles.create}>
 							Create
 						</button>
 					</form>
 				</dialog>
 
-				<div className="grid">
+				<div className={homeStyles.grid}>
 					<button
 						title="More info about the project"
 						className="info mobile"
@@ -361,10 +353,10 @@ const Home: NextPage = () => {
 						}}>
 						<GoGear /> <span>Metadata</span>
 					</button>
-					<div className="projectForm">
-						<div className="details">
-							<form onSubmit={(event) => handleSubmit(event)}>
-								<div className="formName">
+					<div className={styles.project}>
+						<div className={styles.details}>
+							<form className={[styles.detailsForm, 'projectDetails'].join(' ')} onSubmit={(event) => handleSubmit(event)}>
+								<div className={styles.name}>
 									<input
 										value={title}
 										onChange={(event) => setTitle(event.target.value)}
@@ -386,7 +378,7 @@ const Home: NextPage = () => {
 									maxLength={128}
 									name="project-desc"></textarea>
 
-								<div className="optionGrid">
+								<div className={styles.optionGrid}>
 									<div>
 										<div className="tooltip">
 											<p>AutoVanish</p>
@@ -422,12 +414,16 @@ const Home: NextPage = () => {
 						<div className="tooltip">
 							<button
 								title="Save the board"
-								className="save"
+								className={styles.save}
 								disabled={code == ''}
 								onClick={() => {
 									const form =
-										document.querySelector<HTMLFormElement>(`.details form`);
+										document.querySelector<HTMLFormElement>(`.projectDetails`);
 									form.requestSubmit();
+									const backdrop =
+										document.querySelector<HTMLFormElement>(`.backdrop`);
+									backdrop.innerHTML = "Saving..."
+									backdrop.style['display'] = 'block';
 								}}>
 								Save
 							</button>
@@ -483,7 +479,7 @@ const Home: NextPage = () => {
 									</button>
 								</div>
 							</div>
-							<div className="copypasta">
+							<div className={styles.prettier}>
 								<button
 									title="Format the code"
 									style={{
@@ -529,7 +525,7 @@ const Home: NextPage = () => {
 	);
 };
 
-export default Home;
+export default Index;
 
 // Formatting code with Prettier
 const formatCode = async (code: string, language: string) => {
@@ -537,7 +533,7 @@ const formatCode = async (code: string, language: string) => {
 	const babylonParser = await import('prettier/parser-babel');
 	const css = await import('prettier/parser-postcss');
 	const html = await import('prettier/parser-html');
-  const angular = await import('prettier/parser-angular');
+	const angular = await import('prettier/parser-angular');
 	const markdown = await import('prettier/parser-markdown');
 	const typescript = await import('prettier/parser-typescript');
 	const yaml = await import('prettier/parser-yaml');
@@ -545,21 +541,21 @@ const formatCode = async (code: string, language: string) => {
 	let parser = 'babel';
 
 	switch (language) {
-    case 'angular':
+		case 'angular':
 			parser = 'angular';
 			break;
 		case 'css':
 			parser = 'css';
 			break;
 		case 'markdown':
-    case 'mdx':
+		case 'mdx':
 			parser = 'markdown';
 			break;
 		case 'html':
 			parser = 'html';
 			break;
 		case 'typescript':
-    case 'tsx':
+		case 'tsx':
 			parser = 'typescript';
 			break;
 		case 'yaml':
@@ -578,8 +574,8 @@ const formatCode = async (code: string, language: string) => {
 		useTabs: true,
 		bracketSpacing: true,
 		bracketSameLine: true,
-    endOfLine: 'auto',
-    
+		endOfLine: 'auto',
+
 	});
 };
 

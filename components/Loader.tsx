@@ -34,7 +34,7 @@ export const Loader: React.FC = () => {
   }
 
   return (
-      <div className={styles.loader}>
+      <div className={[styles.loader, 'loadScreen'].join(' ')}>
         <svg
           className={styles.loadingRing}
           viewBox="0 0 128 128"

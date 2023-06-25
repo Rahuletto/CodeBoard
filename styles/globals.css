@@ -184,48 +184,6 @@ header {
   justify-content: space-between;
 }
 
-.lander {
-  height: 100vh;
-  padding: 5rem 6rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 0.2fr 1.8fr;
-  grid-template-rows: 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    ". .";
-  max-height: 88.6vh;
-  overflow: hidden;
-  max-width: 100vw;
-}
-
-.buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-}
-
-.newProject {
-  font-size: 18px;
-  background: var(--background-dark);
-  font-family: "JetBrains Mono";
-  color: var(--special-color);
-  padding: 6px 24px;
-  border-radius: 50px;
-  display: flex;
-  height: 48px;
-  align-items: center;
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96) color background-color;
-}
-
-.title {
-  margin: 0px;
-  font-family: "JetBrains Mono";
-  color: var(--special-color);
-}
-
 .edit:before {
   content: '';
   background: var(--background-dark);
@@ -315,16 +273,7 @@ button:active {
   transform: scale(0.93);
 }
 
-.backdrop {
-  z-index: 50;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.5);
-  display: none;
-}
+
 
 .cm-editor {
   font-family: "JetBrains Mono" !important;
@@ -345,7 +294,7 @@ button:active {
 }
 
 .codeWrapper {
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   overflow: hidden;
   background: var(--background-light);
   border-top-left-radius: 38px;
@@ -358,7 +307,7 @@ button:active {
 }
 
 .file-holder {
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   padding: 10px;
   border-bottom: 5px solid var(--background-dark);
   display: flex;
@@ -372,15 +321,23 @@ button {
 }
 
 .fileSelect {
-  background: var(--background-slight-dark);
-  border: 3px solid var(--background-darker);
+  background: var(--background-dark);
+  border: 3px solid var(--background-dark);
   border-radius: 50px;
   padding: 6px 18px;
   display: flex;
+  opacity: 0.7;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.active-file { 
+  opacity: 1;
+  background: var(--background-slight-dark);
+  border: 3px solid var(--background-darker);
+}
+
 .fileSelect:hover {
+
   transform: scale(0.95);
 }
 
@@ -448,34 +405,6 @@ dialog div {
   display: flex;
   gap: 16px;
   align-items: center;
-}
-
-.create {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  font-weight: 800;
-  margin-left: auto;
-  margin-right: auto;
-
-  width: 70%;
-}
-
-.back {
-  padding: 8px 12px;
-  font-family: "DM Sans";
-  color: var(--red);
-  border-radius: 50px;
-  font-weight: 700;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.back:hover {
-  transform: scale(1.1);
-  cursor: pointer;
-  background: var(--red);
-  color: #17191B;
-  box-shadow: 0px 0px 24px var(--red);
 }
 
 
@@ -551,35 +480,6 @@ dialog::backdrop {
   text-transform: capitalize;
 }
 
-.details {
-  width: 280px;
-  padding: 24px;
-}
-
-.details form {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-}
-
-.details form div input {
-  max-width: 200px;
-  font-size: 32px;
-  background: transparent;
-  border-radius: 0px;
-  border: 0px solid transparent !important;
-  border-bottom: 2px var(--background-slight-dark) solid !important;
-  padding: 0px;
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-}
-
-.details form .formName {
-  display: flex;
-  align-items: center;
-  font-size: 28px;
-}
 
 .enc {
   color: var(--green);
@@ -588,46 +488,6 @@ dialog::backdrop {
 
 [data-theme="light"] .enc {
   color: var(--special-color);
-}
-
-.details form textarea {
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-  resize: none;
-  background: var(--background-dark);
-  border-radius: 18px;
-  border: 0px none;
-  padding: 12px;
-  font-family: "DM Sans";
-  height: 190px;
-  color: var(--special-color);
-  font-size: 16px;
-  margin-bottom: 14px;
-}
-
-.optionGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: 18px;
-  grid-template-areas:
-    "."
-    "."
-    ".";
-}
-
-.optionGrid div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--special-color);
-  user-select: none;
-  font-family: "DM Sans";
-  font-size: 20px;
-}
-
-.optionGrid div p {
-  margin: 0px;
-  font-weight: 700;
 }
 
 
@@ -771,51 +631,6 @@ span.tooltiptext {
   opacity: 1;
 }
 
-.projectForm {
-  transition: 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-bottom: 32px;
-}
-
-.details form,
-.details {
-  transition: 0.3s ease-in-out;
-}
-
-.save {
-  width: -moz-available;
-  width: -webkit-fill-available;
-  color: #17191B;
-  padding: 12px 24px;
-  border: 5px solid #17191B;
-  background: var(--green);
-  font-family: "DM Sans";
-  font-size: 20px;
-  border-radius: 50px;
-  margin: 0px 24px;
-  font-weight: 900;
-  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-
-.save:hover {
-  transform: scale(0.98);
-  cursor: pointer;
-  box-shadow: 0px 0px 24px #17191B;
-}
-
-.save:active {
-  transform: scale(0.91);
-  border: 3px solid #17191B;
-}
-
-.save:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 .rick:hover:before {
   content: "rick-rolled x-x";
 }
@@ -841,69 +656,9 @@ span.tooltiptext {
   color: var(--special-color) !important;
 }
 
-.copypasta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.copypasta button {
-  font-family: "JetBrains Mono";
-  border: 2px solid var(--background-darker);
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 18px;
-  padding: 10px;
-  display: flex;
-  color: var(--special-color);
-  background-color: initial;
-  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.codeButtons {
-  opacity: 0;
-  position: absolute;
-  display: flex;
-  z-index: 4;
-  background: rgb(39 44 53 / 90%);
-  border-radius: 12px;
-  right: 6px;
-  margin-top: 0px;
-  border: 3px solid var(--background-dark);
-  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-[data-theme="light"] .codeButtons {
-  background: rgb(270 270 270 / 90%);
-}
-
-.codeWrapper:hover .codeButtons {
+.codeWrapper:hover .codeCopy {
   margin-top: 10px;
   opacity: 1;
-}
-
-.codeButtons button:nth-of-type(1) {
-  padding: 6px 10px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-right: 2px solid var(--background-darker);
-}
-
-
-.codeButtons button:nth-of-type(2) {
-  padding: 6px 10px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-
-.codeButtons button {
-  color: var(--special-color);
-  border-radius: 9px;
-  font-family: 'JetBrains Mono';
-}
-
-.codeButtons button:hover {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .errorCode {

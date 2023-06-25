@@ -1,11 +1,11 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css';
+import homeStyles from '../styles/Home.module.css';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
-import ThemeSwitch from '../components/ThemeSwitch';
+import MetaTags from '../components/Metatags';
 import Header from '../components/Header';
 
 const Error: NextPage = () => {
@@ -18,24 +18,13 @@ const Error: NextPage = () => {
   }, [])
 
   return (
-    <div className={styles.container}>
-      <Header title="Uhhm ??" description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)." />
+    <div className={homeStyles.container}>
+      <MetaTags title="Uhhm ??" description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)." />
 
-      <main className={styles.main}>
-        <header>
-          <h1 className="title">CodeBoard</h1>
-          <div className="buttons">
-            <a href="/" className="newProject mobile">
-              <FaPlus />
-            </a>
-            <a href="/" className="newProject pc">
-              <FaPlus style={{ marginRight: '10px' }} /> New board
-            </a>
-            <ThemeSwitch theme={theme} setTheme={setTheme} />
-          </div>
-        </header>
+      <main className={homeStyles.main}>
+        <Header theme={theme} setTheme={setTheme} />
 
-        <div className="lander">
+        <div className={homeStyles.lander}>
           <h1 style={{ fontSize: '48px' }}> Something{"'"}s wrong here.</h1>
           <div style={{fontSize: "18px"}}>
             The board you are looking for never existed, Or just got{' '}
@@ -59,7 +48,7 @@ const Error: NextPage = () => {
           <a
             style={{ width: 'fit-content', marginTop: '18px' }}
             href="/"
-            className="newProject"
+            className={homeStyles.newProject}
           >
             <FaPlus style={{ marginRight: '10px' }} /> New board
           </a>
