@@ -290,8 +290,8 @@ const Index: NextPage = () => {
 
 		const result = await response.json();
 		console.log(result)
-		if (result.board)
-			router.push(result.board);
+		if (result)
+			router.push(`/bin/${keyId}`);
 	};
 	// ------------------------------------------------------------------------------
 
