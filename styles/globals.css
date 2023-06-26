@@ -25,6 +25,8 @@
     --hsl-background-slight-dark: hsl(240, 2%, 92%);
     --hsl-background-dark: hsl(0, 0%, 76%);
 
+    --code-editor: #f6f6f6;
+
     --red: #ee4646;
     --green: #45DB4B;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -50,6 +52,8 @@
     --hsl-background-slight-dark: hsl(218, 12%, 18%);
     --hsl-background-dark: hsl(210, 8%, 10%);
 
+    --code-editor: #272c35;
+
     --red: #DB4545;
     --green: #45DB4B;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -71,6 +75,8 @@ html[data-theme="light"] {
 
   --hsl-background-dark: hsl(0, 0%, 76%);
 
+  --code-editor: #f6f6f6;
+  
   --red: #ee4646;
   --green: #45DB4B;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -91,6 +97,8 @@ html[data-theme="dark"] {
 
   --hsl-background-dark: hsl(210, 8%, 10%);
 
+  --code-editor: #272c35;
+
   --red: #DB4545;
   --green: #45DB4B;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -107,7 +115,7 @@ body {
   font-family: "DM Sans";
   color: var(--font-color);
   scrollbar-width: thin;
-  scrollbar-color: var(--background-dark) #272c35;
+  scrollbar-color: var(--background-darker) var(--code-editor);
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -148,26 +156,26 @@ button:focus {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #272c35;
+  background-color: var(--code-editor);
 }
 
 ::-webkit-scrollbar-track:hover {
-  background-color: #272c35;
+  background-color: var(--code-editor);
 }
 
 /* scrollbar itself */
 ::-webkit-scrollbar-thumb {
-  background: var(--background-dark);
+  background: var(--background-darker);
   border-radius: 16px;
-  border: 6px solid #272c35;
+  border: 6px solid var(--code-editor);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  border: 5px solid #272c35;
+  border: 5px solid var(--code-editor);
 }
 
 ::-webkit-scrollbar-corner {
-  background: #272c35;
+  background: var(--code-editor);
 }
 
 ::-webkit-scrollbar-button {
@@ -182,6 +190,7 @@ header {
   padding: 16px 32px;
   display: flex;
   justify-content: space-between;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .edit:before {
@@ -683,10 +692,17 @@ footer {
   padding-top: 10px;
   margin-left: 10%;
   margin-right: 10%;
+  position: absolute;
+  width: -webkit-fill-available;
+  bottom: 20px;
 }
 
 footer a {
   font-size: 22px;
   color: var(--special-color);
   font-family: 'JetBrains Mono';
+}
+
+hr {
+  margin: 20px;
 }

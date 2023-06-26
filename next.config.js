@@ -6,9 +6,6 @@ const nextConfig = {
     NEXT_PUBLIC_KEY: process.env['NEXT_PUBLIC_KEY'],
     NEXT_PUBLIC_ENCRPT: process.env['NEXT_PUBLIC_ENCRPT']
   },
-  experimental: {
-    runtime: 'edge',
-  },
   webpack: {
     experiments: {
       topLevelAwait: true

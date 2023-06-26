@@ -18,8 +18,8 @@ const Header: React.FC<MetaTagsProps> = ({ ISE, theme, setTheme } = { ISE: false
     return (
         <header>
             <div style={{display: 'flex', gap: '20px', alignItems: 'center'}}>
-            <a href="/home" className={styles.title}>{ISE ? 'C0d3B0a2d' : 'CodeBoard'}</a>
-            <a  target="_blank" rel="noreferrer" href="https://github.com/Rahuletto/CodeBoard" className={[styles.newProject, 'pc'].join(' ')}>
+            <a href="/home" className={styles.title} >{ISE ? 'C0d3B0a2d' : 'CodeBoard'}</a>
+            <a  target="_blank" style={{height: '42px'}} rel="noreferrer" href="https://github.com/Rahuletto/CodeBoard" className={[styles.newProject, 'pc'].join(' ')}>
                 <VscGithubInverted style={{ marginRight: '10px' }} /> Github
             </a>
             </div>

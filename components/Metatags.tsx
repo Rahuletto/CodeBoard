@@ -16,7 +16,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
           name="description"
           content={
             description ||
-            'Codeboard is an open source source code bin website thats better in every way '
+            'CodeBoard is an open-source code sharing platform thats better in every way. With beautiful syntax highlighting and integrated with Prettier.'
           }
         />
 
@@ -28,7 +28,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
           property="og:description"
           content={
             description ||
-            'Codeboard is an open source source code bin website thats better in every way '
+            'CodeBoard is an open-source code sharing platform thats better in every way. With beautiful syntax highlighting and integrated with Prettier.'
           }
         />
         <meta property="og:image" content="/favicon.ico" />

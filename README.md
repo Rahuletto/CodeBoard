@@ -3,6 +3,10 @@
 
 ## A new way to share your code.
 
+CodeBoard is an open-source code sharing platform thats better in every way.
+With beautiful syntax highlighting and integrated with Prettier.
+
+
 # Why CodeBoard ?
 
 - Supports 120+ Languages ! (Previously Supported 20 languages 😂)
@@ -11,7 +15,7 @@
 - Encryption on the line (First in segment)
 - Embed your board (bin in our words) to your website
 - 100% Open Source !
-- Efficient, No crap
+- No Ads (This became a feature now lol)
 - Support for Mobile devices !
 
 ### Not just a simple sourcebin. Its a full on code editor
