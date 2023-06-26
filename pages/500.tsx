@@ -39,9 +39,6 @@ const Error: NextPage = () => {
 
 					<code className="errorCode">Error Code: 500</code>
 				</div>
-				<footer>
-                    Made by <a href='https://rahuletto.thedev.id'>Rahuletto</a>
-                </footer>
 			</main>
 		</div>
 	);

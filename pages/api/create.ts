@@ -20,6 +20,7 @@ export default async function handler(
   // Get data submitted in request's body.
   const db = await connectDB();
   const body: CreateRequestBody = req.body;
+
   if (req.method != 'POST')
     return res.status(405).json({
       message: 'Invaid Method ! EXPECTED: POST method.',
@@ -31,13 +32,23 @@ export default async function handler(
       status: 401
     })
 
+  const ifExist = await Code.findOne({ key: body.key }).exec()
+  if (ifExist) {
+    console.log('BRO DONT SPAM')
+    return res.status(401).json({
+      message: "Board with this key already exists. ",
+      error: 401
+    })
+  }
+
+
   Code.create({
-    name: req.body.name,
-    description: req.body.description,
-    options: req.body.options,
-    files: req.body.files,
-    key: req.body.key,
-    createdAt: req.body.createdAt,
+    name: body.name,
+    description: body.description,
+    options: body.options,
+    files: body.files,
+    key: body.key,
+    createdAt: body.createdAt,
   });
 
   return res.status(201).json({ board: `/bin/${req.body.key}`, status: 201, workDone: true })

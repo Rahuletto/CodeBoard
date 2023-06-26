@@ -47,6 +47,8 @@ const Index: NextPage = () => {
 	const [encrypt, setEncrypt] = useState(true);
 	const [vanish, setVanish] = useState(false);
 
+	const keyId = makeid(8);
+
 	// Files
 	const [files, setFiles] = useState([
 		{
@@ -105,7 +107,7 @@ const Index: NextPage = () => {
 			}
 
 			const cls = `edit-${file.name.split('.').join('-')} edit`;
-			
+
 			fileButtons.push(
 				<div key={file.name}>
 					<div className={(file.name === fileName ? "fileSelect active-file" : "fileSelect")}>
@@ -195,9 +197,9 @@ const Index: NextPage = () => {
 		const l =
 			extensions.find((x) =>
 				x.key.includes('.' + n.replace('.', '^').split('^')[1])
-			)?.name ||  extensions.find((x) =>
-			x.key.includes('.' + n.split('.')[n.split('.').length - 1])
-		)?.name || 'none';
+			)?.name || extensions.find((x) =>
+				x.key.includes('.' + n.split('.')[n.split('.').length - 1])
+			)?.name || 'none';
 
 		box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
 	}
@@ -252,21 +254,15 @@ const Index: NextPage = () => {
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
 
-		const keyId = makeid(8);
-
 		let encryptedFiles: BoardFile[] = [];
 
 		if (encrypt) {
 			files.forEach((file) => {
-				formatCode(file.value, file.language).then(code => {
-					encryptedFiles.push({
-						name: file.name,
-						language: file.language,
-						value: String(AESEncrypt(code)),
-					});
-				})
-
-				
+				encryptedFiles.push({
+					name: file.name,
+					language: file.language,
+					value: String(AESEncrypt(file.value)),
+				});
 			});
 		} else encryptedFiles = files;
 
@@ -293,7 +289,9 @@ const Index: NextPage = () => {
 		const response = await fetch(endpoint, options);
 
 		const result = await response.json();
-		router.push(`/bin/${keyId}`);
+		console.log(result)
+		if (result.board)
+			router.push(result.board);
 	};
 	// ------------------------------------------------------------------------------
 
@@ -420,13 +418,15 @@ const Index: NextPage = () => {
 								title="Save the board"
 								className={styles.save}
 								disabled={code == ''}
-								onClick={() => {
+								onClick={(event) => {
+									(event.target as HTMLButtonElement).disabled = true;
+									(event.target as HTMLElement).style.background = 'var(--red)'
 									const form =
 										document.querySelector<HTMLFormElement>(`.projectDetails`);
 									form.requestSubmit();
 									const backdrop =
 										document.querySelector<HTMLFormElement>(`.backdrop`);
-									backdrop.innerHTML = "Saving..."
+									backdrop.innerHTML = "<h1>Saving...</h1>"
 									backdrop.style['display'] = 'block';
 								}}>
 								Save
@@ -575,7 +575,6 @@ const formatCode = async (code: string, language: string) => {
 		plugins: [babylonParser, css, html, markdown, typescript, yaml, angular],
 		semi: true,
 		singleQuote: true,
-		useTabs: true,
 		bracketSpacing: true,
 		bracketSameLine: true,
 		endOfLine: 'auto',

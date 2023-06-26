@@ -55,9 +55,7 @@ const Error: NextPage = () => {
 
           <code className='errorCode' >Error Code: 404</code>
         </div>
-        <footer>
-          Made by <a href='https://rahuletto.thedev.id'>Rahuletto</a>
-        </footer>
+
       </main>
     </div>
   );

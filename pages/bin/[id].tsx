@@ -198,7 +198,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
+  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
 
   if (promiseBoard.status == 200) {
     const maybeBoard: FetchResponse = await promiseBoard.json()
