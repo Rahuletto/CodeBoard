@@ -1,178 +1,176 @@
 .backdrop {
-    z-index: 50;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
+  z-index: 50;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
 }
 
 
 .denyCreate {
-    padding: 8px 12px;
-    font-family: "DM Sans";
-    color: var(--red);
-    border-radius: 50px;
-    font-weight: 700;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 8px 12px;
+  font-family: "DM Sans";
+  color: var(--red);
+  border-radius: 50px;
+  font-weight: 700;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .denyCreate:hover {
-    transform: scale(1.1);
-    cursor: pointer;
-    background: var(--red);
-    color: #17191B;
-    box-shadow: 0px 0px 24px var(--red);
+  transform: scale(1.1);
+  cursor: pointer;
+  background: var(--red);
+  color: #17191B;
+  box-shadow: 0px 0px 24px var(--red);
 }
 
 
 .create {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    font-weight: 800;
-    margin-left: auto;
-    margin-right: auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  font-weight: 800;
+  margin-left: auto;
+  margin-right: auto;
 
-    width: 70%;
+  width: 70%;
 }
 
 .project {
-    transition: 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 32px;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 32px;
 }
 
 
 .detailsForm,
 .details {
-    transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 .details form textarea {
-    transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-    resize: none;
-    background: var(--background-dark);
-    border-radius: 18px;
-    border: 0px none;
-    padding: 12px;
-    font-family: "DM Sans";
-    height: 190px;
-    color: var(--special-color);
-    font-size: 16px;
-    margin-bottom: 14px;
-  }
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  resize: none;
+  background: var(--background-dark);
+  border-radius: 18px;
+  border: 0px none;
+  padding: 12px;
+  font-family: "DM Sans";
+  height: 190px;
+  color: var(--special-color);
+  font-size: 16px;
+  margin-bottom: 14px;
+}
 
-  .details {
-    width: 280px;
-    padding: 24px;
-  }
-  
-  .details form {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-  }
-  
-  .details form div input {
-    max-width: 200px;
-    font-size: 32px;
-    background: transparent;
-    border-radius: 0px;
-    border: 0px solid transparent !important;
-    border-bottom: 2px var(--background-slight-dark) solid !important;
-    padding: 0px;
-    transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
-  }
-  
-  .details form .name {
-    display: flex;
-    align-items: center;
-    font-size: 28px;
-  }
+.details {
+  width: 280px;
+  padding: 24px;
+}
 
-  
+.details form {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.details form div input {
+  max-width: 200px;
+  font-size: 32px;
+  background: transparent;
+  border-radius: 0px;
+  border: 0px solid transparent !important;
+  border-bottom: 2px var(--background-slight-dark) solid !important;
+  padding: 0px;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.details form .name {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+}
+
+
 .save {
-    width: -moz-available;
-    width: -webkit-fill-available;
-    color: #17191B;
-    padding: 12px 24px;
-    border: 5px solid #17191B;
-    background: var(--green);
-    font-family: "DM Sans";
-    font-size: 20px;
-    border-radius: 50px;
-    margin: 0px 24px;
-    font-weight: 900;
-    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: -moz-available;
+  width: -webkit-fill-available;
+  color: #17191B;
+  padding: 12px 24px;
+  border: 5px solid #17191B;
+  background: var(--green);
+  font-family: "DM Sans";
+  font-size: 20px;
+  border-radius: 50px;
+  margin: 0px 24px;
+  font-weight: 900;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 
 .save:hover {
-    transform: scale(0.98);
-    cursor: pointer;
-    box-shadow: 0px 0px 24px #17191B;
+  transform: scale(0.98);
+  cursor: pointer;
+  box-shadow: 0px 0px 24px #17191B;
 }
 
 .save:active {
-    transform: scale(0.91);
-    border: 3px solid #17191B;
+  transform: scale(0.91);
+  border: 3px solid #17191B;
 }
 
 .save:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .optionGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    gap: 18px;
-    grid-template-areas:
-      "."
-      "."
-      ".";
-  }
-  
-  .optionGrid div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--special-color);
-    user-select: none;
-    font-family: "DM Sans";
-    font-size: 20px;
-  }
-  
-  .optionGrid div p {
-    margin: 0px;
-    font-weight: 700;
-  }
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 18px;
+  grid-template-areas:
+    "."
+    "."
+    ".";
+}
 
-  .prettier {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  
-  .prettier button {
-    font-family: "JetBrains Mono";
-    border: 2px solid var(--background-darker);
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 18px;
-    padding: 10px;
-    display: flex;
-    color: var(--special-color);
-    background-color: initial;
-    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
+.optionGrid div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--special-color);
+  user-select: none;
+  font-family: "DM Sans";
+  font-size: 20px;
+}
 
-  
+.optionGrid div p {
+  margin: 0px;
+  font-weight: 700;
+}
+
+.prettier {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prettier button {
+  font-family: "JetBrains Mono";
+  border: 2px solid var(--background-darker);
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 10px;
+  display: flex;
+  color: var(--special-color);
+  background-color: initial;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

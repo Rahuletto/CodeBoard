@@ -30,6 +30,6 @@ var board = new Schema({
 
 mongoose.models = {};
 
-var Code = mongoose.model('Encrypted-CodeBoard', board);
+var Code = mongoose.model('Production-CodeBoard', board);
 
 export default Code;

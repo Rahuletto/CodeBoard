@@ -1,7 +1,7 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import homeStyles from '../styles/Home.module.css';
+import generalStyles from '../styles/General.module.css';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
@@ -18,15 +18,15 @@ const Error: NextPage = () => {
   }, [])
 
   return (
-    <div className={homeStyles.container}>
+    <div className={generalStyles.container}>
       <MetaTags title="Uhhm ??" description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)." />
 
-      <main className={homeStyles.main}>
+      <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
 
-        <div className={homeStyles.lander}>
+        <div className={generalStyles.lander}>
           <h1 style={{ fontSize: '48px' }}> Something{"'"}s wrong here.</h1>
-          <div style={{fontSize: "18px"}}>
+          <div style={{ fontSize: "18px" }}>
             The board you are looking for never existed, Or just got{' '}
             <div className="tooltip rick">
               <p>AutoVanished</p>
@@ -48,13 +48,14 @@ const Error: NextPage = () => {
           <a
             style={{ width: 'fit-content', marginTop: '18px' }}
             href="/"
-            className={homeStyles.newProject}
+            className={generalStyles.newProject}
           >
             <FaPlus style={{ marginRight: '10px' }} /> New board
           </a>
 
           <code className='errorCode' >Error Code: 404</code>
         </div>
+
       </main>
     </div>
   );
