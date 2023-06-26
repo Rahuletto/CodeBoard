@@ -30,8 +30,6 @@
     --red: #ee4646;
     --green: #45DB4B;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: var(--background);
-    background: linear-gradient(135deg, var(--background) 0%, var(--background-dark) 100%);
   }
 }
 
@@ -57,8 +55,6 @@
     --red: #DB4545;
     --green: #45DB4B;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: var(--background);
-    background: linear-gradient(135deg, var(--background) 0%, var(--background-dark) 100%);
   }
 }
 
@@ -80,8 +76,6 @@ html[data-theme="light"] {
   --red: #ee4646;
   --green: #45DB4B;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  background: var(--background);
-  background: linear-gradient(135deg, var(--background) 0%, var(--background-dark) 100%);
 }
 
 html[data-theme="dark"] {
@@ -102,9 +96,6 @@ html[data-theme="dark"] {
   --red: #DB4545;
   --green: #45DB4B;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-  background: var(--background);
-  background: linear-gradient(135deg, var(--background) 0%, var(--background-dark) 100%);
 }
 
 html,
