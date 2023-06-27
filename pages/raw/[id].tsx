@@ -22,14 +22,21 @@ export default function MyComponent({ text } : { text: string })  {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
-  );
+  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'force-cache' });
 
 
   if (promiseBoard.status == 200) {
     const maybeBoard: FetchResponse = await promiseBoard.json();
+
+    if (
+      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+      maybeBoard?.autoVanish
+    ) return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
 
     let text: string;
 

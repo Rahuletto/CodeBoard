@@ -198,11 +198,21 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`);
+  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'force-cache' });
 
   if (promiseBoard.status == 200) {
     const maybeBoard: FetchResponse = await promiseBoard.json()
     let board: FetchResponse = maybeBoard;
+
+    if (
+      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
+      board?.autoVanish
+    ) return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
 
     if (maybeBoard.encrypted) {
       try {
@@ -223,7 +233,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           key: maybeBoard.key,
           createdAt: maybeBoard.createdAt,
           status: 200,
-          encrypted: true
+          encrypted: maybeBoard.encrypted,
+          autoVanish: maybeBoard.autoVanish
         }
       } catch (err) { }
     }

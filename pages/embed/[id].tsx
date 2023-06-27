@@ -162,7 +162,7 @@ export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
+  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'force-cache' });
 
 
 
@@ -171,6 +171,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     let board: FetchResponse = maybeBoard;
 
+    if (
+      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
+      board?.autoVanish
+    ) return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
+    
     if (maybeBoard.encrypted) {
       try {
         const decryptedFiles = [];
@@ -190,7 +200,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           key: maybeBoard.key,
           createdAt: maybeBoard.createdAt,
           status: 200,
-          encrypted: true
+          encrypted: maybeBoard.encrypted,
+          autoVanish: maybeBoard.autoVanish
         }
       } catch (err) { }
     }

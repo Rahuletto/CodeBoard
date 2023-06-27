@@ -7,6 +7,7 @@ import { Board } from '../../utils/board';
 export interface FetchResponse extends Omit<Board, 'options'> {
 	status: number;
 	encrypted: boolean;
+	autoVanish: boolean;
 }
 
 export default async function handler(
@@ -26,6 +27,7 @@ export default async function handler(
 			key: boardRaw.key,
 			name: boardRaw.name,
 			encrypted: boardRaw.options[0].encrypt,
+			autoVanish: boardRaw.options[0].autoVanish,
 			status: 200,
 		});
 	else
