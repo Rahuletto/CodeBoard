@@ -267,9 +267,10 @@ const Index: NextPage = () => {
 
   // HANDLE SUMBIT ----------------------------------------------------
   const handleSubmit = async (event: FormEvent) => {
-    const { AESEncrypt } = await import('../utils/aes');
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
+
+    const { AESEncrypt } = await import('../utils/aes');
 
     let encryptedFiles: BoardFile[] = [];
 
