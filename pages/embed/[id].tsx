@@ -1,21 +1,30 @@
 // NextJS stuff
 import { useRouter } from 'next/router';
 import React, { MouseEvent, memo, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { GetServerSidePropsContext } from 'next';
+
+// Styles
 import boardStyles from '../../styles/Board.module.css';
 
 // Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
-// Our Imports
-import CodeBoard from '../../components/CodeBoard';
-import MetaTags from '../../components/Metatags';
-
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes';
+
+// Types
 import { FetchResponse } from '../api/fetch';
-import { GetServerSidePropsContext } from 'next';
+
+
+// Lazy loading
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: false,
+});
+const MetaTags = dynamic(() => import('../../components/Metatags'), { ssr: true })
 
 export function Embed({ board }: { board: FetchResponse }) {
+  
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();

@@ -2,6 +2,9 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import dynamic from 'next/dynamic';
+
+// Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Index.module.css';
 
@@ -19,15 +22,16 @@ import {
 import { GoGear } from 'react-icons-ng/go';
 import { SiPrettier } from 'react-icons-ng/si';
 
-// Our Imports
-import { extensions } from '../utils/extensions';
-import CodeBoard from '../components/CodeBoard';
+// Types
 import { BoardFile } from '../utils/board';
-import MetaTags from '../components/Metatags';
+import { extensions } from '../utils/extensions';
 
-// Encrypt-Decrypt
-import { AESEncrypt } from '../utils/aes';
-import Header from '../components/Header';
+
+// Lazy loading
+const CodeBoard = dynamic(() => import('../components/CodeBoard'), { ssr: false });
+const Header = dynamic(() => import('../components/Header'), { ssr: false });
+const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
+
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -263,6 +267,7 @@ const Index: NextPage = () => {
 
   // HANDLE SUMBIT ----------------------------------------------------
   const handleSubmit = async (event: FormEvent) => {
+    const { AESEncrypt } = await import('../utils/aes');
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
@@ -301,7 +306,6 @@ const Index: NextPage = () => {
     const response = await fetch(endpoint, options);
 
     const result = await response.json();
-    console.log(result);
     if (result) router.push(`/bin/${keyId}`);
   };
   // ------------------------------------------------------------------------------

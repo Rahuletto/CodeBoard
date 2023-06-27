@@ -1,11 +1,13 @@
 // NextJS Stuff
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { GetServerSidePropsContext } from 'next';
+
+// Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
 import boardStyles from '../../styles/Board.module.css';
-
-import { GetServerSidePropsContext } from 'next';
 
 // CodeMirror Language
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
@@ -15,14 +17,19 @@ import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
 
 // Our Imports
-import CodeBoard from '../../components/CodeBoard';
 import { BoardFile } from '../../utils/board';
-import MetaTags from '../../components/Metatags';
 import { FetchResponse } from '../api/fetch';
 
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes';
-import Header from '../../components/Header';
+
+// Lazy loading
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: false,
+});
+const MetaTags = dynamic(() => import('../../components/Metatags'), { ssr: true })
+const Header = dynamic(() => import('../../components/Header'), { ssr: false })
+
 
 export default function Bin({ board }: { board: FetchResponse }) {
   const router = useRouter();
@@ -57,15 +64,16 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <div
+        <button
+        title={f.name} onClick={() => setFileName(f.name)}
           className={[
             f.name.replaceAll('.', '-'),
             f.name == fileName ? 'fileSelect active-file' : 'fileSelect',
           ].join(' ')}>
-          <button title={f.name} onClick={() => setFileName(f.name)}>
+          <div>
             {f.name}
-          </button>
-        </div>
+          </div>
+        </button>
       </div>
     );
   });
@@ -80,6 +88,9 @@ export default function Bin({ board }: { board: FetchResponse }) {
       target.classList.toggle('clicked-copy');
     }, 5000);
   }
+
+  
+  
   return (
     <div className={generalStyles.container}>
       <MetaTags
@@ -224,7 +235,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         const decryptedFiles = [];
 
         maybeBoard.files.forEach((f) => {
-          console.log(AESDecrypt(f.value))
           decryptedFiles.push({
             name: f.name,
             language: f.language,
@@ -240,7 +250,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           createdAt: maybeBoard.createdAt,
           status: 200,
           encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard.autoVanish,
+          autoVanish: maybeBoard?.autoVanish || false,
         };
       } catch (err) { console.log(err) }
     }

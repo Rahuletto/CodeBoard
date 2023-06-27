@@ -2,13 +2,14 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
 // Styles
 import '../styles/globals.css';
 import '../styles/mobile.css';
 
-// Loader
-import { Loader } from '../components/Loader';
+// Lazy loading
+const Loader = dynamic(() => import('../components/Loader'), { ssr: true })
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) elem.style.opacity = '0';
-    }, 1800);
+    }, router.pathname == '/' ? 800 : 1800);
   }, []);
 
   const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home']; // blacklist these urls

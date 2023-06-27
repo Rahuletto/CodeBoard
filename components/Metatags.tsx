@@ -24,6 +24,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
         <meta property="og:url" content="https://cdeboard.vercel.app" />
         <meta property="og:title" content={title || 'CodeBoard'} />
         <meta property="og:color" content="#8d40bc" />
+        <meta name="theme-color" content="#8d40bc" />
         <meta
           property="og:description"
           content={
@@ -43,6 +44,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
             'Codeboard is an open source source code bin website thats better in every way '
           }
         />
+
 
         <link key="icon" rel="icon" href="/favicon.ico" />
       </Head>

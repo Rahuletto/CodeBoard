@@ -1,4 +1,4 @@
-// NextJS stuff
+// Styles
 import styles from './styles/Header.module.css';
 
 // Component

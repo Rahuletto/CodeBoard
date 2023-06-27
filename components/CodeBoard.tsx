@@ -28,6 +28,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   height,
   width,
 }) => {
+  
   return (
     <>
       <CodeMirror
@@ -71,6 +72,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         readOnly={readOnly}
         extensions={[language, hyperLink]}
         onChange={onChange}
+        aria-label="code"
         basicSetup={{
           foldGutter: true,
           closeBrackets: true,

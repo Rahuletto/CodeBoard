@@ -1,5 +1,7 @@
 // NextJS stuff
 import { ChangeEvent, useEffect } from 'react';
+
+// Styles
 import styles from './styles/ThemeSwitcher.module.css';
 
 interface ThemeSwitchProps {

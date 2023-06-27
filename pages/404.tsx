@@ -1,12 +1,17 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+// Styles
 import generalStyles from '../styles/General.module.css';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
-import MetaTags from '../components/Metatags';
-import Header from '../components/Header';
+
+// Lazy loading
+const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
+const Header = dynamic(() => import('../components/Header'), { ssr: false })
 
 const Error: NextPage = () => {
   // DARK MODE & LIGHT MODE

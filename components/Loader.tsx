@@ -1,8 +1,10 @@
 // NextJS Stuff
 import React, { useState, useEffect } from 'react';
+
+// Styles
 import styles from './styles/Loader.module.css';
 
-export const Loader: React.FC = () => {
+const Loader: React.FC = () => {
   // Random texts to show in loading screen. Do a pr and add more ;)
   const texts = [
     <span key="1">Sorting things out.</span>,
@@ -75,3 +77,6 @@ export const Loader: React.FC = () => {
     </div>
   );
 };
+
+
+export default Loader;
