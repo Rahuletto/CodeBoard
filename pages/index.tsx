@@ -30,7 +30,7 @@ import { extensions } from '../utils/extensions';
 const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
   ssr: false,
 });
-const Header = dynamic(() => import('../components/Header'), { ssr: false });
+const Header = dynamic(() => import('../components/Header'), { ssr: true });
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 
 const Index: NextPage = () => {
@@ -110,49 +110,51 @@ const Index: NextPage = () => {
 
     const tmpFiles = [...files];
 
-    tmpFiles.map((file) => {
-      if (file.language == 'none') {
-        file.name = file.name.split('.')[0] + '.md';
+    tmpFiles.map((f) => {
+      if (f.language == 'none') {
+        f.name = f.name.split('.')[0] + '.md';
       }
 
-      const cls = `edit-${file.name.split('.').join('-')} edit`;
-
+      const cls = `edit-${f.name.replaceAll('.', '-')} edit`;
       fileButtons.push(
-        <div key={file.name}>
+        <div key={f.name}>
           <button
-            title={file.name}
-            onClick={() => setFileName(file.name)}
+            title={f.name}
+            onClick={() => setFileName(f.name)}
             className={
-              file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
+              f.name === fileName ? 'fileSelect active-file' : 'fileSelect'
             }>
-            <div>{file.name}</div>
-            <button className="file" title="Edit" onClick={() => showEdit(file)}>
-              <FaCaretDown />
-            </button>
+            <div>{f.name}</div>
+            <div>
+              <button className="file" title="Edit" onClick={() => showEdit(f)}>
+                <FaCaretDown />
+              </button>
+            </div>
           </button>
 
           <div className={cls}>
             {' '}
-            {/** eslint-disable-next-line react-hooks/exhaustive-deps */}
-            <form className="editForm" onSubmit={(event) => edit(event, file)}>
+            <form className="editForm" onSubmit={(event) => edit(event)}>
               <input
-                onChange={(event) => updateEditLanguage(event)}
+                onChange={(event) => updateEditLanguage(event, f.name)}
                 className="file-name"
                 name="filename"
                 type="text"
-                placeholder={file.name}
+                placeholder={f.name}
                 autoComplete="off"></input>
               <p>
-                <span className="language-show-edit">
-                  {file.language.charAt(0).toUpperCase() +
-                    file.language.slice(1)}
+                <span
+                  className={['language-show-edit', f.name + '-language'].join(
+                    ' '
+                  )}>
+                  {f.language.charAt(0).toUpperCase() + f.language.slice(1)}
                 </span>
               </p>
 
               <button
                 title="Delete the file"
                 disabled={files.length <= 1}
-                onClick={() => setTimeout(() => deleteFile(file.name), 400)}>
+                onClick={() => setTimeout(() => deleteFile(f.name), 400)}>
                 Delete
               </button>
             </form>
@@ -175,45 +177,48 @@ const Index: NextPage = () => {
   }
 
   function showEdit(file: BoardFile) {
-    const div = document.querySelector<HTMLElement>(
-      `div.edit-${file.name.split('.').join('-')}`
-    );
+    const div = document.getElementsByClassName(
+      `edit-${file.name.replaceAll('.', '-')}`
+    )[0];
     const back = document.querySelector<HTMLElement>(`.backdrop`);
-    div.style['display'] = 'flex';
+    (div as HTMLElement).style['display'] = 'flex';
     back.style['display'] = 'block';
   }
 
-  function edit(event: FormEvent<HTMLFormElement>, file: BoardFile) {
+  function edit(event) {
     event.preventDefault();
     closeEdit();
-    // @ts-ignore
-    const name = event.target[0].value;
 
-    const box = document.querySelector<HTMLElement>(
-      `.edit-${file.name.split('.').join('-')} form .language-show-edit`
-    );
+    const input = document.querySelector<HTMLInputElement>(`.edit-${fileName.replaceAll('.', '-')}.edit form input`)
+    const name = input.value
+
+    const file = files.find(a => a.name == fileName)
+
+    const box = document.getElementsByClassName(`${fileName}-language`)[0];
 
     if (!name) return;
     if (files.find((a) => a.name === name))
       return alert('Name already taken !');
     else {
       file.name = name;
-      file.language = (box.innerText || box.textContent).toLowerCase();
+      file.language = ((box as HTMLElement).innerText || box.textContent).toLowerCase();
 
       setFileName(name);
     }
   }
 
-  function updateEditLanguage(e: ChangeEvent<HTMLInputElement>) {
-    const n = e.target.value;
-    const box = document.querySelector('.language-show-edit');
+  function updateEditLanguage(e: ChangeEvent<HTMLInputElement>, old) {
+    const value = e.target.value;
+    const box = document.getElementsByClassName(`${old}-language`)[0];
+
+    if (!box) return;
 
     const l =
       extensions.find((x) =>
-        x.key.includes('.' + n.replace('.', '^').split('^')[1])
+        x.key.includes('.' + value.replace('.', '^').split('^')[1])
       )?.name ||
       extensions.find((x) =>
-        x.key.includes('.' + n.split('.')[n.split('.').length - 1])
+        x.key.includes('.' + value.split('.')[value.split('.').length - 1])
       )?.name ||
       'none';
 
@@ -254,12 +259,12 @@ const Index: NextPage = () => {
   }
 
   function updateLanguage(e: ChangeEvent<HTMLInputElement>) {
-    const n = e.target.value;
+    const value = e.target.value;
     const box = document.querySelector('.language-show');
 
     const l =
       extensions.find((x) =>
-        x.key.includes('.' + n.replace('.', '^').split('^')[1])
+        x.key.includes('.' + value.replace('.', '^').split('^')[1])
       )?.name || 'none';
 
     box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
