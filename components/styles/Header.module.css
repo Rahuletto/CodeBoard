@@ -7,7 +7,7 @@
 .newProject {
   font-size: 18px;
   background: var(--background-dark);
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   color: var(--special-color);
   padding: 6px 24px;
   border-radius: 50px;
@@ -19,7 +19,7 @@
 
 .title {
   margin: 0px;
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-size: 36px;
   color: var(--special-color);
 }

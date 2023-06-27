@@ -28,6 +28,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   height,
   width,
 }) => {
+  
   return (
     <>
       <CodeMirror
@@ -35,35 +36,35 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         theme={
           theme == 'light'
             ? githubLightInit({
-              settings: {
-                background: '#F6F6F6',
-                gutterBackground: '#F1F1F1'
-              }
-            })
+                settings: {
+                  background: '#F6F6F6',
+                  gutterBackground: '#F1F1F1',
+                },
+              })
             : atomoneInit({
-              settings: {
-                foreground: '#ABB2BF',
-                selection: '#646464',
-                selectionMatch: '#646464',
-                caret: '#C6C6C6',
-                fontFamily: 'JetBrains Mono',
-              },
-              styles: [
-                { tag: t.content, color: '#7D8799' },
-                { tag: t.processingInstruction, color: '#98C379' },
-                { tag: t.name, color: '#61AFEF' },
-                { tag: t.variableName, color: '#D19A66'},
-                { tag: t.definitionOperator, color: '#56B6C2' },
-                { tag: t.propertyName, color: '#E06C75' },
-                { tag: t.punctuation, color: '#C678DD'},
-                { tag: t.brace, color: '#ABB2BF' },
-                { tag: t.paren, color: '#ABB2BF' },
-                { tag: t.angleBracket, color: '#ABB2BF' },
-                { tag: t.variableName, color: '#E06C75' },
-                { tag: t.definition(t.variableName), color: '#D19A66'},
-                { tag: t.color, color: '#D19A66'}
-              ]
-            })
+                settings: {
+                  foreground: '#ABB2BF',
+                  selection: '#646464',
+                  selectionMatch: '#646464',
+                  caret: '#C6C6C6',
+                  fontFamily: 'JetBrains Mono',
+                },
+                styles: [
+                  { tag: t.content, color: '#7D8799' },
+                  { tag: t.processingInstruction, color: '#98C379' },
+                  { tag: t.name, color: '#61AFEF' },
+                  { tag: t.variableName, color: '#D19A66' },
+                  { tag: t.definitionOperator, color: '#56B6C2' },
+                  { tag: t.propertyName, color: '#E06C75' },
+                  { tag: t.punctuation, color: '#C678DD' },
+                  { tag: t.brace, color: '#ABB2BF' },
+                  { tag: t.paren, color: '#ABB2BF' },
+                  { tag: t.angleBracket, color: '#ABB2BF' },
+                  { tag: t.variableName, color: '#E06C75' },
+                  { tag: t.definition(t.variableName), color: '#D19A66' },
+                  { tag: t.color, color: '#D19A66' },
+                ],
+              })
         }
         value={code}
         width={width || 'auto'}
@@ -71,6 +72,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         readOnly={readOnly}
         extensions={[language, hyperLink]}
         onChange={onChange}
+        aria-label="code"
         basicSetup={{
           foldGutter: true,
           closeBrackets: true,

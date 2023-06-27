@@ -1,19 +1,28 @@
 // NextJS stuff
 import { useRouter } from 'next/router';
 import React, { MouseEvent, memo, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { GetServerSidePropsContext } from 'next';
+
+// Styles
 import boardStyles from '../../styles/Board.module.css';
 
 // Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
-// Our Imports
-import CodeBoard from '../../components/CodeBoard';
-import MetaTags from '../../components/Metatags';
-
 // Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes'
+import { AESDecrypt } from '../../utils/aes';
+
+// Types
 import { FetchResponse } from '../api/fetch';
-import { GetServerSidePropsContext } from 'next';
+
+// Lazy loading
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: false,
+});
+const MetaTags = dynamic(() => import('../../components/Metatags'), {
+  ssr: true,
+});
 
 export function Embed({ board }: { board: FetchResponse }) {
   const router = useRouter();
@@ -21,8 +30,8 @@ export function Embed({ board }: { board: FetchResponse }) {
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme') || "dark")
-  }, [])
+    setTheme(localStorage.getItem('theme') || 'dark');
+  }, []);
 
   useEffect(() => {
     if (!board) router.push('/404');
@@ -34,14 +43,14 @@ export function Embed({ board }: { board: FetchResponse }) {
   const [btns, setBtns] = useState([]);
 
   // Props
-  const [height, setHeight] = useState(472)
-  const [width, setWidth] = useState(1028)
-
+  const [height, setHeight] = useState(472);
+  const [width, setWidth] = useState(1028);
 
   let file = board.files.find((a) => a.name == fileName);
   if (!file) file = board.files[0];
 
-  let language = loadLanguage( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
+  let language = loadLanguage(
+    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     file.language == 'none' ? 'markdown' : file.language
   );
 
@@ -54,9 +63,14 @@ export function Embed({ board }: { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <div className={(f.name == fileName ? "fileSelect active-file" : "fileSelect")}>
-          <button title={f.name} onClick={() => setFileName(f.name)}>{f.name}</button>
-        </div>
+        <button
+          title={f.name}
+          onClick={() => setFileName(f.name)}
+          className={
+            f.name == fileName ? 'fileSelect active-file' : 'fileSelect'
+          }>
+          <div>{f.name}</div>
+        </button>
       </div>
     );
   });
@@ -64,77 +78,74 @@ export function Embed({ board }: { board: FetchResponse }) {
   setTimeout(() => setBtns(fileButtons), 20);
 
   useEffect(() => {
-    setHeight(window.innerHeight)
-    setWidth(window.innerWidth)
+    setHeight(window.innerHeight);
+    setWidth(window.innerWidth);
 
     window.addEventListener('resize', () => {
-      setHeight(window.innerHeight)
-      setWidth(window.innerWidth)
+      setHeight(window.innerHeight);
+      setWidth(window.innerWidth);
 
-      const code = document.querySelector<HTMLElement>('.codeWrapper')
-      code.style.height = height.toString()
-      code.style.width = width.toString()
+      const code = document.querySelector<HTMLElement>('.codeWrapper');
+      code.style.height = height.toString();
+      code.style.width = width.toString();
     });
   }, []);
 
   function handleCopies(event: MouseEvent, text: string) {
-    var target = event.currentTarget
+    var target = event.currentTarget;
     navigator.clipboard.writeText(text);
-    target.classList.toggle('clicked-copy')
+    target.classList.toggle('clicked-copy');
     setTimeout(() => {
-      target.classList.toggle('clicked-copy')
+      target.classList.toggle('clicked-copy');
     }, 5000);
   }
 
   return (
     <div>
-      <MetaTags title="CodeBoard Embeds" description="Embed your code in your desired website as however you want with beautiful iframes" />
+      <MetaTags
+        title="CodeBoard Embeds"
+        description="Embed your code in your desired website as however you want with beautiful iframes"
+      />
 
       <div
         className="codeWrapper"
         style={{
           borderRadius: '30px',
           border: '5px solid var(--background-dark)',
-          position: "inherit",
-          width: width + "px",
-          height: height + "px",
-        }}
-      >
+          position: 'inherit',
+          width: width + 'px',
+          height: height + 'px',
+        }}>
         <div className="file-holder bin-copy">
-          <div style={{ display: 'flex', gap: '12px' }} >
-            {btns}
-          </div>
+          <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
           <div className={boardStyles.copy}>
             <button
               title="Copy the whole program"
-              style={{ height: '36px', display: "flex", alignItems: 'center' }}
+              style={{ height: '36px', display: 'flex', alignItems: 'center' }}
               onClick={(event) => {
                 handleCopies(event, file.value.toString());
-              }}
-            >
+              }}>
               Copy
             </button>
             <button
-              style={{ height: '36px', display: "flex", alignItems: 'center' }}
+              style={{ height: '36px', display: 'flex', alignItems: 'center' }}
               title="Open RAW file"
               onClick={() => {
-                router.push(`/raw/${board.key}?file=${file.name}`)
-              }}
-            >
+                router.push(`/raw/${board.key}?file=${file.name}`);
+              }}>
               Raw
             </button>
           </div>
         </div>
 
-
         <CodeBoard
-          width={width + "px"}
-          height={height + "px"}
+          width={width + 'px'}
+          height={height + 'px'}
           language={language}
           code={file.value}
           readOnly={true}
           theme={theme}
-          onChange={() => "ok"}
+          onChange={() => 'ok'}
         />
       </div>
 
@@ -152,36 +163,43 @@ export function Embed({ board }: { board: FetchResponse }) {
   );
 }
 
-
-
-
 export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
-  return <Embed board={board} />
-})
-
+  return <Embed board={board} />;
+});
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'no-cache' });
-
-
+  const promiseBoard = await fetch(
+    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    { cache: 'force-cache' }
+  );
 
   if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json()
+    const maybeBoard: FetchResponse = await promiseBoard.json();
 
     let board: FetchResponse = maybeBoard;
+
+    if (
+      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+      maybeBoard?.autoVanish
+    )
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/404',
+        },
+      };
 
     if (maybeBoard.encrypted) {
       try {
         const decryptedFiles = [];
 
-        maybeBoard.files.forEach(f => {
+        maybeBoard.files.forEach((f) => {
           decryptedFiles.push({
             name: f.name,
             language: f.language,
-            value: AESDecrypt(f.value)
-          })
-        })
+            value: AESDecrypt(f.value),
+          });
+        });
 
         board = {
           name: maybeBoard.name,
@@ -190,14 +208,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           key: maybeBoard.key,
           createdAt: maybeBoard.createdAt,
           status: 200,
-          encrypted: true
-        }
-      } catch (err) { }
+          encrypted: maybeBoard.encrypted,
+          autoVanish: maybeBoard.autoVanish,
+        };
+      } catch (err) {}
     }
 
-    return { props: { board: board } }
-  }
-  else
+    return { props: { board: board } };
+  } else
     return {
       redirect: {
         permanent: false,

@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 
-export default function MyComponent({ text } : { text: string })  {
+export default function MyComponent({ text }: { text: string }) {
   return (
     <textarea
       disabled
@@ -16,8 +16,7 @@ export default function MyComponent({ text } : { text: string })  {
         height: '95vh',
         width: '100%',
       }}
-      value={text}
-    ></textarea>
+      value={text}></textarea>
   );
 }
 
@@ -27,9 +26,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     { cache: 'force-cache' }
   );
 
-
   if (promiseBoard.status == 200) {
     const maybeBoard: FetchResponse = await promiseBoard.json();
+
+    if (
+      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+      maybeBoard?.autoVanish
+    )
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/404',
+        },
+      };
 
     let text: string;
 

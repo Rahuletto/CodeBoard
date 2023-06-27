@@ -11,15 +11,15 @@
 
 @media (prefers-color-scheme: light) {
   html {
-    --font-color: #17191B;
-    --special-color: #17191B;
+    --font-color: #17191b;
+    --special-color: #17191b;
     --hsl-special-color: hsl(210, 8%, 10%);
     --hsl-special-color-end: hsl(204, 14%, 14%);
 
-    --background: #EAEAEB;
-    --background-light: #DEDEDE;
-    --background-slight-dark: #EAEAEB;
-    --background-dark: #C2C2C2;
+    --background: #eaeaeb;
+    --background-light: #dedede;
+    --background-slight-dark: #eaeaeb;
+    --background-dark: #c2c2c2;
     --background-darker: #8f8f8f;
 
     --hsl-background-slight-dark: hsl(240, 2%, 92%);
@@ -28,23 +28,22 @@
     --code-editor: #f6f6f6;
 
     --red: #ee4646;
-    --green: #45DB4B;
+    --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 }
 
-
 @media (prefers-color-scheme: dark) {
   html {
     --font-color: #dde1e3;
-    --special-color: #ABB8CC;
+    --special-color: #abb8cc;
     --hsl-special-color: hsl(216, 24%, 74%);
     --hsl-special-color-end: hsl(217, 16%, 51%);
 
     --background: #212428;
-    --background-light: #31353E;
+    --background-light: #31353e;
     --background-slight-dark: #282c33;
-    --background-dark: #17191B;
+    --background-dark: #17191b;
     --background-darker: #141618;
 
     --hsl-background-slight-dark: hsl(218, 12%, 18%);
@@ -52,49 +51,49 @@
 
     --code-editor: #272c35;
 
-    --red: #DB4545;
-    --green: #45DB4B;
+    --red: #db4545;
+    --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 }
 
-html[data-theme="light"] {
-  --font-color: #17191B;
-  --special-color: #17191B;
+html[data-theme='light'] {
+  --font-color: #17191b;
+  --special-color: #17191b;
   --hsl-special-color: hsl(210, 8%, 10%);
 
-  --background: #EAEAEB;
-  --background-light: #DEDEDE;
-  --background-slight-dark: #EAEAEB;
-  --background-dark: #C2C2C2;
+  --background: #eaeaeb;
+  --background-light: #dedede;
+  --background-slight-dark: #eaeaeb;
+  --background-dark: #c2c2c2;
   --background-darker: #8f8f8f;
 
   --hsl-background-dark: hsl(0, 0%, 76%);
 
   --code-editor: #f6f6f6;
-  
+
   --red: #ee4646;
-  --green: #45DB4B;
+  --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --font-color: #dde1e3;
-  --special-color: #ABB8CC;
+  --special-color: #abb8cc;
   --hsl-special-color: hsl(216, 24%, 74%);
 
   --background: #212428;
-  --background-light: #31353E;
+  --background-light: #31353e;
   --background-slight-dark: #282c33;
-  --background-dark: #17191B;
+  --background-dark: #17191b;
   --background-darker: #141618;
 
   --hsl-background-dark: hsl(210, 8%, 10%);
 
   --code-editor: #272c35;
 
-  --red: #DB4545;
-  --green: #45DB4B;
+  --red: #db4545;
+  --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -103,7 +102,7 @@ body {
   overflow: hidden;
   padding: 0;
   margin: 0;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   color: var(--font-color);
   scrollbar-width: thin;
   scrollbar-color: var(--background-darker) var(--code-editor);
@@ -116,8 +115,7 @@ h3,
 h4,
 button,
 a {
-
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -139,7 +137,6 @@ textarea:focus,
 button:focus {
   outline: none;
 }
-
 
 ::-webkit-scrollbar {
   width: 16px;
@@ -170,7 +167,7 @@ button:focus {
 }
 
 ::-webkit-scrollbar-button {
-  display: none
+  display: none;
 }
 
 dialog {
@@ -216,7 +213,7 @@ input {
   border-radius: 50px;
   color: var(--special-color) !important;
   background: var(--background-light);
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   border: 2px solid var(--background-light) !important;
 }
 
@@ -228,7 +225,7 @@ input {
   color: var(--special-color);
   background: var(--background-dark);
   font-size: 18px;
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   margin: 0;
   font-weight: 700;
   height: 40px;
@@ -242,12 +239,12 @@ input::placeholder {
 
 .edit form button {
   padding: 6px 12px;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   background: var(--red);
   border-radius: 50px;
   font-weight: 700;
   height: 38px;
-  color: #17191B;
+  color: #17191b;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -273,15 +270,13 @@ button:active {
   transform: scale(0.93);
 }
 
-
-
 .cm-editor {
-  font-family: "JetBrains Mono" !important;
+  font-family: 'JetBrains Mono' !important;
   height: 77.3vh;
 }
 
 .cm-scroller {
-  font-family: "JetBrains Mono" !important;
+  font-family: 'JetBrains Mono' !important;
   font-size: 14px;
 }
 
@@ -289,12 +284,12 @@ button:active {
   user-select: none;
 }
 
-[data-theme="dark"] .cm-activeLineGutter {
+[data-theme='dark'] .cm-activeLineGutter {
   color: rgba(255, 255, 255, 0.7);
 }
 
 .codeWrapper {
-  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   overflow: hidden;
   background: var(--background-light);
   border-top-left-radius: 38px;
@@ -307,7 +302,7 @@ button:active {
 }
 
 .file-holder {
-  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   padding: 10px;
   border-bottom: 5px solid var(--background-dark);
   display: flex;
@@ -320,25 +315,30 @@ button {
   background: transparent;
 }
 
+
+
 .fileSelect {
-  background: var(--background-dark);
-  border: 3px solid var(--background-dark);
+  background: var(--background);
+  border: 3px dashed var(--background-darker);
   border-radius: 50px;
   padding: 6px 18px;
   display: flex;
+  align-items: center;
   opacity: 0.7;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0px 0px 5px transparent;
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transform: scale(0.95);
 }
 
-
 .active-file {
+  background: var(--background-slight-dark) !important;
+  border: 3px solid var(--background-darker) !important;
+  box-shadow: 0px 0px 5px var(--background-slight-dark) !important;
   opacity: 1;
-  background: var(--background-slight-dark);
-  border: 3px solid var(--background-darker);
+  transform: scale(1) !important;
 }
 
 .fileSelect:hover {
-
   transform: scale(0.95);
 }
 
@@ -346,20 +346,20 @@ button {
   transform: scale(0.9);
 }
 
-.fileSelect button {
+.fileSelect div, .fileSelect .file {
   user-select: none;
   color: var(--special-color);
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   font-weight: 600;
   font-size: 18px;
 }
 
-.fileSelect button:nth-of-type(2) {
+.fileSelect .file {
   align-items: center;
   display: flex;
 }
 
-.fileSelect button:hover {
+.fileSelect div:hover {
   cursor: pointer;
 }
 
@@ -373,22 +373,20 @@ button {
   display: flex;
   justify-content: center;
   align-content: center;
+  align-items: flex-start !important;
 }
 
 .plus button {
-  color: #17191B;
+  color: #17191b;
   font-weight: 800;
   font-size: 38px;
   margin-top: -9px;
 }
 
-.plus:has(button:disabled),
-.plus button:disabled {
-  visibility: hidden;
+.plus:has(button:disabled) {
+  opacity: 0.6;
 }
-
-button:disabled {
-  opacity: 0.3;
+.plus button:disabled {
   cursor: not-allowed !important;
 }
 
@@ -399,7 +397,6 @@ dialog {
   color: var(--special-color);
 }
 
-
 dialog div {
   margin: 16px 0px;
   margin-top: 6px;
@@ -408,15 +405,14 @@ dialog div {
   align-items: center;
 }
 
-
 dialog form button {
   padding: 6px 12px;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   background: var(--green);
   border-radius: 50px;
   font-weight: 700;
   height: 38px;
-  color: #17191B;
+  color: #17191b;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -445,7 +441,7 @@ dialog form p {
   color: var(--special-color);
   background: var(--background-dark);
   font-size: 18px;
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   margin: 0;
   font-weight: 700;
   height: 40px;
@@ -470,7 +466,7 @@ dialog::backdrop {
   background: var(--background-slight-dark) !important;
   border: 2px solid transparent !important;
   border-radius: 8px !important;
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   color: var(--special-color) !important;
   text-transform: capitalize;
 }
@@ -481,16 +477,14 @@ dialog::backdrop {
   text-transform: capitalize;
 }
 
-
 .enc {
   color: var(--green);
   opacity: 0.8;
 }
 
-[data-theme="light"] .enc {
+[data-theme='light'] .enc {
   color: var(--special-color);
 }
-
 
 /* The switch - the box around the slider */
 .switch {
@@ -515,7 +509,7 @@ dialog::backdrop {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #17191B;
+  background-color: #17191b;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -530,7 +524,7 @@ dialog::backdrop {
   transform: rotate(-90deg);
   font-size: 20px;
   text-align: center;
-  color: #17191B;
+  color: #17191b;
   line-height: 29px;
   height: 28px;
   width: 28px;
@@ -540,8 +534,8 @@ dialog::backdrop {
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-input:checked+.slider:before {
-  content: "\f00c";
+input:checked + .slider:before {
+  content: '\f00c';
   font-family: 'Font Awesome 5 Free';
   font-weight: 600;
   font-size: 16px;
@@ -560,7 +554,6 @@ input:checked+.slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-
 
 .ͼ1 .cm-line {
   display: block;
@@ -610,13 +603,12 @@ span.tooltiptext {
   grid-template-columns: 1.6fr 0.4fr;
   grid-template-rows: 1fr;
   gap: 6px 12px;
-  grid-template-areas:
-    ". .";
+  grid-template-areas: '. .';
 }
 
 /* Tooltip arrow */
 .tooltip .tooltiptext::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 100%;
   left: 50%;
@@ -633,7 +625,7 @@ span.tooltiptext {
 }
 
 .rick:hover:before {
-  content: "rick-rolled x-x";
+  content: 'rick-rolled x-x';
 }
 
 .rick p {
@@ -653,7 +645,7 @@ span.tooltiptext {
   background-color: var(--green) !important;
 }
 
-[data-theme="light"] .clicked-copy {
+[data-theme='light'] .clicked-copy {
   color: var(--special-color) !important;
 }
 

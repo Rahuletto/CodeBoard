@@ -16,7 +16,7 @@
   display: none;
 }
 
-[data-theme="light"] .themeSwitch:before {
+[data-theme='light'] .themeSwitch:before {
   content: '\f185';
   font-family: 'Font Awesome 5 Free';
   font-weight: 600;

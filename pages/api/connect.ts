@@ -28,6 +28,5 @@ export default async function handler(
     }, 10000);
   }
 
-  return res.status(200).json({ started: db })
-
+  return res.status(200).json({ started: db });
 }

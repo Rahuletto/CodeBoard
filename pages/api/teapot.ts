@@ -2,8 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
-    _req: NextApiRequest,
-    res: NextApiResponse
+  _req: NextApiRequest,
+  res: NextApiResponse
 ) {
-    return res.status(418).send("Im a teapot now")
+  return res.status(418).send('Im a teapot now');
 }

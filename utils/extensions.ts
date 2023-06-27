@@ -1,4 +1,4 @@
-export type ExtensionType = { name: string, key: string[] };
+export type ExtensionType = { name: string; key: string[] };
 
 export type ExtensionTypeArray = ExtensionType[];
 
