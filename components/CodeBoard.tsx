@@ -60,7 +60,8 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
                 { tag: t.paren, color: '#ABB2BF' },
                 { tag: t.angleBracket, color: '#ABB2BF' },
                 { tag: t.variableName, color: '#E06C75' },
-                { tag: t.definition(t.variableName), color: '#D19A66'}
+                { tag: t.definition(t.variableName), color: '#D19A66'},
+                { tag: t.color, color: '#D19A66'}
               ]
             })
         }
