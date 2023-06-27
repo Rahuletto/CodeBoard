@@ -35,9 +35,10 @@ export default async function handler(
   const ifExist = await Code.findOne({ key: body.key }).exec()
   if (ifExist) {
     console.log('BRO DONT SPAM')
-    return res.status(401).json({
+    return res.status(200).json({
+      board: `/bin/${req.body.key}`,
       message: "Board with this key already exists. ",
-      error: 401
+      error: 200
     })
   }
 
