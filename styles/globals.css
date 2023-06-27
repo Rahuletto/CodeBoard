@@ -289,7 +289,7 @@ button:active {
 }
 
 .codeWrapper {
-  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   overflow: hidden;
   background: var(--background-light);
   border-top-left-radius: 38px;
@@ -302,7 +302,7 @@ button:active {
 }
 
 .file-holder {
-  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   padding: 10px;
   border-bottom: 5px solid var(--background-dark);
   display: flex;
@@ -315,20 +315,26 @@ button {
   background: transparent;
 }
 
+
+
 .fileSelect {
-  background: var(--background-dark);
-  border: 3px solid var(--background-dark);
+  background: var(--background);
+  border: 3px dashed var(--background-darker);
   border-radius: 50px;
   padding: 6px 18px;
   display: flex;
   opacity: 0.7;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0px 0px 5px transparent;
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  transform: scale(0.95);
 }
 
 .active-file {
+  background: var(--background-slight-dark) !important;
+  border: 3px solid var(--background-darker) !important;
+  box-shadow: 0px 0px 5px var(--background-slight-dark) !important;
   opacity: 1;
-  background: var(--background-slight-dark);
-  border: 3px solid var(--background-darker);
+  transform: scale(1) !important;
 }
 
 .fileSelect:hover {
@@ -339,7 +345,7 @@ button {
   transform: scale(0.9);
 }
 
-.fileSelect button {
+.fileSelect div {
   user-select: none;
   color: var(--special-color);
   font-family: 'DM Sans';
@@ -347,12 +353,12 @@ button {
   font-size: 18px;
 }
 
-.fileSelect button:nth-of-type(2) {
+.fileSelect div:nth-of-type(2) {
   align-items: center;
   display: flex;
 }
 
-.fileSelect button:hover {
+.fileSelect div:hover {
   cursor: pointer;
 }
 
