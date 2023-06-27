@@ -5,13 +5,13 @@
   "author": "Rahuletto",
   "homepage": "https://cdeboard.vercel.app",
   "license": "CC-BY-NC-ND-4.0",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Rahuletto/CodeBoard"
-	},
-	"bugs": {
-		"url": "https://github.com/Rahuletto/CodeBoard/issues"
-	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rahuletto/CodeBoard"
+  },
+  "bugs": {
+    "url": "https://github.com/Rahuletto/CodeBoard/issues"
+  },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
@@ -19,9 +19,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@codemirror/language-data": "^6.3.1",
-    "@uiw/codemirror-extensions-basic-setup": "^4.21.2",
-    "@uiw/codemirror-extensions-color": "^4.21.2",
     "@uiw/codemirror-extensions-hyper-link": "^4.21.2",
     "@uiw/codemirror-extensions-langs": "^4.21.2",
     "@uiw/codemirror-theme-atomone": "^4.21.2",
@@ -36,7 +33,6 @@
     "react-icons-ng": "^4.8.4"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.1.0",
     "@types/node": "18.0.1",
     "@types/prettier": "^2.7.3",
     "@types/react": "18.0.14",
