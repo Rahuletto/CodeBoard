@@ -208,8 +208,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let board: FetchResponse = maybeBoard;
 
     if (
-      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
-      board?.autoVanish
+      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+      maybeBoard?.autoVanish
     )
       return {
         redirect: {
@@ -219,10 +219,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
 
     if (maybeBoard.encrypted) {
+
       try {
         const decryptedFiles = [];
 
         maybeBoard.files.forEach((f) => {
+          console.log(AESDecrypt(f.value))
           decryptedFiles.push({
             name: f.name,
             language: f.language,
@@ -240,7 +242,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           encrypted: maybeBoard.encrypted,
           autoVanish: maybeBoard.autoVanish,
         };
-      } catch (err) {}
+      } catch (err) { console.log(err) }
     }
 
     return { props: { board: board } };

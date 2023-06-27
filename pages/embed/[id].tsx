@@ -170,8 +170,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let board: FetchResponse = maybeBoard;
 
     if (
-      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
-      board?.autoVanish
+      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+      maybeBoard?.autoVanish
     )
       return {
         redirect: {
