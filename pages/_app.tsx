@@ -11,36 +11,36 @@ import '../styles/mobile.css';
 import { Loader } from '../components/Loader';
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const router = useRouter();
-	const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
+  useEffect(() => {
+    setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
 
-		setTimeout(() => {
-			const elem = document.querySelector<HTMLElement>('.loadScreen');
-			if (elem) elem.style.opacity = '0';
-		}, 1800);
-	}, []);
+    setTimeout(() => {
+      const elem = document.querySelector<HTMLElement>('.loadScreen');
+      if (elem) elem.style.opacity = '0';
+    }, 1800);
+  }, []);
 
-	const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home']; // blacklist these urls
-	if (
-		!loading &&
-		!blacklist.some((substring) => router.pathname.includes(substring))
-	) {
-		return (
-			<>
-				<Loader />
-				<Component {...pageProps} /> {/** For getting its meta tags */}
-			</>
-		);
-	}
+  const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home']; // blacklist these urls
+  if (
+    !loading &&
+    !blacklist.some((substring) => router.pathname.includes(substring))
+  ) {
+    return (
+      <>
+        <Loader />
+        <Component {...pageProps} /> {/** For getting its meta tags */}
+      </>
+    );
+  }
 
-	return (
-		<>
-			<Component {...pageProps} />
-		</>
-	);
+  return (
+    <>
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 export default MyApp;

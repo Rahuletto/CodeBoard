@@ -46,7 +46,6 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
 
         <link key="icon" rel="icon" href="/favicon.ico" />
       </Head>
-
     </>
   );
 };

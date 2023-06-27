@@ -9,10 +9,9 @@
   display: none;
 }
 
-
 .denyCreate {
   padding: 8px 12px;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   color: var(--red);
   border-radius: 50px;
   font-weight: 700;
@@ -23,10 +22,9 @@
   transform: scale(1.1);
   cursor: pointer;
   background: var(--red);
-  color: #17191B;
+  color: #17191b;
   box-shadow: 0px 0px 24px var(--red);
 }
-
 
 .create {
   align-items: center;
@@ -47,7 +45,6 @@
   padding-bottom: 32px;
 }
 
-
 .detailsForm,
 .details {
   transition: 0.3s ease-in-out;
@@ -60,7 +57,7 @@
   border-radius: 18px;
   border: 0px none;
   padding: 12px;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   height: 190px;
   color: var(--special-color);
   font-size: 16px;
@@ -97,15 +94,14 @@
   font-size: 28px;
 }
 
-
 .save {
   width: -moz-available;
   width: -webkit-fill-available;
-  color: #17191B;
+  color: #17191b;
   padding: 12px 24px;
-  border: 5px solid #17191B;
+  border: 5px solid #17191b;
   background: var(--green);
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   font-size: 20px;
   border-radius: 50px;
   margin: 0px 24px;
@@ -113,16 +109,15 @@
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-
 .save:hover {
   transform: scale(0.98);
   cursor: pointer;
-  box-shadow: 0px 0px 24px #17191B;
+  box-shadow: 0px 0px 24px #17191b;
 }
 
 .save:active {
   transform: scale(0.91);
-  border: 3px solid #17191B;
+  border: 3px solid #17191b;
 }
 
 .save:disabled {
@@ -136,9 +131,9 @@
   grid-template-rows: 1fr 1fr 1fr;
   gap: 18px;
   grid-template-areas:
-    "."
-    "."
-    ".";
+    '.'
+    '.'
+    '.';
 }
 
 .optionGrid div {
@@ -147,7 +142,7 @@
   align-items: center;
   color: var(--special-color);
   user-select: none;
-  font-family: "DM Sans";
+  font-family: 'DM Sans';
   font-size: 20px;
 }
 
@@ -163,7 +158,7 @@
 }
 
 .prettier button {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   border: 2px solid var(--background-darker);
   border-radius: 12px;
   font-weight: 800;

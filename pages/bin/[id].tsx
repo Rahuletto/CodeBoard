@@ -21,22 +21,21 @@ import MetaTags from '../../components/Metatags';
 import { FetchResponse } from '../api/fetch';
 
 // Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes'
+import { AESDecrypt } from '../../utils/aes';
 import Header from '../../components/Header';
 
-export default function Bin({ board } : { board: FetchResponse }) {
+export default function Bin({ board }: { board: FetchResponse }) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme') || "dark")
-  }, [])
+    setTheme(localStorage.getItem('theme') || 'dark');
+  }, []);
 
   useEffect(() => {
     if (!board) router.push('/404');
   }, [board]);
-
 
   const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
@@ -44,7 +43,8 @@ export default function Bin({ board } : { board: FetchResponse }) {
   let file = board.files.find((a: BoardFile) => a.name == fileName);
   if (!file) file = board.files[0];
 
-  let language = loadLanguage( // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
+  let language = loadLanguage(
+    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     file.language == 'none' ? 'markdown' : file.language
   );
 
@@ -57,8 +57,14 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <div className={[f.name.replaceAll('.', '-'), (f.name == fileName ? "fileSelect active-file" : "fileSelect")].join(' ')}>
-          <button title={f.name} onClick={() => setFileName(f.name)}>{f.name}</button>
+        <div
+          className={[
+            f.name.replaceAll('.', '-'),
+            f.name == fileName ? 'fileSelect active-file' : 'fileSelect',
+          ].join(' ')}>
+          <button title={f.name} onClick={() => setFileName(f.name)}>
+            {f.name}
+          </button>
         </div>
       </div>
     );
@@ -66,21 +72,25 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
   setTimeout(() => setBtns(fileButtons), 20);
 
-
   function handleCopies(event: MouseEvent, text: string) {
-    var target = event.currentTarget
+    var target = event.currentTarget;
     navigator.clipboard.writeText(text);
-    target.classList.toggle('clicked-copy')
+    target.classList.toggle('clicked-copy');
     setTimeout(() => {
-      target.classList.toggle('clicked-copy')
+      target.classList.toggle('clicked-copy');
     }, 5000);
   }
   return (
     <div className={generalStyles.container}>
-      <MetaTags title={board.name + "/CodeBoard"} description={board.description || "No Description. Just the source code."} />
+      <MetaTags
+        title={board.name + '/CodeBoard'}
+        description={
+          board.description || 'No Description. Just the source code.'
+        }
+      />
 
       <main className={generalStyles.main}>
-      <Header theme={theme} setTheme={setTheme} />
+        <Header theme={theme} setTheme={setTheme} />
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <button
@@ -89,8 +99,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
             onClick={(event) => {
               document.querySelector('.projectForm').classList.toggle('show');
               (event.target as HTMLElement).classList.toggle('opened');
-            }}
-          >
+            }}>
             <GoGear /> <span>Metadata</span>
           </button>
           <div className={[styles.project, 'projectForm'].join(' ')}>
@@ -101,8 +110,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
                     value={board.name}
                     readOnly
                     placeholder="Untitled."
-                    name="project-name"
-                  ></input>{' '}
+                    name="project-name"></input>{' '}
                   {board.encrypted ? (
                     <GoShieldCheck className="enc icon" />
                   ) : null}
@@ -112,8 +120,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
                   readOnly
                   placeholder="Enter a short description."
                   maxLength={128}
-                  name="project-desc"
-                ></textarea>
+                  name="project-desc"></textarea>
               </form>
             </div>
             <div className="tooltip">
@@ -124,8 +131,7 @@ export default function Bin({ board } : { board: FetchResponse }) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                }}
-              >
+                }}>
                 <GoGitBranch style={{ marginRight: '12px' }} /> Fork
               </button>
               <span style={{ borderRadius: '12px' }} className="tooltiptext">
@@ -136,51 +142,46 @@ export default function Bin({ board } : { board: FetchResponse }) {
 
           <div className="codeWrapper">
             <div className="file-holder bin-copy">
-              <div style={{ display: 'flex', gap: '12px' }} >
-                {btns}
-              </div>
+              <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
               <div className={boardStyles.copy}>
                 <button
                   title="Copy URL"
                   onClick={(event) => {
                     handleCopies(event, `${location.origin}/bin/${board.key}`);
-                  }}
-                >
+                  }}>
                   <FaLink title="Copy URL" />
                 </button>
                 <button
-                  
                   title="Embed the board"
                   onClick={(event) => {
-                    handleCopies(event, `<iframe 
+                    handleCopies(
+                      event,
+                      `<iframe 
                     src="${location.origin}/embed/${board.key}" 
                     style="width: 1024px; height: 473px; border:0; transform: scale(1); overflow:hidden;" 
                     sandbox="allow-scripts allow-same-origin">
-                  </iframe>`);
-                  }}
-                >
+                  </iframe>`
+                    );
+                  }}>
                   <FaCode title="Embed the board" />
                 </button>
-
               </div>
             </div>
             <div className={[boardStyles.inCode, 'codeCopy'].join(' ')}>
-            <button
-                  title="Copy the whole program"
-                  onClick={(event) => {
-                    handleCopies(event, file.value.toString());
-                  }}
-                >
-                  Copy
-                </button>
-                <button
-                  title="Open RAW file"
-                  onClick={() => {
-                    router.push(`/raw/${board.key}?file=${file.name}`)
-                  }}
-                >
-                  Raw
-                </button>
+              <button
+                title="Copy the whole program"
+                onClick={(event) => {
+                  handleCopies(event, file.value.toString());
+                }}>
+                Copy
+              </button>
+              <button
+                title="Open RAW file"
+                onClick={() => {
+                  router.push(`/raw/${board.key}?file=${file.name}`);
+                }}>
+                Raw
+              </button>
             </div>
             <CodeBoard
               language={language}
@@ -197,35 +198,38 @@ export default function Bin({ board } : { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
-  const promiseBoard = await fetch(`https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`, { cache: 'force-cache' });
+  const promiseBoard = await fetch(
+    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    { cache: 'force-cache' }
+  );
 
   if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json()
+    const maybeBoard: FetchResponse = await promiseBoard.json();
     let board: FetchResponse = maybeBoard;
 
     if (
       Number(board.createdAt) + 86400 * 1000 < Date.now() &&
       board?.autoVanish
-    ) return {
-      redirect: {
-        permanent: false,
-        destination: '/404',
-      },
-    };
+    )
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/404',
+        },
+      };
 
     if (maybeBoard.encrypted) {
       try {
         const decryptedFiles = [];
-  
-        maybeBoard.files.forEach(f => {
+
+        maybeBoard.files.forEach((f) => {
           decryptedFiles.push({
             name: f.name,
             language: f.language,
-            value: AESDecrypt(f.value)
-          })
-        })
-  
+            value: AESDecrypt(f.value),
+          });
+        });
+
         board = {
           name: maybeBoard.name,
           description: maybeBoard.description,
@@ -234,14 +238,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           createdAt: maybeBoard.createdAt,
           status: 200,
           encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard.autoVanish
-        }
-      } catch (err) { }
+          autoVanish: maybeBoard.autoVanish,
+        };
+      } catch (err) {}
     }
 
-    return { props: { board: board } }
-  }
-  else
+    return { props: { board: board } };
+  } else
     return {
       redirect: {
         permanent: false,

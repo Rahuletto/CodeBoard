@@ -1,6 +1,6 @@
 // NextJS stuff
 import { ChangeEvent, useEffect } from 'react';
-import styles from './styles/ThemeSwitcher.module.css'
+import styles from './styles/ThemeSwitcher.module.css';
 
 interface ThemeSwitchProps {
   theme?: 'light' | 'dark' | string;
@@ -48,11 +48,11 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   return (
     <>
       <label className={styles.themeSwitch}>
-        <input title='Switch theme'
+        <input
+          title="Switch theme"
           onChange={(event) => switchTheme(event)}
           type="checkbox"
-          checked={theme == 'dark'}
-        ></input>
+          checked={theme == 'dark'}></input>
       </label>
     </>
   );

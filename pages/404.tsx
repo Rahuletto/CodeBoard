@@ -9,24 +9,26 @@ import MetaTags from '../components/Metatags';
 import Header from '../components/Header';
 
 const Error: NextPage = () => {
-
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme') || "dark")
-  }, [])
+    setTheme(localStorage.getItem('theme') || 'dark');
+  }, []);
 
   return (
     <div className={generalStyles.container}>
-      <MetaTags title="Uhhm ??" description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)." />
+      <MetaTags
+        title="Uhhm ??"
+        description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)."
+      />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
 
         <div className={generalStyles.lander}>
           <h1 style={{ fontSize: '48px' }}> Something{"'"}s wrong here.</h1>
-          <div style={{ fontSize: "18px" }}>
+          <div style={{ fontSize: '18px' }}>
             The board you are looking for never existed, Or just got{' '}
             <div className="tooltip rick">
               <p>AutoVanished</p>
@@ -35,11 +37,9 @@ const Error: NextPage = () => {
               </span>
             </div>
             .<br></br>Anyways, Wanna sip some coffee and have cookies ?<br></br>
-            <br></br>but sadly i dont have
-            cookies {'>'}:{"("}
+            <br></br>but sadly i dont have cookies {'>'}:{'('}
             <span
-              style={{ fontStyle: 'italic', opacity: 0.6, marginLeft: '10px' }}
-            >
+              style={{ fontStyle: 'italic', opacity: 0.6, marginLeft: '10px' }}>
               blame my developer
             </span>
           </div>
@@ -48,14 +48,12 @@ const Error: NextPage = () => {
           <a
             style={{ width: 'fit-content', marginTop: '18px' }}
             href="/"
-            className={generalStyles.newProject}
-          >
+            className={generalStyles.newProject}>
             <FaPlus style={{ marginRight: '10px' }} /> New board
           </a>
 
-          <code className='errorCode' >Error Code: 404</code>
+          <code className="errorCode">Error Code: 404</code>
         </div>
-
       </main>
     </div>
   );
