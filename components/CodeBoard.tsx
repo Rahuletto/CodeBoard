@@ -28,7 +28,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   height,
   width,
 }) => {
-  
+
   return (
     <>
       <CodeMirror
@@ -87,7 +87,10 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
           indentOnInput: true,
           lintKeymap: true,
           drawSelection: true,
+          completionKeymap: true,
+          defaultKeymap: true,
         }}
+        
       />
     </>
   );
