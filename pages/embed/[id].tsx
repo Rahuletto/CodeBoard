@@ -16,15 +16,15 @@ import { AESDecrypt } from '../../utils/aes';
 // Types
 import { FetchResponse } from '../api/fetch';
 
-
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
-const MetaTags = dynamic(() => import('../../components/Metatags'), { ssr: true })
+const MetaTags = dynamic(() => import('../../components/Metatags'), {
+  ssr: true,
+});
 
 export function Embed({ board }: { board: FetchResponse }) {
-  
   const router = useRouter();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -63,14 +63,14 @@ export function Embed({ board }: { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <div
+        <button
+          title={f.name}
+          onClick={() => setFileName(f.name)}
           className={
             f.name == fileName ? 'fileSelect active-file' : 'fileSelect'
           }>
-          <button title={f.name} onClick={() => setFileName(f.name)}>
-            {f.name}
-          </button>
-        </div>
+          <div>{f.name}</div>
+        </button>
       </div>
     );
   });

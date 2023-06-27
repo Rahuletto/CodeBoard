@@ -27,9 +27,10 @@ import { AESDecrypt } from '../../utils/aes';
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
-const MetaTags = dynamic(() => import('../../components/Metatags'), { ssr: true })
-const Header = dynamic(() => import('../../components/Header'), { ssr: false })
-
+const MetaTags = dynamic(() => import('../../components/Metatags'), {
+  ssr: true,
+});
+const Header = dynamic(() => import('../../components/Header'), { ssr: false });
 
 export default function Bin({ board }: { board: FetchResponse }) {
   const router = useRouter();
@@ -65,14 +66,13 @@ export default function Bin({ board }: { board: FetchResponse }) {
     fileButtons.push(
       <div key={f.name}>
         <button
-        title={f.name} onClick={() => setFileName(f.name)}
+          title={f.name}
+          onClick={() => setFileName(f.name)}
           className={[
             f.name.replaceAll('.', '-'),
             f.name == fileName ? 'fileSelect active-file' : 'fileSelect',
           ].join(' ')}>
-          <div>
-            {f.name}
-          </div>
+          <div>{f.name}</div>
         </button>
       </div>
     );
@@ -89,8 +89,6 @@ export default function Bin({ board }: { board: FetchResponse }) {
     }, 5000);
   }
 
-  
-  
   return (
     <div className={generalStyles.container}>
       <MetaTags
@@ -230,7 +228,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
 
     if (maybeBoard.encrypted) {
-
       try {
         const decryptedFiles = [];
 
@@ -252,7 +249,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           encrypted: maybeBoard.encrypted,
           autoVanish: maybeBoard?.autoVanish || false,
         };
-      } catch (err) { console.log(err) }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     return { props: { board: board } };

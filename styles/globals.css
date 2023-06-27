@@ -323,6 +323,7 @@ button {
   border-radius: 50px;
   padding: 6px 18px;
   display: flex;
+  align-items: center;
   opacity: 0.7;
   box-shadow: 0px 0px 5px transparent;
   transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
@@ -345,7 +346,7 @@ button {
   transform: scale(0.9);
 }
 
-.fileSelect div {
+.fileSelect div, .fileSelect .file {
   user-select: none;
   color: var(--special-color);
   font-family: 'DM Sans';
@@ -353,7 +354,7 @@ button {
   font-size: 18px;
 }
 
-.fileSelect div:nth-of-type(2) {
+.fileSelect .file {
   align-items: center;
   display: flex;
 }
@@ -372,6 +373,7 @@ button {
   display: flex;
   justify-content: center;
   align-content: center;
+  align-items: flex-start !important;
 }
 
 .plus button {
@@ -381,13 +383,10 @@ button {
   margin-top: -9px;
 }
 
-.plus:has(button:disabled),
-.plus button:disabled {
-  visibility: hidden;
+.plus:has(button:disabled) {
+  opacity: 0.6;
 }
-
-button:disabled {
-  opacity: 0.3;
+.plus button:disabled {
   cursor: not-allowed !important;
 }
 

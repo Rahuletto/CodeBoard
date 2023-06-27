@@ -26,12 +26,12 @@ import { SiPrettier } from 'react-icons-ng/si';
 import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
 
-
 // Lazy loading
-const CodeBoard = dynamic(() => import('../components/CodeBoard'), { ssr: false });
+const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
+  ssr: false,
+});
 const Header = dynamic(() => import('../components/Header'), { ssr: false });
-const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
-
+const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -119,17 +119,17 @@ const Index: NextPage = () => {
 
       fileButtons.push(
         <div key={file.name}>
-          <div
+          <button
+            title={file.name}
+            onClick={() => setFileName(file.name)}
             className={
               file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
             }>
-            <button title={file.name} onClick={() => setFileName(file.name)}>
-              {file.name}
-            </button>
-            <button title="Edit" onClick={() => showEdit(file)}>
+            <div>{file.name}</div>
+            <button className="file" title="Edit" onClick={() => showEdit(file)}>
               <FaCaretDown />
             </button>
-          </div>
+          </button>
 
           <div className={cls}>
             {' '}
