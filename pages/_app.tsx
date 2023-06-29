@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, router.pathname == '/' ? 800 : 1800);
   }, []);
 
-  const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home']; // blacklist these urls
+  const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home', '/privacy']; // blacklist these urls
   if (
     !loading &&
     !blacklist.some((substring) => router.pathname.includes(substring))

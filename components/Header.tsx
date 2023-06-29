@@ -25,8 +25,8 @@ const Header: React.FC<MetaTagsProps> = (
         </a>
         <a
           target="_blank"
-          style={{ height: '42px' }}
           rel="noreferrer"
+          style={{ height: '42px' }}
           href="https://github.com/Rahuletto/CodeBoard"
           className={[styles.newProject, 'pc'].join(' ')}>
           <VscGithubInverted style={{ marginRight: '10px' }} /> Github

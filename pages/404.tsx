@@ -11,7 +11,7 @@ import { FaPlus } from 'react-icons-ng/fa';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
-const Header = dynamic(() => import('../components/Header'), { ssr: false })
+const Header = dynamic(() => import('../components/Header'), { ssr: true })
 
 const Error: NextPage = () => {
   // DARK MODE & LIGHT MODE

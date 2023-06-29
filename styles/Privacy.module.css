@@ -1,0 +1,114 @@
+.container {
+  padding: 0;
+  background: var(--background);
+  background: linear-gradient(
+    135deg,
+    var(--background) 0%,
+    var(--background-dark) 100%
+  );
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.main {
+  overflow: auto;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.privacyLander {
+  padding: 2rem 4rem;
+  overflow: auto;
+}
+
+.privacyHeader {
+  font-size: 48px !important;
+  font-family: 'DM Sans' !important;
+  color: var(--font-color) !important;
+  text-decoration: 0px none var(--font-color) !important;
+}
+
+.privacyLander ul li,
+.privacyLander p {
+  font-weight: 400;
+  line-height: 26px;
+  font-size: 18px;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.privacyLander ul {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.privacyLander h1 {
+  font-size: 32px;
+  font-family: 'JetBrains Mono';
+  color: var(--special-color);
+  text-decoration: 2px underline var(--background-darker);
+  transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.indent a h1:after {
+  content: '#';
+  margin-left: -10px;
+  color: var(--green);
+  font-size: 32px;
+  opacity: 0;
+  transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+[data-theme='light'] .indent a h1:after {
+  color: var(--background-darkest);
+}
+
+.indent a h1:hover::after {
+  margin-left: 10px;
+  opacity: 1;
+}
+
+.privacyLander p {
+  padding-left: 24px;
+  transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.indent {
+  padding-left: 20px;
+}
+
+.link {
+  transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  background: var(--background-darker);
+  padding: 2px 9px;
+  cursor: pointer;
+  color: var(--special-color);
+  border-radius: 8px;
+  text-wrap: nowrap;
+  border: 2px solid transparent;
+}
+
+.link:hover {
+  border: 2px solid var(--special-color)
+}
+
+.link:active {
+  transform: translateY(-5px)
+}
+
+@media only screen and (max-width: 750px) {
+  .privacyLander {
+    padding: 2rem;
+    overflow: auto;
+  }
+
+  .privacyHeader {
+    font-size: 38px !important;
+  }
+
+  .privacyLander h1 {
+    font-size: 24px;
+  }
+
+  .privacyLander p {
+    padding-left: 0px;
+  }
+}

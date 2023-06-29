@@ -9,10 +9,11 @@ import styles from '../styles/Home.module.css';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
+import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
-const Header = dynamic(() => import('../components/Header'), { ssr: false })
+const Header = dynamic(() => import('../components/Header'), { ssr: true })
  
 
 const Home: NextPage = () => {
@@ -24,16 +25,16 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div className={generalStyles.container}>
+    <div className={styles.container}>
       <MetaTags
         title="CodeBoard"
         description="Welcome to codeboard ! Codeboard is an open source bin website thats better in every way."
       />
 
-      <main className={generalStyles.main}>
+      <main className={styles.main}>
         <Header theme={theme} setTheme={setTheme} />
 
-        <div className={generalStyles.lander}>
+        <div className={styles.lander}>
           <h1 className={styles.headin}>CodeBoard</h1>
           <p style={{ fontSize: '20px' }}>
             CodeBoard is an open-source code sharing platform thats better in
@@ -45,12 +46,20 @@ const Home: NextPage = () => {
               Supporting 125 languages so far!
             </span>
           </p>
+          <div className={styles.buttonHolder}>
           <a
-            style={{ width: 'fit-content', marginTop: '18px' }}
+            style={{ width: 'fit-content' }}
             href="/"
             className={generalStyles.newProject}>
             <FaPlus style={{ marginRight: '10px' }} /> New board
           </a>
+          <a
+            style={{ width: 'fit-content' }}
+            href="/privacy"
+            className={styles.privacy}>
+            <FlFillIcFluentInprivateAccount24Filled style={{ marginRight: '10px' }} /> Privacy
+          </a>
+          </div>
         </div>
         <footer>
           Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>

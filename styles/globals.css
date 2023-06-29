@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import url('https://use.fontawesome.com/releases/v6.0.0/css/all.css');
 
 .mobile {
@@ -7,6 +7,10 @@
 
 .pc {
   display: inherit !important;
+}
+
+#__next {
+  height: 100%;
 }
 
 @media (prefers-color-scheme: light) {
@@ -141,7 +145,6 @@ html[data-theme='dark'] {
 
 html,
 body {
-  overflow: hidden;
   padding: 0;
   margin: 0;
   font-family: 'DM Sans';
@@ -149,6 +152,7 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--background-darker) var(--code-editor);
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  height: auto;
 }
 
 h1,
@@ -156,9 +160,16 @@ h2,
 h3,
 h4,
 button,
-a {
+a,
+p {
   font-family: 'DM Sans';
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+button,
+a,
+p {
+  font-weight: 500;
 }
 
 a {
@@ -167,6 +178,10 @@ a {
   font-weight: 500;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   font-size: 16px;
+}
+
+b {
+  font-weight: 900 !important;
 }
 
 * {
@@ -719,12 +734,27 @@ footer {
   position: absolute;
   width: -webkit-fill-available;
   bottom: 20px;
+  align-items: center;
 }
 
 footer a {
   font-size: 22px;
   color: var(--special-color);
   font-family: 'JetBrains Mono';
+  transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  background: var(--background-darker);
+  padding: 2px 9px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+footer a:hover {
+  border: 2px solid var(--special-color)
+}
+
+footer a:active {
+  transform: translateY(-5px)
 }
 
 hr {
@@ -824,7 +854,6 @@ hr {
   font-family: 'Font Awesome 5 Free';
   font-weight: 600;
 }
-
 
 /** FUNCTION */
 .cm-tooltip li[aria-selected] .cm-completionIcon-function:after {
