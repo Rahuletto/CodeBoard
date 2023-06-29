@@ -30,7 +30,7 @@ function SiteMap() {
 export async function getServerSideProps({ res }) {
   // We make an API call to gather the URLs for our site
   console.log('im here')
-  const request = await fetch('https://3000--main--codeboard--rahuletto--oe34ia8bl7m1u.pit-1.try.coder.app/api/fetchAll', {
+  const request = await fetch('https://cdeboard.vercel.app/api/fetchAll', {
     headers: {
       Authorization: process.env.NEXT_PUBLIC_KEY,
       'Content-Type': 'application/json'
