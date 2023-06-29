@@ -1,14 +1,15 @@
 const EXTERNAL_DATA_URL = 'https://cdeboard.vercel.app/bin';
 
 function generateSiteMap(boards) {
-  console.log(boards);
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
        <loc>https://cdeboard.vercel.app</loc>
+       <priority>0.80</priority>
      </url>
      <url>
        <loc>https://cdeboard.vercel.app/home</loc>
+       <priority>1.00</priority>
      </url>
      ${boards
        .map((key) => {
@@ -29,7 +30,6 @@ function SiteMap() {
 
 export async function getServerSideProps({ res }) {
   // We make an API call to gather the URLs for our site
-  console.log('im here')
   const request = await fetch('https://cdeboard.vercel.app/api/fetchAll', {
     headers: {
       Authorization: process.env.NEXT_PUBLIC_KEY,
