@@ -227,6 +227,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
 
+ 
     if (maybeBoard.encrypted) {
       try {
         const decryptedFiles = [];

@@ -189,10 +189,12 @@ const Index: NextPage = () => {
     event.preventDefault();
     closeEdit();
 
-    const input = document.querySelector<HTMLInputElement>(`.edit-${fileName.replaceAll('.', '-')}.edit form input`)
-    const name = input.value
+    const input = document.querySelector<HTMLInputElement>(
+      `.edit-${fileName.replaceAll('.', '-')}.edit form input`
+    );
+    const name = input.value;
 
-    const file = files.find(a => a.name == fileName)
+    const file = files.find((a) => a.name == fileName);
 
     const box = document.getElementsByClassName(`${fileName}-language`)[0];
 
@@ -201,7 +203,9 @@ const Index: NextPage = () => {
       return alert('Name already taken !');
     else {
       file.name = name;
-      file.language = ((box as HTMLElement).innerText || box.textContent).toLowerCase();
+      file.language = (
+        (box as HTMLElement).innerText || box.textContent
+      ).toLowerCase();
 
       setFileName(name);
     }
@@ -383,6 +387,7 @@ const Index: NextPage = () => {
                 onSubmit={(event) => handleSubmit(event)}>
                 <div className={styles.name}>
                   <input
+                    style={{ fontWeight: '600' }}
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                     placeholder="Untitled."
@@ -397,6 +402,7 @@ const Index: NextPage = () => {
                   )}
                 </div>
                 <textarea
+                  style={{ fontWeight: '500' }}
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                   placeholder="Enter a short description."
@@ -427,7 +433,9 @@ const Index: NextPage = () => {
                     <label className="switch">
                       <input
                         checked={encrypt}
-                        onChange={() => setEncrypt(!encrypt)}
+                        onChange={() => {
+                          setEncrypt(!encrypt);
+                        }}
                         type="checkbox"
                       />
                       <span className="slider round"></span>
@@ -615,4 +623,3 @@ const makeid = (length: number) => {
   }
   return result;
 };
-
