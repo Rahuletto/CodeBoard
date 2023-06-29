@@ -47,6 +47,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
 
 
         <link key="icon" rel="icon" href="/favicon.ico" />
+        <meta name="google-site-verification" content="0Cmv3J0IwkFN7JLhsv8jWAnIlX3SaPHFrlIlWy4kzK4" />
       </Head>
     </>
   );
