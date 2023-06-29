@@ -8,4 +8,16 @@ User-agent: *
 Disallow: /500
 
 User-agent: *
+Disallow: /raw
+
+User-agent: *
+Disallow: /embed
+
+User-agent: *
+Allow: /bin
+
+User-agent: *
 Allow: /
+
+User-agent: *
+Allow: /home
