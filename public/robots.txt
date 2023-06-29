@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /api
+
+User-agent: *
+Disallow: /404
+
+User-agent: *
+Disallow: /500
+
+User-agent: *
+Allow: /
