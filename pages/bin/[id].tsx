@@ -116,6 +116,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
                   <input
+                    style={{ fontWeight: '600' }}
                     value={board.name}
                     readOnly
                     placeholder="Untitled."
@@ -125,6 +126,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   ) : null}
                 </div>
                 <textarea
+                  style={{ fontWeight: '500' }}
                   value={board.description}
                   readOnly
                   placeholder="Enter a short description."
@@ -218,7 +220,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (
       Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
+      maybeBoard?.autoVanish || maybeBoard?.files.length == 0
     )
       return {
         redirect: {

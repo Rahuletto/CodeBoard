@@ -31,10 +31,6 @@
   display: flex;
   justify-content: center;
   font-weight: 800;
-  margin-left: auto;
-  margin-right: auto;
-
-  width: 70%;
 }
 
 .project {
@@ -184,5 +180,74 @@
 }
 
 .password::placeholder {
-  color: #5a5a5a
+  color: #5a5a5a;
+}
+
+.upload {
+  font-family: 'JetBrains Mono';
+  border: 2px solid var(--background-darker);
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 22px;
+  padding: 8px;
+  display: flex;
+  color: var(--special-color);
+  background-color: transparent;
+  background-color: initial;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropzone {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropNotif {
+  padding: 12px;
+  background: var(--background-slight-dark);
+  border-radius: 20px;
+  border: 3px solid var(--background-darker);
+  width: 50vw;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  pointer-events: none;
+  transform: scale(0.9);
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropNotif h2 {
+  margin: 0px;
+  font-family: 'DM Sans';
+  color: var(--special-color);
+}
+
+.dropNotif p {
+  margin: 0px;
+  font-family: 'JetBrains Mono';
+}
+
+.fileUploadBox {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-direction: column;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: var(--background-dark);
+  display: flex;
+}
+
+.fileUploadBox p {
+  font-size: 15px;
+  text-align: center;
 }
