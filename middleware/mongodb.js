@@ -41,5 +41,5 @@ function mountInterval() {
         }
       });
     }, 10000);
-  } else interval;
+  }
 }
