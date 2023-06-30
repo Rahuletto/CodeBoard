@@ -18,6 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
 
+    setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
+
+    
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) elem.style.opacity = '0';

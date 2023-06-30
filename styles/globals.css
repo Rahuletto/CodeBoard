@@ -188,6 +188,10 @@ b {
   box-sizing: border-box;
 }
 
+input[type="file"] {
+  display: none;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -439,26 +443,30 @@ button {
   margin-top: -9px;
 }
 
-.plus:has(button:disabled) {
+.plus:has(button:disabled), button:disabled {
   opacity: 0.6;
 }
-.plus button:disabled {
+.plus button:disabled, button:disabled {
   cursor: not-allowed !important;
 }
 
 dialog {
-  background: var(--background-slight-dark);
-  border: 4px solid var(--background-dark);
-  border-radius: 40px;
-  color: var(--special-color);
+  background: var(--background-light);
+  border-radius: 50px;
+  border: none;
 }
 
 dialog div {
-  margin: 16px 0px;
-  margin-top: 6px;
+  margin-bottom: 6px;
   display: flex;
   gap: 16px;
   align-items: center;
+  justify-content: space-around;
+  padding: 10px 6px;
+  border-radius: 50px;
+  background: var(--background-slight-dark);
+  border: 4px solid var(--background-dark);
+  color: var(--special-color);
 }
 
 dialog form button {
@@ -483,6 +491,12 @@ dialog form {
   gap: 8px;
   flex-direction: column;
   width: 100%;
+  
+  padding: 14px 12px;
+  border-radius: 38px;
+  background: var(--background-slight-dark);
+  border: 4px solid var(--background-dark);
+  color: var(--special-color);
 }
 
 dialog h2 {
@@ -885,4 +899,12 @@ hr {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+.droppy {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.droppy .dropNotif {
+  transform: scale(1.3);
 }

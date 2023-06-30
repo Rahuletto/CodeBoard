@@ -12,7 +12,13 @@ import styles from '../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
-import { FaPlus, FaCaretDown, FaBackward } from 'react-icons-ng/fa';
+import {
+  FaPlus,
+  FaCaretDown,
+  FaBackward,
+  FaCloudUploadAlt,
+  FaWindowClose,
+} from 'react-icons-ng/fa';
 import {
   LuShieldCheck,
   LuShieldOff,
@@ -55,6 +61,9 @@ const Index: NextPage = () => {
   const [description, setDescription] = useState('');
   const [encrypt, setEncrypt] = useState(true);
   const [vanish, setVanish] = useState(false);
+
+  // For Drag and drop
+  const [drag, setDrag] = useState(false);
 
   const keyId = makeid(8);
 
@@ -153,7 +162,7 @@ const Index: NextPage = () => {
 
               <button
                 title="Delete the file"
-                disabled={files.length <= 1}
+                disabled={files.length == 1}
                 onClick={() => setTimeout(() => deleteFile(f.name), 400)}>
                 Delete
               </button>
@@ -192,6 +201,7 @@ const Index: NextPage = () => {
     const input = document.querySelector<HTMLInputElement>(
       `.edit-${fileName.replaceAll('.', '-')}.edit form input`
     );
+    if (!input) return;
     const name = input.value;
 
     const file = files.find((a) => a.name == fileName);
@@ -256,6 +266,66 @@ const Index: NextPage = () => {
     }
   }
 
+  async function uploadFile(fls: FileList) {
+    if (files.length >= 2) return;
+    if (!fls[0]) return;
+
+    if (
+      fls[0].type.startsWith('image/') ||
+      fls[0].type.startsWith('video/') ||
+      fls[0].type.startsWith('audio/')
+    )
+      return;
+
+    const url = URL.createObjectURL(fls[0]);
+    let name = fls[0].name.replaceAll(' ', '-');
+
+    const blob = await fetch(url).then((r) => r.text());
+
+    if (files.find((a) => a.name === name)) name = 'copy-' + name;
+
+    const l =
+      extensions.find((x) =>
+        x.key.includes('.' + name.replace('.', '^').split('^')[1])
+      )?.name ||
+      extensions.find((x) =>
+        x.key.includes('.' + name.split('.')[name.split('.').length - 1])
+      )?.name ||
+      'none';
+
+    setFiles((f) => [
+      ...f,
+      {
+        name: name,
+        language: l,
+        value: blob,
+      },
+    ]);
+  }
+
+  function handleDrop(
+    event: React.DragEvent<HTMLElement>
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    setDrag(false);
+
+    const fls = event.dataTransfer.files;
+    uploadFile(fls)
+  }
+
+  function handleUpload(
+    event: ChangeEvent<HTMLInputElement>
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const target = event.target;
+
+    const fls = (target as EventTarget & HTMLInputElement).files;
+    uploadFile(fls)
+  }
+
   function showDialog() {
     const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
 
@@ -272,6 +342,11 @@ const Index: NextPage = () => {
       )?.name || 'none';
 
     box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
+  }
+
+  function isFile(dataTransfer: DataTransfer) {
+    if (dataTransfer.types[0] == 'Files') return true;
+    else false;
   }
 
   // HANDLE SUMBIT ----------------------------------------------------
@@ -324,7 +399,23 @@ const Index: NextPage = () => {
     <div className={generalStyles.container}>
       <MetaTags />
 
-      <main className={generalStyles.main}>
+      <main
+        onDragEnter={(e) => {
+          e.preventDefault();
+          isFile(e.dataTransfer) ? setDrag(true) : null;
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          isFile(e.dataTransfer) ? setDrag(true) : null;
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault();
+          isFile(e.dataTransfer) ? setDrag(false) : null;
+        }}
+        onDrop={(e) => {
+          isFile(e.dataTransfer) ? handleDrop(e) : null;
+        }}
+        className={generalStyles.main}>
         <div
           onClick={() => {
             closeEdit();
@@ -332,6 +423,45 @@ const Index: NextPage = () => {
             form.requestSubmit();
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
+
+        <div
+          className={[
+            styles.dropzone,
+            styles.backdrop,
+            drag ? 'droppy' : '',
+          ].join(' ')}>
+          <div className={[styles.dropNotif, 'dropNotif'].join(' ')}>
+            <h2>{files.length >= 2 ? 'Oh no' : 'Drop it.'}</h2>
+            <p>
+              {files.length >= 2
+                ? "You've reached the file limit."
+                : "We'll handle the rest !"}
+            </p>
+            <div
+              className={styles.fileUploadBox}
+              style={{
+                border: `3px dashed ${
+                  files.length >= 2 ? 'var(--red)' : 'var(--background-darker)'
+                }`,
+                color:
+                  files.length >= 2 ? 'var(--red)' : 'var(--special-color)',
+              }}>
+              <span style={{ fontSize: '64px', color: 'var(--special-color)' }}>
+                {files.length >= 2 ? (
+                  <FaWindowClose style={{ color: 'var(--red)' }} />
+                ) : (
+                  <FaCloudUploadAlt />
+                )}
+              </span>
+              <p>
+                {files.length >= 2
+                  ? `There is a limit of 2 files per board at the moment. So we will not process this file. Delete one file and drop again.`
+                  : ` We only accept program files and not images/audio/video. Just
+                drop it we will handle the rest.`}
+              </p>
+            </div>
+          </div>
+        </div>
 
         <Header theme={theme} setTheme={setTheme} />
 
@@ -351,7 +481,27 @@ const Index: NextPage = () => {
               <FaBackward />
             </button>
             <h2>Add new file</h2>
+            <label
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+              className={styles.upload}>
+              <input
+                type="file"
+                id="file-upload"
+                title="Upload"
+                multiple={false}
+                onChange={(event) => {
+                  handleUpload(event);
+                  document.querySelector<HTMLDialogElement>('#newFile').close();
+                }}
+              />
+              <FaCloudUploadAlt title="Upload" />
+            </label>
           </div>
+
           <form method="dialog" onSubmit={(event) => newFile(event)}>
             <input
               autoComplete="off"
@@ -448,7 +598,7 @@ const Index: NextPage = () => {
               <button
                 title="Save the board"
                 className={styles.save}
-                disabled={code == ''}
+                disabled={code == '' && files.length <= 1}
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';
@@ -525,28 +675,32 @@ const Index: NextPage = () => {
                   onClick={(event) => {
                     const colors = ['#f8bc45', '#c596c7', '#56b3b4'];
 
-                    (event.target as HTMLElement).style.color =
-                      colors[Math.floor(Math.random() * colors.length)];
                     formatCode(code, file.language)
                       .then((formatted) => {
                         file.value = formatted;
                         setCode(formatted);
+
+                        (event.target as HTMLElement).style.color =
+                          colors[Math.floor(Math.random() * colors.length)];
+
+                        setInterval(() => {
+                          (event.target as HTMLElement).style.color =
+                            'var(--special-color)';
+                        }, 5000);
                       })
                       .catch((err) => {
                         (event.target as HTMLElement).style.color = '#ea5e5e';
                         console.log(err);
                       });
-
-                    setInterval(() => {
-                      (event.target as HTMLElement).style.color =
-                        'var(--special-color)';
-                    }, 5000);
                   }}>
                   <SiPrettier />
                 </button>
               </div>
             </div>
             <CodeBoard
+              style={
+                drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
+              }
               code={file.value}
               readOnly={false}
               language={language}

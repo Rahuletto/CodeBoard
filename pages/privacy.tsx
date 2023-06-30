@@ -106,7 +106,7 @@ const Home: NextPage = () => {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.link}
-                  href="https://discord.com/users/770551872309166090">
+                  href="/discord">
                   discord
                 </a>
               </p>
@@ -128,7 +128,7 @@ const Home: NextPage = () => {
                   target="_blank"
                   rel="noreferrer"
                   className={styles.link}
-                  href="https://discord.com/users/770551872309166090">
+                  href="/discord">
                   at Discord
                 </a>
                 .

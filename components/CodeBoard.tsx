@@ -17,6 +17,7 @@ interface CodeBoardProps {
   readOnly?: boolean;
   height?: string;
   width?: string;
+  style?: any
 }
 
 const CodeBoard: React.FC<CodeBoardProps> = ({
@@ -27,11 +28,12 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   readOnly,
   height,
   width,
+  style
 }) => {
-
   return (
     <>
       <CodeMirror
+        style={style}
         placeholder="Paste your code here."
         theme={
           theme == 'light'
@@ -72,6 +74,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         readOnly={readOnly}
         extensions={[language, hyperLink]}
         onChange={onChange}
+        draggable={false}
         aria-label="code"
         basicSetup={{
           foldGutter: true,
@@ -90,7 +93,6 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
           completionKeymap: true,
           defaultKeymap: true,
         }}
-        
       />
     </>
   );

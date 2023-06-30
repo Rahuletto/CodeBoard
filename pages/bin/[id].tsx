@@ -218,7 +218,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (
       Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
+      maybeBoard?.autoVanish || maybeBoard?.files.length == 0
     )
       return {
         redirect: {
