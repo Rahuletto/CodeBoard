@@ -62,6 +62,9 @@ const Index: NextPage = () => {
   const [encrypt, setEncrypt] = useState(true);
   const [vanish, setVanish] = useState(false);
 
+  // Mobile
+  const [metadata, setMetadata] = useState(false)
+
   // For Drag and drop
   const [drag, setDrag] = useState(false);
 
@@ -523,14 +526,13 @@ const Index: NextPage = () => {
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <button
             title="More info about the project"
-            className="info mobile"
-            onClick={(event) => {
-              document.querySelector('.projectForm').classList.toggle('show');
-              (event.target as HTMLButtonElement).classList.toggle('opened');
+            className={["info", "mobile", (metadata ? 'opened' : null)].join(' ')}
+            onClick={() => {
+              setMetadata(!metadata)
             }}>
             <GoGear /> <span>Metadata</span>
           </button>
-          <div className={[styles.project, 'projectForm'].join(' ')}>
+          <div className={[styles.project, 'projectForm', (metadata ? 'show' : null)].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
