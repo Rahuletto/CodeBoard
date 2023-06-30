@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Code from '../../model/code';
+import Code from '../model/code';
 
 let interval;
 
