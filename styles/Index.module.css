@@ -184,7 +184,7 @@
 }
 
 .upload {
-  font-family: 'JetBrains Mono';
+  cursor: pointer;
   border: 2px solid var(--background-darker);
   border-radius: 50px;
   font-weight: 800;

@@ -17,6 +17,12 @@ export default async function handler(
   const db = await connectDB();
   let queries = req.query;
 
+  if (!queries.id) return res.status(422).json({
+    message: 'Board ID not provided !',
+    status: 422,
+  });
+  else if(queries.id == '{id}') queries.id = queries.id.replace('{id}', 'cEFTT17h')
+
   const boardRaw = await Code.findOne({ key: queries.id });
 
   if (boardRaw)
@@ -30,5 +36,5 @@ export default async function handler(
       autoVanish: boardRaw.options[0].autoVanish,
       status: 200,
     });
-  else return res.status(404).json({ board: 'NOT FOUND', status: 404 });
+  else return res.status(404).json({ board: 'NOT FOUND. Try a valid board id', status: 404 });
 }

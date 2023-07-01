@@ -51,13 +51,13 @@ const Home: NextPage = () => {
             style={{ width: 'fit-content' }}
             href="/"
             className={generalStyles.newProject}>
-            <FaPlus style={{ marginRight: '10px' }} /> New board
+            <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New board
           </a>
           <a
             style={{ width: 'fit-content' }}
             href="/privacy"
             className={styles.privacy}>
-            <FlFillIcFluentInprivateAccount24Filled style={{ marginRight: '10px' }} /> Privacy
+            <FlFillIcFluentInprivateAccount24Filled title="Privacy Matters" style={{ marginRight: '10px' }} /> Privacy
           </a>
           </div>
         </div>

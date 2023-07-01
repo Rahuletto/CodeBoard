@@ -63,7 +63,7 @@ const Index: NextPage = () => {
   const [vanish, setVanish] = useState(false);
 
   // Mobile
-  const [metadata, setMetadata] = useState(false)
+  const [metadata, setMetadata] = useState(false);
 
   // For Drag and drop
   const [drag, setDrag] = useState(false);
@@ -139,7 +139,7 @@ const Index: NextPage = () => {
             <div>{f.name}</div>
             <div>
               <button className="file" title="Edit" onClick={() => showEdit(f)}>
-                <FaCaretDown />
+                <FaCaretDown title="Edit" />
               </button>
             </div>
           </button>
@@ -306,27 +306,23 @@ const Index: NextPage = () => {
     ]);
   }
 
-  function handleDrop(
-    event: React.DragEvent<HTMLElement>
-  ) {
+  function handleDrop(event: React.DragEvent<HTMLElement>) {
     event.preventDefault();
     event.stopPropagation();
     setDrag(false);
 
     const fls = event.dataTransfer.files;
-    uploadFile(fls)
+    uploadFile(fls);
   }
 
-  function handleUpload(
-    event: ChangeEvent<HTMLInputElement>
-  ) {
+  function handleUpload(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     const target = event.target;
 
     const fls = (target as EventTarget & HTMLInputElement).files;
-    uploadFile(fls)
+    uploadFile(fls);
   }
 
   function showDialog() {
@@ -451,7 +447,10 @@ const Index: NextPage = () => {
               }}>
               <span style={{ fontSize: '64px', color: 'var(--special-color)' }}>
                 {files.length >= 2 ? (
-                  <FaWindowClose style={{ color: 'var(--red)' }} />
+                  <FaWindowClose
+                    title="Not Allowed"
+                    style={{ color: 'var(--red)' }}
+                  />
                 ) : (
                   <FaCloudUploadAlt />
                 )}
@@ -481,7 +480,7 @@ const Index: NextPage = () => {
                 document.querySelector<HTMLDialogElement>('#newFile').close();
               }}
               className={styles.denyCreate}>
-              <FaBackward />
+              <FaBackward title="Back" />
             </button>
             <h2>Add new file</h2>
             <label
@@ -526,13 +525,18 @@ const Index: NextPage = () => {
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <button
             title="More info about the project"
-            className={["info", "mobile", (metadata ? 'opened' : null)].join(' ')}
+            className={['info', 'mobile', metadata ? 'opened' : null].join(' ')}
             onClick={() => {
-              setMetadata(!metadata)
+              setMetadata(!metadata);
             }}>
-            <GoGear /> <span>Metadata</span>
+            <GoGear title="Settings" /> <span>Metadata</span>
           </button>
-          <div className={[styles.project, 'projectForm', (metadata ? 'show' : null)].join(' ')}>
+          <div
+            className={[
+              styles.project,
+              'projectForm',
+              metadata ? 'show' : null,
+            ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
@@ -545,9 +549,10 @@ const Index: NextPage = () => {
                     placeholder="Untitled."
                     name="project-name"></input>{' '}
                   {encrypt ? (
-                    <LuShieldCheck className="enc icon" />
+                    <LuShieldCheck title="Encrypted" className="enc icon" />
                   ) : (
                     <LuShieldOff
+                      title="Not Encrypted"
                       style={{ color: 'var(--red)' }}
                       className="enc icon"
                     />
@@ -620,11 +625,13 @@ const Index: NextPage = () => {
                 AutoVanish:{' '}
                 {vanish ? (
                   <LuTimer
+                    title="Auto delete"
                     style={{ opacity: 1, fontSize: '22px' }}
                     className="enc icon"
                   />
                 ) : (
                   <LuTimerOff
+                    title="Auto delete"
                     style={{
                       color: 'var(--red)',
                       opacity: 1,
@@ -636,11 +643,13 @@ const Index: NextPage = () => {
                 Encryption:{' '}
                 {encrypt ? (
                   <LuShieldCheck
+                    title="Encrypted"
                     style={{ opacity: 1, fontSize: '22px' }}
                     className="enc icon"
                   />
                 ) : (
                   <LuShieldOff
+                    title="Not Encrypted"
                     style={{
                       color: 'var(--red)',
                       opacity: 1,
@@ -662,7 +671,7 @@ const Index: NextPage = () => {
                     title="New file"
                     disabled={files.length >= 2}
                     onClick={() => showDialog()}>
-                    <FaPlus style={{ fontSize: '22px' }} />
+                    <FaPlus title="New File" style={{ fontSize: '22px' }} />
                   </button>
                 </div>
               </div>
@@ -695,7 +704,7 @@ const Index: NextPage = () => {
                         console.log(err);
                       });
                   }}>
-                  <SiPrettier />
+                  <SiPrettier title="Format with Prettier" />
                 </button>
               </div>
             </div>
