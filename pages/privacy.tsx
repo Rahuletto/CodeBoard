@@ -40,7 +40,7 @@ const Home: NextPage = () => {
                 fontSize: '52px',
                 marginBottom: '-16px',
               }}>
-              <FlFillIcFluentInprivateAccount24Filled />
+              <FlFillIcFluentInprivateAccount24Filled title="Privacy Matters" />
             </span>
           </div>
           <p style={{ paddingLeft: '0px' }}>
@@ -91,9 +91,15 @@ const Home: NextPage = () => {
                   not use your data
                 </span>{' '}
                 for out profits nor selling it. We{' '}
-                <b style={{ color: 'var(--orange)' }}>only</b> store your code,
-                options you provided. if you wish to share with the platform. We
-                might use your cache to pre-load our components {'('}website
+                <b style={{ color: 'var(--orange)' }}>only</b> store your code{' '}
+                <span
+                  style={{ fontWeight: 600, color: 'var(--special-color)',
+                  fontFamily: 'JetBrains Mono', }}>
+                  {
+                    '(If you use Encryption option, We will store only the encrypted code snippet and not your decrypted code snippet)'
+                  }
+                </span>, options you provided. if you wish to share with the platform.
+                We might use your cache to pre-load our components {'('}website
                 items{')'} to make it very fast. But if you wish to opt-out, You
                 can disable cookies and cache. Damn we don{"'"}t even get your
                 personal data
