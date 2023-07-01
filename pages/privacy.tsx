@@ -44,9 +44,9 @@ const Home: NextPage = () => {
             </span>
           </div>
           <p style={{ paddingLeft: '0px' }}>
-            We are not ready to waste your time with some <b>&quot;big blah blah
-            blah&quot;</b> legal document. Thats why we made something thats *spot
-            on* simple yet transparent policy.
+            We are not ready to waste your time with some{' '}
+            <b>&quot;big blah blah blah&quot;</b> legal document. Thats why we
+            made something thats *spot on* simple yet transparent policy.
           </p>
           <div className={styles.indent}>
             <a href="#definitions">
@@ -56,12 +56,28 @@ const Home: NextPage = () => {
               <ul>
                 <li>
                   &quot;Service&quot;, &quot;We&quot;, &quot;The Website&quot;
-                  refers to the CodeBoard.
+                  refers to the{' '}
+                  <span
+                    style={{
+                      color: 'var(--special-color)',
+                      fontWeight: 600,
+                      fontFamily: 'JetBrains Mono',
+                    }}>
+                    CodeBoard
+                  </span>
+                  .
                 </li>
 
                 <li>
-                  &quot;You&quot;, &quot;The User&quot; refers to the individual
-                  or organisation using this Service.
+                  &quot;You&quot;, &quot;The User&quot; refers to the{' '}
+                  <span style={{ fontWeight: 600, color: 'var(--green)' }}>
+                    individual
+                  </span>
+                  or{' '}
+                  <span style={{ fontWeight: 600, color: 'var(--green)' }}>
+                    organisation
+                  </span>{' '}
+                  using this Service.
                 </li>
               </ul>
             </div>
@@ -70,12 +86,17 @@ const Home: NextPage = () => {
             </a>
             <div className={styles.indent}>
               <p>
-                We will not use your data for out profits nor selling it. We{' '}
-                <b>only</b> store your code, options you provided. if you wish
-                to share with the platform. We might use your cache to pre-load
-                our components {'('}website items{')'} to make it very fast. But
-                if you wish to opt-out, You can disable cookies and cache. Damn
-                we don{"'"}t even get your personal data
+                We will{' '}
+                <span style={{ fontWeight: 600, color: 'var(--green)' }}>
+                  not use your data
+                </span>{' '}
+                for out profits nor selling it. We{' '}
+                <b style={{ color: 'var(--orange)' }}>only</b> store your code,
+                options you provided. if you wish to share with the platform. We
+                might use your cache to pre-load our components {'('}website
+                items{')'} to make it very fast. But if you wish to opt-out, You
+                can disable cookies and cache. Damn we don{"'"}t even get your
+                personal data
               </p>
             </div>
             <a href="#liability">
@@ -84,8 +105,16 @@ const Home: NextPage = () => {
             <div className={styles.indent}>
               <p>
                 As this is a code sharing platform, you might come around with
-                so called <b>bad actors</b>. So we will not be liable to you or
-                any third party for any loss of profits, use, goodwill, or data,
+                so called <b style={{ color: 'var(--red)' }}>bad actors</b>. The
+                code snippets in this platform are made by other users. So we do{' '}
+                <b>
+                  <strong style={{ color: 'var(--orange)' }}>not</strong>
+                </b>{' '}
+                take responsibilities for any damages. Use it at your own risk.
+                So we will not be liable to you or any third party for{' '}
+                <b style={{ color: 'var(--red)' }}>
+                  any loss of profits, use, goodwill, or data
+                </b>{' '}
                 or for any incidental, indirect, special, consequential or
                 exemplary damages, however arising, that result from:
               </p>
@@ -96,8 +125,9 @@ const Home: NextPage = () => {
                 <li>Your use or inability to use the Service</li>
               </ul>
               <p>
-                If you come across a malicious board {'(code)'} then{' '}
-                <b>PLEASE</b> send the key {'(or)'} url via{' '}
+                If you come across a malicious board {'(code snippet)'} then{' '}
+                <b style={{ color: 'var(--green)' }}>PLEASE</b> send the key{' '}
+                {'(or)'} url via{' '}
                 <a className={styles.link} href="mailto: rahulmarban@gmail.com">
                   email
                 </a>{' '}
@@ -116,10 +146,13 @@ const Home: NextPage = () => {
             </a>
             <div className={styles.indent}>
               <p>
-                Reading this privacy notice will help you understand your
-                privacy rights and choices. If you do not agree with our
-                policies and practices, please do not use our Services. If you
-                still have any questions or concerns, please contact me at{' '}
+                Reading this privacy notice will help you understand your{' '}
+                <b style={{ color: 'var(--green)' }}>
+                  privacy rights and choices
+                </b>
+                . If you do not agree with our policies and practices, please do
+                not use our Services. If you still have any questions or
+                concerns, please contact me at{' '}
                 <a className={styles.link} href="mailto: rahulmarban@gmail.com">
                   rahulmarban@gmail.com
                 </a>{' '}

@@ -32,6 +32,7 @@
     --code-editor: #f6f6f6;
 
     --red: #ee4646;
+    --orange: #c27d24;
     --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
@@ -77,6 +78,7 @@
     --code-editor: #272c35;
 
     --red: #db4545;
+    --orange: #ff9c1c;
     --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
@@ -119,6 +121,7 @@ html[data-theme='light'] {
   --code-editor: #f6f6f6;
 
   --red: #ee4646;
+  --orange: #c27d24;
   --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -139,6 +142,7 @@ html[data-theme='dark'] {
   --code-editor: #272c35;
 
   --red: #db4545;
+  --orange: #ff9c1c;
   --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

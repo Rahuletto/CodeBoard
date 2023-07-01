@@ -15,6 +15,8 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 // Icons
 import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { GoShieldCheck, GoGitBranch, GoGear } from 'react-icons-ng/go';
+import { TiWarning } from 'react-icons-ng/ti';
+import {IoCloseCircleSharp} from 'react-icons-ng/io5'
 
 // Our Imports
 import { BoardFile } from '../../utils/board';
@@ -100,6 +102,19 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
+        <div className={[generalStyles.warning, 'warning'].join(' ')}>
+          <TiWarning style={{fontSize: '64px', minWidth: '34px', height: '34px', color: 'var(--orange)'}} />{' '}
+          <div className={generalStyles.warnText}>
+            <div><h3>Warning</h3><IoCloseCircleSharp title="Close Warning" style={{ cursor: 'pointer', color: 'var(--red)' }} onClick={() => (document.getElementsByClassName('warning')[0] as HTMLElement).style.visibility = "hidden"}/></div>
+            <p>
+              These code snippets are made by other users. So we do{' '}
+              <b>
+                <strong style={{ color: 'var(--orange)' }}>not</strong>
+              </b>{' '}
+              take responsibilities for any damages. Use it at your own risk
+            </p>
+          </div>
+        </div>
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <button
@@ -219,8 +234,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let board: FetchResponse = maybeBoard;
 
     if (
-      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish || maybeBoard?.files.length == 0
+      (Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+        maybeBoard?.autoVanish) ||
+      maybeBoard?.files.length == 0
     )
       return {
         redirect: {
@@ -229,7 +245,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
 
- 
     if (maybeBoard.encrypted) {
       try {
         const decryptedFiles = [];
