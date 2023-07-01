@@ -235,10 +235,6 @@ button:focus {
   display: none;
 }
 
-dialog {
-  z-index: 100;
-}
-
 header {
   padding: 16px 32px;
   display: flex;
@@ -458,6 +454,7 @@ dialog {
   background: var(--background-light);
   border-radius: 50px;
   border: none;
+  z-index: 100;
 }
 
 dialog div {
@@ -465,11 +462,9 @@ dialog div {
   display: flex;
   gap: 16px;
   align-items: center;
-  justify-content: space-around;
-  padding: 10px 6px;
+  justify-content: space-between;
+  padding: 0px 6px;
   border-radius: 50px;
-  background: var(--background-slight-dark);
-  border: 4px solid var(--background-dark);
   color: var(--special-color);
 }
 
