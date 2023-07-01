@@ -463,7 +463,7 @@ dialog div {
   gap: 16px;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 6px;
+  padding: 0px 8px;
   border-radius: 50px;
   color: var(--special-color);
 }
