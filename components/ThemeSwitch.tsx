@@ -4,12 +4,19 @@ import { ChangeEvent, useEffect } from 'react';
 // Styles
 import styles from './styles/ThemeSwitcher.module.css';
 
+// React
+import React from 'react';
+
+// MillionJS
+import { block } from 'million/react';
+
+
 interface ThemeSwitchProps {
   theme?: 'light' | 'dark' | string;
   setTheme?: Function | any;
 }
 
-const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
+const UnblockedThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   // Theme switcher
   function switchTheme(e: ChangeEvent<HTMLInputElement>) {
     const toggleSwitch = e.target;
@@ -60,4 +67,5 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   );
 };
 
+const ThemeSwitch = block(UnblockedThemeSwitch, {ssr: false})
 export default ThemeSwitch;

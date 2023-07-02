@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 // Styles
 import styles from './styles/Loader.module.css';
 
-const Loader: React.FC = () => {
+// MillionJS
+import { block } from 'million/react';
+
+const UnblockedLoader: React.FC = () => {
   // Random texts to show in loading screen. Do a pr and add more ;)
   const texts = [
     <span key="1">Sorting things out.</span>,
@@ -76,7 +79,7 @@ const Loader: React.FC = () => {
       </h2>
     </div>
   );
-};
+}
 
-
+const Loader = block(UnblockedLoader, {ssr: false})
 export default Loader;

@@ -54,3 +54,4 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
 };
 
 export default MetaTags;
+// Who needs to use block. This doesnt even render as page
