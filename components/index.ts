@@ -1,3 +1,4 @@
+import AddFile from './AddFile'
 import CodeBoard from "./CodeBoard"
 import CreateModal from "./CreateModal"
 import DropZone from "./DropZone"
@@ -11,15 +12,16 @@ import PrettierButton from "./PrettierButton"
 import ThemeSwitch from "./ThemeSwitch"
 
 export { 
+    AddFile, // MillionJS Block Element
     CodeBoard,
     CreateModal,
     DropZone,
     EditModal,
     FileSelect,
-    Header,
+    Header, // MillionJS Block Element
     InfoButton,
-    Loader,
+    Loader, // MillionJS Block Element
     MetaTags,
-    PrettierButton,
-    ThemeSwitch
+    PrettierButton, // MillionJS Block Element
+    ThemeSwitch // MillionJS Block Element
 }

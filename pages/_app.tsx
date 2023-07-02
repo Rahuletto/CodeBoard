@@ -2,14 +2,13 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 // Styles
 import '../styles/globals.css';
 import '../styles/mobile.css';
 
-// Lazy loading
-const Loader = dynamic(() => import('../components/Loader'), { ssr: true })
+// Loader
+import Loader from '../components/Loader'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -18,9 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
 
-    setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
-
-    
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) elem.style.opacity = '0';
@@ -33,10 +29,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     !blacklist.some((substring) => router.pathname.includes(substring))
   ) {
     return (
-      <>
+      <div>
         <Loader />
-        <Component {...pageProps} /> {/** For getting its meta tags */}
-      </>
+        <Component {...pageProps} />
+      </div>
     );
   }
 
