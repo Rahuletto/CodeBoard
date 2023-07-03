@@ -4,9 +4,6 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
 
-// MillionJS
-import { block } from 'million/react';
-
 // Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Index.module.css';
@@ -15,7 +12,6 @@ import styles from '../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
-import { FaPlus } from 'react-icons-ng/fa';
 import {
   LuShieldCheck,
   LuShieldOff,
@@ -26,19 +22,17 @@ import {
 // Our Imports
 import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
+import { AddFile, MetaTags } from '../components';
 
 // Lazy loading
 
 // WANTED TO COMBINE ALL LAZY IMPORTS WITH INDEX.TS BUT NEXTJS DONT ALLOW AAA
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
-const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
+
 const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
   ssr: false,
 });
 const EditModal = dynamic(() => import('../components/EditModal'), {
-  ssr: false,
-});
-const FileSelect = dynamic(() => import('../components/FileSelect'), {
   ssr: false,
 });
 const DropZone = dynamic(() => import('../components/DropZone'), {
@@ -53,7 +47,7 @@ const InfoButton = dynamic(() => import('../components/InfoButton'), {
 const CreateModal = dynamic(() => import('../components/CreateModal'), {
   ssr: false,
 });
-const AddFile = dynamic(() => import('../components/AddFile'), {
+const FileSelect = dynamic(() => import('../components/FileSelect'), {
   ssr: false,
 });
 

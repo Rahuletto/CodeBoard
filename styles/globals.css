@@ -61,7 +61,7 @@
 
 @media (prefers-color-scheme: dark) {
   html {
-    --font-color: #dde1e3;
+    --font-color: #CAD4E2;
     --special-color: #abb8cc;
     --hsl-special-color: hsl(216, 24%, 74%);
     --hsl-special-color-end: hsl(217, 16%, 51%);
@@ -127,7 +127,7 @@ html[data-theme='light'] {
 }
 
 html[data-theme='dark'] {
-  --font-color: #dde1e3;
+  --font-color: #CAD4E2;
   --special-color: #abb8cc;
   --hsl-special-color: hsl(216, 24%, 74%);
 

@@ -21,3 +21,4 @@ Allow: /
 
 User-agent: *
 Allow: /home
+Allow: /api/og/*
