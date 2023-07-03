@@ -15,7 +15,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const db = await connectDB();
-  let queries = req.query;
+  const queries = req.query;
 
   if (!queries.id) return res.status(422).json({
     message: 'Board ID not provided !',
@@ -24,6 +24,7 @@ export default async function handler(
   else if(queries.id == '{id}') queries.id = queries.id.replace('{id}', 'cEFTT17h')
 
   const boardRaw = await Code.findOne({ key: queries.id });
+  res.setHeader('Cache-Control', 's-maxage=10')
 
   if (boardRaw)
     return res.status(200).json({
