@@ -5,11 +5,12 @@ import CodeMirror from '@uiw/react-codemirror';
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
 import { tags as t } from '@lezer/highlight';
 
+
 // React
 import React from 'react';
 
 // Props
-interface CodeBoardProps {
+type CodeBoardProps = {
   language?: Function | any;
   code?: string;
   theme?: 'light' | 'dark' | string;
@@ -17,8 +18,8 @@ interface CodeBoardProps {
   readOnly?: boolean;
   height?: string;
   width?: string;
-  style?: any
-}
+  styleProp?: any
+};
 
 const CodeBoard: React.FC<CodeBoardProps> = ({
   language,
@@ -28,12 +29,12 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   readOnly,
   height,
   width,
-  style
+  styleProp
 }) => {
   return (
     <>
       <CodeMirror
-        style={style}
+        
         placeholder="Paste your code here."
         theme={
           theme == 'light'
@@ -68,6 +69,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
                 ],
               })
         }
+        style={styleProp || { pointerEvents: 'auto' }}
         value={code}
         width={width || 'auto'}
         height={height || '200px'}

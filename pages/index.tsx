@@ -1,7 +1,7 @@
 // NextJS Stuff
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
 
 // Styles
@@ -13,64 +13,74 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
 import {
-  FaPlus,
-  FaCaretDown,
-  FaBackward,
-  FaCloudUploadAlt,
-  FaWindowClose,
-} from 'react-icons-ng/fa';
-import {
   LuShieldCheck,
   LuShieldOff,
   LuTimer,
   LuTimerOff,
 } from 'react-icons-ng/lu';
-import { GoGear } from 'react-icons-ng/go';
-import { SiPrettier } from 'react-icons-ng/si';
 
-// Types
+// Our Imports
 import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
+import { AddFile, MetaTags } from '../components';
 
 // Lazy loading
+
+// WANTED TO COMBINE ALL LAZY IMPORTS WITH INDEX.TS BUT NEXTJS DONT ALLOW AAA
+const Header = dynamic(() => import('../components/Header'), { ssr: true });
+
 const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
   ssr: false,
 });
-const Header = dynamic(() => import('../components/Header'), { ssr: true });
-const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
+const EditModal = dynamic(() => import('../components/EditModal'), {
+  ssr: false,
+});
+const DropZone = dynamic(() => import('../components/DropZone'), {
+  ssr: false,
+});
+const PrettierButton = dynamic(() => import('../components/PrettierButton'), {
+  ssr: false,
+});
+const InfoButton = dynamic(() => import('../components/InfoButton'), {
+  ssr: false,
+});
+const CreateModal = dynamic(() => import('../components/CreateModal'), {
+  ssr: false,
+});
+const FileSelect = dynamic(() => import('../components/FileSelect'), {
+  ssr: false,
+});
 
 const Index: NextPage = () => {
   const router = useRouter();
 
-  // Items
+  // ---------------------------------
+  // ---------- S T A T E S ----------
+  // ---------------------------------
+
+  // Items ---------------------------------
   const [fileName, setFileName] = useState('untitled.js');
   const [btns, setBtns] = useState([]);
 
-  // Validation
+  // Validation ---------------------------------
   const [code, setCode] = useState('');
 
-  // mode
+  // Themes ---------------------------------
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  useEffect(() => {
-    setTheme(localStorage.getItem('theme') || 'dark');
-  }, []);
-
-  // Inputs
+  // Inputs ---------------------------------
   const [title, setTitle] = useState('Untitled');
   const [description, setDescription] = useState('');
   const [encrypt, setEncrypt] = useState(true);
   const [vanish, setVanish] = useState(false);
 
-  // Mobile
+  // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
 
-  // For Drag and drop
+  // For Drag and drop ---------------------------------
   const [drag, setDrag] = useState(false);
 
-  const keyId = makeid(8);
-
-  // Files
+  // Files ---------------------------------
   const [files, setFiles] = useState([
     {
       name: 'untitled.js',
@@ -82,17 +92,17 @@ const Index: NextPage = () => {
   let file = files.find((a) => a.name == fileName);
   if (!file) file = files[0];
 
+  // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
     // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
     loadLanguage(file.language == 'none' ? 'markdown' : file.language)
   );
 
-  useEffect(() => {
-    setLanguage(
-      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
-    );
-  }, [file.language]);
+  const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
+
+  // ---------------------------------
+  // -------- C A L L B A C K --------
+  // ---------------------------------
 
   const onChange = React.useCallback(
     (value: string, viewUpdate: any) => {
@@ -107,70 +117,47 @@ const Index: NextPage = () => {
     [fileName]
   );
 
+  // ---------------------------------
+  // --------- E F F E C T S ---------
+  // ---------------------------------
+
+  // Set Language ---------------------------------
   useEffect(() => {
-    function deleteFile(name: string) {
-      const ff = files.filter(function (item) {
-        return item.name !== name;
-      });
+    setLanguage(
+      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
+      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    );
+  }, [file.language]);
 
-      setFileName(ff[0].name);
+  // Set Themes ---------------------------------
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme') || 'dark');
+  }, []);
 
-      setFiles(ff);
-    }
-
+  // File Selector Effect ---------------------------------
+  useEffect(() => {
     const fileButtons: JSX.Element[] = [];
 
     const tmpFiles = [...files];
-
     tmpFiles.map((f) => {
-      if (f.language == 'none') {
-        f.name = f.name.split('.')[0] + '.md';
-      }
+      f.name = f.language == 'none' ? f.name.split('.')[0] + '.md' : f.name;
 
-      const cls = `edit-${f.name.replaceAll('.', '-')} edit`;
       fileButtons.push(
         <div key={f.name}>
-          <button
-            title={f.name}
-            onClick={() => setFileName(f.name)}
-            className={
-              f.name === fileName ? 'fileSelect active-file' : 'fileSelect'
-            }>
-            <div>{f.name}</div>
-            <div>
-              <button className="file" title="Edit" onClick={() => showEdit(f)}>
-                <FaCaretDown title="Edit" />
-              </button>
-            </div>
-          </button>
+          <FileSelect
+            fileName={fileName}
+            file={f}
+            setFileName={setFileName}
+            edit={true}
+          />
 
-          <div className={cls}>
-            {' '}
-            <form className="editForm" onSubmit={(event) => edit(event)}>
-              <input
-                onChange={(event) => updateEditLanguage(event, f.name)}
-                className="file-name"
-                name="filename"
-                type="text"
-                placeholder={f.name}
-                autoComplete="off"></input>
-              <p>
-                <span
-                  className={['language-show-edit', f.name + '-language'].join(
-                    ' '
-                  )}>
-                  {f.language.charAt(0).toUpperCase() + f.language.slice(1)}
-                </span>
-              </p>
-
-              <button
-                title="Delete the file"
-                disabled={files.length == 1}
-                onClick={() => setTimeout(() => deleteFile(f.name), 400)}>
-                Delete
-              </button>
-            </form>
-          </div>
+          <EditModal
+            fileName={fileName}
+            setFileName={setFileName}
+            currentFile={f}
+            files={files}
+            setFiles={setFiles}
+          />
         </div>
       );
     });
@@ -178,95 +165,18 @@ const Index: NextPage = () => {
     setTimeout(() => setBtns(fileButtons), 20);
   }, [fileName, files]);
 
-  function closeEdit() {
-    const div = document.querySelectorAll(`div.edit`);
-    const back = document.querySelector<HTMLElement>(`.backdrop`);
+  // ---------------------------------
+  // ------- F U N C T I O N S -------
+  // ---------------------------------
 
-    div.forEach((cls) => {
-      (cls as HTMLElement).style['display'] = 'none';
-    });
-    back.style['display'] = 'none';
-  }
-
-  function showEdit(file: BoardFile) {
-    const div = document.getElementsByClassName(
-      `edit-${file.name.replaceAll('.', '-')}`
-    )[0];
-    const back = document.querySelector<HTMLElement>(`.backdrop`);
-    (div as HTMLElement).style['display'] = 'flex';
-    back.style['display'] = 'block';
-  }
-
-  function edit(event) {
+  // Drop Handler ---------------------------------
+  function handleDrop(event: React.DragEvent<HTMLElement>) {
     event.preventDefault();
-    closeEdit();
+    event.stopPropagation();
+    setDrag(false);
 
-    const input = document.querySelector<HTMLInputElement>(
-      `.edit-${fileName.replaceAll('.', '-')}.edit form input`
-    );
-    if (!input) return;
-    const name = input.value;
-
-    const file = files.find((a) => a.name == fileName);
-
-    const box = document.getElementsByClassName(`${fileName}-language`)[0];
-
-    if (!name) return;
-    if (files.find((a) => a.name === name))
-      return alert('Name already taken !');
-    else {
-      file.name = name;
-      file.language = (
-        (box as HTMLElement).innerText || box.textContent
-      ).toLowerCase();
-
-      setFileName(name);
-    }
-  }
-
-  function updateEditLanguage(e: ChangeEvent<HTMLInputElement>, old) {
-    const value = e.target.value;
-    const box = document.getElementsByClassName(`${old}-language`)[0];
-
-    if (!box) return;
-
-    const l =
-      extensions.find((x) =>
-        x.key.includes('.' + value.replace('.', '^').split('^')[1])
-      )?.name ||
-      extensions.find((x) =>
-        x.key.includes('.' + value.split('.')[value.split('.').length - 1])
-      )?.name ||
-      'none';
-
-    box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
-  }
-
-  function newFile(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
-    const box = document.querySelector<HTMLElement>('.language-show');
-
-    // @ts-ignore
-    if (event.target[0].value == '') return dialog.close();
-    // @ts-ignore
-    const name = event.target[0].value;
-
-    dialog.close(name);
-
-    if (!name) return alert('Provide a valid name !');
-    if (files.find((a) => a.name === name))
-      return alert('Name already taken !');
-    else {
-      setFiles((f) => [
-        ...f,
-        {
-          name: name,
-          language: (box.innerText || box.textContent).toLowerCase(),
-          value: '',
-        },
-      ]);
-    }
+    const fls = event.dataTransfer.files;
+    uploadFile(fls);
   }
 
   async function uploadFile(fls: FileList) {
@@ -306,49 +216,23 @@ const Index: NextPage = () => {
     ]);
   }
 
-  function handleDrop(event: React.DragEvent<HTMLElement>) {
-    event.preventDefault();
-    event.stopPropagation();
-    setDrag(false);
+  // -----------------------------------------------
 
-    const fls = event.dataTransfer.files;
-    uploadFile(fls);
+  // Edit Handler ---------------------------------
+
+  function closeEdit() {
+    const div = document.querySelectorAll(`div.edit`);
+    const back = document.querySelector<HTMLElement>(`.backdrop`);
+
+    div.forEach((cls) => {
+      (cls as HTMLElement).style['display'] = 'none';
+    });
+    back.style['display'] = 'none';
   }
 
-  function handleUpload(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
-    event.stopPropagation();
+  // -----------------------------------------------
 
-    const target = event.target;
-
-    const fls = (target as EventTarget & HTMLInputElement).files;
-    uploadFile(fls);
-  }
-
-  function showDialog() {
-    const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
-
-    dialog.showModal();
-  }
-
-  function updateLanguage(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    const box = document.querySelector('.language-show');
-
-    const l =
-      extensions.find((x) =>
-        x.key.includes('.' + value.replace('.', '^').split('^')[1])
-      )?.name || 'none';
-
-    box.innerHTML = l.charAt(0).toUpperCase() + l.slice(1);
-  }
-
-  function isFile(dataTransfer: DataTransfer) {
-    if (dataTransfer.types[0] == 'Files') return true;
-    else false;
-  }
-
-  // HANDLE SUMBIT ----------------------------------------------------
+  // Handle Submit ---------------------------------
   const handleSubmit = async (event: FormEvent) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
@@ -392,7 +276,14 @@ const Index: NextPage = () => {
     const result = await response.json();
     if (result) router.push(`/bin/${keyId}`);
   };
-  // ------------------------------------------------------------------------------
+
+  // Find if its File ---------------------------------
+  function isFile(dataTransfer: DataTransfer) {
+    if (dataTransfer.types[0] == 'Files') return true;
+    else false;
+  }
+
+  // ------------------------------------------------------------------
 
   return (
     <div className={generalStyles.container}>
@@ -423,114 +314,21 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
+        <DropZone files={files} drag={drag} />
+
+        <Header drag={drag} theme={theme} setTheme={setTheme} />
+
+        <CreateModal
+          files={files}
+          setFiles={setFiles}
+          uploadFile={uploadFile}
+        />
+
         <div
-          className={[
-            styles.dropzone,
-            styles.backdrop,
-            drag ? 'droppy' : '',
-          ].join(' ')}>
-          <div className={[styles.dropNotif, 'dropNotif'].join(' ')}>
-            <h2>{files.length >= 2 ? 'Oh no' : 'Drop it.'}</h2>
-            <p>
-              {files.length >= 2
-                ? "You've reached the file limit."
-                : "We'll handle the rest !"}
-            </p>
-            <div
-              className={styles.fileUploadBox}
-              style={{
-                border: `3px dashed ${
-                  files.length >= 2 ? 'var(--red)' : 'var(--background-darker)'
-                }`,
-                color:
-                  files.length >= 2 ? 'var(--red)' : 'var(--special-color)',
-              }}>
-              <span style={{ fontSize: '64px', color: 'var(--special-color)' }}>
-                {files.length >= 2 ? (
-                  <FaWindowClose
-                    title="Not Allowed"
-                    style={{ color: 'var(--red)' }}
-                  />
-                ) : (
-                  <FaCloudUploadAlt />
-                )}
-              </span>
-              <p>
-                {files.length >= 2
-                  ? `There is a limit of 2 files per board at the moment. So we will not process this file. Delete one file and drop again.`
-                  : ` We only accept program files and not images/audio/video. Just
-                drop it we will handle the rest.`}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <Header theme={theme} setTheme={setTheme} />
-
-        <dialog id="newFile" open={false}>
-          <div>
-            <button
-              title="Back"
-              style={{
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-              onClick={() => {
-                document.querySelector<HTMLDialogElement>('#newFile').close();
-              }}
-              className={styles.denyCreate}>
-              <FaBackward title="Back" />
-            </button>
-            <h2>Add new file</h2>
-            <label
-              style={{
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-              className={styles.upload}>
-              <input
-                type="file"
-                id="file-upload"
-                title="Upload"
-                multiple={false}
-                onChange={(event) => {
-                  handleUpload(event);
-                  document.querySelector<HTMLDialogElement>('#newFile').close();
-                }}
-              />
-              <FaCloudUploadAlt title="Upload" />
-            </label>
-          </div>
-
-          <form method="dialog" onSubmit={(event) => newFile(event)}>
-            <input
-              autoComplete="off"
-              onChange={(event) => updateLanguage(event)}
-              className="file-name"
-              name="filename"
-              type="text"
-              placeholder="untitled.js"></input>
-            <p>
-              <span className="language-show">Javascript</span>
-            </p>
-
-            <button title="Create new file" className={styles.create}>
-              Create
-            </button>
-          </form>
-        </dialog>
-
-        <div className={[generalStyles.grid, 'grid'].join(' ')}>
-          <button
-            title="More info about the project"
-            className={['info', 'mobile', metadata ? 'opened' : null].join(' ')}
-            onClick={() => {
-              setMetadata(!metadata);
-            }}>
-            <GoGear title="Settings" /> <span>Metadata</span>
-          </button>
+          className={[generalStyles.grid, 'grid', drag ? 'dragging' : ''].join(
+            ' '
+          )}>
+          <InfoButton metadata={metadata} setMetadata={setMetadata} />
           <div
             className={[
               styles.project,
@@ -605,7 +403,7 @@ const Index: NextPage = () => {
               <button
                 title="Save the board"
                 className={styles.save}
-                disabled={code == '' && files.length <= 1}
+                disabled={code == ''}
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';
@@ -666,50 +464,12 @@ const Index: NextPage = () => {
             <div className="file-holder bin-copy">
               <div style={{ display: 'flex', gap: '12px' }}>
                 {btns}
-                <div className="fileSelect plus active-file">
-                  <button
-                    title="New file"
-                    disabled={files.length >= 2}
-                    onClick={() => showDialog()}>
-                    <FaPlus title="New File" style={{ fontSize: '22px' }} />
-                  </button>
-                </div>
+                <AddFile files={files} />
               </div>
-              <div className={styles.prettier}>
-                <button
-                  title="Format the code"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    fontSize: '20px',
-                  }}
-                  onClick={(event) => {
-                    const colors = ['#f8bc45', '#c596c7', '#56b3b4'];
-
-                    formatCode(code, file.language)
-                      .then((formatted) => {
-                        file.value = formatted;
-                        setCode(formatted);
-
-                        (event.target as HTMLElement).style.color =
-                          colors[Math.floor(Math.random() * colors.length)];
-
-                        setInterval(() => {
-                          (event.target as HTMLElement).style.color =
-                            'var(--special-color)';
-                        }, 5000);
-                      })
-                      .catch((err) => {
-                        (event.target as HTMLElement).style.color = '#ea5e5e';
-                        console.log(err);
-                      });
-                  }}>
-                  <SiPrettier title="Format with Prettier" />
-                </button>
-              </div>
+              <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
             <CodeBoard
-              style={
+              styleProp={
                 drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
               }
               code={file.value}
@@ -726,56 +486,6 @@ const Index: NextPage = () => {
 };
 
 export default Index;
-
-// Formatting code with Prettier
-const formatCode = async (code: string, language: string) => {
-  const prettier = await import('prettier/standalone');
-  const babylonParser = await import('prettier/parser-babel');
-  const css = await import('prettier/parser-postcss');
-  const html = await import('prettier/parser-html');
-  const angular = await import('prettier/parser-angular');
-  const markdown = await import('prettier/parser-markdown');
-  const typescript = await import('prettier/parser-typescript');
-  const yaml = await import('prettier/parser-yaml');
-
-  let parser = 'babel';
-
-  switch (language) {
-    case 'angular':
-      parser = 'angular';
-      break;
-    case 'css':
-      parser = 'css';
-      break;
-    case 'markdown':
-    case 'mdx':
-      parser = 'markdown';
-      break;
-    case 'html':
-      parser = 'html';
-      break;
-    case 'typescript':
-    case 'tsx':
-      parser = 'typescript';
-      break;
-    case 'yaml':
-      parser = 'yaml';
-      break;
-    default:
-      parser = 'babel';
-      break;
-  }
-
-  return prettier.format(code, {
-    parser: parser,
-    plugins: [babylonParser, css, html, markdown, typescript, yaml, angular],
-    semi: true,
-    singleQuote: true,
-    bracketSpacing: true,
-    bracketSameLine: true,
-    endOfLine: 'auto',
-  });
-};
 
 // Generate ID key for boards
 const makeid = (length: number) => {

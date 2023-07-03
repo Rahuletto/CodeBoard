@@ -8,20 +8,25 @@ import ThemeSwitch from './ThemeSwitch';
 import { FaPlus } from 'react-icons-ng/fa';
 import { VscGithubInverted } from 'react-icons-ng/vsc';
 
-interface MetaTagsProps {
-  ISE?: boolean; // Expands to Internal Server Error
+
+// MillionJS
+import { block } from 'million/react';
+
+
+type MetaTagsProps = {
   theme?: string;
   setTheme?: Function;
+  drag?: boolean
 }
 
-const Header: React.FC<MetaTagsProps> = (
-  { ISE, theme, setTheme } = { ISE: false }
+const UnblockedHeader: React.FC<MetaTagsProps> = (
+  { theme, setTheme, drag } = { drag: false }
 ) => {
   return (
-    <header>
+    <header className={drag ? "dragging" : ""}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <a href="/home" className={styles.title}>
-          {ISE ? 'C0d3B0a2d' : 'CodeBoard'}
+        CodeBoard
         </a>
         <a
           target="_blank"
@@ -38,7 +43,7 @@ const Header: React.FC<MetaTagsProps> = (
         </a>
         <a href="/" className={[styles.newProject, 'pc'].join(' ')}>
           <FaPlus style={{ marginRight: '10px' }} />{' '}
-          {ISE ? 'N3w B0a2d' : 'New Board'}
+          New Board
         </a>
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
@@ -46,4 +51,5 @@ const Header: React.FC<MetaTagsProps> = (
   );
 };
 
+const Header = block(UnblockedHeader, { ssr: true })
 export default Header;

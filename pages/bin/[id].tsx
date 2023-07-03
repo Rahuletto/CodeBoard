@@ -1,8 +1,9 @@
 // NextJS Stuff
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { GetServerSidePropsContext } from 'next';
+
 
 // Styles
 import generalStyles from '../../styles/General.module.css';
@@ -15,25 +16,32 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 // Icons
 import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { LuShieldCheck } from 'react-icons-ng/lu';
-import { GoGitBranch, GoGear } from 'react-icons-ng/go';
-import { TiWarning } from 'react-icons-ng/ti';
-import { IoCloseCircleSharp } from 'react-icons-ng/io5'
+import { GoGitBranch } from 'react-icons-ng/go';
 
 // Our Imports
 import { BoardFile } from '../../utils/board';
 import { FetchResponse } from '../api/fetch';
+import { MetaTags } from '../../components';
 
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes';
 
 // Lazy loading
+
+// WANTED TO COMBINE ALL LAZY IMPORTS WITH INDEX.TS BUT NEXTJS DONT ALLOW AAA
+const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
-const MetaTags = dynamic(() => import('../../components/Metatags'), {
-  ssr: true,
+const FileSelect = dynamic(() => import('../../components/FileSelect'), {
+  ssr: false,
 });
-const Header = dynamic(() => import('../../components/Header'), { ssr: false });
+const Warning = dynamic(() => import('../../components/Warning'), {
+  ssr: false,
+});
+const InfoButton = dynamic(() => import('../../components/InfoButton'), {
+  ssr: false,
+});
 
 export default function Bin({ board }: { board: FetchResponse }) {
   const router = useRouter();
@@ -50,6 +58,9 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
   const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
+
+  // Mobile ---------------------------------
+  const [metadata, setMetadata] = useState(false);
 
   let file = board.files.find((a: BoardFile) => a.name == fileName);
   if (!file) file = board.files[0];
@@ -68,15 +79,12 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <button
-          title={f.name}
-          onClick={() => setFileName(f.name)}
-          className={[
-            f.name.replaceAll('.', '-'),
-            f.name == fileName ? 'fileSelect active-file' : 'fileSelect',
-          ].join(' ')}>
-          <div>{f.name}</div>
-        </button>
+        <FileSelect
+          fileName={fileName}
+          file={f}
+          setFileName={setFileName}
+          edit={false}
+        />
       </div>
     );
   });
@@ -99,35 +107,21 @@ export default function Bin({ board }: { board: FetchResponse }) {
         description={
           board.description || 'No Description. Just the source code.'
         }
+        key={board.key}
       />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
-        <div className={[generalStyles.warning, 'warning'].join(' ')}>
-          <TiWarning title="Warning" style={{fontSize: '64px', minWidth: '34px', height: '34px', color: 'var(--orange)'}} />{' '}
-          <div className={generalStyles.warnText}>
-            <div><h3>Warning</h3><IoCloseCircleSharp title="Close Warning" style={{ cursor: 'pointer', color: 'var(--red)' }} onClick={() => (document.getElementsByClassName('warning')[0] as HTMLElement).style.visibility = "hidden"}/></div>
-            <p>
-              These code snippets are made by other users. So we do{' '}
-              <b>
-                <strong style={{ color: 'var(--orange)' }}>not</strong>
-              </b>{' '}
-              take responsibilities for any damages. Use it at your own risk
-            </p>
-          </div>
-        </div>
+        <Warning />
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
-          <button
-            title="More info about the project"
-            className="info mobile"
-            onClick={(event) => {
-              document.querySelector('.projectForm').classList.toggle('show');
-              (event.target as HTMLElement).classList.toggle('opened');
-            }}>
-            <GoGear title="Settings" /> <span>Metadata</span>
-          </button>
-          <div className={[styles.project, 'projectForm'].join(' ')}>
+          <InfoButton metadata={metadata} setMetadata={setMetadata} />
+          <div
+            className={[
+              styles.project,
+              'projectForm',
+              metadata ? 'show' : null,
+            ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
@@ -159,7 +153,11 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <GoGitBranch title="Fork the board" style={{ marginRight: '12px' }} /> Fork
+                <GoGitBranch
+                  title="Fork the board"
+                  style={{ marginRight: '12px' }}
+                />{' '}
+                Fork
               </button>
               <span style={{ borderRadius: '12px' }} className="tooltiptext">
                 Coming soon..

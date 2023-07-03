@@ -10,8 +10,8 @@ import generalStyles from '../styles/General.module.css';
 import { FaPlus } from 'react-icons-ng/fa';
 
 // Lazy loading
-const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true })
-const Header = dynamic(() => import('../components/Header'), { ssr: true })
+const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
+const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
 const Error: NextPage = () => {
   // DARK MODE & LIGHT MODE
@@ -24,6 +24,7 @@ const Error: NextPage = () => {
   return (
     <div className={generalStyles.container}>
       <MetaTags
+        err404={true}
         title="Uhhm ??"
         description="This was not supposed to happen. This board never existed (or) enabled AutoVanish (auto-delete)."
       />
@@ -54,7 +55,8 @@ const Error: NextPage = () => {
             style={{ width: 'fit-content', marginTop: '18px' }}
             href="/"
             className={generalStyles.newProject}>
-            <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New board
+            <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New
+            board
           </a>
 
           <code className="errorCode">Error Code: 404</code>

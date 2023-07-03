@@ -4,9 +4,11 @@ import Head from 'next/head';
 interface MetaTagsProps {
   title?: string;
   description?: string;
+  key?: string;
+  err404?: boolean;
 }
 
-const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
+const MetaTags: React.FC<MetaTagsProps> = ({ title, description, key, err404 }) => {
   return (
     <>
       <Head>
@@ -32,11 +34,30 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
             'CodeBoard is an open-source code sharing platform thats better in every way. With beautiful syntax highlighting and integrated with Prettier.'
           }
         />
-        <meta property="og:image" content="/favicon.ico" />
+        <meta
+          property="og:image"
+          content={
+            err404
+              ? '/404-og.png'
+              : key
+              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${key}`
+              : '/home-og.png'
+          }
+        />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://cdeboard.vercel.app" />
         <meta property="twitter:title" content={title || 'CodeBoard'} />
+        <meta
+          property="twitter:image"
+          content={
+            err404
+              ? '/404-og.png'
+              : key
+              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${key}`
+              : '/home-og.png'
+          }
+        />
         <meta
           property="twitter:description"
           content={
@@ -45,12 +66,15 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description }) => {
           }
         />
 
-
         <link key="icon" rel="icon" href="/favicon.ico" />
-        <meta name="google-site-verification" content="0Cmv3J0IwkFN7JLhsv8jWAnIlX3SaPHFrlIlWy4kzK4" />
+        <meta
+          name="google-site-verification"
+          content="0Cmv3J0IwkFN7JLhsv8jWAnIlX3SaPHFrlIlWy4kzK4"
+        />
       </Head>
     </>
   );
 };
 
 export default MetaTags;
+// Who needs to use block. This doesnt even render as page

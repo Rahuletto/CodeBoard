@@ -13,15 +13,16 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 // Encrypt-Decrypt
 import { AESDecrypt } from '../../utils/aes';
 
-// Types
+// Our imports
+import { MetaTags } from '../../components';
 import { FetchResponse } from '../api/fetch';
 
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
-const MetaTags = dynamic(() => import('../../components/Metatags'), {
-  ssr: true,
+const FileSelect = dynamic(() => import('../../components/FileSelect'), {
+  ssr: false,
 });
 
 export function Embed({ board }: { board: FetchResponse }) {
@@ -63,14 +64,12 @@ export function Embed({ board }: { board: FetchResponse }) {
 
     fileButtons.push(
       <div key={f.name}>
-        <button
-          title={f.name}
-          onClick={() => setFileName(f.name)}
-          className={
-            f.name == fileName ? 'fileSelect active-file' : 'fileSelect'
-          }>
-          <div>{f.name}</div>
-        </button>
+        <FileSelect
+          fileName={fileName}
+          file={f}
+          setFileName={setFileName}
+          edit={false}
+        />
       </div>
     );
   });
@@ -105,6 +104,7 @@ export function Embed({ board }: { board: FetchResponse }) {
       <MetaTags
         title="CodeBoard Embeds"
         description="Embed your code in your desired website as however you want with beautiful iframes"
+        key={board.key}
       />
 
       <div
@@ -118,7 +118,7 @@ export function Embed({ board }: { board: FetchResponse }) {
         }}>
         <div className="file-holder bin-copy">
           <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
-          <div className={boardStyles.copy}>
+          <div style={{gap: '6px'}} className={boardStyles.copy}>
             <button
               title="Copy the whole program"
               style={{ height: '36px', display: 'flex', alignItems: 'center' }}
@@ -127,13 +127,14 @@ export function Embed({ board }: { board: FetchResponse }) {
               }}>
               Copy
             </button>
+            
             <button
               style={{ height: '36px', display: 'flex', alignItems: 'center' }}
-              title="Open RAW file"
+              title="Source"
               onClick={() => {
-                router.push(`/raw/${board.key}?file=${file.name}`);
+                router.push(`/bin/${board.key}`);
               }}>
-              Raw
+              Source
             </button>
           </div>
         </div>

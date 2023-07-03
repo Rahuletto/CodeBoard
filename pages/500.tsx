@@ -21,12 +21,13 @@ const Error: NextPage = () => {
   return (
     <div className={generalStyles.container}>
       <MetaTags
+        err404={true}
         title="500: Internal Server Error"
         description="Uhh. We encountered some issues with our servers. Lets hope its not the rain messing things up"
       />
 
       <main className={generalStyles.main}>
-        <Header ISE={true} theme={theme} setTheme={setTheme} />
+        <Header theme={theme} setTheme={setTheme} />
 
         <div className={generalStyles.lander}>
           <h1 style={{ fontSize: '48px' }}> Brokn s3rvers x-x</h1>
