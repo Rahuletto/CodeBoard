@@ -38,7 +38,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
           property="og:image"
           content={
             err404
-              ? '/404-og.png'
+              ? '/err-og.png'
               : k
               ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
@@ -52,7 +52,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
           property="twitter:image"
           content={
             err404
-              ? '/404-og.png'
+              ? '/err-og.png'
               : k
               ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
