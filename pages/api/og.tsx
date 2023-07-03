@@ -52,16 +52,6 @@ export default async function OGImage(request: NextRequest) {
           display: 'flex',
           padding: '24px',
         }}>
-        <span
-          style={{
-            width: 200,
-            background: 'transparent',
-            height: 0.5,
-            boxShadow: '0px 0px 250px 25px rgba(141, 64, 188, 0.60)',
-            position: 'absolute',
-            top: 270,
-            left: 280,
-          }}></span>
         <h1
           style={{
             margin: '0',
