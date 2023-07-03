@@ -107,7 +107,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
         description={
           board.description || 'No Description. Just the source code.'
         }
-        key={board.key}
+        k={board.key + ""}
       />
 
       <main className={generalStyles.main}>

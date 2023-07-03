@@ -4,11 +4,11 @@ import Head from 'next/head';
 interface MetaTagsProps {
   title?: string;
   description?: string;
-  key?: string;
+  k?: string;
   err404?: boolean;
 }
 
-const MetaTags: React.FC<MetaTagsProps> = ({ title, description, key, err404 }) => {
+const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) => {
   return (
     <>
       <Head>
@@ -25,8 +25,8 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, key, err404 }) 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://cdeboard.vercel.app" />
         <meta property="og:title" content={title || 'CodeBoard'} />
-        <meta property="og:color" content="#abb8cc" />
-        <meta name="theme-color" content="#abb8cc" />
+        <meta property="og:color" content={err404 ? "#ff5656" : "#a95fd6"} />
+        <meta name="theme-color" content={err404 ? "#ff5656" : "#a95fd6"} />
         <meta
           property="og:description"
           content={
@@ -38,9 +38,9 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, key, err404 }) 
           property="og:image"
           content={
             err404
-              ? '/404-og.png'
-              : key
-              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${key}`
+              ? '/err-og.png'
+              : k
+              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />
@@ -52,9 +52,9 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, key, err404 }) 
           property="twitter:image"
           content={
             err404
-              ? '/404-og.png'
-              : key
-              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${key}`
+              ? '/err-og.png'
+              : k
+              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />
