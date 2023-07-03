@@ -25,8 +25,8 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://cdeboard.vercel.app" />
         <meta property="og:title" content={title || 'CodeBoard'} />
-        <meta property="og:color" content="#a95fd6" />
-        <meta name="theme-color" content="#a95fd6" />
+        <meta property="og:color" content={err404 ? "#ff5656" : "#a95fd6"} />
+        <meta name="theme-color" content={err404 ? "#ff5656" : "#a95fd6"} />
         <meta
           property="og:description"
           content={
