@@ -20,7 +20,7 @@ export {
     FileSelect,
     Header, // MillionJS Block Element
     InfoButton,
-    Loader, // MillionJS Block Element
+    Loader,
     MetaTags,
     PrettierButton, // MillionJS Block Element
     ThemeSwitch // MillionJS Block Element

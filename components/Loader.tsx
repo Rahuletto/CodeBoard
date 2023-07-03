@@ -4,10 +4,8 @@ import React, { useState, useEffect } from 'react';
 // Styles
 import styles from './styles/Loader.module.css';
 
-// MillionJS
-import { block } from 'million/react';
 
-const UnblockedLoader: React.FC = () => {
+const Loader: React.FC = () => {
   // Random texts to show in loading screen. Do a pr and add more ;)
   const texts = [
     <span key="1">Sorting things out.</span>,
@@ -30,13 +28,16 @@ const UnblockedLoader: React.FC = () => {
     <span key="14">{'{ Promise <pending> }'}</span>,
   ];
 
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-  if (!hydrated) {
-    return null;
-  }
+  const random = Math.floor(Math.random() * texts.length)
+
+  const [hydrated, setHydrated] = React.useState(false);
+    React.useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) {
+        // Returns null on first render, so the client and server match
+        return null;
+    }
 
   return (
     <div className={[styles.loader, 'loadScreen'].join(' ')}>
@@ -75,11 +76,11 @@ const UnblockedLoader: React.FC = () => {
         />
       </svg>
       <h2 className={styles.loadTitle}>
-        {texts[Math.floor(Math.random() * texts.length)]}
+        {texts[random]}
       </h2>
     </div>
   );
-}
+};
 
-const Loader = block(UnblockedLoader, {ssr: false})
 export default Loader;
+// Didnt use Million.block as it messes up the svg and animation

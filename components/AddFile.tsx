@@ -1,11 +1,15 @@
+'use client';
+// MillionJS
 import { block } from 'million/react';
+
+// Icons
 import { FaPlus } from 'react-icons-ng/fa';
 
 const UnblockedAddFile = ({ files }) => {
   function showDialog() {
-    const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
+    const dialog = document.getElementById('newFile');
 
-    dialog.showModal();
+    (dialog as HTMLDialogElement).showModal();
   }
 
   return (
@@ -13,7 +17,9 @@ const UnblockedAddFile = ({ files }) => {
       <button
         title="New file"
         disabled={files.length >= 2}
-        onClick={() => showDialog()}>
+        onClick={() => {
+          if (files.length < 2) showDialog();
+        }}>
         <FaPlus title="New File" style={{ fontSize: '22px' }} />
       </button>
     </div>

@@ -1,3 +1,4 @@
+"use client"
 // MillionJS
 import { block } from 'million/react';
 

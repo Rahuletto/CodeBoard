@@ -67,5 +67,5 @@ const UnblockedThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) =
   );
 };
 
-const ThemeSwitch = block(UnblockedThemeSwitch, {ssr: false})
+const ThemeSwitch = block(UnblockedThemeSwitch, { ssr: false })
 export default ThemeSwitch;

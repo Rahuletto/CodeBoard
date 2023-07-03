@@ -9,9 +9,14 @@ type FileSelectProps = {
   setFileName?: Function;
   file?: BoardFile;
   edit?: boolean;
-}
+};
 
-const FileSelect: React.FC<FileSelectProps> = ({ fileName, setFileName, file, edit }) => {
+const FileSelect: React.FC<FileSelectProps> = ({
+  fileName,
+  setFileName,
+  file,
+  edit,
+}) => {
   function showEdit(file: BoardFile) {
     const div = document.getElementsByClassName(
       `edit-${file.name.replaceAll('.', '-')}`
@@ -22,22 +27,28 @@ const FileSelect: React.FC<FileSelectProps> = ({ fileName, setFileName, file, ed
   }
 
   return (
+    <div
+      className={
+        file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
+      }>
       <button
         title={file.name}
         onClick={() => setFileName(file.name)}
-        className={
-            file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
-        }>
+        >
         <div>{file.name}</div>
-        <div>
+      </button>
+
+      <div>
           {edit ? (
-            <button className="file" title="Edit" onClick={() => showEdit(file)}>
+            <button
+              className="file"
+              title="Edit"
+              onClick={() => showEdit(file)}>
               <FaCaretDown title="Edit" />
             </button>
           ) : null}
         </div>
-      </button>
-
+    </div>
   );
 };
 
