@@ -8,39 +8,48 @@ import '../styles/globals.css';
 import '../styles/mobile.css';
 
 // Loader
-import Loader from '../components/Loader'
+import Loader from '../components/Loader';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setLoading(true), 2000); // just read the fun things in the loading screen bruh
-
+    
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
-      if (elem) elem.style.opacity = '0';
-    }, router.pathname == '/' ? 800 : 1800);
+      if (elem) elem.style.display = 'none';
+    }, 2000); // just read the fun things in the loading screen bruh
+
+    setTimeout(
+      () => {
+        const elem = document.querySelector<HTMLElement>('.loadScreen');
+        if (elem) elem.style.opacity = '0';
+      },
+      router.pathname == '/' ? 800 : 1800
+    );
   }, []);
 
-  const blacklist = ['/raw/[id]', '/embed/[id]', '/404', '/500', '/home', '/privacy']; // blacklist these urls
-  if (
-    !loading &&
-    !blacklist.some((substring) => router.pathname.includes(substring))
-  ) {
+  const blacklist = [
+    '/raw/[id]',
+    '/embed/[id]',
+    '/404',
+    '/500',
+    '/home',
+    '/privacy',
+  ]; // blacklist these urls
+  if (!blacklist.some((substring) => router.pathname.includes(substring))) {
     return (
-      <div>
+      <>
         <Loader />
         <Component {...pageProps} />
-      </div>
+      </>
     );
-  }
-
-  return (
-    <>
-      <Component {...pageProps} />
-    </>
-  );
+  } else
+    return (
+      <>
+        <Component {...pageProps} />
+      </>
+    );
 }
 
 export default MyApp;
