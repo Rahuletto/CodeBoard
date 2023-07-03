@@ -1,5 +1,5 @@
 // ReactJS stuff
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 
 // Our Imports
 import { BoardFile } from '../utils/board';
@@ -30,8 +30,9 @@ const EditModal: React.FC<FileSelectProps> = ({
     back.style['display'] = 'none';
   }
 
-  function edit(event) {
+  function edit(event: FormEvent) {
     event.preventDefault();
+    event.stopPropagation()
     closeEdit();
 
     const input = document.querySelector<HTMLInputElement>(

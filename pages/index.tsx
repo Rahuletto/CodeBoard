@@ -403,7 +403,7 @@ const Index: NextPage = () => {
               <button
                 title="Save the board"
                 className={styles.save}
-                disabled={code == '' && files.length <= 1}
+                disabled={code == ''}
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';

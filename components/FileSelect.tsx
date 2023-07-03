@@ -28,12 +28,13 @@ const FileSelect: React.FC<FileSelectProps> = ({
 
   return (
     <div
+      onClick={() => setFileName(file.name)}
       className={
         file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
       }>
       <button
         title={file.name}
-        onClick={() => setFileName(file.name)}
+        
         >
         <div>{file.name}</div>
       </button>
