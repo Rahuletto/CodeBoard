@@ -17,12 +17,16 @@ type CreateModalProps = {
   uploadFile: Function;
 };
 
-const CreateModal: React.FC<CreateModalProps> = (
-  { files, setFiles, uploadFile }
-) => {
+const CreateModal: React.FC<CreateModalProps> = ({
+  files,
+  setFiles,
+  uploadFile,
+}) => {
   function updateLanguage(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    const box = document.getElementsByClassName('language-show')[0] as HTMLElement;
+    const box = document.getElementsByClassName(
+      'language-show'
+    )[0] as HTMLElement;
 
     const l =
       extensions.find((x) =>
@@ -46,7 +50,9 @@ const CreateModal: React.FC<CreateModalProps> = (
   function newFile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const dialog = document.querySelector<HTMLDialogElement>('dialog#newFile');
-    const box = document.getElementsByClassName('language-show')[0] as HTMLElement;
+    const box = document.getElementsByClassName(
+      'language-show'
+    )[0] as HTMLElement;
 
     // @ts-ignore
     if (event.target[0].value == '') return dialog.close();
@@ -116,9 +122,17 @@ const CreateModal: React.FC<CreateModalProps> = (
           name="filename"
           type="text"
           placeholder="untitled.js"></input>
-        <p>
-          <span className="language-show">Javascript</span>
-        </p>
+        <div style={{padding: 0}} className="tooltip">
+          <p>
+            <span className="language-show">Javascript</span>
+          </p>
+          <span
+            style={{ maxWidth: 'auto', left: '28%' }}
+            className="tooltiptext">
+            To change language, just have file extension with file name. Just
+            like you do with normal code editor
+          </span>
+        </div>
 
         <button title="Create new file" className={styles.create}>
           Create

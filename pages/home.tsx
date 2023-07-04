@@ -99,7 +99,7 @@ const Home: NextPage = () => {
             <h2>Supports 120+ Languages</h2>
             <p>
               We support various languages to fit your needs. Wanna share error
-              logs ? You can! We support 120 file formats including popular
+              logs ? You can! We support 120+ file formats including popular
               languages
             </p>
           </div>

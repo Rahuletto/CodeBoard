@@ -18,7 +18,7 @@ const EditModal: React.FC<FileSelectProps> = ({
   setFileName,
   currentFile,
   files,
-  setFiles
+  setFiles,
 }) => {
   function closeEdit() {
     const div = document.querySelectorAll(`div.edit`);
@@ -32,7 +32,7 @@ const EditModal: React.FC<FileSelectProps> = ({
 
   function edit(event: FormEvent) {
     event.preventDefault();
-    event.stopPropagation()
+    event.stopPropagation();
     closeEdit();
 
     const input = document.querySelector<HTMLInputElement>(
@@ -97,14 +97,19 @@ const EditModal: React.FC<FileSelectProps> = ({
           type="text"
           placeholder={currentFile.name}
           autoComplete="off"></input>
-        <p>
-          <span
-            className={['language-show-edit', currentFile.name + '-language'].join(
-              ' '
-            )}>
-            {currentFile.language.charAt(0).toUpperCase() + currentFile.language.slice(1)}
-          </span>
-        </p>
+        <div style={{padding: 0}} className="tooltip">
+          <p>
+            <span
+              className={[
+                'language-show-edit',
+                currentFile.name + '-language',
+              ].join(' ')}>
+              {currentFile.language.charAt(0).toUpperCase() +
+                currentFile.language.slice(1)}
+            </span>
+          </p>
+          <span style={{maxWidth: 'auto', left: '28%'}} className="tooltiptext">To change language, just have file extension with file name. Just like you do with normal code editor</span>
+        </div>
 
         <button
           title="Delete the file"
