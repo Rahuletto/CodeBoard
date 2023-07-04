@@ -161,7 +161,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
             <div className="tooltip">
               <button
                 className={styles.save}
-                disabled={board.fork.status}
+                disabled={board.fork?.status}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
