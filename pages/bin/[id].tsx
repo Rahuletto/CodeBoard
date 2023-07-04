@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -107,7 +106,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
         description={
           board.description || 'No Description. Just the source code.'
         }
-        k={board.key + ""}
+        k={board.key + ''}
       />
 
       <main className={generalStyles.main}>
@@ -123,6 +122,21 @@ export default function Bin({ board }: { board: FetchResponse }) {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
+              {board.fork?.status ? (
+                <p style={{ margin: 0 }}>
+                  <GoGitBranch
+                    title="Forked Project"
+                    style={{ color: 'var(--green)', marginRight: '12px' }}
+                  />{' '}
+                  Forked from{' '}
+                  <a
+                    style={{ color: 'var(--purple-dark)' }}
+                    href={`/bin/${board.fork?.key}`}>
+                    {board.fork?.name}
+                  </a>
+                </p>
+              ) : null}
+
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
                   <input
@@ -265,6 +279,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           status: 200,
           encrypted: maybeBoard.encrypted,
           autoVanish: maybeBoard?.autoVanish || false,
+          fork: maybeBoard.fork || null
         };
       } catch (err) {
         console.log(err);

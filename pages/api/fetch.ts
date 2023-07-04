@@ -8,6 +8,7 @@ export interface FetchResponse extends Omit<Board, 'options'> {
   status: number;
   encrypted: boolean;
   autoVanish: boolean;
+  fork: { status: boolean, key: string, name: string };
 }
 
 export default async function handler(
@@ -23,7 +24,7 @@ export default async function handler(
   });
   else if(queries.id == '{id}') queries.id = queries.id.replace('{id}', 'cEFTT17h')
 
-  const boardRaw = await Code.findOne({ key: queries.id });
+  const boardRaw: Board = await Code.findOne({ key: queries.id });
   res.setHeader('Cache-Control', 's-maxage=10')
 
   if (boardRaw)
@@ -35,6 +36,7 @@ export default async function handler(
       name: boardRaw.name,
       encrypted: boardRaw.options[0].encrypt,
       autoVanish: boardRaw.options[0].autoVanish,
+      fork: boardRaw.options[0].forked,
       status: 200,
     });
   else return res.status(404).json({ board: 'NOT FOUND. Try a valid board id', status: 404 });
