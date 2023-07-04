@@ -161,6 +161,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
             <div className="tooltip">
               <button
                 className={styles.save}
+                onClick={() => router.push(`/fork/${board.key}`)}
                 disabled={board.fork?.status}
                 style={{
                   display: 'flex',
