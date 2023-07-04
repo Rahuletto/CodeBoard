@@ -28,7 +28,7 @@ export default async function OGImage(request: NextRequest) {
     // ?title=<title>
     const hasTitle = searchParams.has('title');
     const title = hasTitle
-      ? searchParams.get('title')
+      ? searchParams.get('title').replace('/CodeBoard', '')
       : 'OG Generator';
 
       const hasDesc = searchParams.has('desc');

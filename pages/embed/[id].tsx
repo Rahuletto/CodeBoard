@@ -211,6 +211,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           status: 200,
           encrypted: maybeBoard.encrypted,
           autoVanish: maybeBoard.autoVanish,
+          fork: maybeBoard.fork || null
         };
       } catch (err) {}
     }

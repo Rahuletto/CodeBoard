@@ -49,7 +49,7 @@ const Error: NextPage = () => {
               blame my developer
             </span>
           </div>
-          <hr></hr>
+          <hr className="splitter"></hr>
 
           <a
             style={{ width: 'fit-content', marginTop: '18px' }}

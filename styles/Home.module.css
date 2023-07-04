@@ -9,20 +9,35 @@
   min-height: 100vh;
   height: 100%;
   transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  padding-bottom: 30px;
 }
 
 .main {
   height: 100%;
+  
   transition: 0.1s cubic-bezier(0.51, 0.69, 0.46, 0.96);
 }
 
-.lander {
-  padding: 3rem 6rem;
+.land {
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  grid-template-rows: 1fr;
+  gap: 2px;
+  align-items: center;
 }
 
+.welcome {
+  max-width: 495px;
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+}
 
 .headin {
   font-size: 64px;
+  margin: 0px;
+  font-weight: 500;
 }
 
 .newProject {
@@ -45,11 +60,28 @@
   align-items: center;
 }
 
+.dash {
+  text-decoration: line-through;
+  text-decoration-color: var(--purple-dark);
+  text-decoration-thickness: 11px;
+}
+
+.dash:after {
+  content: 'present';
+  font-family: 'Caveat';
+  position: absolute;
+  content: 'present';
+  color: var(--purple-dark);
+  font-size: 38px;
+  margin-top: -33px;
+  margin-left: -100px;
+  transform: rotate(346deg);
+}
 .privacy {
   width: fit-content;
   background: var(--special-color);
   color: var(--background-darker);
-  padding: 8px 16px;
+  padding: 10px 18px;
   font-size: 18px;
   border-radius: 50px;
   display: flex;
@@ -57,6 +89,147 @@
   font-family: 'JetBrains Mono';
   font-weight: 900;
 }
+
+[data-theme='dark'] .glowBall1,
+.glowBall2 {
+  box-shadow: 0px 0px 210px 100px rgba(141, 64, 188, 0.3);
+  position: absolute;
+  width: 10px;
+  background: rgba(141, 64, 188, 0.25);
+  height: 10px;
+}
+
+[data-theme='light'] .glowBall1,
+.glowBall2 {
+  box-shadow: 0px 0px 210px 100px rgba(141, 64, 188, 0.5);
+  position: absolute;
+  width: 10px;
+  background: rgba(141, 64, 188, 0.25);
+  height: 10px;
+}
+
+.glowBall1 {
+  left: 235px;
+  margin-top: -235px;
+}
+
+.glowBall2 {
+  right: 215px;
+}
+
+.logo {
+  transform: scale(1.1);
+  margin-top: -20px;
+  position: absolute;
+  right: 150px;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  padding: 20px;
+  width: 85vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.glowBall3 {
+  content: '';
+  box-shadow: 0px 0px 280px 100px rgba(141, 64, 188, 0.4);
+  position: absolute;
+  z-index: 0;
+  left: 50vw;
+  margin-top: 200px;
+}
+
+[data-theme="light"] .parent > div {
+  transition: 0.4s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  border-radius: 22px;
+  padding: 24px;
+  background: hsl(277deg 30% 88% / 40%);
+  backdrop-filter: blur(4px);
+  border: 2px solid rgb(246 242 248);
+}
+
+[data-theme="dark"] .parent > div {
+  transition: 0.4s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+  border-radius: 22px;
+  padding: 24px;
+  background: rgba(8, 8, 8, 0.45);
+  backdrop-filter: blur(4px);
+  border: 2px solid rgb(20, 20, 20);
+}
+
+.parent > div:hover {
+  border: 2px solid var(--purple-dark);
+}
+
+.div1 h2,
+.div2 h2,
+.div3 h2,
+.div4 h2 {
+  margin: 0px;
+  font-size: 36px;
+}
+
+.div1 p,
+.div2 p,
+.div3 p,
+.div4 p {
+  margin: 0px;
+  margin-top: 10px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 4 / 5;
+}
+.div2 {
+  grid-area: 1 / 5 / 4 / 8;
+}
+.div3 {
+  padding: 18px !important;
+  grid-area: 4 / 6 / 7 / 8;
+}
+.div4 {
+  grid-area: 4 / 1 / 7 / 6;
+}
+
+.last {
+  border-radius: 155px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 17px solid #8d40bc;
+  width: 85vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 18px;
+  margin: 48px auto;
+  align-items: center;
+}
+[data-theme="light"] .last {
+  background: #d3c9ef;
+}
+[data-theme="dark"] .last {
+  background: #232129;
+}
+
+.last h3 {
+  color: var(--special-color);
+  text-align: center;
+  font-size: 34px;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0px;
+}
+
 
 @media only screen and (max-width: 750px) {
   .headin {
@@ -68,9 +241,17 @@
     align-items: flex-start;
   }
 
-  .lander {
+  .parent {
+    width: inherit;
+    display: flex !important;
+    flex-direction: column;
+  }
+  .land {
     padding: 2rem;
+    display: flex;
   }
 
+  .logo {
+    display: none;
+  }
 }
-

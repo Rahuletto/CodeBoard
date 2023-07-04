@@ -1,12 +1,12 @@
 // NextJS Stuff
-import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
 
 // Styles
-import generalStyles from '../styles/General.module.css';
-import styles from '../styles/Index.module.css';
+import generalStyles from '../../styles/General.module.css';
+import styles from '../../styles/Index.module.css';
 
 // Load Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
@@ -20,38 +20,43 @@ import {
 } from 'react-icons-ng/lu';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
-import { extensions } from '../utils/extensions';
-import makeid from '../utils/makeid';
-import { AddFile, MetaTags } from '../components';
-
+import { BoardFile } from '../../utils/board';
+import { extensions } from '../../utils/extensions';
+import { AddFile, MetaTags } from '../../components';
+import { AESDecrypt } from '../../utils/aes';
+import { FetchResponse } from '../api/fetch';
+import makeid from '../../utils/makeid';
+import { GoGitBranch } from 'react-icons-ng/go';
 
 // Lazy loading
-const Header = dynamic(() => import('../components/Header'), { ssr: true });
+const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
-const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
-const EditModal = dynamic(() => import('../components/EditModal'), {
+const EditModal = dynamic(() => import('../../components/EditModal'), {
   ssr: false,
 });
-const DropZone = dynamic(() => import('../components/DropZone'), {
+const DropZone = dynamic(() => import('../../components/DropZone'), {
   ssr: false,
 });
-const PrettierButton = dynamic(() => import('../components/PrettierButton'), {
+const PrettierButton = dynamic(
+  () => import('../../components/PrettierButton'),
+  {
+    ssr: false,
+  }
+);
+const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
-const InfoButton = dynamic(() => import('../components/InfoButton'), {
+const CreateModal = dynamic(() => import('../../components/CreateModal'), {
   ssr: false,
 });
-const CreateModal = dynamic(() => import('../components/CreateModal'), {
-  ssr: false,
-});
-const FileSelect = dynamic(() => import('../components/FileSelect'), {
+const FileSelect = dynamic(() => import('../../components/FileSelect'), {
   ssr: false,
 });
 
-const Index: NextPage = () => {
+export default function Fork({ board }: { board: FetchResponse }) {
   const router = useRouter();
 
   // ---------------------------------
@@ -59,7 +64,7 @@ const Index: NextPage = () => {
   // ---------------------------------
 
   // Items ---------------------------------
-  const [fileName, setFileName] = useState('untitled.js');
+  const [fileName, setFileName] = useState(board.files[0].name);
   const [btns, setBtns] = useState([]);
 
   // Validation ---------------------------------
@@ -69,10 +74,10 @@ const Index: NextPage = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   // Inputs ---------------------------------
-  const [title, setTitle] = useState('Untitled');
-  const [description, setDescription] = useState('');
-  const [encrypt, setEncrypt] = useState(true);
-  const [vanish, setVanish] = useState(false);
+  const [title, setTitle] = useState(board.name + ' Fork');
+  const [description, setDescription] = useState('Fork of ' + board.name);
+  const [encrypt, setEncrypt] = useState(board.encrypted);
+  const [vanish, setVanish] = useState(board.autoVanish);
 
   // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
@@ -81,13 +86,7 @@ const Index: NextPage = () => {
   const [drag, setDrag] = useState(false);
 
   // Files ---------------------------------
-  const [files, setFiles] = useState([
-    {
-      name: 'untitled.js',
-      language: 'javascript',
-      value: ``,
-    },
-  ]);
+  const [files, setFiles] = useState(board.files);
 
   let file = files.find((a) => a.name == fileName);
   if (!file) file = files[0];
@@ -237,7 +236,7 @@ const Index: NextPage = () => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    const { AESEncrypt } = await import('../utils/aes');
+    const { AESEncrypt } = await import('../../utils/aes');
 
     let encryptedFiles: BoardFile[] = [];
 
@@ -254,7 +253,7 @@ const Index: NextPage = () => {
     const data = {
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [{ autoVanish: vanish, encrypt: encrypt }],
+      options: [{ autoVanish: vanish, encrypt: encrypt, fork: { status: true, key: board.key, name: board.name } }],
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
@@ -287,7 +286,7 @@ const Index: NextPage = () => {
 
   return (
     <div className={generalStyles.container}>
-      <MetaTags />
+      <MetaTags title={'Forking'} description={'Forking a board'} />
 
       <main
         onDragEnter={(e) => {
@@ -336,9 +335,24 @@ const Index: NextPage = () => {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
+            <p style={{ margin: 0 }}>
+                  <GoGitBranch
+                    title="Forked Project"
+                    style={{ color: 'var(--green)', marginRight: '12px' }}
+                  />{' '}
+                  Forked from{' '}
+                  <a
+                    style={{ color: 'var(--purple-dark)' }}
+                    href={`/bin/${board.key}`}>
+                    {board.name}
+                  </a>
+                </p>
+
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
                 onSubmit={(event) => handleSubmit(event)}>
+                
+
                 <div className={styles.name}>
                   <input
                     style={{ fontWeight: '600' }}
@@ -356,6 +370,7 @@ const Index: NextPage = () => {
                     />
                   )}
                 </div>
+
                 <textarea
                   style={{ fontWeight: '500' }}
                   value={description}
@@ -472,9 +487,9 @@ const Index: NextPage = () => {
               styleProp={
                 drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
               }
+              language={language}
               code={file.value}
               readOnly={false}
-              language={language}
               theme={theme}
               onChange={onChange}
             />
@@ -483,6 +498,64 @@ const Index: NextPage = () => {
       </main>
     </div>
   );
-};
+}
 
-export default Index;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const promiseBoard = await fetch(
+    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    { cache: 'force-cache' }
+  );
+
+  if (promiseBoard.status == 200) {
+    const maybeBoard: FetchResponse = await promiseBoard.json();
+    let board: FetchResponse = maybeBoard;
+
+    if (
+      (Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
+        maybeBoard?.autoVanish) ||
+      maybeBoard?.files.length == 0
+    )
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/404',
+        },
+      };
+
+    if (maybeBoard.encrypted) {
+      try {
+        const decryptedFiles = [];
+
+        maybeBoard.files.forEach((f) => {
+          decryptedFiles.push({
+            name: f.name,
+            language: f.language,
+            value: AESDecrypt(f.value),
+          });
+        });
+
+        board = {
+          name: maybeBoard.name,
+          description: maybeBoard.description,
+          files: decryptedFiles,
+          key: maybeBoard.key,
+          createdAt: maybeBoard.createdAt,
+          status: 200,
+          encrypted: maybeBoard.encrypted,
+          autoVanish: maybeBoard?.autoVanish || false,
+          fork: maybeBoard?.fork || null
+        };
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return { props: { board: board } };
+  } else
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
+}

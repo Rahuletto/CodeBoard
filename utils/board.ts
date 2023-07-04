@@ -2,7 +2,7 @@ export type Board = {
   name: string;
   description: string;
   files: BoardFile[];
-  options: Options;
+  options: Options[];
   key: string;
   createdAt: number;
 };
@@ -16,4 +16,5 @@ export type BoardFile = {
 export type Options = {
   autoVanish: boolean;
   encrypt: boolean;
+  forked: { status: boolean, key: string, name: string } | undefined;
 };

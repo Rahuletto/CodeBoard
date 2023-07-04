@@ -39,7 +39,7 @@ const Error: NextPage = () => {
               {'*Psst*'} Error 500 is the error code for Internal Server Error
             </span>
           </div>
-          <hr></hr>
+          <hr className="splitter"></hr>
 
           <code className="errorCode">Error Code: 500</code>
         </div>
