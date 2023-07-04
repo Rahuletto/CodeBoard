@@ -17,14 +17,14 @@
 }
 
 .newProject {
-  font-size: 18px;
+  font-size: 20px;
   background: var(--background-dark);
   font-family: 'JetBrains Mono';
   color: var(--special-color);
-  padding: 6px 24px;
+  padding: 6px 26px;
   border-radius: 50px;
   display: flex;
-  height: 48px;
+  height: 52px;
   align-items: center;
   transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96) color background-color;
 }
@@ -92,6 +92,11 @@
   font-size: 16px;
   font-family: 'JetBrains Mono';
   margin: 0;
+}
+
+.purple {
+  font-weight: 700;
+  color: var(--purple);
 }
 
 @media only screen and (max-width: 750px) {

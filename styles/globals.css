@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=DM+Sans:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import url('https://use.fontawesome.com/releases/v6.0.0/css/all.css');
 
 .mobile {
@@ -32,6 +32,8 @@
     --code-editor: #f6f6f6;
 
     --red: #ee4646;
+    --purple: #aa61d6;
+    --purple-dark: #8d40bc;
     --orange: #c27d24;
     --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -61,7 +63,7 @@
 
 @media (prefers-color-scheme: dark) {
   html {
-    --font-color: #CAD4E2;
+    --font-color: #cad4e2;
     --special-color: #abb8cc;
     --hsl-special-color: hsl(216, 24%, 74%);
     --hsl-special-color-end: hsl(217, 16%, 51%);
@@ -78,6 +80,8 @@
     --code-editor: #272c35;
 
     --red: #db4545;
+    --purple: #aa61d6;
+    --purple-dark: #8d40bc;
     --orange: #ff9c1c;
     --green: #45db4b;
     transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -122,12 +126,14 @@ html[data-theme='light'] {
 
   --red: #ee4646;
   --orange: #c27d24;
+  --purple: #aa61d6;
+  --purple-dark: #8d40bc;
   --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 html[data-theme='dark'] {
-  --font-color: #CAD4E2;
+  --font-color: #cad4e2;
   --special-color: #abb8cc;
   --hsl-special-color: hsl(216, 24%, 74%);
 
@@ -142,6 +148,8 @@ html[data-theme='dark'] {
   --code-editor: #272c35;
 
   --red: #db4545;
+  --purple: #aa61d6;
+  --purple-dark: #8d40bc;
   --orange: #ff9c1c;
   --green: #45db4b;
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -735,6 +743,14 @@ span.tooltiptext {
   display: flex;
 }
 
+.splitter {
+  border: 1.5px var(--purple-dark) solid;
+  border-radius: 10px;
+  width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 footer {
   display: flex;
   justify-content: center;
@@ -742,13 +758,11 @@ footer {
   color: var(--special-color);
   font-family: 'JetBrains Mono';
   gap: 8px;
-  border-top: 2px solid var(--special-color);
+  border-top: 2px solid var(--purple-dark);
   padding-top: 10px;
   margin-left: 10%;
   margin-right: 10%;
-  position: absolute;
   width: -webkit-fill-available;
-  bottom: 20px;
   align-items: center;
 }
 
@@ -910,6 +924,7 @@ hr {
   transform: scale(1.3);
 }
 
-.dragging, .dragging * {
+.dragging,
+.dragging * {
   pointer-events: none;
 }
