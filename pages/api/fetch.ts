@@ -8,7 +8,7 @@ export interface FetchResponse extends Omit<Board, 'options'> {
   status: number;
   encrypted: boolean;
   autoVanish: boolean;
-  fork: { status: boolean, key: string, name: string };
+  fork?: { status: boolean, key: string, name: string };
 }
 
 export default async function handler(
