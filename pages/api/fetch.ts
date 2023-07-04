@@ -36,7 +36,7 @@ export default async function handler(
       name: boardRaw.name,
       encrypted: boardRaw.options[0].encrypt,
       autoVanish: boardRaw.options[0].autoVanish,
-      fork: boardRaw.options[0].forked,
+      fork: boardRaw.options[0].fork,
       status: 200,
     });
   else return res.status(404).json({ board: 'NOT FOUND. Try a valid board id', status: 404 });

@@ -16,5 +16,5 @@ export type BoardFile = {
 export type Options = {
   autoVanish: boolean;
   encrypt: boolean;
-  forked: { status: boolean, key: string, name: string } | undefined;
+  fork: { status: boolean, key: string, name: string } | undefined;
 };
