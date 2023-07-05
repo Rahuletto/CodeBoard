@@ -99,7 +99,6 @@ export default function Bin({ board }: { board: FetchResponse }) {
     }, 5000);
   }
 
-  console.log(board.fork)
 
   return (
     <div className={generalStyles.container}>
@@ -273,7 +272,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           });
         });
 
-        console.log(maybeBoard)
         board = {
           name: maybeBoard.name,
           description: maybeBoard.description,
