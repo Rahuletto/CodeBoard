@@ -232,6 +232,10 @@
 
 
 @media only screen and (max-width: 750px) {
+  .last {
+    border-radius: 30px;
+  }
+
   .headin {
     font-size: 48px;
   }
@@ -251,7 +255,7 @@
     display: flex;
   }
 
-  .logo {
+  .logo, .glowBall1 {
     display: none;
   }
 }
