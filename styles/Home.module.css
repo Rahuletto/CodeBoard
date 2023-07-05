@@ -92,7 +92,7 @@
 
 [data-theme='dark'] .glowBall1,
 .glowBall2 {
-  box-shadow: 0px 0px 210px 100px rgba(141, 64, 188, 0.3);
+  box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.25);
   position: absolute;
   width: 10px;
   background: rgba(141, 64, 188, 0.25);
@@ -101,7 +101,7 @@
 
 [data-theme='light'] .glowBall1,
 .glowBall2 {
-  box-shadow: 0px 0px 210px 100px rgba(141, 64, 188, 0.5);
+  box-shadow: 0px 0px 210px 100px rgba(141, 64, 188, 0.45);
   position: absolute;
   width: 10px;
   background: rgba(141, 64, 188, 0.25);
@@ -232,8 +232,12 @@
 
 
 @media only screen and (max-width: 750px) {
+
+  .last h3 {
+    font-size: 28px;
+  }
   .last {
-    border-radius: 30px;
+    border-radius: 50px;
   }
 
   .headin {
@@ -255,7 +259,7 @@
     display: flex;
   }
 
-  .logo, .glowBall1 {
+  .logo, .glowBall2 {
     display: none;
   }
 }
