@@ -29,3 +29,20 @@
   content: '✨';
   transform: rotate(0deg);
 }
+
+
+@media only screen and (max-width: 750px) {
+  .themeSwitch {
+    border: 4px solid var(--background-dark);
+    border-radius: 50px;
+    height: 40px;
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    color: var(--special-color);
+    font-size: 1.1rem;
+  }
+}

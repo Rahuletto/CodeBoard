@@ -5,13 +5,10 @@ import styles from './styles/Header.module.css';
 import ThemeSwitch from './ThemeSwitch';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
+import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 import { VscGithubInverted } from 'react-icons-ng/vsc';
 
-
-// MillionJS
-import { block } from 'million/react';
-
+import { useSession, signIn, signOut } from "next-auth/react"
 
 type MetaTagsProps = {
   theme?: string;
@@ -19,9 +16,10 @@ type MetaTagsProps = {
   drag?: boolean
 }
 
-const UnblockedHeader: React.FC<MetaTagsProps> = (
+const Header: React.FC<MetaTagsProps> = (
   { theme, setTheme, drag } = { drag: false }
 ) => {
+  const { data: session } = useSession()
   return (
     <header className={drag ? "dragging" : ""}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
@@ -45,11 +43,11 @@ const UnblockedHeader: React.FC<MetaTagsProps> = (
           <FaPlus style={{ marginRight: '10px' }} />{' '}
           New Board
         </a>
+        {session ? <img src={session.user.image} alt="user" className={[styles.newProject].join(' ')} /> : <a onClick={() => signIn()} href="/" className={[styles.newProject].join(' ')}><FaUserAlt/></a>}
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
     </header>
   );
 };
 
-const Header = block(UnblockedHeader, { ssr: true })
 export default Header;

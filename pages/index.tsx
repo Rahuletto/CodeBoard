@@ -24,7 +24,7 @@ import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
 import { AddFile, MetaTags } from '../components';
-
+import connectDB from '../middleware/mongodb';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -486,3 +486,8 @@ const Index: NextPage = () => {
 };
 
 export default Index;
+
+export async function getServerSideProps() {
+  const db = await connectDB();
+  return { props: {} };
+}

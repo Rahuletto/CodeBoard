@@ -747,8 +747,8 @@ span.tooltiptext {
   border: 1.5px var(--purple-dark) solid;
   border-radius: 10px;
   width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 footer {
@@ -927,4 +927,103 @@ hr {
 .dragging,
 .dragging * {
   pointer-events: none;
+}
+
+.signin-btn {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+  height: 64vh;
+  background: var(--background-dark);
+  border-radius: 28px;
+  border: 2px solid var(--background-light);
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 0px 50px 10px var(--background-darker);
+}
+
+[data-theme="light"] .signin-btn {
+  background: var(--background-light);
+}
+
+.signin-btn .details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signin-btn .details p {
+  padding: 2px 20px;
+  text-align: center;
+  opacity: 0.6;
+  margin: 0;
+  font-size: 15px;
+}
+
+.signin-btn .details ul {
+  font-size: 16px;
+
+  padding: 0;
+  text-align: left;
+  font-family: 'JetBrains Mono';
+}
+
+.signin-btn button {
+  background: rgb(13 15 16);
+  padding: 12px 24px;
+  border-radius: 14px;
+  color: white;
+  font-family: 'DM Sans';
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  gap: 12px;
+}
+
+.signin-lander {
+  margin: 0px 30px;
+  border-radius: 20px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #8d40bcd4,
+    #8d40bcd4 1px,
+    transparent 1px,
+    transparent 6px
+  );
+  background-size: 4px 4px;
+}
+
+.signin-lander:after {
+  box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.42);
+  content: '';
+  position: absolute;
+  margin-top: -3rem;
+}
+
+.signin-lander:before {
+  box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.42);
+  content: '';
+  position: absolute;
+  right: 110px;
+  margin-top: 8rem;
+}
+
+
+.error-land:after {
+  box-shadow: 0px 0px 220px 100px var(--red);
+  content: '';
+  position: absolute;
+  margin-top: -2rem;
+  opacity: 0.4;
+}
+
+.error-land:before {
+  box-shadow: 0px 0px 220px 100px var(--red);
+  opacity: 0.4;
+  content: '';
+  position: absolute;
+  right: 110px;
+  margin-top: 8rem;
 }

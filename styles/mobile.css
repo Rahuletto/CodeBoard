@@ -121,4 +121,17 @@
   header {
     padding: 16px 14px;
   }
+
+  .signin-lander {
+    margin: 0px 10px;
+    padding: 10px !important;
+  }
+
+  .signin-lander:after {
+    box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.2);
+  }
+
+  .signin-lander:before {
+    box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.3);
+  }
 }

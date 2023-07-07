@@ -10,11 +10,13 @@ import '../styles/mobile.css';
 // Loader
 import Loader from '../components/Loader';
 
-function MyApp({ Component, pageProps }: AppProps) {
+// Session
+import { SessionProvider } from 'next-auth/react';
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) elem.style.display = 'none';
@@ -36,19 +38,21 @@ function MyApp({ Component, pageProps }: AppProps) {
     '/500',
     '/home',
     '/privacy',
+    '/auth/signin',
+    '/auth/error'
   ]; // blacklist these urls
   if (!blacklist.some((substring) => router.pathname.includes(substring))) {
     return (
-      <>
+      <SessionProvider session={session}>
         <Loader />
         <Component {...pageProps} />
-      </>
+      </SessionProvider>
     );
   } else
     return (
-      <>
+      <SessionProvider session={session}>
         <Component {...pageProps} />
-      </>
+      </SessionProvider>
     );
 }
 

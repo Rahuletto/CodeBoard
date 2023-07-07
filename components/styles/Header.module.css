@@ -26,10 +26,18 @@
 
 @media only screen and (max-width: 750px) {
   .title {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
   }
 
   .newProject {
-    padding: 6px 15px;
+    padding: 4px 12px;
+    height: 40px;
+    width: 40px;
   }
 }
