@@ -48,7 +48,6 @@ const Header: React.FC<MetaTagsProps> = (
           <a
             title="Sign in"
             onClick={() => signIn()}
-            href="/"
             className={[styles.profile].join(' ')}>
             <FaUserAlt title="Sign in" />
           </a>
