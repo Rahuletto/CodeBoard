@@ -13,11 +13,11 @@ export default NextAuth({
       checks: ['none'],
     }),
   ],
-  pages: {
-    signIn: '/auth/signin',
-    signOut: '/',
-    error: '/auth/error',
-  },
+  // pages: {
+  //   signIn: '/auth/signin',
+  //   signOut: '/',
+  //   error: '/auth/error',
+  // },
   callbacks: {
     async session({ session, token }) {
       session.user = token.user;
