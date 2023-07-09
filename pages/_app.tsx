@@ -39,7 +39,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     '/home',
     '/privacy',
     '/auth/signin',
-    '/auth/error'
+    '/auth/error',
+    '/docs',
+    '/docs/fetch',
+    '/docs/ping',
+    '/docs/save',
+    '/docs/teapot'
   ]; // blacklist these urls
   if (!blacklist.some((substring) => router.pathname.includes(substring))) {
     return (
