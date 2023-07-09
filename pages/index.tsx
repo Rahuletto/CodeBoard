@@ -11,6 +11,9 @@ import styles from '../styles/Index.module.css';
 // Load Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
+// Auth
+import { useSession } from 'next-auth/react';
+
 // Icons from React-Icons-NG (Thanks 💖)
 import {
   LuShieldCheck,
@@ -19,12 +22,16 @@ import {
   LuTimerOff,
 } from 'react-icons-ng/lu';
 
+// Mongoose
+import connectDB from '../middleware/mongodb';
+
 // Our Imports
 import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
+import PBKDF2 from '../utils/encrypt';
+
 import { AddFile, MetaTags } from '../components';
-import connectDB from '../middleware/mongodb';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -53,6 +60,7 @@ const FileSelect = dynamic(() => import('../components/FileSelect'), {
 
 const Index: NextPage = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   // ---------------------------------
   // ---------- S T A T E S ----------
@@ -180,7 +188,9 @@ const Index: NextPage = () => {
   }
 
   async function uploadFile(fls: FileList) {
-    if (files.length >= 2) return;
+    let limit = 2;
+    if (session) limit = 4;
+    if (files.length >= limit) return;
     if (!fls[0]) return;
 
     if (
@@ -258,6 +268,7 @@ const Index: NextPage = () => {
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
+      author: session ? PBKDF2(session.user.email) : null,
     };
 
     const JSONdata = JSON.stringify(data);
@@ -314,7 +325,7 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
-        <DropZone files={files} drag={drag} />
+        <DropZone files={files} drag={drag} limit={session ? 4 : 2} />
 
         <Header drag={drag} theme={theme} setTheme={setTheme} />
 
@@ -464,7 +475,7 @@ const Index: NextPage = () => {
             <div className="file-holder bin-copy">
               <div style={{ display: 'flex', gap: '12px' }}>
                 {btns}
-                <AddFile files={files} />
+                <AddFile files={files} limit={session?.user ? 4 : 2} />
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
@@ -488,6 +499,6 @@ const Index: NextPage = () => {
 export default Index;
 
 export async function getServerSideProps() {
-  const db = await connectDB();
+  await connectDB();
   return { props: {} };
 }

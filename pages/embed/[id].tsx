@@ -154,9 +154,13 @@ export function Embed({ board }: { board: FetchResponse }) {
         {`
         html,
         body {
+          overflow: hidden;
           margin: 0;
           background: transparent;
           min-height: 0;
+        }
+        .cm-editor {
+          height: 80vh;
         }
       `}
       </style>
@@ -169,19 +173,29 @@ export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
 });
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=360, stale-while-revalidate=480'
+  )
+
   const promiseBoard = await fetch(
     `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
+    {
+      cache: 'force-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: process.env.NEXT_PUBLIC_KEY,
+      },
+    }
   );
 
   if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-
-    let board: FetchResponse = maybeBoard;
+    const board: FetchResponse = await promiseBoard.json();
 
     if (
-      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
+      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
+      board?.autoVanish
     )
       return {
         redirect: {
@@ -189,32 +203,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           destination: '/404',
         },
       };
-
-    if (maybeBoard.encrypted) {
-      try {
-        const decryptedFiles = [];
-
-        maybeBoard.files.forEach((f) => {
-          decryptedFiles.push({
-            name: f.name,
-            language: f.language,
-            value: AESDecrypt(f.value),
-          });
-        });
-
-        board = {
-          name: maybeBoard.name,
-          description: maybeBoard.description,
-          files: decryptedFiles,
-          key: maybeBoard.key,
-          createdAt: maybeBoard.createdAt,
-          status: 200,
-          encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard.autoVanish,
-          fork: maybeBoard.fork || null
-        };
-      } catch (err) {}
-    }
 
     return { props: { board: board } };
   } else

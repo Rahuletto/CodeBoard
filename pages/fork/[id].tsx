@@ -253,7 +253,13 @@ export default function Fork({ board }: { board: FetchResponse }) {
     const data = {
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [{ autoVanish: vanish, encrypt: encrypt, fork: { status: true, key: board.key, name: board.name } }],
+      options: [
+        {
+          autoVanish: vanish,
+          encrypt: encrypt,
+          fork: { status: true, key: board.key, name: board.name },
+        },
+      ],
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
@@ -335,24 +341,22 @@ export default function Fork({ board }: { board: FetchResponse }) {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
-            <p style={{ margin: 0 }}>
-                  <GoGitBranch
-                    title="Forked Project"
-                    style={{ color: 'var(--green)', marginRight: '12px' }}
-                  />{' '}
-                  Forked from{' '}
-                  <a
-                    style={{ color: 'var(--purple-dark)' }}
-                    href={`/bin/${board.key}`}>
-                    {board.name}
-                  </a>
-                </p>
+              <p style={{ margin: 0 }}>
+                <GoGitBranch
+                  title="Forked Project"
+                  style={{ color: 'var(--green)', marginRight: '12px' }}
+                />{' '}
+                Forked from{' '}
+                <a
+                  style={{ color: 'var(--purple-dark)' }}
+                  href={`/bin/${board.key}`}>
+                  {board.name}
+                </a>
+              </p>
 
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
                 onSubmit={(event) => handleSubmit(event)}>
-                
-
                 <div className={styles.name}>
                   <input
                     style={{ fontWeight: '600' }}
@@ -501,19 +505,30 @@ export default function Fork({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=360, stale-while-revalidate=480'
+  )
+  
   const promiseBoard = await fetch(
     `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
+    {
+      cache: 'force-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: process.env.NEXT_PUBLIC_KEY,
+      },
+    }
   );
 
   if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-    let board: FetchResponse = maybeBoard;
+    const board: FetchResponse = await promiseBoard.json();
 
     if (
-      (Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-        maybeBoard?.autoVanish) ||
-      maybeBoard?.files.length == 0
+      (Number(board.createdAt) + 86400 * 1000 < Date.now() &&
+        board?.autoVanish) ||
+      board?.files.length == 0
     )
       return {
         redirect: {
@@ -521,34 +536,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           destination: '/404',
         },
       };
-
-    if (maybeBoard.encrypted) {
-      try {
-        const decryptedFiles = [];
-
-        maybeBoard.files.forEach((f) => {
-          decryptedFiles.push({
-            name: f.name,
-            language: f.language,
-            value: AESDecrypt(f.value),
-          });
-        });
-
-        board = {
-          name: maybeBoard.name,
-          description: maybeBoard.description,
-          files: decryptedFiles,
-          key: maybeBoard.key,
-          createdAt: maybeBoard.createdAt,
-          status: 200,
-          encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard?.autoVanish || false,
-          fork: maybeBoard?.fork || null
-        };
-      } catch (err) {
-        console.log(err);
-      }
-    }
 
     return { props: { board: board } };
   } else

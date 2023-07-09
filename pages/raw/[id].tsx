@@ -27,11 +27,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   );
 
   if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
+    const board: FetchResponse = await promiseBoard.json();
 
     if (
-      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
+      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
+      board?.autoVanish
     )
       return {
         redirect: {
@@ -42,14 +42,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     let text: string;
 
-    const file = maybeBoard.files.find((a) => a.name == context.query.file);
+    const file = board.files.find((a) => a.name == context.query.file);
 
     if (!file || !file?.value) return { props: { text: 'File not found !' } };
 
     text = file.value;
-
-    if (maybeBoard.encrypted) text = AESDecrypt(file.value);
-
+    
     return { props: { text: text } };
   } else return { props: { text: 'Board not found !' } };
 }

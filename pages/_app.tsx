@@ -20,14 +20,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) elem.style.display = 'none';
-    }, 2000); // just read the fun things in the loading screen bruh
+    }, 1700); // just read the fun things in the loading screen bruh
 
     setTimeout(
       () => {
         const elem = document.querySelector<HTMLElement>('.loadScreen');
         if (elem) elem.style.opacity = '0';
       },
-      router.pathname == '/' ? 800 : 1800
+      router.pathname == '/' ? 600 : 1600
     );
   }, []);
 
