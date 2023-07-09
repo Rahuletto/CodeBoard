@@ -20,9 +20,7 @@
 
 .land {
   padding: 4rem;
-  display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  grid-template-rows: 1fr;
+  display: flex;
   gap: 2px;
   align-items: center;
 }
@@ -74,7 +72,7 @@
   color: var(--purple-dark);
   font-size: 38px;
   margin-top: -33px;
-  margin-left: -100px;
+  margin-left: -145px;
   transform: rotate(346deg);
 }
 .privacy {
@@ -154,7 +152,7 @@
   border: 2px solid rgb(246 242 248);
 }
 
-[data-theme="dark"] .parent > div {
+.parent > div {
   transition: 0.4s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   border-radius: 22px;
   padding: 24px;
