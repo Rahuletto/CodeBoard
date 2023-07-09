@@ -44,7 +44,7 @@ export default function SignIn({
         <Header theme={theme} setTheme={setTheme} />
 
         <div className={[generalStyles.lander, 'signin-lander'].join(' ')}>
-          <div className="signin-btn">
+          <div className="signin">
             <div className="details">
               <FaGithub style={{ fontSize: '64px' }} />
               <h1 style={{ margin: '6px' }}>Sign in</h1>
@@ -76,6 +76,8 @@ export default function SignIn({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+
+  
   const session = await getServerSession(context.req, context.res, authOptions);
 
   // If the user is already logged in, redirect.

@@ -31,8 +31,8 @@ export default function SignError() {
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
 
-        <div className={[generalStyles.lander, 'signin-lander', 'error-land'].join(' ')} style={{backgroundImage: 'repeating-linear-gradient(-45deg,var(--red),var(--red) 1px,transparent 1px,transparent 6px)'}}>
-          <div className="signin-btn">
+        <div className={[generalStyles.lander, 'error-lander'].join(' ')} style={{backgroundImage: 'repeating-linear-gradient(-45deg,var(--red),var(--red) 1px,transparent 1px,transparent 6px)'}}>
+          <div className="error">
             <div className="details">
               <FaWindowClose
                 style={{ color: 'var(--red)', fontSize: '64px' }}
