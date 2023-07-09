@@ -14,7 +14,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const db = await connectDB();
+  await connectDB();
 
   if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
     return res.status(401).json({
@@ -22,7 +22,7 @@ export default async function handler(
       status: 401,
     });
     
-  const allBoards = await Code.find({});
+  const allBoards = await Code.find({})
 
   const boards = [];
 

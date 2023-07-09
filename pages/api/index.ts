@@ -6,11 +6,14 @@ export const config = {
 export default async function Index() {
   return new Response(JSON.stringify(
     {
-      info: 'Welcome to CodeBoard API. You have 1 endpoint to use with CodeBoard',
-      get: [
-        { endpoint: '/fetch', usage: '/fetch?id={key}' },
-        { endpoint: '/teapot', usage: '/teapot' },
+      info: 'Welcome to CodeBoard API. You have 4 endpoint to use with CodeBoard',
+      endpoints: [
+        { endpoint: '/ping', usage: '/ping', method: "GET" },
+        { endpoint: '/teapot', usage: '/teapot', method: "GET" },
+        { endpoint: '/save', usage: '/save', method: "POST" },
+        { endpoint: '/fetch', usage: '/fetch?id={key}', method: "GET" }, 
       ],
+      documentation: "/docs/"
     }
   ),
     {
