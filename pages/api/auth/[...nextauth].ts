@@ -10,16 +10,19 @@ export default NextAuth({
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      checks: ['none']
+      checks: ['none'],
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/auth/signin',
     signOut: '/',
     error: '/auth/error',
   },
   callbacks: {
+    async session({ session, token }) {
+      session.user = token.user;
+      return session;
+    },
     async signIn({ user, account, profile, email, credentials }) {
       const ifExist = await User.findOne({ id: user.id });
       if (ifExist) return true;
