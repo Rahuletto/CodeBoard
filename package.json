@@ -1,6 +1,6 @@
 {
   "name": "codeboard",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
   "author": "Rahuletto",
   "homepage": "https://cdeboard.vercel.app",
@@ -26,6 +26,7 @@
     "@uiw/react-codemirror": "^4.21.2",
     "@vercel/og": "^0.5.8",
     "crypto-js": "^4.1.1",
+    "lru-cache": "^10.0.0",
     "million": "^2.4.9",
     "mongoose": "^7.2.2",
     "next": "^13.4.7",
