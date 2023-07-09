@@ -16,7 +16,7 @@ const connectDB = async () => {
     useNewUrlParser: true,
   });
 
-  console.log('Connected. Mounting Interval...');
+  console.log('Connected.');
 
   mountInterval()
   
@@ -26,7 +26,9 @@ const connectDB = async () => {
 export default connectDB;
 
 function mountInterval() {
+  
   if (!interval) {
+    console.log("Mounting Interval")
     interval = setInterval(async () => {
       const data = await Code.find({});
 

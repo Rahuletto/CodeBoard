@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
-/*  
+/* 
 {
     name: "Board title",
     description: "Description",
@@ -14,7 +14,8 @@ var Schema = mongoose.Schema;
     ],
     options: [{encrypt: bool, autoVanish: bool, fork: { title: "Forked title", key: "key", status: true } }],
     key: "123456",
-    createdAt: 1628261284
+    createdAt: 1628261284,
+    author: "isdoiWODH@HDJKN@*GDH*@WADS22@" (encrypted email)
 }
 */
 
@@ -43,6 +44,14 @@ var board = new Schema({
     type: Number,
     required: true,
   },
+  author: {
+    type: String,
+    required: false
+  },
+  bot: {
+    type: Boolean,
+    required: false
+  }
 });
 
 mongoose.models = {};

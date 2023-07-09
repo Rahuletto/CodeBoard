@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 /*  
 {
+    id: '1235312'
     name: "Rahuletto",
     image: "github.com/image/something",
     email: "sdawhoidhafaLKSNDioH@(WDnkN@OnkSAD*@", (encrypted)
@@ -10,8 +11,7 @@ var Schema = mongoose.Schema;
         {
             title: "TITLE",
             desc: "DESC"
-            key: "12345",
-            public: true
+            key: "12345"
         }
     ],
     apiKey: "12345"
@@ -19,6 +19,10 @@ var Schema = mongoose.Schema;
 */
 
 var user = new Schema({
+  id: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
