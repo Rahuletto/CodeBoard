@@ -10,6 +10,7 @@ export default NextAuth({
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+      checks: ['none']
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -19,20 +20,21 @@ export default NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile, email, credentials }) {
       const ifExist = await User.findOne({ id: user.id });
       if (ifExist) return true;
+      else {
+        User.create({
+          id: user.id,
+          name: user.name,
+          image: user.image,
+          email: PBKDF2(user.email),
+          boards: [],
+          apiKey: makeid(20),
+        });
 
-      User.create({
-        id: user.id,
-        name: user.name,
-        image: user.image,
-        email: PBKDF2(user.email),
-        boards: [],
-        apiKey: makeid(20),
-      });
-
-      return true;
+        return true;
+      }
     },
   },
 });
