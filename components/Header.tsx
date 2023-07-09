@@ -8,31 +8,31 @@ import ThemeSwitch from './ThemeSwitch';
 import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 import { VscGithubInverted } from 'react-icons-ng/vsc';
 
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 type MetaTagsProps = {
   theme?: string;
   setTheme?: Function;
-  drag?: boolean
-}
+  drag?: boolean;
+};
 
 const Header: React.FC<MetaTagsProps> = (
   { theme, setTheme, drag } = { drag: false }
 ) => {
-  const { data: session } = useSession()
+  const router = useRouter()
+  const { data: session } = useSession();
   return (
-    <header className={drag ? "dragging" : ""}>
+    <header className={drag ? 'dragging' : ''}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <a href="/home" className={styles.title}>
-        CodeBoard
+          CodeBoard
         </a>
         <a
-          target="_blank"
-          rel="noreferrer"
-          style={{ height: '42px' }}
-          href="/github"
-          className={[styles.newProject, 'pc'].join(' ')}>
-          <VscGithubInverted style={{ marginRight: '10px' }} /> Github
+          title="API Documentation"
+          href="/docs"
+          className={[styles.api, 'pc'].join(' ')}>
+          API
         </a>
       </div>
       <div className={styles.buttons}>
@@ -40,10 +40,19 @@ const Header: React.FC<MetaTagsProps> = (
           <FaPlus />
         </a>
         <a href="/" className={[styles.newProject, 'pc'].join(' ')}>
-          <FaPlus style={{ marginRight: '10px' }} />{' '}
-          New Board
+          <FaPlus style={{ marginRight: '10px' }} /> New Board
         </a>
-        {session ? <img src={session.user.image} alt="user" className={[styles.newProject].join(' ')} /> : <a onClick={() => signIn()} href="/" className={[styles.newProject].join(' ')}><FaUserAlt/></a>}
+        {session ? (
+          <img title="Account Settings" onClick={() => router.push('/account')} src={session.user.image} alt="user" className={styles.profile} />
+        ) : (
+          <a
+            title="Sign in"
+            onClick={() => signIn()}
+            href="/"
+            className={[styles.profile].join(' ')}>
+            <FaUserAlt title="Sign in" />
+          </a>
+        )}
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
     </header>

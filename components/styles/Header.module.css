@@ -14,7 +14,7 @@
   display: flex;
   height: 48px;
   align-items: center;
-  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96) color background-color;
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
 }
 
 .title {
@@ -22,6 +22,36 @@
   font-family: 'JetBrains Mono';
   font-size: 36px;
   color: var(--special-color);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  width: 48px;
+  padding: 0px;
+  border-radius: 50px;
+  background: var(--background-dark);
+  border: 4px solid var(--background-darker);
+  color: var(--special-color);
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.api {
+  font-size: 18px;
+  padding: 6px 12px;
+  background: var(--purple);
+  border-radius: 10px;
+  border-right: 4px solid var(--purple-dark);
+  font-family: 'JetBrains Mono';
+  height: 34px;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  color: var(--background);
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
 }
 
 @media only screen and (max-width: 750px) {
@@ -37,6 +67,10 @@
 
   .newProject {
     padding: 4px 12px;
+    height: 40px;
+    width: 40px;
+  }
+  .profile {
     height: 40px;
     width: 40px;
   }

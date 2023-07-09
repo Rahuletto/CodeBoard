@@ -6,9 +6,10 @@ interface MetaTagsProps {
   description?: string;
   k?: string;
   err404?: boolean;
+  docs?: boolean
 }
 
-const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) => {
+const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs }) => {
   return (
     <>
       <Head>
@@ -37,8 +38,8 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
         <meta
           property="og:image"
           content={
-            err404
-              ? '/err-og.png'
+            docs
+              ? '/docs-og.png'
               : k
               ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'

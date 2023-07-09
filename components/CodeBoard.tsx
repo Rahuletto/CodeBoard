@@ -66,6 +66,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
                   { tag: t.variableName, color: '#E06C75' },
                   { tag: t.definition(t.variableName), color: '#D19A66' },
                   { tag: t.color, color: '#D19A66' },
+                  { tag: t.bool, color: '#D19A66' }
                 ],
               })
         }
