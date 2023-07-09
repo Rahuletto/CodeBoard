@@ -12,13 +12,14 @@ export default NextAuth({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
       checks: ['none'],
+      
     }),
   ],
-  pages: {
-    signIn: '/auth/signin',
-    signOut: '/',
-    error: '/auth/error',
-  },
+  // pages: {
+  //   signIn: '/auth/signin',
+  //   signOut: '/',
+  //   error: '/auth/error',
+  // },
   callbacks: {
     async redirect({ url, baseUrl }) {
       return baseUrl;
@@ -32,6 +33,9 @@ export default NextAuth({
     async jwt({ token, user, account, profile }) {
       if (account) {
         token.accessToken = account.access_token;
+      }
+      if (user) {
+        token.id = user.id;
       }
       return token;
     },
