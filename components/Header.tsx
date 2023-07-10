@@ -6,10 +6,9 @@ import ThemeSwitch from './ThemeSwitch';
 
 // Icons
 import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
-import { VscGithubInverted } from 'react-icons-ng/vsc';
 
-import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useSession } from '@supabase/auth-helpers-react';
 
 type MetaTagsProps = {
   theme?: string;
@@ -21,7 +20,8 @@ const Header: React.FC<MetaTagsProps> = (
   { theme, setTheme, drag } = { drag: false }
 ) => {
   const router = useRouter()
-  const { data: session } = useSession();
+  const session = useSession()
+
   return (
     <header className={drag ? 'dragging' : ''}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
@@ -43,11 +43,11 @@ const Header: React.FC<MetaTagsProps> = (
           <FaPlus style={{ marginRight: '10px' }} /> New Board
         </a>
         {session ? (
-          <img title="Account Settings" onClick={() => router.push('/account')} src={session.user.image} alt="user" className={styles.profile} />
+          <img title="Account Settings" onClick={() => router.push('/account')} src={session.user.user_metadata.avatar_url} alt="user" className={styles.profile} />
         ) : (
           <a
             title="Sign in"
-            onClick={() => signIn()}
+            onClick={() => router.push('/auth/signin')}
             className={[styles.profile].join(' ')}>
             <FaUserAlt title="Sign in" />
           </a>

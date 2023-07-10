@@ -236,7 +236,7 @@
     }
 
     .content {
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 1rem;
     }
 
     .pages {
@@ -253,4 +253,32 @@
         position: relative;
         top: 0;
     }
+
+    .move {
+        flex-direction: column;
+        margin-top: 30px;
+    }
+
+    .left, .right {
+        width: auto;
+        gap: 4px;
+    }
+
+    .baseUrl {
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px !important;
+        border-radius: 24px;
+     }
+     
+     .baseUrl::before {
+         user-select: none;
+         font-size: 18px !important;
+         content: "BASE URL";
+         width: -webkit-fill-available;
+         justify-content: center;
+         margin-right: 0px;
+     }
 }

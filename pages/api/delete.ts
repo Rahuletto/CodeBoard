@@ -32,13 +32,13 @@ export default async function handler(
     });
 
   await Code.findOneAndDelete({ key: queries.id }).exec();
-  const user = await User.findOne({ email: queries.email });
+  const user = await User.findOne({ id: queries.userId });
   const removed = user.boards.filter(function (item) {
     return item.key !== queries.id;
   });
 
   await User.findOneAndUpdate(
-    { email: queries.email },
+    { id: queries.userId },
     { boards: [...removed] }
   ).exec();
 

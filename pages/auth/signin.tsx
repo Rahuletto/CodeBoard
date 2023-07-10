@@ -1,15 +1,5 @@
-// NextJS Stuff
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from 'next';
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
-
-// Auth
-import { getProviders, signIn } from 'next-auth/react';
-import { getServerSession } from 'next-auth/next';
-import authOptions from '../api/auth/[...nextauth]';
 
 // Styles
 import generalStyles from '../../styles/General.module.css';
@@ -17,15 +7,20 @@ import generalStyles from '../../styles/General.module.css';
 // Icons
 import { FaGithub } from 'react-icons-ng/fa';
 
+// Auth
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/router';
+
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
-export default function SignIn({
-  providers,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function SignIn() {
+  const supabaseClient = useSupabaseClient();
+  const router = useRouter();
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
@@ -61,13 +56,17 @@ export default function SignIn({
                 </li>
               </ul>
             </div>
-            {Object.values(providers).map((provider) => (
-              <div key={provider.name}>
-                <button onClick={() => signIn(provider.id)}>
-                  <FaGithub /> Authorize with {provider.name}
-                </button>
-              </div>
-            ))}
+
+            <div key="github">
+              <button
+                onClick={() =>
+                  supabaseClient.auth.signInWithOAuth({
+                    provider: 'github',
+                  }).catch(() => router.push('/auth/error'))
+                }>
+                <FaGithub /> Authorize with Github
+              </button>
+            </div>
           </div>
         </div>
       </main>
@@ -75,21 +74,23 @@ export default function SignIn({
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps = async (ctx) => {
+  // Create authenticated Supabase Client
+  const supabase = createPagesServerClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  // If the user is already logged in, redirect.
-  // Note: Make sure not to redirect to the same page
-  // To avoid an infinite loop!
-  if (session) {
-    return { redirect: { destination: '/' } };
-  }
-
-  const providers = await getProviders();
+  if (session)
+    return {
+      redirect: {
+        destination: '/account',
+        permanent: false,
+      },
+    };
 
   return {
-    props: { providers: providers ?? [] },
+    props: {},
   };
-}
+};

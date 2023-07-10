@@ -16,14 +16,12 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { LuShieldCheck } from 'react-icons-ng/lu';
 import { GoGitBranch } from 'react-icons-ng/go';
+import { Md2RobotExcited } from 'react-icons-ng/md2'
 
 // Our Imports
 import { BoardFile } from '../../utils/board';
 import { FetchResponse } from '../api/fetch';
 import { MetaTags } from '../../components';
-
-// Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes';
 
 // Lazy loading
 
@@ -130,7 +128,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   />{' '}
                   Forked from{' '}
                   <a
-                    style={{ color: 'var(--purple-dark)' }}
+                    style={{ background: 'var(--purple-dark)', color: 'var(--background)', borderRadius: "8px", padding: "2px 6px" }}
                     href={`/bin/${board.fork?.key}`}>
                     {board.fork?.name}
                   </a>
@@ -147,6 +145,9 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     name="project-name"></input>{' '}
                   {board.encrypted ? (
                     <LuShieldCheck title="Encrypted" className="enc icon" />
+                  ) : null}
+                  {board.bot ? (
+                    <Md2RobotExcited title="Created using api" className="enc icon" style={{ color: 'var(--purple)'}} />
                   ) : null}
                 </div>
                 <textarea
@@ -245,7 +246,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   )
 
   const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    `http://127.0.0.1:3000/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {

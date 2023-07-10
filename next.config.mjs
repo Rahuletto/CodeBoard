@@ -7,9 +7,6 @@ const nextConfig = {
     MONGO: process.env['MONGO'],
     NEXT_PUBLIC_KEY: process.env['NEXT_PUBLIC_KEY'],
     NEXT_PUBLIC_ENCRPT: process.env['NEXT_PUBLIC_ENCRPT'],
-    GITHUB_ID: process.env['GITHUB_ID'],
-    GITHUB_SECRET: process.env['GITHUB_SECRET'],
-    NEXTAUTH_URL: process.env['NEXTAUTH_URL']
   },
   webpack: (config) => {
     config.experiments = {

@@ -12,7 +12,7 @@ import styles from '../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Auth
-import { useSession } from 'next-auth/react';
+import { useSession } from '@supabase/auth-helpers-react';
 
 // Icons from React-Icons-NG (Thanks 💖)
 import {
@@ -22,16 +22,13 @@ import {
   LuTimerOff,
 } from 'react-icons-ng/lu';
 
-// Mongoose
-import connectDB from '../middleware/mongodb';
-
 // Our Imports
 import { BoardFile } from '../utils/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
-import PBKDF2 from '../utils/encrypt';
 
 import { AddFile, MetaTags } from '../components';
+import connectDB from '../middleware/mongodb';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -57,10 +54,13 @@ const CreateModal = dynamic(() => import('../components/CreateModal'), {
 const FileSelect = dynamic(() => import('../components/FileSelect'), {
   ssr: false,
 });
+const Save = dynamic(() => import('../components/Save'), {
+  ssr: false,
+});
 
 const Index: NextPage = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const session = useSession();
 
   // ---------------------------------
   // ---------- S T A T E S ----------
@@ -87,6 +87,9 @@ const Index: NextPage = () => {
 
   // For Drag and drop ---------------------------------
   const [drag, setDrag] = useState(false);
+
+  // Saving ---------------------------------
+  const [save, setSave] = useState(false);
 
   // Files ---------------------------------
   const [files, setFiles] = useState([
@@ -268,7 +271,7 @@ const Index: NextPage = () => {
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
-      author: session ? PBKDF2(session.user.email) : null,
+      author: session ? session?.user?.user_metadata?.provider_id : null,
     };
 
     const JSONdata = JSON.stringify(data);
@@ -317,6 +320,7 @@ const Index: NextPage = () => {
           isFile(e.dataTransfer) ? handleDrop(e) : null;
         }}
         className={generalStyles.main}>
+        { save ? <Save /> : null}
         <div
           onClick={() => {
             closeEdit();
@@ -325,7 +329,10 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
+
+
         <DropZone files={files} drag={drag} limit={session ? 4 : 2} />
+        
 
         <Header drag={drag} theme={theme} setTheme={setTheme} />
 
@@ -418,13 +425,11 @@ const Index: NextPage = () => {
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';
+                  setMetadata(false);
+                  setSave(true);
                   const form =
                     document.querySelector<HTMLFormElement>(`.projectDetails`);
                   form.requestSubmit();
-                  const backdrop =
-                    document.querySelector<HTMLFormElement>(`.backdrop`);
-                  backdrop.innerHTML = '<h1>Saving...</h1>';
-                  backdrop.style['display'] = 'block';
                 }}>
                 Save
               </button>

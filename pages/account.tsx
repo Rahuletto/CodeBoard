@@ -1,13 +1,11 @@
 // NextJS stuff
-import type { GetServerSidePropsContext } from 'next';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
 // Auth
-import { Session, getServerSession } from 'next-auth';
-import authOptions from './api/auth/[...nextauth]';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Styles
 import styles from '../styles/Account.module.css';
@@ -18,21 +16,22 @@ import { LuRefreshCw } from 'react-icons-ng/lu';
 
 // Models and mongoose
 import User from '../model/user';
-import connectDB from '../middleware/mongodb';
 
 // Our imports
-import PBKDF2 from '../utils/encrypt';
+import connectDB from '../middleware/mongodb';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
 export default function Account({ github, boards, id, api }) {
+  const router = useRouter();
+
+  const supabaseClient = useSupabaseClient();
+  const session = useSession();
+
   const [apiKey, setApiKey] = useState(api);
   const [ratelimit, setRatelimit] = useState(false);
-  
-  const router = useRouter();
-  const { data: session, status } = useSession();
 
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -41,17 +40,9 @@ export default function Account({ github, boards, id, api }) {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
-  if (status === 'loading') {
-    return <p>Loading...</p>;
-  }
-
-  if (status === 'unauthenticated') {
-    return <p>Access Denied</p>;
-  }
-
   async function deleteBoard(b) {
     const response = await fetch(
-      `/api/delete?id=${b}&email=${PBKDF2(session.user.email)}`,
+      `/api/delete?id=${b}&userId=${session.user.user_metadata.provider_id}`,
       {
         method: 'DELETE',
         headers: {
@@ -73,23 +64,22 @@ export default function Account({ github, boards, id, api }) {
           'Content-Type': 'application/json',
           Authorization: process.env.NEXT_PUBLIC_KEY,
         },
-        body: JSON.stringify({ email: PBKDF2(session.user.email) }),
+        body: JSON.stringify({ userId: session.user.user_metadata.provider_id }),
       });
       const result = await response.json();
 
       if (result.regen) {
         setApiKey(result.apiKey);
         setRatelimit(true);
-        
+
         const btn = document.getElementById('regen');
 
         (btn as HTMLButtonElement).style.background = 'var(--red)';
         (btn as HTMLButtonElement).style.opacity = '0.4';
         (btn as HTMLButtonElement).disabled = true;
-        
-      } else throw new Error("RATELIMIT")
+      } else throw new Error('RATELIMIT');
     } catch {
-      setRatelimit(true)
+      setRatelimit(true);
       const btn = document.getElementById('regen');
 
       (btn as HTMLButtonElement).style.background = 'var(--red)';
@@ -108,56 +98,47 @@ export default function Account({ github, boards, id, api }) {
         <div className={styles.lander}>
           <div className={styles.account}>
             <div className={styles.wrapper}>
-              <img src={session.user.image} className={styles.profile} />
+              <img alt="profile picture" src={session?.user?.user_metadata?.avatar_url} className={styles.profile} />
 
               <div className={styles.details}>
-                <h1>{session.user.name}</h1>
+                <h1>{session?.user?.user_metadata?.name}</h1>
                 {github ? (
                   <a href={github} className={styles.githubURL}>
                     <FaGithub style={{ marginRight: '6px' }} />
-                    {github.replace('https://github.com/', '')}{' '}
+                    {session?.user?.user_metadata?.user_name}{' '}
                   </a>
                 ) : null}
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <p>API Key: </p>{' '}
-              <code
-                style={{
-                  fontFamily: 'JetBrains Mono',
-                  padding: '2px 6px',
-                  background: 'var(--background-dark)',
-                  borderRadius: '8px',
-                  userSelect: 'all',
-                }}>
-                {apiKey}
+              <code className={styles.secret}>
+                <span>{apiKey}</span>
               </code>
               <button
-                title={ratelimit ? "Ratelimited !" : "Regenerate API Key"}
+                title={ratelimit ? 'Ratelimited !' : 'Regenerate API Key'}
                 onClick={() => regenerate()}
                 id="regen"
                 className={styles.regen}>
-                <LuRefreshCw title={ratelimit ? "Ratelimited !" : "Regenerate API Key"} />
+                <LuRefreshCw
+                  title={ratelimit ? 'Ratelimited !' : 'Regenerate API Key'}
+                />
               </button>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <p>User ID: </p>{' '}
-              <code
-                style={{
-                  fontFamily: 'JetBrains Mono',
-                  padding: '2px 6px',
-                  background: 'var(--background-dark)',
-                  borderRadius: '8px',
-                  userSelect: 'all',
-                }}>
-                {id}
+              <code className={styles.secret}>
+                <span>{id}</span>
               </code>
             </div>
 
             <button
               title="Sign out"
-              onClick={() => signOut({ callbackUrl: '/' })}
+              onClick={() => {
+                supabaseClient.auth.signOut()
+                router.push('/')
+              }}
               className={styles.signOut}>
               Sign Out
             </button>
@@ -188,38 +169,35 @@ export default function Account({ github, boards, id, api }) {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  await connectDB();
+export const getServerSideProps = async (ctx) => {
+  await connectDB()
+  // Create authenticated Supabase Client
+  const supabase = createPagesServerClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  const session: Session = await getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  if (!session)
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    };
 
-  if (!session) {
-    return { redirect: { destination: '/' } };
-  }
+  const mongoUser = await User.findOne({ id: session.user.user_metadata.provider_id });
 
-  const g = await fetch(
-    `https://api.github.com/search/users?q=${encodeURIComponent(
-      `${session.user.name} in:name`
-    )}`
-  );
-  const gAPI = await g.json();
-
-  const user = await User.findOne({ name: session.user.name });
-
-  if (!user) {
-    return { redirect: { destination: '/' } };
+  if (!mongoUser) {
+    return { redirect: { destination: '/auth/signin', permanent: false } };
   }
 
   return {
     props: {
-      github: gAPI.items ? gAPI?.items[0]?.html_url : null,
-      boards: user?.boards ?? [],
-      id: user?.id ?? '',
-      api: user?.apiKey ?? '',
+      boards: mongoUser.boards ?? [],
+      id: mongoUser?.id ?? '',
+      api: mongoUser?.apiKey ?? '',
+      github: session?.user ? "https://github.com/" + session.user.user_metadata.user_name : '',
     },
   };
-}
+};

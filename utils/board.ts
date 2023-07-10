@@ -5,6 +5,7 @@ export type Board = {
   options: Options[];
   key: string;
   createdAt: number;
+  author: string;
 };
 
 export type BoardFile = {

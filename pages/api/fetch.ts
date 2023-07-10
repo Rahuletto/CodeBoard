@@ -23,6 +23,7 @@ export interface FetchResponse extends Omit<Board, 'options'> {
   encrypted: boolean;
   autoVanish: boolean;
   fork?: { status: boolean; key: string; name: string };
+  bot: boolean;
 }
 
 export default async function handler(
@@ -76,6 +77,8 @@ export default async function handler(
     encrypted: boardRaw.options[0].encrypt,
     autoVanish: boardRaw.options[0].autoVanish,
     fork: boardRaw.options[0].fork,
+    author: boardRaw.author,
+    bot: (boardRaw.author == 'bot' ? true : false),
     status: 200,
   };
 
@@ -105,6 +108,8 @@ export default async function handler(
         encrypted: boardRaw.options[0].encrypt,
         autoVanish: boardRaw.options[0].autoVanish,
         fork: boardRaw.options[0].fork,
+        author: boardRaw.author,
+        bot: (boardRaw.author == 'bot' ? true : false),
         status: 200,
       };
     } catch (err) {

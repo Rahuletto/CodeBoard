@@ -89,7 +89,7 @@ export default async function handler(
     files: files,
     key: key,
     createdAt: Date.now(),
-    bot: true,
+    author: 'bot',
   });
 
   return res.status(201).json({

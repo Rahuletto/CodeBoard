@@ -3,6 +3,9 @@ import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+
 // Styles
 import '../styles/globals.css';
 import '../styles/mobile.css';
@@ -10,22 +13,20 @@ import '../styles/mobile.css';
 // Loader
 import Loader from '../components/Loader';
 
-// Session
-import { SessionProvider } from 'next-auth/react';
-
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
+  const [supabaseClient] = useState(() => createPagesBrowserClient());
 
   useEffect(() => {
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
-      if (elem) elem.style.display = 'none';
+      if (elem) elem.remove();
     }, 1700); // just read the fun things in the loading screen bruh
 
     setTimeout(
       () => {
         const elem = document.querySelector<HTMLElement>('.loadScreen');
-        if (elem) elem.style.opacity = '0';
+        if (elem) elem.style.opacity = '0'; 
       },
       router.pathname == '/' ? 600 : 1600
     );
@@ -44,20 +45,24 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     '/docs/fetch',
     '/docs/ping',
     '/docs/save',
-    '/docs/teapot'
+    '/docs/teapot',
   ]; // blacklist these urls
   if (!blacklist.some((substring) => router.pathname.includes(substring))) {
     return (
-      <SessionProvider session={session}>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={pageProps.initialSession}>
         <Loader />
         <Component {...pageProps} />
-      </SessionProvider>
+      </SessionContextProvider>
     );
   } else
     return (
-      <SessionProvider session={session}>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={pageProps.initialSession}>
         <Component {...pageProps} />
-      </SessionProvider>
+      </SessionContextProvider>
     );
 }
 

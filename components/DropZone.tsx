@@ -1,9 +1,6 @@
 // Styles
 import styles from '../styles/Index.module.css';
 
-// Auth
-import { Session } from 'next-auth/core/types';
-
 // Icons
 import { FaCloudUploadAlt, FaWindowClose } from 'react-icons-ng/fa';
 

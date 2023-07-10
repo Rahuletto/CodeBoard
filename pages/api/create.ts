@@ -49,7 +49,7 @@ export default async function handler(
   }
 
   if (body.author) {
-    const user = await User.findOne({ email: body.author });
+    const user = await User.findOne({ id: body.author });
     const newBoard = {
       title: body.name,
       desc: body.description,
@@ -58,7 +58,7 @@ export default async function handler(
 
     if (user)
       await User.findOneAndUpdate(
-        { email: body.author },
+        { id: body.author },
         { boards: [...user.boards, newBoard] }
       );
     else body.author = null;

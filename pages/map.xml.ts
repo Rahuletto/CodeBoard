@@ -13,7 +13,31 @@ function generateSiteMap(boards) {
      </url>
      <url>
        <loc>https://cdeboard.vercel.app/privacy</loc>
+       <priority>0.85</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/docs</loc>
        <priority>0.80</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/docs/ping</loc>
+       <priority>0.80</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/docs/teapot</loc>
+       <priority>0.80</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/docs/save</loc>
+       <priority>0.80</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/docs/fetch</loc>
+       <priority>0.80</priority>
+     </url>
+     <url>
+       <loc>https://cdeboard.vercel.app/map.xml</loc>
+       <priority>0.70</priority>
      </url>
      ${boards
        .map((key) => {

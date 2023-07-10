@@ -48,10 +48,6 @@ var board = new Schema({
     type: String,
     required: false
   },
-  bot: {
-    type: Boolean,
-    required: false
-  }
 });
 
 mongoose.models = {};

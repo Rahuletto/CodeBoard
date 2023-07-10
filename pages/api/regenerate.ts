@@ -29,7 +29,7 @@ export default async function handler(
       status: 401,
     });
 
-  const user = await User.findOne({ email: body.email });
+  const user = await User.findOne({ id: body.userId });
 
   try {
     await limiter.check(res, 2, user.apiKey as string);
@@ -43,7 +43,7 @@ export default async function handler(
 
   const key = makeid(20);
 
-  await User.findOneAndUpdate({ email: body.email }, { apiKey: key });
+  await User.findOneAndUpdate({ id: body.userId }, { apiKey: key });
 
   return res
     .status(200)

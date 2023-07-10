@@ -248,11 +248,26 @@ button:focus {
   display: none;
 }
 
+::selection {
+  background-color: var(--purple-dark);
+  color: #141618;
+}
+
+::-moz-selection {
+  background-color: var(--purple-dark);
+  color: #141618;
+}
+
 header {
   padding: 16px 32px;
   display: flex;
   justify-content: space-between;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+main {
+  animation: blur 1.8s forwards; 
+  transition: 0.2s ease-out;
 }
 
 .edit:before {
@@ -535,6 +550,7 @@ dialog form p {
 
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
   z-index: 100;
 }
 
@@ -1081,4 +1097,12 @@ code {
 
 .orange {
   color: var(--orange);
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(14px);
+  } 100% {
+    filter: blur(0px);
+  }
 }
