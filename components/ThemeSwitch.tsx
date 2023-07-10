@@ -39,14 +39,16 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
         window.matchMedia('(prefers-color-scheme: light)').matches
       ) {
         setTheme('light');
-      } else setTheme('dark')
+      } else {
+        setTheme('dark')
+      };
 
       if (theme == 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
       } else if (theme == 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
-    }
+    
 
   
   }, []);
