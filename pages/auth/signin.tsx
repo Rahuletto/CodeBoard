@@ -62,7 +62,7 @@ export default function SignIn() {
                 onClick={() =>
                   supabaseClient.auth.signInWithOAuth({
                     provider: 'github',
-                  })n
+                  })
                 }>
                 <FaGithub /> Authorize with Github
               </button>
