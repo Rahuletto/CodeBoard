@@ -32,14 +32,14 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
 
   // To let window to load
   useEffect(() => {
-    function detectColorScheme() {
+
       if (!window || !window.matchMedia) return false;
       else if (
         window &&
         window.matchMedia('(prefers-color-scheme: light)').matches
       ) {
         setTheme('light');
-      }
+      } else setTheme('dark')
 
       if (theme == 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
@@ -48,7 +48,7 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
       }
     }
 
-    detectColorScheme();
+  
   }, []);
 
   return (
