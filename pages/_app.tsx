@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
       if (elem) { 
-        elem.style.opacity = 0;
+        elem.style.opacity = "0";
         elem.style.display = "none"
       }
     }, 1700); // just read the fun things in the loading screen bruh
