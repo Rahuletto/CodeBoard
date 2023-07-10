@@ -15,7 +15,7 @@ export default function Document() {
         if (theme == 'light') {
             console.log("Light theme user ? Never seen a programmer using light theme x-x")
             document.documentElement.setAttribute('data-theme', 'light');
-        }
+        } else document.documentElement.setAttribute('data-theme', 'dark');
         `}
         </Script>
       </body>
