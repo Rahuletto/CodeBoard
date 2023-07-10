@@ -33,7 +33,7 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   // To let window to load
   useEffect(() => {
 
-      if (!window || !window.matchMedia) return false;
+      if (!window || !window.matchMedia) return;
       else if (
         window &&
         window.matchMedia('(prefers-color-scheme: light)').matches
