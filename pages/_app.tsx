@@ -20,7 +20,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
     setTimeout(() => {
       const elem = document.querySelector<HTMLElement>('.loadScreen');
-      if (elem) elem.remove();
+      if (elem) { 
+        elem.style.opacity = 0;
+        elem.style.display = "none"
+      }
     }, 1700); // just read the fun things in the loading screen bruh
 
     setTimeout(
