@@ -266,7 +266,6 @@ header {
 }
 
 main {
-  animation: blur 1.8s forwards; 
   transition: 0.2s ease-out;
 }
 
@@ -1097,12 +1096,4 @@ code {
 
 .orange {
   color: var(--orange);
-}
-
-@keyframes blur {
-  0% {
-    filter: blur(14px);
-  } 100% {
-    filter: blur(0px);
-  }
 }
