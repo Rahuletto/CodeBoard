@@ -22,7 +22,7 @@ export default function SignIn() {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
   // DARK MODE & LIGHT MODE
-  const [theme, setTheme] = useState<'light' | 'dark' | string>();
+  const [theme, setTheme] = useState<'light' | 'dark' | string>('dark');
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
@@ -62,7 +62,7 @@ export default function SignIn() {
                 onClick={() =>
                   supabaseClient.auth.signInWithOAuth({
                     provider: 'github',
-                  }).catch(() => router.push('/auth/error'))
+                  })n
                 }>
                 <FaGithub /> Authorize with Github
               </button>
