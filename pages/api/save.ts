@@ -53,7 +53,7 @@ export default async function handler(
     await limiter.check(res, 21, apik as string);
   } catch {
     return res.status(429).json({
-      error: 'Rate limit exceeded. Only 20 saves per minute',
+      message: 'Rate limit exceeded. Only 20 saves per minute',
       apiKey: 'XXXXXXXXXXXX' + apik.slice(12),
       status: 429,
     });

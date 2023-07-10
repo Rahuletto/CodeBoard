@@ -35,5 +35,5 @@ export default async function handler(
     return res.status(200).json({
       keys: boards
     });
-  else return res.status(404).json({ keys: 'NOT FOUND', status: 404 });
+  else return res.status(404).json({ message: 'NOT FOUND', status: 404 });
 }

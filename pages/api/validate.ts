@@ -17,6 +17,6 @@ export default async function handler(
 
   if (!token) return res
   .status(404)
-  .json({ message: 'NOT FOUND. Try a valid api key', status: 404 });
-  else return res.status(200).json({ message: "VALID. This api key is valid", status: 200 })
+  .json({ message: 'NOT FOUND. Try a valid api key', valid: false, status: 404 });
+  else return res.status(200).json({ message: "VALID. This api key is valid", valid: true, status: 200 })
 }

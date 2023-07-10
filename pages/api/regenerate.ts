@@ -35,7 +35,7 @@ export default async function handler(
     await limiter.check(res, 2, user.apiKey as string);
   } catch {
     return res.status(429).json({
-      error: 'Rate limit exceeded. Only 1 regenerate per minute',
+      message: 'Rate limit exceeded. Only 1 regenerate per minute',
       apiKey: 'XXXXXXXXXXXX' + (user.apiKey as string).slice(12),
       status: 429,
     });

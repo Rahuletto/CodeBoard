@@ -49,7 +49,7 @@ export default async function handler(
       await limiter.check(res, 41, apik as string);
     } catch {
       return res.status(429).json({
-        error: 'Rate limit exceeded. Only 40 fetches per minute',
+        message: 'Rate limit exceeded. Only 40 fetches per minute',
         apiKey: 'XXXXXXXXXXXX' + apik.slice(12),
         status: 429,
       });
@@ -61,7 +61,7 @@ export default async function handler(
   if (!boardRaw)
     return res
       .status(404)
-      .json({ board: 'NOT FOUND. Try a valid board id', status: 404 });
+      .json({ message: 'NOT FOUND. Try a valid board id', status: 404 });
 
       res.setHeader(
         'Cache-Control',
