@@ -246,7 +246,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   )
 
   const promiseBoard = await fetch(
-    `http://127.0.0.1:3000/api/fetch?id=${context.params.id}`,
+    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {
