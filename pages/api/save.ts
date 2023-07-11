@@ -62,11 +62,12 @@ export default async function handler(
   let cont = '';
   let files = body.files;
 
-  if (files.length > 2) {
-    files = [body.files[0], body.files[1]];
+  console.log(body)
+  if (files?.length > 2) {
+    files = [files[0], files[1]];
     cont =
       ' - Reached file limit (2). Sent ' +
-      files.length +
+      files?.length +
       ' amount of files. Considering first two files';
   }
 
