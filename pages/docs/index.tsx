@@ -40,6 +40,7 @@ const Docs: NextPage = () => {
               <a className={styles.active} href="/docs">
                 Introduction
               </a>
+              <a href="/docs/npm">npm Package</a>
               <a href="/docs/ping">Ping</a>
               <a href="/docs/teapot">Im a teapot</a>
               <a href="/docs/save">Save a board</a>
@@ -142,10 +143,10 @@ const Docs: NextPage = () => {
             <div className={styles.move}>
               <div style={{ opacity: 0 }} className={styles.left}></div>
               <div
-                onClick={() => router.push('/docs/ping')}
+                onClick={() => router.push('/docs/npm')}
                 className={styles.right}>
-                <h2>Ping</h2>
-                <p>/api/ping</p>
+                <h2>npm Package</h2>
+                <p>@codeboard/api</p>
               </div>
             </div>
           </div>

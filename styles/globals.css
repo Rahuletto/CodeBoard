@@ -197,6 +197,22 @@ a {
   font-size: 16px;
 }
 
+blockquote {
+  background: rgba(141, 64, 188, 0.3);
+  border-radius: 10px;
+  max-width: 700px;
+  border-left: 8px solid var(--purple-dark);
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+  line-height: 1.8em;
+}
+
+blockquote p {
+  line-height: 12px;
+  display: inline;
+}
+
 b {
   font-weight: 900 !important;
 }

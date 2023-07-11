@@ -33,6 +33,14 @@
   opacity: 0.85;
 }
 
+[data-theme="light"] .pages {
+    background: var(--background-light);
+}
+
+[data-theme="light"] .content a {
+    background: var(--background-light) !important;
+}
+
 .pages {
     min-width: 200px;
     background: var(--background-dark);

@@ -46,6 +46,7 @@ const Docs: NextPage = () => {
             <h4>Contents</h4>
             <div>
               <a href="/docs">Introduction</a>
+              <a href="/docs/npm">npm Package</a>
               <a className={styles.active} href="/docs/ping">
                 Ping
               </a>
