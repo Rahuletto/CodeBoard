@@ -43,7 +43,7 @@ const Header: React.FC<MetaTagsProps> = (
           <FaPlus style={{ marginRight: '10px' }} /> New Board
         </a>
         {session ? (
-          <img title="Account Settings" onClick={() => router.push('/account')} src={session.user.user_metadata.avatar_url} alt="user" className={styles.profile} />
+          <img title="Account Settings" onClick={() => router.push('/account')} src={session?.user?.user_metadata?.avatar_url} alt="user" className={styles.profile} />
         ) : (
           <a
             title="Sign in"

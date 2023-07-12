@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { extensions } from './utils/extensions';
+import PBKDF2 from './utils/encrypt';
+import makeid from './utils/makeid';
 
 let interval;
 export async function middleware(req: NextRequest) {
@@ -12,6 +14,27 @@ export async function middleware(req: NextRequest) {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  if (session) {
+    const { data: user } = await supabase
+      .from('Users')
+      .select()
+      .eq('id', session?.user?.user_metadata?.provider_id)
+      .limit(1)
+      .single();
+
+    if (!user) {
+      await supabase.from('Users').insert({
+        uid: session?.user?.id,
+        id: session?.user?.user_metadata?.provider_id,
+        email: PBKDF2(session?.user?.email),
+        name: session?.user?.user_metadata?.name,
+        image: session?.user?.user_metadata?.avatar_url ?? "",
+        boards: [],
+        apiKey: makeid(20),
+      });
+    }
+  }
 
   return res;
 }
