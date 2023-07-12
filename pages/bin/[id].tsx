@@ -163,7 +163,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
               <button
                 className={styles.save}
                 onClick={() => router.push(`/fork/${board.key}`)}
-                disabled={board.fork?.status}
+                disabled={board.fork?.status || board.bot}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
