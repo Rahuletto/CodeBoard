@@ -1,8 +1,9 @@
 // NextJS Stuff
 import type { AppProps } from 'next/app';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
+// Auth
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
@@ -13,13 +14,14 @@ import '../styles/mobile.css';
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [supabaseClient] = useState(() => createPagesBrowserClient());
 
-    return (
-      <SessionContextProvider
-        supabaseClient={supabaseClient}
-        initialSession={pageProps.initialSession}>
-        <Component {...pageProps} />
-      </SessionContextProvider>
-    );
+  return (
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}>
+      <Component {...pageProps} />
+      <Analytics />
+    </SessionContextProvider>
+  );
 }
 
 export default MyApp;

@@ -27,6 +27,7 @@
     "@uiw/codemirror-theme-atomone": "^4.21.2",
     "@uiw/codemirror-theme-github": "^4.21.2",
     "@uiw/react-codemirror": "^4.21.2",
+    "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.5.8",
     "crypto-js": "^4.1.1",
     "lru-cache": "^10.0.0",
