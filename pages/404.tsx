@@ -8,7 +8,7 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { BsQuestionDiamondFill } from 'react-icons/bs';
+import { BsQuestionDiamondFill } from 'react-icons-ng/bs';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
