@@ -32,7 +32,7 @@ export default async function handler(req: NextRequest) {
   const keys = [];
 
   boards.forEach((board) => {
-    if (board.options[0].autoVanish) return;
+    if (board.autoVanish) return;
     else keys.push(board.key);
   });
 
