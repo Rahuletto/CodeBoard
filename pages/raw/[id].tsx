@@ -22,7 +22,7 @@ export default function MyComponent({ text }: { text: string }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     { cache: 'force-cache' }
   );
 

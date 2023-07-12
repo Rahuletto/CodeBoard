@@ -1,80 +1,166 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, NextRequest } from 'next/server';
 
-// Models and mongoose
-import Code from '../../model/code';
-import connectDB from '../../middleware/mongodb';
-import User from '../../model/user';
-import { BoardFile, Options } from '../../utils/board';
+// Database
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
+// Our Imports
+import { BoardFile } from '../../utils/types/board';
+
+// Types
 type CreateRequestBody = {
   name: string;
   description: string;
-  options: Options[];
   files: BoardFile[];
   key: string;
+  encrypt: boolean;
+  autoVanish: boolean;
+  fork: { status: boolean; key: string; name: string } | undefined;
   createdAt: number;
   author: string | null;
 };
 
-// Same as /api/save but create is sudo (Only for the website servers)
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // Get data submitted in request's body.
-  await connectDB();
-  const body: CreateRequestBody = req.body;
+// Edge config
+export const config = {
+  runtime: 'edge',
+};
 
-  if (req.method != 'POST')
-    return res.status(405).json({
-      message: 'Invaid Method ! EXPECTED: POST method.',
-      status: 405,
-    });
+export default async function handler(req: NextRequest) {
+  const res = NextResponse.next();
 
-  if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return res.status(401).json({
-      message: 'Not Authorized !',
-      status: 401,
-    });
+  try {
+    const body: CreateRequestBody = await req?.json();
 
-  const ifExist = await Code.findOne({ key: body.key });
-  if (ifExist) {
-    console.log('BRO DONT SPAM');
-    return res.status(200).json({
-      board: `/bin/${req.body.key}`,
-      message: 'Board with this key already exists. ',
-      status: 200,
-    });
-  }
+    const authorization = req.headers.get('authorization');
 
-  if (body.author) {
-    const user = await User.findOne({ id: body.author });
-    const newBoard = {
-      title: body.name,
-      desc: body.description,
-      key: body.key,
-    };
-
-    if (user)
-      await User.findOneAndUpdate(
-        { id: body.author },
-        { boards: [...user.boards, newBoard] }
+    if (req.method != 'POST')
+      return new Response(
+        JSON.stringify({
+          message: 'Invaid Method ! EXPECTED: POST method.',
+          status: 405,
+        }),
+        {
+          status: 405,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
       );
-    else body.author = null;
+
+    const supabase = createMiddlewareClient({ req, res });
+
+    if (authorization != process.env.NEXT_PUBLIC_KEY)
+      return new Response(
+        JSON.stringify({
+          message: 'Not Authorized !',
+          status: 401,
+        }),
+        {
+          status: 401,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
+    const { data: board } = await supabase
+      .from('Boards')
+      .select()
+      .eq('key', body.key)
+      .limit(1)
+      .single();
+    if (board) {
+      console.log('BRO DONT SPAM');
+      return new Response(
+        JSON.stringify({
+          board: `/bin/${body.key}`,
+          message: 'Board with this key already exists. ',
+          status: 200,
+        }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+
+    if (body.author) {
+      const { data: user } = await supabase
+        .from('Users')
+        .select()
+        .eq('id', body.author)
+        .limit(1)
+        .single();
+
+      const newBoard = {
+        title: body.name,
+        desc: body.description,
+        key: body.key,
+      };
+
+      if (user) {
+        const { error } = await supabase
+          .from('Users')
+          .update({ boards: [...user.boards, newBoard] })
+          .eq('id', body.author);
+        if (error) {
+          console.log(error);
+          body.author = null;
+        }
+      } else body.author = null;
+    }
+
+    const { error } = await supabase.from('Boards').insert({
+      name: body.name,
+      description: body.description,
+      encrypt: body.encrypt,
+      autoVanish: body.autoVanish,
+      fork: body.fork,
+      files: body.files,
+      key: body.key,
+      author: body.author,
+      createdAt: body.createdAt ?? Date.now(),
+    });
+
+    if (error) {
+      console.log(error);
+      return new Response(
+        JSON.stringify({
+          message: 'Server Error ! Contact the owner',
+          status: 500,
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+    return new Response(
+      JSON.stringify({ board: `/bin/${body.key}`, created: true, status: 201 }),
+      {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return new Response(
+      JSON.stringify({
+        message: 'Bad Request !',
+        status: 400,
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
   }
-
-  Code.create({
-    name: body.name,
-    description: body.description,
-    options: body.options,
-    files: body.files,
-    key: body.key,
-    createdAt: body.createdAt,
-    author: body.author,
-  });
-
-  return res
-    .status(201)
-    .json({ board: `/bin/${req.body.key}`, status: 201, workDone: true });
 }

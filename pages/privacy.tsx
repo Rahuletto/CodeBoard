@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import styles from '../styles/Privacy.module.css';
 
 // Icons
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons/fl';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

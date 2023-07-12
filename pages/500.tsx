@@ -8,7 +8,7 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaHeartBroken } from 'react-icons-ng/fa';
+import { FaHeartBroken } from 'react-icons/fa';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

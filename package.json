@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": false,
   "author": "Rahuletto",
-  "homepage": "https://cdeboard.vercel.app",
+  "homepage": "https://board.is-an.app",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {
     "type": "git",
@@ -31,12 +31,11 @@
     "crypto-js": "^4.1.1",
     "lru-cache": "^10.0.0",
     "million": "^2.4.9",
-    "mongoose": "^7.2.2",
     "next": "^13.4.7",
     "prettier": "^2.8.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons-ng": "^4.8.4"
+    "react-icons": "^4.10.1"
   },
   "devDependencies": {
     "@types/node": "18.0.1",

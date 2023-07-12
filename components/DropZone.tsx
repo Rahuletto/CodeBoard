@@ -2,10 +2,10 @@
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaCloudUploadAlt, FaWindowClose } from 'react-icons-ng/fa';
+import { FaCloudUploadAlt, FaWindowClose } from 'react-icons/fa';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type DropZoneProps = {
   files?: BoardFile[];

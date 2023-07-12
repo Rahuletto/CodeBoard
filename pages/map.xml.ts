@@ -1,42 +1,42 @@
-const EXTERNAL_DATA_URL = 'https://cdeboard.vercel.app/bin';
+const EXTERNAL_DATA_URL = 'https://board.is-an.app/bin';
 
 function generateSiteMap(boards) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
-       <loc>https://cdeboard.vercel.app/home</loc>
+       <loc>https://board.is-an.app/home</loc>
        <priority>1.00</priority>
      </url>
      <url>
-     <loc>https://cdeboard.vercel.app</loc>
+     <loc>https://board.is-an.app</loc>
        <priority>0.90</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/privacy</loc>
+       <loc>https://board.is-an.app/privacy</loc>
        <priority>0.85</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/docs</loc>
+       <loc>https://board.is-an.app/docs</loc>
        <priority>0.80</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/docs/ping</loc>
+       <loc>https://board.is-an.app/docs/ping</loc>
        <priority>0.80</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/docs/teapot</loc>
+       <loc>https://board.is-an.app/docs/teapot</loc>
        <priority>0.80</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/docs/save</loc>
+       <loc>https://board.is-an.app/docs/save</loc>
        <priority>0.80</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/docs/fetch</loc>
+       <loc>https://board.is-an.app/docs/fetch</loc>
        <priority>0.80</priority>
      </url>
      <url>
-       <loc>https://cdeboard.vercel.app/map.xml</loc>
+       <loc>https://board.is-an.app/map.xml</loc>
        <priority>0.70</priority>
      </url>
      ${boards
@@ -58,7 +58,7 @@ function SiteMap() {
 
 export async function getServerSideProps({ res }) {
   // We make an API call to gather the URLs for our site
-  const request = await fetch('https://cdeboard.vercel.app/api/fetchAll', {
+  const request = await fetch('https://board.is-an.app/api/mass-fetch', {
     headers: {
       Authorization: process.env.NEXT_PUBLIC_KEY,
       'Content-Type': 'application/json',

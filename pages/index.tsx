@@ -20,15 +20,15 @@ import {
   LuShieldOff,
   LuTimer,
   LuTimerOff,
-} from 'react-icons-ng/lu';
+} from 'react-icons/lu';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
-
 import { AddFile, MetaTags } from '../components';
-import connectDB from '../middleware/mongodb';
+
+import { Languages } from '../utils/types/languages';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -105,8 +105,7 @@ const Index: NextPage = () => {
 
   // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    loadLanguage(file.language == 'none' ? 'markdown' : (file.language as Languages))
   );
 
   const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
@@ -135,15 +134,17 @@ const Index: NextPage = () => {
   // Set Language ---------------------------------
   useEffect(() => {
     setLanguage(
-      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+      loadLanguage(file.language == 'none' ? 'markdown' : (file.language) as Languages)
     );
   }, [file.language]);
 
   // Set Themes ---------------------------------
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
+
+  // ---------------------------------------------
 
   // File Selector Effect ---------------------------------
   useEffect(() => {
@@ -267,9 +268,10 @@ const Index: NextPage = () => {
     const data = {
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [{ autoVanish: vanish, encrypt: encrypt }],
       files: encryptedFiles,
       key: keyId,
+      autoVanish: vanish,
+      encrypt: encrypt,
       createdAt: Date.now(),
       author: session ? session?.user?.user_metadata?.provider_id : null,
     };
@@ -291,7 +293,8 @@ const Index: NextPage = () => {
     if (result) router.push(`/bin/${keyId}`);
   };
 
-  // Find if its File ---------------------------------
+  // Find if its File ------------------------------------------------
+  
   function isFile(dataTransfer: DataTransfer) {
     if (dataTransfer.types[0] == 'Files') return true;
     else false;
@@ -320,7 +323,7 @@ const Index: NextPage = () => {
           isFile(e.dataTransfer) ? handleDrop(e) : null;
         }}
         className={generalStyles.main}>
-        { save ? <Save /> : null}
+        {save ? <Save /> : null}
         <div
           onClick={() => {
             closeEdit();
@@ -329,10 +332,7 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
-
-
         <DropZone files={files} drag={drag} limit={session ? 4 : 2} />
-        
 
         <Header drag={drag} theme={theme} setTheme={setTheme} />
 
@@ -502,8 +502,3 @@ const Index: NextPage = () => {
 };
 
 export default Index;
-
-export async function getServerSideProps() {
-  await connectDB();
-  return { props: {} };
-}

@@ -13,7 +13,8 @@ export default async function Index() {
         { endpoint: '/save', usage: '/save', method: "POST" },
         { endpoint: '/fetch', usage: '/fetch?id={key}', method: "GET" }, 
       ],
-      documentation: "/docs/"
+      documentation: "/docs/",
+      package: "/docs/npm"
     }
   ),
     {

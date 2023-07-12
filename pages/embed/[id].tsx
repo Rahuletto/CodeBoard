@@ -10,12 +10,10 @@ import boardStyles from '../../styles/Board.module.css';
 // Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
-// Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes';
-
 // Our imports
 import { MetaTags } from '../../components';
 import { FetchResponse } from '../api/fetch';
+import { Languages } from '../../utils/types/languages';
 
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -51,8 +49,7 @@ export function Embed({ board }: { board: FetchResponse }) {
   if (!file) file = board.files[0];
 
   let language = loadLanguage(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    file.language == 'none' ? 'markdown' : file.language
+    file.language == 'none' ? 'markdown' : (file.language as Languages)
   );
 
   const fileButtons = [];
@@ -180,7 +177,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   )
 
   const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {

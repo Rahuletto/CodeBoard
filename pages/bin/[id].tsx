@@ -13,15 +13,16 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode } from 'react-icons-ng/fa';
-import { LuShieldCheck } from 'react-icons-ng/lu';
-import { GoGitBranch } from 'react-icons-ng/go';
-import { Md2RobotExcited } from 'react-icons-ng/md2'
+import { FaLink, FaCode } from 'react-icons/fa';
+import { LuShieldCheck } from 'react-icons/lu';
+import { GoGitBranch } from 'react-icons/go';
+import { Md2RobotExcited } from 'react-icons/md2'
 
 // Our Imports
-import { BoardFile } from '../../utils/board';
+import { BoardFile } from '../../utils/types/board';
 import { FetchResponse } from '../api/fetch';
 import { MetaTags } from '../../components';
+import { Languages } from '../../utils/types/languages';
 
 // Lazy loading
 
@@ -63,8 +64,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
   if (!file) file = board.files[0];
 
   let language = loadLanguage(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    file.language == 'none' ? 'markdown' : file.language
+    file.language == 'none' ? 'markdown' : (file.language as Languages)
   );
 
   const fileButtons: JSX.Element[] = [];
@@ -143,7 +143,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     readOnly
                     placeholder="Untitled."
                     name="project-name"></input>{' '}
-                  {board.encrypted ? (
+                  {board.encrypt ? (
                     <LuShieldCheck title="Encrypted" className="enc icon" />
                   ) : null}
                   {board.bot ? (
@@ -246,7 +246,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   )
 
   const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {

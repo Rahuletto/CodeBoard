@@ -16,8 +16,8 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
 const Docs: NextPage = () => {
-  const nodejs = `await fetch('https://cdeboard.vercel.app/api/fetch?id=cEFTT17h', {\n  method: "GET",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  }\n})`;
-  const cURL = `curl -X GET https://cdeboard.vercel.app/api/fetch?id=cEFTT17h -H 'Authorization: API-KEY'`;
+  const nodejs = `await fetch('https://board.is-an.app/api/fetch?id=cEFTT17h', {\n  method: "GET",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  }\n})`;
+  const cURL = `curl -X GET https://board.is-an.app/api/fetch?id=cEFTT17h -H 'Authorization: API-KEY'`;
 
   const [code, setCode] = useState(nodejs);
 
@@ -77,26 +77,26 @@ const Docs: NextPage = () => {
             <h3>Parameters</h3>
 
             <table>
-		<thead>
-			<tr>
-				<th>Parameter</th>
-				<th>Description</th>
-				<th>Required</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>id</td>
-				<td>Fetch a board using its id</td>
-				<td className="green">true</td>
-			</tr>
-			<tr>
-				<td>key</td>
-				<td>Give your API Key as parameter instead of header</td>
-				<td className="orange">Required if not passed in headers</td>
-			</tr>
-		</tbody>
-	</table>
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Description</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>id</td>
+                  <td>Fetch a board using its id</td>
+                  <td className="green">true</td>
+                </tr>
+                <tr>
+                  <td>key</td>
+                  <td>Give your API Key as parameter instead of header</td>
+                  <td className="orange">Required if not passed in headers</td>
+                </tr>
+              </tbody>
+            </table>
 
             <h3>Example</h3>
             <p style={{ fontFamily: 'JetBrains Mono' }}>Request</p>
@@ -164,7 +164,7 @@ const Docs: NextPage = () => {
                 maxWidth: '700px',
               }}>
               <CodeBoard
-                code={`{\n  "name": "Board name",\n  "description": "The description of board",\n  "files": [\n    {\n      "name": "untitled.js",\n      "language": "javascript",\n      "value": "console.log('hello world')"\n    }\n  ],\n  "key": "cEFTT17h",\n  "createdAt": 1687764312780,\n  "encrypted": true,\n  "autoVanish": false,\n  "fork": false,\n  "status": 200,\n}
+                code={`{\n  "name": "Board name",\n  "description": "The description of board",\n  "files": [\n    {\n      "name": "untitled.js",\n      "language": "javascript",\n      "value": "console.log('hello world')"\n    }\n  ],\n  "key": "cEFTT17h",\n  "createdAt": 1687764312780,\n  "encrypt": true,\n  "autoVanish": false,\n  "fork": false,\n  "status": 200,\n}
               `}
                 readOnly={true}
                 language={loadLanguage('json')}

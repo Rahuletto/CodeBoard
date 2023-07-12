@@ -16,8 +16,8 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
 const Docs: NextPage = () => {
-  const nodejs = `const body = {\n  name: "Board name",\n  description: "The description of board",\n  files: [\n    {\n      name: "untitled.js",\n      language: "javascript",\n      value: "console.log('hello world')"\n    }\n  ]\n}\nconst JSONBody = JSON.stringify(body)\n\nawait fetch('https://cdeboard.vercel.app/api/save', {\n  method: "POST",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  },\n  body: JSONBody\n})`;
-  const cURL = `curl -X POST -d '{"name": "Board name","description": "The description of board","files": [{"name":"untitled.js","language":"javascript","value":"console.log(\'hello world\')"}] }' -H 'Content-Type: application/json' -H 'Authorization: API-KEY'\n  https://cdeboard.vercel.app/api/save`;
+  const nodejs = `const body = {\n  name: "Board name",\n  description: "The description of board",\n  files: [\n    {\n      name: "untitled.js",\n      language: "javascript",\n      value: "console.log('hello world')"\n    }\n  ]\n}\nconst JSONBody = JSON.stringify(body)\n\nawait fetch('https://board.is-an.app/api/save', {\n  method: "POST",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  },\n  body: JSONBody\n})`;
+  const cURL = `curl -X POST -d '{"name": "Board name","description": "The description of board","files": [{"name":"untitled.js","language":"javascript","value":"console.log(\'hello world\')"}] }' -H 'Content-Type: application/json' -H 'Authorization: API-KEY'\n  https://board.is-an.app/api/save`;
 
   const [code, setCode] = useState(nodejs);
   const router = useRouter();

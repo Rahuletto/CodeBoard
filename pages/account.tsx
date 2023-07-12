@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-// Auth
+// Auth and Database
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
@@ -11,14 +11,11 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import styles from '../styles/Account.module.css';
 
 // Icons
-import { FaGithub } from 'react-icons-ng/fa';
-import { LuRefreshCw } from 'react-icons-ng/lu';
-
-// Models and mongoose
-import User from '../model/user';
+import { FaGithub } from 'react-icons/fa';
+import { LuRefreshCw } from 'react-icons/lu';
 
 // Our imports
-import connectDB from '../middleware/mongodb';
+import { User } from '../utils/types/user';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -64,9 +61,12 @@ export default function Account({ github, boards, id, api }) {
           'Content-Type': 'application/json',
           Authorization: process.env.NEXT_PUBLIC_KEY,
         },
-        body: JSON.stringify({ userId: session.user.user_metadata.provider_id }),
+        body: JSON.stringify({
+          userId: session.user.user_metadata.provider_id,
+        }),
       });
       const result = await response.json();
+      console.log(result);
 
       if (result.regen) {
         setApiKey(result.apiKey);
@@ -98,7 +98,11 @@ export default function Account({ github, boards, id, api }) {
         <div className={styles.lander}>
           <div className={styles.account}>
             <div className={styles.wrapper}>
-              <img alt="profile picture" src={session?.user?.user_metadata?.avatar_url} className={styles.profile} />
+              <img
+                alt="profile picture"
+                src={session?.user?.user_metadata?.avatar_url}
+                className={styles.profile}
+              />
 
               <div className={styles.details}>
                 <h1>{session?.user?.user_metadata?.name}</h1>
@@ -117,7 +121,7 @@ export default function Account({ github, boards, id, api }) {
               </code>
               <button
                 title={ratelimit ? 'Ratelimited !' : 'Regenerate API Key'}
-                onClick={() => regenerate()}
+                onClick={() => (ratelimit ? null : regenerate())}
                 id="regen"
                 className={styles.regen}>
                 <LuRefreshCw
@@ -136,8 +140,8 @@ export default function Account({ github, boards, id, api }) {
             <button
               title="Sign out"
               onClick={() => {
-                supabaseClient.auth.signOut()
-                router.push('/')
+                supabaseClient.auth.signOut();
+                router.push('/');
               }}
               className={styles.signOut}>
               Sign Out
@@ -170,7 +174,6 @@ export default function Account({ github, boards, id, api }) {
 }
 
 export const getServerSideProps = async (ctx) => {
-  await connectDB()
   // Create authenticated Supabase Client
   const supabase = createPagesServerClient(ctx);
   // Check if we have a session
@@ -186,18 +189,25 @@ export const getServerSideProps = async (ctx) => {
       },
     };
 
-  const mongoUser = await User.findOne({ id: session.user.user_metadata.provider_id });
+  const { data: user }: { data: User } = await supabase
+    .from('Users')
+    .select()
+    .eq('id', session.user.user_metadata.provider_id)
+    .limit(1)
+    .single();
 
-  if (!mongoUser) {
+  if (!user) {
     return { redirect: { destination: '/auth/signin', permanent: false } };
   }
 
   return {
     props: {
-      boards: mongoUser.boards ?? [],
-      id: mongoUser?.id ?? '',
-      api: mongoUser?.apiKey ?? '',
-      github: session?.user ? "https://github.com/" + session.user.user_metadata.user_name : '',
+      boards: user.boards ?? [],
+      id: user?.id ?? '',
+      api: user?.apiKey ?? '',
+      github: session?.user
+        ? 'https://github.com/' + session.user.user_metadata.user_name
+        : '',
     },
   };
 };

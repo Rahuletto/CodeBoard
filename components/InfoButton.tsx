@@ -1,6 +1,6 @@
 
 // Icons
-import { GoGear } from 'react-icons-ng/go';
+import { GoGear } from 'react-icons/go';
 
 interface MetaTagsProps {
   metadata?: boolean;

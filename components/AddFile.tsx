@@ -3,7 +3,7 @@
 import { block } from 'million/react';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
+import { FaPlus } from 'react-icons/fa';
 
 const UnblockedAddFile = ({ files, limit = 2 }) => {
   function showDialog() {

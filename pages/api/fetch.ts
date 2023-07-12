@@ -1,16 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, NextRequest } from 'next/server';
 
-// Models and mongoose
-import connectDB from '../../middleware/mongodb';
-import Code from '../../model/code';
-import User from '../../model/user';
+// Database
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-// Our imports
+// Our Imports
+import { User } from '../../utils/types/user';
+import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
-import { Board, BoardFile } from '../../utils/board';
 
-// Rate limiting
+// Ratelimits
 import rateLimit from '../../utils/rate-limit';
 
 const limiter = rateLimit({
@@ -18,78 +17,107 @@ const limiter = rateLimit({
   uniqueTokenPerInterval: 500, // Max 500
 });
 
-export interface FetchResponse extends Omit<Board, 'options'> {
-  status: number;
-  encrypted: boolean;
-  autoVanish: boolean;
-  fork?: { status: boolean; key: string; name: string };
-  bot: boolean;
+
+// Types
+export type FetchResponse = {
+  name: string,
+  description: string,
+  files: BoardFile[],
+  key: string,
+  encrypt: boolean,
+  autoVanish: boolean,
+  fork: { status: boolean, key: string, name: string } | undefined,
+  author: string,
+  bot: boolean,
+  createdAt: number,
+  status: number, // HTTPS Status code
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  await connectDB();
-  const queries = req.query;
-  const apik = req.headers.authorization || queries.key;
+// Edge config
+export const config = {
+  runtime: 'edge',
+};
 
-  if (!queries.id)
-    return res.status(422).json({
-      message: 'Board ID not provided !',
-      status: 422,
-    });
-  else if (queries.id == '{id}')
-    queries.id = queries.id.replace('{id}', 'cEFTT17h');
+export default async function handler(req: NextRequest) {
+  const res = NextResponse.next();
 
-  const token = await User.findOne({ apiKey: apik });
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get('id');
+
+  const authorization = req.headers.get('authorization');
+
+  const apikey = authorization || searchParams.get('key');
+
+  const supabase = createMiddlewareClient({ req, res });
+
+  const { data: token }: { data: User[] } = await supabase
+    .from('Users')
+    .select()
+    .eq('apiKey', apikey)
+    .limit(1)
+    .single();
 
   if (token) {
     try {
-      await limiter.check(res, 41, apik as string);
+      await limiter.check(res, 41, apikey as string);
     } catch {
-      return res.status(429).json({
-        message: 'Rate limit exceeded. Only 40 fetches per minute',
-        apiKey: 'XXXXXXXXXXXX' + apik.slice(12),
-        status: 429,
-      });
+      return new Response(
+        JSON.stringify({
+          message: 'Rate limit exceeded. Only 40 fetches per minute',
+          apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
+          status: 429,
+        }),
+        {
+          status: 429,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
     }
   }
 
-  const boardRaw: Board = await Code.findOne({ key: queries.id });
+  const { data: boardRaw }: { data: Board } = await supabase
+    .from('Boards')
+    .select()
+    .eq('key', id)
+    .limit(1)
+    .single();
 
   if (!boardRaw)
-    return res
-      .status(404)
-      .json({ message: 'NOT FOUND. Try a valid board id', status: 404 });
-
-      res.setHeader(
-        'Cache-Control',
-        's-maxage=60, stale-while-revalidate=70'
-      )
+    return new Response(
+      JSON.stringify({
+        message: 'NOT FOUND. Try a valid board id',
+        status: 404,
+      }),
+      {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+          'cache-control': 's-maxage=60, stale-while-revalidate=70',
+        },
+      }
+    );
 
   let board = {
     name: boardRaw.name,
     description: boardRaw.description,
     files: boardRaw.files,
     key: boardRaw.key,
-    createdAt: boardRaw.createdAt,
-    encrypted: boardRaw.options[0].encrypt,
-    autoVanish: boardRaw.options[0].autoVanish,
-    fork: boardRaw.options[0].fork,
+    encrypt: boardRaw.encrypt,
+    autoVanish: boardRaw.autoVanish,
+    fork: boardRaw.fork,
     author: boardRaw.author,
-    bot: (boardRaw.author == 'bot' ? true : false),
+    bot: boardRaw.author == 'bot' ? true : false,
+    createdAt: boardRaw.createdAt,
     status: 200,
   };
 
-  if (
-    (token || req.headers.authorization == process.env.NEXT_PUBLIC_KEY) &&
-    boardRaw
-  ) {
+  if ((token || authorization == process.env.NEXT_PUBLIC_KEY) && boardRaw) {
     try {
       let decryptedFiles: BoardFile[] = [];
 
-      if (boardRaw.options[0].encrypt) {
+      if (boardRaw.encrypt) {
         boardRaw.files.forEach((f) => {
           decryptedFiles.push({
             name: f.name,
@@ -99,22 +127,36 @@ export default async function handler(
         });
       } else decryptedFiles = boardRaw.files;
 
-      board = {
-        name: boardRaw.name,
-        description: boardRaw.description,
-        files: decryptedFiles,
-        key: boardRaw.key,
-        createdAt: boardRaw.createdAt,
-        encrypted: boardRaw.options[0].encrypt,
-        autoVanish: boardRaw.options[0].autoVanish,
-        fork: boardRaw.options[0].fork,
-        author: boardRaw.author,
-        bot: (boardRaw.author == 'bot' ? true : false),
-        status: 200,
-      };
+      board.files = decryptedFiles;
     } catch (err) {
-      console.log(err);
+      console.warn(err);
+      return new Response(
+        JSON.stringify({
+          message:
+            'Server Error while parsing encrypt files ! Contact the owner',
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
     }
-  }
-  return res.status(200).json(board);
+
+    return new Response(JSON.stringify(board), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
+      },
+    });
+  } else
+    return new Response(JSON.stringify(board), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
+      },
+    });
 }

@@ -1,8 +1,8 @@
 // Icons
-import { FaCaretDown } from 'react-icons-ng/fa';
+import { FaCaretDown } from 'react-icons/fa';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type FileSelectProps = {
   fileName?: string;

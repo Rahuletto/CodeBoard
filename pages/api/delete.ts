@@ -1,46 +1,167 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, NextRequest } from 'next/server';
 
-// Model and Mongoose
-import connectDB from '../../middleware/mongodb';
-import Code from '../../model/code';
-import User from '../../model/user';
+// Database
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  await connectDB();
-  const queries = req.query;
+// Our Imports
+import { User } from '../../utils/types/user';
 
-  if (req.method != 'DELETE')
-    return res.status(405).json({
-      message: 'Invaid Method ! EXPECTED: DELETE method.',
-      status: 405
+// Ratelimits
+import rateLimit from '../../utils/rate-limit';
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 60 seconds
+  uniqueTokenPerInterval: 500, // Max 500
+});
+
+// Edge config
+export const config = {
+  runtime: 'edge',
+};
+
+export default async function handler(req: NextRequest) {
+  const res = NextResponse.next();
+
+  try {
+    if (req.method != 'DELETE')
+      return new Response(
+        JSON.stringify({
+          message: 'Invaid Method ! EXPECTED: DELETE method.',
+          status: 405,
+        }),
+        {
+          status: 405,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
+    const authorization = req.headers.get('authorization');
+    if (authorization != process.env.NEXT_PUBLIC_KEY)
+      return new Response(
+        JSON.stringify({
+          message: 'Not Authorized !',
+          status: 401,
+        }),
+        {
+          status: 401,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    const userId = searchParams.get('userId');
+
+    if (!id)
+      return new Response(
+        JSON.stringify({
+          message: 'Board ID not provided !',
+          status: 422,
+        }),
+        {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
+    const supabase = createMiddlewareClient({ req, res });
+
+    const { data: user }: { data: User } = await supabase
+      .from('Users')
+      .select()
+      .eq('id', userId)
+      .limit(1)
+      .single();
+
+    if (user) {
+      try {
+        await limiter.check(res, 21, user.apiKey as string);
+      } catch {
+        return new Response(
+          JSON.stringify({
+            message: 'Rate limit exceeded. Only 20 deletions per minute',
+            apiKey: 'XXXXXXXXXXXX' + user.apiKey.slice(12),
+            status: 429,
+          }),
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+      }
+    } else {
+      return new Response(
+        JSON.stringify({
+          message: 'User not found !',
+          status: 404,
+        }),
+        {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+
+    const { error: boardError } = await supabase
+      .from('Boards')
+      .delete()
+      .eq('key', id);
+
+    const removed = user.boards.filter(function (item) {
+      return item.key !== id;
     });
 
-  if (req.headers.authorization != process.env.NEXT_PUBLIC_KEY)
-    return res.status(401).json({
-      message: 'Not Authorized !',
-      status: 401,
-    });
+    const { error: userError } = await supabase
+      .from('Users')
+      .update({ boards: [...removed] })
+      .eq('id', userId);
 
-  if (!queries.id)
-    return res.status(422).json({
-      message: 'Board ID not provided !',
-      status: 422,
-    });
-
-  await Code.findOneAndDelete({ key: queries.id }).exec();
-  const user = await User.findOne({ id: queries.userId });
-  const removed = user.boards.filter(function (item) {
-    return item.key !== queries.id;
-  });
-
-  await User.findOneAndUpdate(
-    { id: queries.userId },
-    { boards: [...removed] }
-  ).exec();
-
-  return res.status(200).json({ deleted: true });
+    if (boardError || userError) {
+      console.log('BoardERR: ' + boardError);
+      console.log('UserERR: ' + userError);
+      return new Response(
+        JSON.stringify({
+          message: 'Server Error ! Contact the owner',
+          status: 500,
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    } else
+      return new Response(JSON.stringify({ deleted: true, status: 200 }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+  } catch (err) {
+    console.log(err);
+    return new Response(
+      JSON.stringify({
+        message: 'Bad Request !',
+        status: 400,
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+  }
 }

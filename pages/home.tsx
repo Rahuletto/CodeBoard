@@ -9,8 +9,8 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+import { FaPlus } from 'react-icons/fa';
+import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons/fl';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -39,8 +39,8 @@ const Home: NextPage = () => {
           <span className={styles.glowBall2}></span>
           <div className={styles.welcome}>
             <h1 className={styles.headin}>
-              The <span className={styles.dash}>future</span> of{' '}
-              <span className={generalStyles.purple}>code sharing</span>
+              The future of{' '}<br></br>
+              <span className={generalStyles.purple}>code sharing platform</span>
             </h1>
             <p style={{ fontSize: '22px' }}>
               An <span className={generalStyles.purple}>open-source</span> code
@@ -101,13 +101,6 @@ const Home: NextPage = () => {
               We support various languages to fit your needs. Wanna share error
               logs ? You can! We support 120+ file formats including popular
               languages
-            </p>
-          </div>
-          <div className={styles.div3}>
-            <h2>Open source</h2>
-            <p>
-              This is an open source project. You can see the source code in
-              GitHub
             </p>
           </div>
         </div>

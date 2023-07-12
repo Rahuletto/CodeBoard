@@ -2,7 +2,7 @@
 import { ChangeEvent, FormEvent } from 'react';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
 
 type FileSelectProps = {

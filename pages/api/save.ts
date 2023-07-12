@@ -1,102 +1,207 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, NextRequest } from 'next/server';
 
-// Models and mongoose
-import connectDB from '../../middleware/mongodb';
-import Code from '../../model/code';
-import User from '../../model/user';
+// Database
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
-// Our imports
+// Our Imports
+import { User } from '../../utils/types/user';
+import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
-import { BoardFile } from '../../utils/board';
+import { extensions } from '../../utils/extensions';
 
-// Ratelimiting
+// Ratelimits
 import rateLimit from '../../utils/rate-limit';
+import { LanguagesArray } from '../../utils/types/languages';
 
 const limiter = rateLimit({
   interval: 60 * 1000, // 60 seconds
   uniqueTokenPerInterval: 500, // Max 500
 });
 
-type CreateRequestBody = {
+// Request Body
+type SaveRequestBody = {
   name: string;
   description: string;
   files: BoardFile[];
-  createdAt: number;
 };
 
-// Same as /api/create but save is for public api (not used by website servers)
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // Get data submitted in request's body.
-  await connectDB();
-  const body: CreateRequestBody = req.body;
-  const apik = req.headers.authorization || req.query.key;
+// Edge config
+export const config = {
+  runtime: 'edge',
+};
 
-  if (req.method != 'POST')
-    return res.status(405).json({
-      message: 'Invaid Method ! EXPECTED: POST method.',
-      status: 405,
-    });
-
-  const token = await User.findOne({ apiKey: apik });
-
-  if (!token)
-    return res.status(401).json({
-      message: 'Not Authorized !',
-      status: 401,
-    });
+export default async function handler(req: NextRequest) {
+  const res = NextResponse.next();
 
   try {
-    await limiter.check(res, 21, apik as string);
-  } catch {
-    return res.status(429).json({
-      message: 'Rate limit exceeded. Only 20 saves per minute',
-      apiKey: 'XXXXXXXXXXXX' + apik.slice(12),
-      status: 429,
+    const body: SaveRequestBody = await req?.json();
+
+    const { searchParams } = new URL(req.url);
+
+    const authorization = req.headers.get('authorization');
+
+    const apikey = authorization || searchParams.get('key');
+
+    if (req.method != 'POST')
+      return new Response(
+        JSON.stringify({
+          message: 'Invaid Method ! EXPECTED: POST method.',
+          status: 405,
+        }),
+        {
+          status: 405,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
+    const supabase = createMiddlewareClient({ req, res });
+
+    const { data: token }: { data: User[] } = await supabase
+      .from('Users')
+      .select()
+      .eq('apiKey', apikey)
+      .limit(1)
+      .single();
+
+    if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
+      return new Response(
+        JSON.stringify({
+          message: 'Not Authorized !',
+          status: 401,
+        }),
+        {
+          status: 401,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    else if (token) {
+      try {
+        await limiter.check(res, 21, apikey as string);
+      } catch {
+        return new Response(
+          JSON.stringify({
+            message: 'Rate limit exceeded. Only 20 saves per minute',
+            apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
+            status: 429,
+          }),
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+      }
+    }
+
+    let cont = '';
+    let files = body.files ?? [];
+
+    files.every((f) => {
+      if (!f.name || !f.language || !f.value)
+        return new Response(
+          JSON.stringify({
+            message: 'Malformed File !',
+            file: f,
+            status: 400,
+          }),
+          {
+            status: 400,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+      else {
+        const ext = extensions.find((x) => x.name == f.language)?.name;
+
+        if (!ext) {
+          return new Response(
+            JSON.stringify({
+              message: 'Unknown file language !',
+              languages: LanguagesArray,
+              status: 400,
+            }),
+            {
+              status: 400,
+              headers: {
+                'content-type': 'application/json',
+              },
+            }
+          );
+        } else return true;
+      }
     });
-  }
 
-  let cont = '';
-  let files = body.files;
+    if (files?.length > 2) {
+      files = [files[0], files[1]];
+      cont =
+        ' - Reached file limit (2). Sent ' +
+        files?.length +
+        ' amount of files. Considering first two files';
+    }
 
-  console.log(body)
-  if (files?.length > 2) {
-    files = [files[0], files[1]];
-    cont =
-      ' - Reached file limit (2). Sent ' +
-      files?.length +
-      ' amount of files. Considering first two files';
-  }
+    const key = makeid(8);
 
-  const key = makeid(8);
-
-  const ifExist = await Code.findOne({ key: key });
-  if (ifExist) {
-    console.log('BRO DONT SPAM');
-    return res.status(200).json({
-      board: `/bin/${key}`,
-      message: 'Board with this key already exists. ',
-      status: 200,
+    const { error } = await supabase.from('Boards').insert({
+      name: body.name,
+      description: body.description,
+      encrypt: false,
+      autoVanish: false,
+      fork: null,
+      files: files,
+      key: key,
+      author: 'bot',
+      createdAt: Date.now(),
     });
+
+    if (error) {
+      console.log(error);
+      return new Response(
+        JSON.stringify({
+          message: 'Server Error ! Contact the owner',
+          status: 500,
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+    return new Response(
+      JSON.stringify({
+        message: 'Successfully created a board' + cont,
+        board: `/bin/${key}`,
+        status: 201,
+        created: true,
+      }),
+      {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return new Response(
+      JSON.stringify({
+        message: 'Bad Request !',
+        status: 400,
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
   }
-
-  Code.create({
-    name: body.name,
-    description: body.description,
-    options: [{ encrypt: false, autoVanish: false }], // will not encrypt public api files
-    files: files,
-    key: key,
-    createdAt: Date.now(),
-    author: 'bot',
-  });
-
-  return res.status(201).json({
-    message: 'Successfully created a board' + cont,
-    board: `/bin/${key}`,
-    status: 201,
-    created: true,
-  });
 }

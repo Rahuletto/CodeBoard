@@ -422,7 +422,7 @@ const Docs: NextPage = () => {
                   <h4>
                     Optional: <code className="orange">API Key</code>
                   </h4>{' '}
-                  - will return a <span className="red">encrypted mess</span> if not provided
+                  - will return a <span className="red">encrypt mess</span> if not provided
                 </li>
                 <li>
                   <h4>
@@ -504,7 +504,7 @@ const Docs: NextPage = () => {
                 marginBottom: '20px',
               }}>
               <CodeBoard
-                code={`{\r\n  name: string;\r\n  description: string;\r\n  files: BoardFile[]; \/\/ BoardFile type shown below\r\n  url: string;\r\n  key: string;\r\n  createdAt: number;\r\n  encrypted: boolean;\r\n  autoVanish: boolean;\r\n  fork: {\r\n    status: boolean;\r\n    key: string;\r\n    name: string;\r\n  };\r\n  author?: string | null;\r\n  bot: boolean;\r\n  status: number; \/\/ HTTP Status Code\r\n}`}
+                code={`{\r\n  name: string;\r\n  description: string;\r\n  files: BoardFile[]; \/\/ BoardFile type shown below\r\n  url: string;\r\n  key: string;\r\n  createdAt: number;\r\n  encrypt: boolean;\r\n  autoVanish: boolean;\r\n  fork: {\r\n    status: boolean;\r\n    key: string;\r\n    name: string;\r\n  };\r\n  author?: string | null;\r\n  bot: boolean;\r\n  status: number; \/\/ HTTP Status Code\r\n}`}
                 readOnly={true}
                 language={loadLanguage('typescript')}
                 theme={theme}
@@ -539,7 +539,7 @@ const Docs: NextPage = () => {
             <div className="splitter"></div>
 
             <h1>Support</h1>
-            <a style={{width: "min-content"}} href="/support">Get help: https://cdeboard.vercel.app/support</a>
+            <a style={{width: "min-content"}} href="/support">Get help: https://board.is-an.app/support</a>
 
             <p>{"Let's"} build a better community, together.</p>
 

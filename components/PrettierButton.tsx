@@ -3,13 +3,13 @@
 import { block } from 'million/react';
 
 // Icons
-import { SiPrettier } from 'react-icons-ng/si';
+import { SiPrettier } from 'react-icons/si';
 
 // Styles
 import styles from '../styles/Index.module.css';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type PrettierButtonProps = {
   code: string;

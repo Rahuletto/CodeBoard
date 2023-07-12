@@ -17,8 +17,8 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
 const Docs: NextPage = () => {
-  const nodejs = `await fetch('https://cdeboard.vercel.app/api/teapot')`;
-  const cURL = `curl -X GET https://cdeboard.vercel.app/api/teapot`;
+  const nodejs = `await fetch('https://board.is-an.app/api/teapot')`;
+  const cURL = `curl -X GET https://board.is-an.app/api/teapot`;
 
   const [code, setCode] = useState(nodejs);
 

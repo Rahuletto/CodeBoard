@@ -1,22 +1,60 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse, NextRequest } from 'next/server';
 
-// Models and mongoose
-import connectDB from '../../middleware/mongodb';
-import User from '../../model/user';
+// Database
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
+// Our Imports
+import { User } from '../../utils/types/user';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  await connectDB();
-  const apik = req.headers.authorization || req.query.key;
+// Edge config
+export const config = {
+  runtime: 'edge',
+};
 
-  const token = await User.findOne({ apiKey: apik });
+export default async function handler(req: NextRequest) {
+  const res = NextResponse.next();
 
-  if (!token) return res
-  .status(404)
-  .json({ message: 'NOT FOUND. Try a valid api key', valid: false, status: 404 });
-  else return res.status(200).json({ message: "VALID. This api key is valid", valid: true, status: 200 })
+  const { searchParams } = new URL(req.url);
+
+  const authorization = req.headers.get('authorization');
+  const apikey = authorization || searchParams.get('key');
+
+  const supabase = createMiddlewareClient({ req, res });
+
+  const { data: token }: { data: User } = await supabase
+    .from('Users')
+    .select()
+    .eq('apiKey', apikey)
+    .limit(1)
+    .single();
+
+  if (token)
+    return new Response(
+      JSON.stringify({
+        message: 'VALID. This api key is valid',
+        valid: true,
+        status: 200,
+      }),
+      {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+  else
+    return new Response(
+      JSON.stringify({
+        message: 'NOT_VALID. This api key is invalid',
+        valid: false,
+        status: 404,
+      }),
+      {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
 }

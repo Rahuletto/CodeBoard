@@ -17,16 +17,18 @@ import {
   LuShieldOff,
   LuTimer,
   LuTimerOff,
-} from 'react-icons-ng/lu';
+} from 'react-icons/lu';
 
 // Our Imports
-import { BoardFile } from '../../utils/board';
+import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
 import { AddFile, MetaTags } from '../../components';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 import makeid from '../../utils/makeid';
-import { GoGitBranch } from 'react-icons-ng/go';
+import { GoGitBranch } from 'react-icons/go';
+import { Languages } from '../../utils/types/languages';
+import { useSession } from '@supabase/auth-helpers-react';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -58,7 +60,8 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
 
 export default function Fork({ board }: { board: FetchResponse }) {
   const router = useRouter();
-
+  const session = useSession();
+  
   // ---------------------------------
   // ---------- S T A T E S ----------
   // ---------------------------------
@@ -76,7 +79,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
   // Inputs ---------------------------------
   const [title, setTitle] = useState(board.name + ' Fork');
   const [description, setDescription] = useState('Fork of ' + board.name);
-  const [encrypt, setEncrypt] = useState(board.encrypted);
+  const [encrypt, setEncrypt] = useState(board.encrypt);
   const [vanish, setVanish] = useState(board.autoVanish);
 
   // Mobile ---------------------------------
@@ -93,8 +96,9 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
   // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    loadLanguage(
+      file.language == 'none' ? 'markdown' : (file.language as Languages)
+    )
   );
 
   const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
@@ -123,8 +127,9 @@ export default function Fork({ board }: { board: FetchResponse }) {
   // Set Language ---------------------------------
   useEffect(() => {
     setLanguage(
-      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+      loadLanguage(
+        file.language == 'none' ? 'markdown' : (file.language as Languages)
+      )
     );
   }, [file.language]);
 
@@ -253,16 +258,13 @@ export default function Fork({ board }: { board: FetchResponse }) {
     const data = {
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [
-        {
-          autoVanish: vanish,
-          encrypt: encrypt,
-          fork: { status: true, key: board.key, name: board.name },
-        },
-      ],
+      autoVanish: vanish,
+      encrypt: encrypt,
+      fork: { status: true, key: board.key, name: board.name },
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
+      author: session ? session?.user?.user_metadata?.provider_id : null,
     };
 
     const JSONdata = JSON.stringify(data);
@@ -505,14 +507,13 @@ export default function Fork({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
   context.res.setHeader(
     'Cache-Control',
     'public, s-maxage=360, stale-while-revalidate=480'
-  )
-  
+  );
+
   const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
+    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {

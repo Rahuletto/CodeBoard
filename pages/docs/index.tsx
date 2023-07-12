@@ -132,7 +132,7 @@ const Docs: NextPage = () => {
               <span className="red">teapot</span> and{' '}
               <span className="red">ping</span> endpoints.
             </p>
-            <h3 className={styles.baseUrl}>https://cdeboard.vercel.app</h3>
+            <h3 className={styles.baseUrl}>https://board.is-an.app</h3>
             <p>
               Get your API Key in{' '}
               <a href="/accounts" className="green">

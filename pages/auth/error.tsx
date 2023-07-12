@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import generalStyles from '../../styles/General.module.css';
 
 // Icons
-import { FaWindowClose } from 'react-icons-ng/fa';
+import { FaWindowClose } from 'react-icons/fa';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
