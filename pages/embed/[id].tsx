@@ -210,8 +210,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
 }
-
-// Edge config
-export const config = {
-  runtime: 'experimental-edge',
-};

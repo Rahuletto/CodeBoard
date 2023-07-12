@@ -56,8 +56,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: { text: text } };
   } else return { props: { text: 'Board not found !' } };
 }
-
-// Edge config
-export const config = {
-  runtime: 'experimental-edge',
-};
