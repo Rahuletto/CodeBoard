@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import styles from '../../styles/Docs.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { CodeBoard } from '../../components';
-import code from '../../model/code';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
