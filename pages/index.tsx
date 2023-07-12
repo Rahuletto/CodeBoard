@@ -20,7 +20,7 @@ import {
   LuShieldOff,
   LuTimer,
   LuTimerOff,
-} from 'react-icons/lu';
+} from 'react-icons-ng/lu';
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

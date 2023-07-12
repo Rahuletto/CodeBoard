@@ -3,7 +3,7 @@
 import { block } from 'million/react';
 
 // Icons
-import { SiPrettier } from 'react-icons/si';
+import { SiPrettier } from 'react-icons-ng/si';
 
 // Styles
 import styles from '../styles/Index.module.css';

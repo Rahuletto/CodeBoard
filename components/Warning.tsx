@@ -2,8 +2,8 @@
 import generalStyles from '../styles/General.module.css'
 
 // Icons
-import { IoCloseCircleSharp } from 'react-icons/io5';
-import { TiWarning } from 'react-icons/ti';
+import { IoCloseCircleSharp } from 'react-icons-ng/io5';
+import { TiWarning } from 'react-icons-ng/ti';
 import { block } from 'million/react';
 
 const UnblockedWarning: React.FC<{}> = () => {

@@ -2,7 +2,7 @@
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaCloudUploadAlt, FaWindowClose } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaWindowClose } from 'react-icons-ng/fa';
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

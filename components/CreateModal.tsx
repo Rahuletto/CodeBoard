@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent } from 'react';
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaBackward, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaBackward, FaCloudUploadAlt } from 'react-icons-ng/fa';
 
 // Our Imports
 import { extensions } from '../utils/extensions';

@@ -17,7 +17,7 @@ import {
   LuShieldOff,
   LuTimer,
   LuTimerOff,
-} from 'react-icons/lu';
+} from 'react-icons-ng/lu';
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
@@ -26,7 +26,7 @@ import { AddFile, MetaTags } from '../../components';
 import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 import makeid from '../../utils/makeid';
-import { GoGitBranch } from 'react-icons/go';
+import { GoGitBranch } from 'react-icons-ng/go';
 import { Languages } from '../../utils/types/languages';
 import { useSession } from '@supabase/auth-helpers-react';
 

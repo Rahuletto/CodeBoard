@@ -13,10 +13,10 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode } from 'react-icons/fa';
-import { LuShieldCheck } from 'react-icons/lu';
-import { GoGitBranch } from 'react-icons/go';
-import { Md2RobotExcited } from 'react-icons/md2'
+import { FaLink, FaCode } from 'react-icons-ng/fa';
+import { LuShieldCheck } from 'react-icons-ng/lu';
+import { GoGitBranch } from 'react-icons-ng/go';
+import { Md2RobotExcited } from 'react-icons-ng/md2'
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';

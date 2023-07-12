@@ -2,7 +2,7 @@
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { BiSolidSave } from 'react-icons/bi';
+import { BiSolidSave } from 'react-icons-ng/bi';
 
 // MillionJS
 import { block } from 'million/react';

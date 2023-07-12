@@ -11,8 +11,8 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import styles from '../styles/Account.module.css';
 
 // Icons
-import { FaGithub } from 'react-icons/fa';
-import { LuRefreshCw } from 'react-icons/lu';
+import { FaGithub } from 'react-icons-ng/fa';
+import { LuRefreshCw } from 'react-icons-ng/lu';
 
 // Our imports
 import { User } from '../utils/types/user';

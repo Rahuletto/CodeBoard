@@ -1,5 +1,5 @@
 // Icons
-import { FaCaretDown } from 'react-icons/fa';
+import { FaCaretDown } from 'react-icons-ng/fa';
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

@@ -5,7 +5,7 @@ import styles from './styles/Header.module.css';
 import ThemeSwitch from './ThemeSwitch';
 
 // Icons
-import { FaPlus, FaUserAlt } from 'react-icons/fa';
+import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 
 import { useRouter } from 'next/router';
 import { useSession } from '@supabase/auth-helpers-react';

@@ -9,8 +9,8 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaPlus } from 'react-icons/fa';
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons/fl';
+import { FaPlus } from 'react-icons-ng/fa';
+import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
