@@ -21,6 +21,11 @@ export default function MyComponent({ text }: { text: string }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=360, stale-while-revalidate=480'
+  )
+
   const promiseBoard = await fetch(
     `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     { cache: 'force-cache' }
@@ -51,3 +56,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: { text: text } };
   } else return { props: { text: 'Board not found !' } };
 }
+
+// Edge config
+export const config = {
+  runtime: 'experimental-edge',
+};

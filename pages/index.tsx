@@ -27,7 +27,7 @@ import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
 import { AddFile, MetaTags } from '../components';
-
+import { AESEncrypt } from '../utils/aes';
 import { Languages } from '../utils/types/languages';
 
 // Lazy loading
@@ -105,7 +105,9 @@ const Index: NextPage = () => {
 
   // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
-    loadLanguage(file.language == 'none' ? 'markdown' : (file.language as Languages))
+    loadLanguage(
+      file.language == 'none' ? 'markdown' : (file.language as Languages)
+    )
   );
 
   const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
@@ -134,7 +136,9 @@ const Index: NextPage = () => {
   // Set Language ---------------------------------
   useEffect(() => {
     setLanguage(
-      loadLanguage(file.language == 'none' ? 'markdown' : (file.language) as Languages)
+      loadLanguage(
+        file.language == 'none' ? 'markdown' : (file.language as Languages)
+      )
     );
   }, [file.language]);
 
@@ -251,8 +255,6 @@ const Index: NextPage = () => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    const { AESEncrypt } = await import('../utils/aes');
-
     let encryptedFiles: BoardFile[] = [];
 
     if (encrypt) {
@@ -276,7 +278,6 @@ const Index: NextPage = () => {
       author: session ? session?.user?.user_metadata?.provider_id : null,
     };
 
-    const JSONdata = JSON.stringify(data);
     const endpoint = '/api/create';
 
     const options = {
@@ -285,16 +286,15 @@ const Index: NextPage = () => {
         'Content-Type': 'application/json',
         Authorization: process.env.NEXT_PUBLIC_KEY,
       },
-      body: JSONdata,
+      body: JSON.stringify(data),
     };
     const response = await fetch(endpoint, options);
 
-    const result = await response.json();
-    if (result) router.push(`/bin/${keyId}`);
+    router.push(`/bin/${keyId}`);
   };
 
   // Find if its File ------------------------------------------------
-  
+
   function isFile(dataTransfer: DataTransfer) {
     if (dataTransfer.types[0] == 'Files') return true;
     else false;
