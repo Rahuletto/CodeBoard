@@ -135,7 +135,7 @@ export default async function POST(req: NextRequest) {
     }
 
     let cont = '';
-    const files = body.files ?? [];
+    let files = body.files ?? [];
 
     if (!files)
       return new Response(
@@ -186,7 +186,7 @@ export default async function POST(req: NextRequest) {
         if (index)
           return new Response(
             JSON.stringify({
-              message: `File names are too similar. File index: ${ind}`,
+              message: `File names are too similar. File index: ${index}`,
               status: 400,
             }),
             {
