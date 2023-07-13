@@ -135,6 +135,7 @@ export default async function POST(req: NextRequest) {
     }
 
     let cont = '';
+    let sendFiles = [];
     let files = body.files ?? [];
 
     if (!files)
@@ -198,7 +199,10 @@ export default async function POST(req: NextRequest) {
           );
 
         const lang = LanguagesArray.find((n) => f.language == n);
-        if (lang) return true;
+        if (lang) {
+          sendFiles.push(f)
+          return true
+        }
         else if (!lang)
           return new Response(
             JSON.stringify({
@@ -216,11 +220,11 @@ export default async function POST(req: NextRequest) {
       }
     });
 
-    if (files?.length > 2) {
-      files = [files[0], files[1]];
+    if (sendFiles?.length > 2) {
+      sendFiles = [sendFiles[0], sendFiles[1]];
       cont =
         ' - Reached file limit (2). Sent ' +
-        files?.length +
+        sendFiles?.length +
         ' amount of files. Considering first two files';
     }
 
@@ -232,7 +236,7 @@ export default async function POST(req: NextRequest) {
       encrypt: false,
       autoVanish: false,
       fork: null,
-      files: files,
+      files: sendFiles,
       key: key,
       author: 'bot',
       createdAt: Date.now(),
