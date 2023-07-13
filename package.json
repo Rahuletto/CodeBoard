@@ -13,7 +13,7 @@
     "url": "https://github.com/Rahuletto/CodeBoard/issues"
   },
   "scripts": {
-    "dev": "next dev --hostname 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "next lint"

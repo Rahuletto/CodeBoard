@@ -9,14 +9,6 @@ import { User } from '../../utils/types/user';
 import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
 
-// Ratelimits
-import rateLimit from '../../utils/rate-limit';
-
-const limiter = rateLimit({
-  interval: 60 * 1000, // 60 seconds
-  uniqueTokenPerInterval: 500, // Max 500
-});
-
 // Types
 export type FetchResponse = {
   name: string,
@@ -37,7 +29,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+export default async function GET(req: NextRequest) {
   const res = NextResponse.next();
 
   const { searchParams } = new URL(req.url);
@@ -56,25 +48,19 @@ export default async function handler(req: NextRequest) {
     .limit(1)
     .single();
 
-  if (token) {
-    try {
-      await limiter.check(res, 31, apikey as string);
-    } catch {
+    if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
       return new Response(
         JSON.stringify({
-          message: 'Rate limit exceeded. Only 30 fetches per minute',
-          apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
-          status: 429,
+          message: 'Not Authorized !',
+          status: 401,
         }),
         {
-          status: 429,
+          status: 401,
           headers: {
             'content-type': 'application/json',
           },
         }
-      );
-    }
-  }
+      )
 
   const { data: boardRaw }: { data: Board } = await supabase
     .from('Boards')
@@ -161,12 +147,5 @@ export default async function handler(req: NextRequest) {
         'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
       },
     });
-  } else
-    return new Response(JSON.stringify(board), {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-        'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
-      },
-    });
-}
+  }
+};

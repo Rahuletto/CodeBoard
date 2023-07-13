@@ -8,14 +8,6 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '../../utils/types/user';
 import makeid from '../../utils/makeid';
 
-// Ratelimits
-import rateLimit from '../../utils/rate-limit';
-
-const limiter = rateLimit({
-  interval: 60 * 1000, // 60 seconds
-  uniqueTokenPerInterval: 500, // Max 500
-});
-
 // Edge config
 export const config = {
   runtime: 'edge',
@@ -66,23 +58,7 @@ export default async function handler(req: NextRequest) {
       .single();
 
     if (token) {
-      try {
-        await limiter.check(res, 2, token.apiKey as string);
-      } catch {
-        return new Response(
-          JSON.stringify({
-            message: 'Rate limit exceeded. Only 1 regenerate per minute',
-            apiKey: 'XXXXXXXXXXXX' + token.apiKey.slice(12),
-            status: 429,
-          }),
-          {
-            status: 429,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-      }
+      
     } else {
       return new Response(
         JSON.stringify({

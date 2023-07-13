@@ -10,14 +10,6 @@ import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
 import { LanguagesArray } from '../../utils/types/languages';
 
-// Ratelimits
-import rateLimit from '../../utils/rate-limit';
-
-const limiter = rateLimit({
-  interval: 60 * 1000, // 60 seconds
-  uniqueTokenPerInterval: 500, // Max 500
-});
-
 // Request Body
 type SaveRequestBody = {
   name: string;
@@ -37,7 +29,6 @@ export const config = {
 
 export default async function POST(req: NextRequest) {
   const res = NextResponse.next();
-
   try {
     const { searchParams } = new URL(req.url);
 
@@ -61,7 +52,7 @@ export default async function POST(req: NextRequest) {
 
     const supabase = createMiddlewareClient({ req, res });
 
-    const { data: token }: { data: User[] } = await supabase
+    const { data: token }: { data: User } = await supabase
       .from('Users')
       .select()
       .eq('apiKey', apikey)
@@ -82,27 +73,6 @@ export default async function POST(req: NextRequest) {
         }
       );
     else if (token) {
-      let limited = false;
-      try {
-        await limiter.check(res, 2, apikey as string);
-      } catch {
-        limited = true;
-        return new Response(
-          JSON.stringify({
-            message: 'Rate limit exceeded. Only 15 saves per minute',
-            apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
-            status: 429,
-          }),
-          {
-            status: 429,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-      }
-      if(!limited) {
-
       const body: SaveRequestBody = await req?.json();
       if (body.name?.length > 20) {
         return new Response(
@@ -216,7 +186,7 @@ export default async function POST(req: NextRequest) {
         key: key,
         author: `bot | ${apikey}`,
         createdAt: Date.now(),
-        apiKey: apikey
+        madeBy: token.id
       });
       if (error) {
         console.error(error);
@@ -266,7 +236,7 @@ export default async function POST(req: NextRequest) {
         }
       );
     }
-  }
+  
   } catch (err) {
     console.error(err);
     return new Response(

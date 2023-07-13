@@ -140,8 +140,8 @@ const Docs: NextPage = () => {
               Required: <code className="orange">API_KEY</code>
               <br></br>
               The API Key used to access the privileged endpoints like{' '}
-              <code className="red">save</code>{' '}
-              and <code className="red">fetch</code>. Get{' '}
+              <code className="red">save</code> and{' '}
+              <code className="red">fetch</code>. Get{' '}
               <a className="green" href="/account">
                 your key here
               </a>
@@ -230,8 +230,8 @@ const Docs: NextPage = () => {
 
             <h2 id="teapot">{'CodeBoard.teapot()'}</h2>
             <p>
-              Im a teapot<br></br>A very old developers april joke. <span className="green">We {"won't"}{' '}
-              let it fade away</span>
+              Im a teapot<br></br>A very old developers april joke.{' '}
+              <span className="green">We {"won't"} let it fade away</span>
             </p>
             <div
               style={{
@@ -291,20 +291,22 @@ const Docs: NextPage = () => {
             <div className="splitter"></div>
 
             <h2 id="save">{'CodeBoard.save()'}</h2>
-            <p>
-              Save a board to the CodeBoard</p>
-              <ul>
-                <li>
-                  <h4>
-                    Requires: <code className='red'>API Key</code>
-                  </h4>
-                </li>
-                <li>
-                  <h4>
-                    Ratelimits: <span className='orange'><code>20</code> per minute</span>
-                  </h4>
-                </li>
-              </ul>
+            <p>Save a board to the CodeBoard</p>
+            <ul>
+              <li>
+                <h4>
+                  Requires: <code className="red">API Key</code>
+                </h4>
+              </li>
+              <li>
+                <h4>
+                  Ratelimits:{' '}
+                  <span className="orange">
+                    <code>20</code> per minute
+                  </span>
+                </h4>
+              </li>
+            </ul>
             <div
               style={{
                 maxWidth: '700px',
@@ -414,21 +416,22 @@ const Docs: NextPage = () => {
 
             <h2 id="fetch">{'CodeBoard.fetch()'}</h2>
 
-            <p>
-              Fetch a board from the CodeBoard with a board id</p>
-              <ul>
-                <li>
-                  <h4>
-                    Optional: <code className="orange">API Key</code>
-                  </h4>{' '}
-                  - will return a <span className="red">encrypt mess</span> if not provided
-                </li>
-                <li>
-                  <h4>
-                    Ratelimits: <span className="orange"><code>40</code> per minute</span>
-                  </h4>
-                </li>
-              </ul>
+            <p>Fetch a board from the CodeBoard with a board id</p>
+            <ul>
+              <li>
+                <h4>
+                  Required: <code className="red">API Key</code>
+                </h4>
+              </li>
+              <li>
+                <h4>
+                  Ratelimits:{' '}
+                  <span className="orange">
+                    <code>40</code> per minute
+                  </span>
+                </h4>
+              </li>
+            </ul>
             <div
               style={{
                 maxWidth: '700px',
@@ -537,7 +540,9 @@ const Docs: NextPage = () => {
             <div className="splitter"></div>
 
             <h1>Support</h1>
-            <a style={{width: "min-content"}} href="/support">Get help: https://board.is-an.app/support</a>
+            <a style={{ width: 'min-content' }} href="/support">
+              Get help: https://board.is-an.app/support
+            </a>
 
             <p>{"Let's"} build a better community, together.</p>
 
