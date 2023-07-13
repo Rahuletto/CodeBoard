@@ -35,12 +35,10 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextRequest) {
+export default async function POST(req: NextRequest) {
   const res = NextResponse.next();
 
   try {
-    const body: SaveRequestBody = await req?.json();
-
     const { searchParams } = new URL(req.url);
 
     const authorization = req.headers.get('authorization');
@@ -61,10 +59,8 @@ export default async function handler(req: NextRequest) {
         }
       );
 
-    body.name = body.name || "Untitled";
-    body.description = body.description || "No Description";
+    const body: SaveRequestBody = await req?.json();
 
-    console.warn((body))
     if (body.name?.length > 20) {
       return new Response(
         JSON.stringify({
@@ -139,23 +135,24 @@ export default async function handler(req: NextRequest) {
     }
 
     let cont = '';
-    let files: BoardFile[] = [];
+    const files = body.files ?? [];
 
-    if(!body.files || !Array(body.files)[0]) return new Response(
-      JSON.stringify({
-        message: 'Malformed Files Array !',
-        files: body.files,
-        status: 400,
-      }),
-      {
-        status: 400,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    );
+    if (!files)
+      return new Response(
+        JSON.stringify({
+          message: 'Malformed Files Array !',
+          files: files,
+          status: 400,
+        }),
+        {
+          status: 400,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
 
-    body.files.forEach((f) => {
+    files.every((f) => {
       if (!f.name || !f.language || !f.value)
         return new Response(
           JSON.stringify({
@@ -185,9 +182,24 @@ export default async function handler(req: NextRequest) {
           }
         );
       else {
-        const lang = LanguagesArray.find((n) => f.language == n)
+        const index = files.findIndex((a) => a.name == f.name);
+        if (index)
+          return new Response(
+            JSON.stringify({
+              message: `File names are too similar. File index: ${ind}`,
+              status: 400,
+            }),
+            {
+              status: 400,
+              headers: {
+                'content-type': 'application/json',
+              },
+            }
+          );
 
-        if (!lang) {
+        const lang = LanguagesArray.find((n) => f.language == n);
+        if (lang) return true;
+        else if (!lang)
           return new Response(
             JSON.stringify({
               message: 'Unknown file language !',
@@ -201,41 +213,8 @@ export default async function handler(req: NextRequest) {
               },
             }
           );
-        } else {
-          const ind = files.findIndex((a) => a.name == f.name);
-          if (ind)
-            return new Response(
-              JSON.stringify({
-                message: `File names are too similar. File index: ${ind}`,
-                status: 400,
-              }),
-              {
-                status: 400,
-                headers: {
-                  'content-type': 'application/json',
-                },
-              }
-            );
-          else {
-            files.push(f);
-          }
-        }
       }
     });
-
-    if(!files || !files[0]) return new Response(
-      JSON.stringify({
-        message: 'Malformed Files Array !',
-        files: body.files,
-        status: 400,
-      }),
-      {
-        status: 400,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    );
 
     if (files?.length > 2) {
       files = [files[0], files[1]];
@@ -248,8 +227,8 @@ export default async function handler(req: NextRequest) {
     const key = makeid(8);
 
     const { error } = await supabase.from('Boards').insert({
-      name: body.name,
-      description: body.description,
+      name: body.name || 'Untitled',
+      description: body.description || 'No Description',
       encrypt: false,
       autoVanish: false,
       fork: null,
