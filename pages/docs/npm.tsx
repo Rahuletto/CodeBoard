@@ -292,7 +292,7 @@ const Docs: NextPage = () => {
 
             <h2 id="save">{'CodeBoard.save()'}</h2>
             <p>
-              Save a board to the CodeBoard
+              Save a board to the CodeBoard</p>
               <ul>
                 <li>
                   <h4>
@@ -305,7 +305,6 @@ const Docs: NextPage = () => {
                   </h4>
                 </li>
               </ul>
-            </p>
             <div
               style={{
                 maxWidth: '700px',
@@ -416,7 +415,7 @@ const Docs: NextPage = () => {
             <h2 id="fetch">{'CodeBoard.fetch()'}</h2>
 
             <p>
-              Fetch a board from the CodeBoard with a board id
+              Fetch a board from the CodeBoard with a board id</p>
               <ul>
                 <li>
                   <h4>
@@ -430,7 +429,6 @@ const Docs: NextPage = () => {
                   </h4>
                 </li>
               </ul>
-            </p>
             <div
               style={{
                 maxWidth: '700px',
