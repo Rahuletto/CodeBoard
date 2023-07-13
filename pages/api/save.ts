@@ -31,9 +31,9 @@ export const config = {
   runtime: 'edge',
   api: {
     bodyParser: {
-        sizeLimit: '50kb' // Set desired value here
-    }
-}
+      sizeLimit: '50kb', // Set desired value here
+    },
+  },
 };
 
 export default async function handler(req: NextRequest) {
@@ -62,36 +62,36 @@ export default async function handler(req: NextRequest) {
         }
       );
 
-      if(body.name.length > 20) {
-        return new Response(
-          JSON.stringify({
-            message: 'Board name exceeded the limit of 20 characters',
-            errorCode: "LIMIT_EXCEED",
-            status: 304,
-          }),
-          {
-            status: 304,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-      }
-      if(body.description.length > 128) {
-        return new Response(
-          JSON.stringify({
-            message: 'Board description exceeded the limit of 128 characters',
-            errorCode: "LIMIT_EXCEED",
-            status: 304,
-          }),
-          {
-            status: 304,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-      } 
+    if (body.name.length > 20) {
+      return new Response(
+        JSON.stringify({
+          message: 'Board name exceeded the limit of 20 characters',
+          errorCode: 'LIMIT_EXCEED',
+          status: 304,
+        }),
+        {
+          status: 304,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+    if (body.description.length > 128) {
+      return new Response(
+        JSON.stringify({
+          message: 'Board description exceeded the limit of 128 characters',
+          errorCode: 'LIMIT_EXCEED',
+          status: 304,
+        }),
+        {
+          status: 304,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
 
     const supabase = createMiddlewareClient({ req, res });
 
@@ -136,9 +136,9 @@ export default async function handler(req: NextRequest) {
     }
 
     let cont = '';
-    let files = body.files ?? [];
+    let files: BoardFile[] = [];
 
-    files.every((f) => {
+    body.files.every((f) => {
       if (!f.name || !f.language || !f.value)
         return new Response(
           JSON.stringify({
@@ -153,7 +153,8 @@ export default async function handler(req: NextRequest) {
             },
           }
         );
-        else if(f.name.length > 32) return new Response(
+      else if (f.name.length > 32)
+        return new Response(
           JSON.stringify({
             message: 'File name exceeded the limit of 32 characters',
             file: f,
@@ -166,7 +167,6 @@ export default async function handler(req: NextRequest) {
             },
           }
         );
-
       else {
         const ext = extensions.find((x) => x.name == f.language)?.name;
 
@@ -184,7 +184,26 @@ export default async function handler(req: NextRequest) {
               },
             }
           );
-        } else return true;
+        } else {
+          const ind = files.findIndex((a) => a.name == f.name);
+          if (ind)
+            return new Response(
+              JSON.stringify({
+                message: `File names are too similar. File index: ${ind}`,
+                status: 400,
+              }),
+              {
+                status: 400,
+                headers: {
+                  'content-type': 'application/json',
+                },
+              }
+            );
+          else {
+            files.push(f);
+            return true;
+          }
+        }
       }
     });
 
@@ -215,7 +234,7 @@ export default async function handler(req: NextRequest) {
       return new Response(
         JSON.stringify({
           message: 'Error while uploading board to cloud ! Contact the owner',
-          errorCode: "INSERT_FAIL",
+          errorCode: 'INSERT_FAIL',
           status: 500,
         }),
         {
