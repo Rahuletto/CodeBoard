@@ -289,8 +289,8 @@ const Index: NextPage = () => {
       body: JSON.stringify(data),
     };
     const response = await fetch(endpoint, options);
-
-    router.push(`/bin/${keyId}`);
+    const reply = await response.json()
+    if(reply) router.push(`/bin/${keyId}`);
   };
 
   // Find if its File ------------------------------------------------
