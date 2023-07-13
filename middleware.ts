@@ -31,6 +31,8 @@ export async function middleware(req: NextRequest) {
         boards: [],
         apiKey: makeid(20),
       });
+
+      console.log('new user created')
     }
   }
 

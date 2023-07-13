@@ -62,6 +62,37 @@ export default async function handler(req: NextRequest) {
         }
       );
 
+      if(body.name.length > 20) {
+        return new Response(
+          JSON.stringify({
+            message: 'Board name exceeded the limit of 20 characters',
+            errorCode: "LIMIT_EXCEED",
+            status: 304,
+          }),
+          {
+            status: 304,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+      }
+      if(body.description.length > 128) {
+        return new Response(
+          JSON.stringify({
+            message: 'Board description exceeded the limit of 128 characters',
+            errorCode: "LIMIT_EXCEED",
+            status: 304,
+          }),
+          {
+            status: 304,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+      } 
+
     const supabase = createMiddlewareClient({ req, res });
 
     const { data: token }: { data: User[] } = await supabase
@@ -122,6 +153,20 @@ export default async function handler(req: NextRequest) {
             },
           }
         );
+        else if(f.name.length > 32) return new Response(
+          JSON.stringify({
+            message: 'File name exceeded the limit of 32 characters',
+            file: f,
+            status: 400,
+          }),
+          {
+            status: 400,
+            headers: {
+              'content-type': 'application/json',
+            },
+          }
+        );
+
       else {
         const ext = extensions.find((x) => x.name == f.language)?.name;
 

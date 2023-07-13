@@ -361,6 +361,7 @@ const Index: NextPage = () => {
                   <input
                     style={{ fontWeight: '600' }}
                     value={title}
+                    maxLength={25}
                     onChange={(event) => setTitle(event.target.value)}
                     placeholder="Untitled."
                     name="project-name"></input>{' '}

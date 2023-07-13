@@ -29,8 +29,6 @@ export default async function handler(req: NextRequest) {
   const res = NextResponse.next();
 
   try {
-    const body: CreateRequestBody = await req?.json();
-
     const authorization = req.headers.get('authorization');
 
     if (req.method != 'POST')
@@ -47,8 +45,6 @@ export default async function handler(req: NextRequest) {
         }
       );
 
-    const supabase = createMiddlewareClient({ req, res });
-
     if (authorization != process.env.NEXT_PUBLIC_KEY)
       return new Response(
         JSON.stringify({
@@ -62,6 +58,9 @@ export default async function handler(req: NextRequest) {
           },
         }
       );
+
+    const supabase = createMiddlewareClient({ req, res });
+    const body: CreateRequestBody = await req?.json();
 
     const { data: board } = await supabase
       .from('Boards')
@@ -129,7 +128,7 @@ export default async function handler(req: NextRequest) {
       return new Response(
         JSON.stringify({
           message: 'Error while creating board ! Contact the owner',
-          errorCode: "INSERT_FAIL",
+          errorCode: 'INSERT_FAIL',
           status: 500,
         }),
         {
