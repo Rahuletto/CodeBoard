@@ -8,11 +8,10 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '../../utils/types/user';
 import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
-import { extensions } from '../../utils/extensions';
+import { LanguagesArray } from '../../utils/types/languages';
 
 // Ratelimits
 import rateLimit from '../../utils/rate-limit';
-import { LanguagesArray } from '../../utils/types/languages';
 
 const limiter = rateLimit({
   interval: 60 * 1000, // 60 seconds
@@ -141,7 +140,7 @@ export default async function handler(req: NextRequest) {
     let cont = '';
     let files: BoardFile[] = [];
 
-    if(!body.files[0]) return new Response(
+    if(!body.files || !Array(body.files)[0]) return new Response(
       JSON.stringify({
         message: 'Malformed Files Array !',
         files: body.files,
