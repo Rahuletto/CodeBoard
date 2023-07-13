@@ -247,7 +247,6 @@ export default function Bin({ board }: { board: FetchResponse }) {
   );
 }
 
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   context.res.setHeader(
     'Cache-Control',
@@ -272,14 +271,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       (Number(board.createdAt) + 86400 * 1000 < Date.now() &&
         board?.autoVanish) ||
       board?.files.length == 0
-    )
+    ) {
       return {
         redirect: {
           permanent: false,
           destination: '/404',
         },
       };
-
+    }
     return { props: { board: board } };
   } else
     return {

@@ -98,6 +98,15 @@ export default async function handler(req: NextRequest) {
       }
     );
 
+    if((Number(boardRaw.createdAt) + 86400 * 1000 < Date.now() &&
+    boardRaw?.autoVanish) ||
+    boardRaw?.files.length == 0){
+      const { error: boardError } = await supabase
+      .from('Boards')
+      .delete()
+      .eq('key', boardRaw.key);
+    }
+
   let board = {
     name: boardRaw.name,
     description: boardRaw.description,

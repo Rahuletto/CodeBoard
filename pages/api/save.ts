@@ -6,7 +6,7 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
 import { User } from '../../utils/types/user';
-import { BoardFile } from '../../utils/types/board';
+import { Board, BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
 import { LanguagesArray } from '../../utils/types/languages';
 
@@ -66,10 +66,10 @@ export default async function POST(req: NextRequest) {
         JSON.stringify({
           message: 'Board name exceeded the limit of 20 characters',
           errorCode: 'LIMIT_EXCEED',
-          status: 304,
+          status: 400,
         }),
         {
-          status: 304,
+          status: 400,
           headers: {
             'content-type': 'application/json',
           },
@@ -81,10 +81,10 @@ export default async function POST(req: NextRequest) {
         JSON.stringify({
           message: 'Board description exceeded the limit of 128 characters',
           errorCode: 'LIMIT_EXCEED',
-          status: 304,
+          status: 400,
         }),
         {
-          status: 304,
+          status: 400,
           headers: {
             'content-type': 'application/json',
           },
@@ -135,113 +135,88 @@ export default async function POST(req: NextRequest) {
     }
 
     let cont = '';
-    let sendFiles = [];
-    let files = body.files ?? [];
+    let files: BoardFile[] = [];
 
-    if (!files)
-      return new Response(
-        JSON.stringify({
-          message: 'Malformed Files Array !',
-          files: files,
-          status: 400,
-        }),
-        {
-          status: 400,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
-
-    files.every((f) => {
-      if (!f.name || !f.language || !f.value)
-        return new Response(
+    try {
+      if (!body.files[0])
+        throw new Error(
           JSON.stringify({
-            message: 'Malformed File !',
-            file: f,
+            message: 'Malformed Files Array !',
+            files: body.files,
             status: 400,
-          }),
-          {
-            status: 400,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
+          })
         );
-      else if (f.name.length > 14)
-        return new Response(
-          JSON.stringify({
-            message: 'File name exceeded the limit of 14 characters',
-            file: f,
-            status: 400,
-          }),
-          {
-            status: 400,
-            headers: {
-              'content-type': 'application/json',
-            },
-          }
-        );
-      else {
-        const index = files.findIndex((a) => a.name == f.name);
-        if (index)
-          return new Response(
-            JSON.stringify({
-              message: `File names are too similar. File index: ${index}`,
-              status: 400,
-            }),
-            {
-              status: 400,
-              headers: {
-                'content-type': 'application/json',
-              },
-            }
-          );
 
-        const lang = LanguagesArray.find((n) => f.language == n);
-        if (lang) {
-          sendFiles.push(f)
-          return true
+        body.files.forEach((f) => {
+        if (!f.name || !f.language || !f.value)
+          throw new Error(
+            JSON.stringify({
+              message: 'Malformed File !',
+              file: f,
+              status: 400,
+            })
+          );
+        else if (f.name.length > 18)
+          throw new Error(
+            JSON.stringify({
+              message: 'File name exceeded the limit of 18 characters',
+              file: f,
+              status: 400,
+            })
+          );
+        else {
+          const copyFile = files.find((a) => a.name == f.name);
+          if (copyFile)
+            throw new Error(
+              JSON.stringify({
+                message: `File names are too similar.`,
+                status: 400,
+              })
+            );
+
+          const lang = LanguagesArray.find((n) => f.language == n);
+          if (lang) {
+            files.push(f)
+          }
+          else if (!lang)
+            throw new Error(
+              JSON.stringify({
+                message: 'Unknown file language !',
+                languages: LanguagesArray,
+                status: 400,
+              })
+            );
         }
-        else if (!lang)
-          return new Response(
-            JSON.stringify({
-              message: 'Unknown file language !',
-              languages: LanguagesArray,
-              status: 400,
-            }),
-            {
-              status: 400,
-              headers: {
-                'content-type': 'application/json',
-              },
-            }
-          );
-      }
-    });
+      });
+    } catch (err: any) {
+      return new Response(err, {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+    }
 
-    if (sendFiles?.length > 2) {
-      sendFiles = [sendFiles[0], sendFiles[1]];
+    if (files?.length > 2) {
+      files = [files[0], files[1]];
       cont =
         ' - Reached file limit (2). Sent ' +
-        sendFiles?.length +
+        files?.length +
         ' amount of files. Considering first two files';
     }
 
     const key = makeid(8);
-
     const { error } = await supabase.from('Boards').insert({
       name: body.name || 'Untitled',
       description: body.description || 'No Description',
       encrypt: false,
       autoVanish: false,
       fork: null,
-      files: sendFiles,
+      files: files,
       key: key,
       author: 'bot',
       createdAt: Date.now(),
     });
-
     if (error) {
       console.error(error);
       return new Response(
