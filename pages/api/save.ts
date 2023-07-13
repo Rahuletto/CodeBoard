@@ -189,7 +189,7 @@ export default async function POST(req: NextRequest) {
         }
       });
     } catch (err: any) {
-      return new Response(err, {
+      return new Response(err.replace("Error: "), {
         status: 400,
         headers: {
           'content-type': 'application/json',
