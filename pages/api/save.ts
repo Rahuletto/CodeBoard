@@ -64,6 +64,7 @@ export default async function handler(req: NextRequest) {
     body.name = body.name || "Untitled";
     body.description = body.description || "No Description";
 
+    console.warn((body))
     if (body.name?.length > 20) {
       return new Response(
         JSON.stringify({
