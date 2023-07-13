@@ -116,7 +116,7 @@ export default async function handler(req: NextRequest) {
     autoVanish: boardRaw.autoVanish,
     fork: boardRaw.fork,
     author: boardRaw.author,
-    bot: boardRaw.author.startsWith('bot') ? true : false,
+    bot: boardRaw?.author?.startsWith('bot') ? true : false,
     createdAt: boardRaw.createdAt,
     status: 200,
   };
