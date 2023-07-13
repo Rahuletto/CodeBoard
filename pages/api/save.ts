@@ -143,8 +143,8 @@ export default async function handler(req: NextRequest) {
 
     if(!body.files[0]) return new Response(
       JSON.stringify({
-        message: 'Malformed Files !',
-        file: body.files,
+        message: 'Malformed Files Array !',
+        files: body.files,
         status: 400,
       }),
       {
