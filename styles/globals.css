@@ -266,12 +266,10 @@ button:focus {
 
 ::selection {
   background-color: var(--purple-dark);
-  color: #141618;
 }
 
 ::-moz-selection {
   background-color: var(--purple-dark);
-  color: #141618;
 }
 
 header {
