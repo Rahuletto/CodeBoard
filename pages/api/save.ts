@@ -141,6 +141,20 @@ export default async function handler(req: NextRequest) {
     let cont = '';
     let files: BoardFile[] = [];
 
+    if(!body.files[0]) return new Response(
+      JSON.stringify({
+        message: 'Malformed Files !',
+        file: body.files,
+        status: 400,
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+
     body.files.every((f) => {
       if (!f.name || !f.language || !f.value)
         return new Response(
