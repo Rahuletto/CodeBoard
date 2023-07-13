@@ -179,13 +179,13 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   justifyContent: 'center',
                 }}>
                 <GoGitBranch
-                  title="Fork the board"
+                  title={board.fork?.status ? "Forked boards cannot get forked again" : "Fork the board"}
                   style={{ marginRight: '12px' }}
                 />{' '}
                 Fork
               </button>
               <span style={{ borderRadius: '12px' }} className="tooltiptext">
-                Fork the board
+              {board.fork?.status ? "Forked boards cannot get forked again" : "Fork the board"}
               </span>
             </div>
           </div>
