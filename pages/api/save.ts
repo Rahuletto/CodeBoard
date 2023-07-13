@@ -29,6 +29,11 @@ type SaveRequestBody = {
 // Edge config
 export const config = {
   runtime: 'edge',
+  api: {
+    bodyParser: {
+        sizeLimit: '50kb' // Set desired value here
+    }
+}
 };
 
 export default async function handler(req: NextRequest) {
