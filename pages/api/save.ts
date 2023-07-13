@@ -171,9 +171,9 @@ export default async function handler(req: NextRequest) {
           }
         );
       else {
-        const ext = extensions.find((x) => x.name == f.language)?.name;
+        const lang = LanguagesArray.find((n) => f.language == n)
 
-        if (!ext) {
+        if (!lang) {
           return new Response(
             JSON.stringify({
               message: 'Unknown file language !',
