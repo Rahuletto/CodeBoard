@@ -61,7 +61,7 @@ const Docs: NextPage = () => {
               This is a <span className="orange">POST</span> method
             </p>
 
-            <h3 className={styles.post}>/api/save</h3>
+            <h3 className={styles.post}>/save</h3>
 
             <br></br>
             <h3>Requires</h3>

@@ -62,7 +62,7 @@ const Docs: NextPage = () => {
               platform. This is a <span className="green">GET</span> method
             </p>
 
-            <h3 className={styles.get}>{'/api/fetch?id={id}'}</h3>
+            <h3 className={styles.get}>{'/fetch?id={id}'}</h3>
 
             <br></br>
             <h3>Requires</h3>

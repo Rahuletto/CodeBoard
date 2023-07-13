@@ -64,7 +64,7 @@ const Docs: NextPage = () => {
               <br></br>This runs in an edge function.
             </p>
 
-            <h3 className={styles.get}>/api/ping</h3>
+            <h3 className={styles.get}>/ping</h3>
 
             <br></br>
             <h3>Parameters</h3>
