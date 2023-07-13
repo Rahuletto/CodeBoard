@@ -150,7 +150,7 @@ export default async function handler(req: NextRequest) {
         },
       });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return new Response(
       JSON.stringify({
         message: 'Bad Request !',

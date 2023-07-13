@@ -106,7 +106,7 @@ export default async function handler(req: NextRequest) {
       .eq('id', token.id);
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return new Response(
         JSON.stringify({
           message: 'Server Error ! Contact the owner',
@@ -130,7 +130,7 @@ export default async function handler(req: NextRequest) {
         }
       );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return new Response(
       JSON.stringify({
         message: 'Bad Request !',

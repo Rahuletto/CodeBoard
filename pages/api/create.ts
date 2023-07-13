@@ -106,7 +106,7 @@ export default async function handler(req: NextRequest) {
           .update({ boards: [...user.boards, newBoard] })
           .eq('id', body.author);
         if (error) {
-          console.log(error);
+          console.error(error);
           body.author = null;
         }
       } else body.author = null;
@@ -125,7 +125,7 @@ export default async function handler(req: NextRequest) {
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return new Response(
         JSON.stringify({
           message: 'Server Error ! Contact the owner',
@@ -149,7 +149,7 @@ export default async function handler(req: NextRequest) {
       }
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return new Response(
       JSON.stringify({
         message: 'Bad Request !',

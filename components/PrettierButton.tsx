@@ -51,7 +51,7 @@ const UnblockedPrettierButton: React.FC<PrettierButtonProps> = ({
             })
             .catch((err) => {
               (event.target as HTMLElement).style.color = '#ea5e5e';
-              console.log(err);
+              console.warn(err);
             });
         }}>
         <SiPrettier title="Format with Prettier" />
