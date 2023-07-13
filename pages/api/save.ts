@@ -167,10 +167,10 @@ export default async function POST(req: NextRequest) {
             },
           }
         );
-      else if (f.name.length > 32)
+      else if (f.name.length > 14)
         return new Response(
           JSON.stringify({
-            message: 'File name exceeded the limit of 32 characters',
+            message: 'File name exceeded the limit of 14 characters',
             file: f,
             status: 400,
           }),
