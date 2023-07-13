@@ -84,7 +84,7 @@ export default async function POST(req: NextRequest) {
     else if (token) {
       let limited = false;
       try {
-        await limiter.check(res, 1, apikey as string);
+        await limiter.check(res, 2, apikey as string);
       } catch {
         limited = true;
         return new Response(
