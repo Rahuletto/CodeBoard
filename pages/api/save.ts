@@ -116,11 +116,11 @@ export default async function POST(req: NextRequest) {
       );
     else if (token) {
       try {
-        await limiter.check(res, 21, apikey as string);
+        await limiter.check(res, 16, apikey as string);
       } catch {
         return new Response(
           JSON.stringify({
-            message: 'Rate limit exceeded. Only 20 saves per minute',
+            message: 'Rate limit exceeded. Only 15 saves per minute',
             apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
             status: 429,
           }),

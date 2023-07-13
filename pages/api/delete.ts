@@ -82,11 +82,11 @@ export default async function handler(req: NextRequest) {
 
     if (user) {
       try {
-        await limiter.check(res, 21, user.apiKey as string);
+        await limiter.check(res, 11, user.apiKey as string);
       } catch {
         return new Response(
           JSON.stringify({
-            message: 'Rate limit exceeded. Only 20 deletions per minute',
+            message: 'Rate limit exceeded. Only 10 deletions per minute',
             apiKey: 'XXXXXXXXXXXX' + user.apiKey.slice(12),
             status: 429,
           }),

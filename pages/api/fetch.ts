@@ -58,11 +58,11 @@ export default async function handler(req: NextRequest) {
 
   if (token) {
     try {
-      await limiter.check(res, 41, apikey as string);
+      await limiter.check(res, 31, apikey as string);
     } catch {
       return new Response(
         JSON.stringify({
-          message: 'Rate limit exceeded. Only 40 fetches per minute',
+          message: 'Rate limit exceeded. Only 30 fetches per minute',
           apiKey: 'XXXXXXXXXXXX' + apikey.slice(12),
           status: 429,
         }),
