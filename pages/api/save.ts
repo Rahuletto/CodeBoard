@@ -155,7 +155,7 @@ export default async function handler(req: NextRequest) {
       }
     );
 
-    body.files.every((f) => {
+    body.files.forEach((f) => {
       if (!f.name || !f.language || !f.value)
         return new Response(
           JSON.stringify({
@@ -218,11 +218,24 @@ export default async function handler(req: NextRequest) {
             );
           else {
             files.push(f);
-            return true;
           }
         }
       }
     });
+
+    if(!files || !files[0]) return new Response(
+      JSON.stringify({
+        message: 'Malformed Files Array !',
+        files: body.files,
+        status: 400,
+      }),
+      {
+        status: 400,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
 
     if (files?.length > 2) {
       files = [files[0], files[1]];
