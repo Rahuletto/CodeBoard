@@ -62,7 +62,10 @@ export default async function handler(req: NextRequest) {
         }
       );
 
-    if (body.name.length > 20) {
+    body.name = body.name || "Untitled";
+    body.description = body.description || "No Description";
+
+    if (body.name?.length > 20) {
       return new Response(
         JSON.stringify({
           message: 'Board name exceeded the limit of 20 characters',
@@ -77,7 +80,7 @@ export default async function handler(req: NextRequest) {
         }
       );
     }
-    if (body.description.length > 128) {
+    if (body.description?.length > 128) {
       return new Response(
         JSON.stringify({
           message: 'Board description exceeded the limit of 128 characters',
