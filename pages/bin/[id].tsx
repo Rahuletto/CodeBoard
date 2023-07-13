@@ -16,17 +16,17 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { FaLink, FaCode } from 'react-icons-ng/fa';
 import { LuShieldCheck } from 'react-icons-ng/lu';
 import { GoGitBranch } from 'react-icons-ng/go';
-import { Md2RobotExcited } from 'react-icons-ng/md2'
+import { Md2RobotExcited } from 'react-icons-ng/md2';
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
 import { FetchResponse } from '../api/fetch';
-import { MetaTags } from '../../components';
+
 import { Languages } from '../../utils/types/languages';
+import { MetaTags } from '../../components';
 
 // Lazy loading
 
-// WANTED TO COMBINE ALL LAZY IMPORTS WITH INDEX.TS BUT NEXTJS DONT ALLOW AAA
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
@@ -128,7 +128,12 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   />{' '}
                   Forked from{' '}
                   <a
-                    style={{ background: 'var(--purple-dark)', color: 'var(--background)', borderRadius: "8px", padding: "2px 6px" }}
+                    style={{
+                      background: 'var(--purple-dark)',
+                      color: 'var(--background)',
+                      borderRadius: '8px',
+                      padding: '2px 6px',
+                    }}
                     href={`/bin/${board.fork?.key}`}>
                     {board.fork?.name}
                   </a>
@@ -147,7 +152,11 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     <LuShieldCheck title="Encrypted" className="enc icon" />
                   ) : null}
                   {board.bot ? (
-                    <Md2RobotExcited title="Created using api" className="enc icon" style={{ color: 'var(--purple)'}} />
+                    <Md2RobotExcited
+                      title="Created using api"
+                      className="enc icon"
+                      style={{ color: 'var(--purple)' }}
+                    />
                   ) : null}
                 </div>
                 <textarea
@@ -238,12 +247,12 @@ export default function Bin({ board }: { board: FetchResponse }) {
   );
 }
 
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  
   context.res.setHeader(
     'Cache-Control',
     'public, s-maxage=360, stale-while-revalidate=480'
-  )
+  );
 
   const promiseBoard = await fetch(
     `https://board.is-an.app/api/fetch?id=${context.params.id}`,

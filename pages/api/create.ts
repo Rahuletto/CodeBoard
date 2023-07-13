@@ -128,7 +128,8 @@ export default async function handler(req: NextRequest) {
       console.error(error);
       return new Response(
         JSON.stringify({
-          message: 'Server Error ! Contact the owner',
+          message: 'Error while creating board ! Contact the owner',
+          errorCode: "INSERT_FAIL",
           status: 500,
         }),
         {

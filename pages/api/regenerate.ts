@@ -109,7 +109,8 @@ export default async function handler(req: NextRequest) {
       console.error(error);
       return new Response(
         JSON.stringify({
-          message: 'Server Error ! Contact the owner',
+          message: 'Error while regenerating token ! Contact the owner',
+          errorCode: "REGEN_FAIL",
           status: 500,
         }),
         {

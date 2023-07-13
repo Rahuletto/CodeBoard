@@ -17,7 +17,6 @@ const limiter = rateLimit({
   uniqueTokenPerInterval: 500, // Max 500
 });
 
-
 // Types
 export type FetchResponse = {
   name: string,
@@ -94,7 +93,7 @@ export default async function handler(req: NextRequest) {
         status: 404,
         headers: {
           'content-type': 'application/json',
-          'cache-control': 's-maxage=60, stale-while-revalidate=70',
+          'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
         },
       }
     );
@@ -134,6 +133,8 @@ export default async function handler(req: NextRequest) {
         JSON.stringify({
           message:
             'Server Error while parsing encrypt files ! Contact the owner',
+            errorCode: "ENCRPT_ERR",
+            status: 500,
         }),
         {
           status: 500,

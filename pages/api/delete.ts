@@ -127,12 +127,12 @@ export default async function handler(req: NextRequest) {
       .update({ boards: [...removed] })
       .eq('id', userId);
 
-    if (boardError || userError) {
-      console.log('BoardERR: ' + boardError);
-      console.log('UserERR: ' + userError);
+    if (boardError) {
+      console.warn('Board_ERR: ' + boardError);
       return new Response(
         JSON.stringify({
-          message: 'Server Error ! Contact the owner',
+          message: 'Error while deleting ! Contact the owner',
+          errorCode: "DEL_BOARD_FAIL",
           status: 500,
         }),
         {
@@ -142,7 +142,23 @@ export default async function handler(req: NextRequest) {
           },
         }
       );
-    } else
+    } else if (userError) {
+      console.warn('User_ERR: ' + userError);
+      return new Response(
+        JSON.stringify({
+          message: 'Error while updating users board ! Contact the owner',
+          errorCode: "UPDATE_USER_FAIL",
+          status: 500,
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+    }
+    else
       return new Response(JSON.stringify({ deleted: true, status: 200 }), {
         status: 200,
         headers: {
