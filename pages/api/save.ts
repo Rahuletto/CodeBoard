@@ -189,7 +189,7 @@ export default async function POST(req: NextRequest) {
           }
         });
       } catch (err: any) {
-        return new Response(err.replace('Error: '), {
+        return new Response(err, {
           status: 400,
           headers: {
             'content-type': 'application/json',
@@ -216,6 +216,7 @@ export default async function POST(req: NextRequest) {
         key: key,
         author: `bot | ${apikey}`,
         createdAt: Date.now(),
+        apiKey: apikey
       });
       if (error) {
         console.error(error);
@@ -271,6 +272,7 @@ export default async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         message: 'Bad Request !',
+        error: err,
         status: 400,
       }),
       {

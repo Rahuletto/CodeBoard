@@ -8,6 +8,7 @@ export type Board = {
   fork: { status: boolean, key: string, name: string } | undefined;
   createdAt: number;
   author: string;
+  apiKey: string | null;
 };
 
 export type BoardFile = {
