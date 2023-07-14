@@ -159,7 +159,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   ) : null}
                   {board.bot ? (
                     <Md2RobotExcited
-                      title="Created using api"
+                      title="Created using API"
                       className="enc icon"
                       style={{ color: 'var(--purple)' }}
                     />
@@ -209,6 +209,8 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     title={
                       board.fork?.status
                         ? 'Forked boards cannot get forked again'
+                        : board.bot
+                        ? 'Boards by API cannot get forked'
                         : 'Fork the board'
                     }
                     style={{ marginRight: '12px' }}
