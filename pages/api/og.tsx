@@ -19,7 +19,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function OGImage(request: NextRequest) {
+export default async function GET(request: NextRequest) {
   const mediumData = await medium;
   const boldData = await bold;
   const monoData = await mono;

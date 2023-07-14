@@ -13,7 +13,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+export default async function PATCH(req: NextRequest) {
   const res = NextResponse.next();
 
   try {

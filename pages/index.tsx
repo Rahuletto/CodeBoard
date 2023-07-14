@@ -290,7 +290,8 @@ const Index: NextPage = () => {
     };
     const response = await fetch(endpoint, options);
     const reply = await response.json()
-    if(reply) router.push(`/bin/${keyId}`);
+    if(reply.created) router.push(reply.board)
+    else router.push('/500')
   };
 
   // Find if its File ------------------------------------------------

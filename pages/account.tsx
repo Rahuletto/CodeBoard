@@ -164,7 +164,7 @@ export default function Account({ github, bds, apiBds, id, api }) {
               Sign Out
             </button>
           </div>
-          <div className={styles.repo} style={!isUser ? { border: '3px solid var(--purple)' } : null}>
+          <div className={styles.repo} style={!isUser ? { border: '3px solid var(--purple)', borderRight: "0px", borderBottom: "0px" } : null}>
             <div
               style={{
                 display: 'flex',

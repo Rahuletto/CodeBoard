@@ -4,7 +4,7 @@ export const config = {
   };
    
    
-  export default async function Ping() {
+  export default async function GET() {
     return new Response("Pong !",
       {
         status: 200,

@@ -12,7 +12,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req: NextRequest) {
+export default async function GET(req: NextRequest) {
   const res = NextResponse.next();
 
   const { searchParams } = new URL(req.url);
