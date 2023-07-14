@@ -264,19 +264,17 @@ export const getServerSideProps = async (ctx) => {
       .eq('author', session?.user?.user_metadata?.provider_id);
 
   const {
-    data: apiBds,
-    error: e
+    data: apiBds
   }: { data: { key: string; name: string; description: string }[], error: PostgrestError } =
     await supabase
       .from('Boards')
       .select()
       .eq('madeBy', session?.user?.user_metadata?.provider_id);
 
-      if(e) console.warn(e)
   return {
     props: {
       bds: boards ?? [],
-      apibds: apiBds ?? [],
+      apiBds: apiBds ?? [],
       id: user?.id ?? '',
       api: user?.apiKey ?? '',
       github: session?.user
