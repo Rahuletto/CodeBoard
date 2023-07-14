@@ -37,6 +37,12 @@
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
+}
+
+.profile:hover {
+  transform: scale(0.9);
+  border: 3px solid var(--background-dark);
 }
 
 .api {

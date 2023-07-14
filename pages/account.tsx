@@ -251,9 +251,9 @@ export const getServerSideProps = async (ctx) => {
     .limit(1)
     .single();
 
-  // if (!user) {
-  //   return { redirect: { destination: '/auth/signin', permanent: false } };
-  // }
+  if (!user) {
+    return { redirect: { destination: '/auth/signin', permanent: false } };
+  }
 
   const {
     data: boards,
