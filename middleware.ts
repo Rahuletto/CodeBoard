@@ -44,11 +44,12 @@ const ratelimit = {
   }),
   default: new Ratelimit({
     redis: redis,
-    limiter: Ratelimit.slidingWindow(30, '1 m'),
+    limiter: Ratelimit.slidingWindow(60, '1 m'),
     prefix: 'ratelimit:default',
     ephemeralCache: cache,
   }),
 };
+
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -90,6 +91,10 @@ export async function middleware(req: NextRequest) {
         auth ? auth : req.ip
       );
 
+      res.headers.set('RateLimit-Limit', limit.toString())
+      res.headers.set('RateLimit-Remaining', remaining.toString())
+
+      if(!success) console.warn("API-KEY: ", auth)
       return success
         ? res
         : new NextResponse(
@@ -104,7 +109,6 @@ export async function middleware(req: NextRequest) {
               headers: {
                 'content-type': 'application/json',
                 'RateLimit-Limit': limit.toString(),
-                'RateLimit-Remaining': remaining.toString(),
                 'Retry-After': reset.toString(),
               },
             }
