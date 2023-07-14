@@ -164,20 +164,20 @@ export default function Account({ github, bds, apiBds, id, api }) {
               Sign Out
             </button>
           </div>
-          <div className={styles.repo} style={!isUser ? { border: '3px solid var(--purple)', borderRight: "0px", borderBottom: "0px" } : null}>
+          <div className={styles.repo} style={!isUser ? { borderColor: 'var(--purple)' } : null}>
             <div
               style={{
                 display: 'flex',
                 gap: '12px',
                 justifyContent: 'space-between',
               }}>
-              <h1>{isUser ? 'Your Boards' : 'Boards by your API'}</h1>
+              <h1>{isUser ? 'Your Boards' : 'API Boards'}</h1>
 
               <div
                 style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <span style={{ fontSize: '26px', color: 'var(--purple)' }}>
                   <Md2RobotExcited
-                    title="Boards made by your api"
+                    title="Boards made using your api"
                     style={{ fontSize: '26px', color: 'var(--purple)' }}
                   />
                 </span>
@@ -218,7 +218,7 @@ export default function Account({ github, bds, apiBds, id, api }) {
                 </div>
               ))}
             {!boards || !boards[0] ? (
-              <p>No boards found from your account</p>
+              <p>No boards found</p>
             ) : null}
           </div>
         </div>
@@ -264,12 +264,14 @@ export const getServerSideProps = async (ctx) => {
 
   const {
     data: apiBds,
-  }: { data: { key: string; name: string; description: string }[] } =
+    error: e
+  }: { data: { key: string; name: string; description: string }[], error: string } =
     await supabase
       .from('Boards')
-      .select('key, name, description')
+      .select()
       .eq('madeBy', session?.user?.user_metadata?.provider_id);
 
+      if(e) console.warn(e)
   return {
     props: {
       bds: boards ?? [],
