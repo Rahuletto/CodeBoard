@@ -80,4 +80,6 @@ export async function getServerSideProps({ res }) {
   };
 }
 
+export const runtime = 'edge';
+
 export default SiteMap;

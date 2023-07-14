@@ -283,3 +283,5 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 };
+
+export const runtime = 'edge';
