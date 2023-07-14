@@ -56,14 +56,16 @@ export async function middleware(req: NextRequest) {
 
   if (path && path.startsWith('/api')) {
     const auth = req.headers['Authorization'] || req.headers['authorization'];
+    console.warn(auth)
     if (
       !auth &&
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
-      path !== '/api'
+      path !== '/api' && 
+      path !== '/api/fetch'
     ) {
       return new NextResponse(
-        JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", status: 401 }),
+        JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", authorization: auth, status: 401 }),
         {
           status: 401,
           headers: {
