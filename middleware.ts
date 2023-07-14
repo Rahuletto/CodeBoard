@@ -52,9 +52,9 @@ const ratelimit = {
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  const path = req.nextUrl.pathname;
+  const path = req?.nextUrl?.pathname;
 
-  if (path.startsWith('/api')) {
+  if (path && path.startsWith('/api')) {
     const auth = req.headers['authorization'];
     if (
       !auth &&
