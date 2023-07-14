@@ -101,7 +101,7 @@ export default async function GET(req: NextRequest) {
     encrypt: boardRaw.encrypt,
     autoVanish: boardRaw.autoVanish,
     fork: boardRaw.fork,
-    author: boardRaw.author,
+    author: boardRaw?.author?.startsWith('bot') ? "bot" : boardRaw.author,
     bot: boardRaw?.author?.startsWith('bot') ? true : false,
     madeBy: boardRaw.madeBy,
     createdAt: boardRaw.createdAt,
