@@ -122,6 +122,68 @@
   cursor: not-allowed;
 }
 
+.fork {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  color: #17191b;
+  padding: 12px 24px;
+  border: 5px solid #17191b;
+  background: var(--purple);
+  font-family: 'DM Sans';
+  font-size: 20px;
+  border-radius: 50px;
+  margin: 0px 24px;
+  font-weight: 900;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fork:hover {
+  transform: scale(0.98);
+  cursor: pointer;
+  box-shadow: 0px 0px 24px #17191b;
+}
+
+.fork:active {
+  transform: scale(0.91);
+  border: 3px solid #17191b;
+}
+
+.fork:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.edit {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  color: #17191b;
+  padding: 12px 24px;
+  border: 5px solid #17191b;
+  background: var(--orange);
+  font-family: 'DM Sans';
+  font-size: 20px;
+  border-radius: 50px;
+  margin: 0px 24px;
+  font-weight: 900;
+  transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.edit:hover {
+  transform: scale(0.98);
+  cursor: pointer;
+  box-shadow: 0px 0px 24px #17191b;
+}
+
+.edit:active {
+  transform: scale(0.91);
+  border: 3px solid #17191b;
+}
+
+.edit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .optionGrid {
   display: grid;
   grid-template-columns: 1fr;

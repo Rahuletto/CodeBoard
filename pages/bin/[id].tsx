@@ -13,7 +13,7 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode } from 'react-icons-ng/fa';
+import { FaLink, FaCode, FaPencilAlt } from 'react-icons-ng/fa';
 import { LuShieldCheck } from 'react-icons-ng/lu';
 import { GoGitBranch } from 'react-icons-ng/go';
 import { Md2RobotExcited } from 'react-icons-ng/md2';
@@ -113,7 +113,9 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
-        { session?.user?.user_metadata?.provider_id == board.author ? null : <Warning /> }
+        {session?.user?.user_metadata?.provider_id == board.author ? null : (
+          <Warning />
+        )}
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <InfoButton metadata={metadata} setMetadata={setMetadata} />
@@ -172,26 +174,53 @@ export default function Bin({ board }: { board: FetchResponse }) {
                   name="project-desc"></textarea>
               </form>
             </div>
-            <div className="tooltip">
-              <button
-                className={styles.save}
-                onClick={() => router.push(`/fork/${board.key}`)}
-                disabled={board.fork?.status || board.bot}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <GoGitBranch
-                  title={board.fork?.status ? "Forked boards cannot get forked again" : "Fork the board"}
-                  style={{ marginRight: '12px' }}
-                />{' '}
-                Fork
-              </button>
-              <span style={{ borderRadius: '12px' }} className="tooltiptext">
-              {board.fork?.status ? "Forked boards cannot get forked again" : "Fork the board"}
-              </span>
-            </div>
+            {session?.user?.user_metadata?.provider_id == board.author ? (
+              <div className="tooltip">
+                <button
+                  className={styles.edit}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <FaPencilAlt
+                    title={'Edit your board'}
+                    style={{ marginRight: '12px' }}
+                  />{' '}
+                  Edit
+                </button>
+                <span style={{ borderRadius: '12px' }} className="tooltiptext">
+                  Coming soon..
+                </span>
+              </div>
+            ) : (
+              <div className="tooltip">
+                <button
+                  className={styles.fork}
+                  onClick={() => router.push(`/fork/${board.key}`)}
+                  disabled={board.fork?.status || board.bot}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <GoGitBranch
+                    title={
+                      board.fork?.status
+                        ? 'Forked boards cannot get forked again'
+                        : 'Fork the board'
+                    }
+                    style={{ marginRight: '12px' }}
+                  />{' '}
+                  Fork
+                </button>
+                <span style={{ borderRadius: '12px' }} className="tooltiptext">
+                  {board.fork?.status
+                    ? 'Forked boards cannot get forked again'
+                    : 'Fork the board'}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="codeWrapper">
