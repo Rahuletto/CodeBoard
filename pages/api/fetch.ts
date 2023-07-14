@@ -103,6 +103,7 @@ export default async function GET(req: NextRequest) {
     fork: boardRaw.fork,
     author: boardRaw.author,
     bot: boardRaw?.author?.startsWith('bot') ? true : false,
+    madeBy: boardRaw.madeBy,
     createdAt: boardRaw.createdAt,
     status: 200,
   };

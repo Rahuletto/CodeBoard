@@ -647,6 +647,48 @@ dialog::backdrop {
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.boardSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #17191b;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.boardSlider:before {
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  content: ' ';
+  font-weight: 600;
+  transform: rotate(-180deg);
+  font-size: 20px;
+  text-align: center;
+  color: #17191b;
+  line-height: 29px;
+  height: 28px;
+  width: 28px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--purple);
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+input:checked + .boardSlider:before {
+  content: ' ';
+  font-weight: 600;
+  font-size: 16px;
+
+  background-color: var(--green);
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
 input:checked + .slider:before {
   content: '\f00c';
   font-family: 'Font Awesome 5 Free';
@@ -660,11 +702,11 @@ input:checked + .slider:before {
 }
 
 /* Rounded sliders */
-.slider.round {
+.slider.round, .boardSlider.round {
   border-radius: 34px;
 }
 
-.slider.round:before {
+.slider.round:before, .boardSlider.round::before {
   border-radius: 50%;
 }
 

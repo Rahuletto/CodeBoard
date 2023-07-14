@@ -93,22 +93,7 @@ export default async function handler(req: NextRequest) {
         .limit(1)
         .single();
 
-      const newBoard = {
-        title: body.name,
-        desc: body.description,
-        key: body.key,
-      };
-
-      if (user) {
-        const { error } = await supabase
-          .from('Users')
-          .update({ boards: [...user.boards, newBoard] })
-          .eq('id', body.author);
-        if (error) {
-          console.error(error);
-          body.author = null;
-        }
-      } else body.author = null;
+      if(!user) body.author = null;
     }
 
     const { error } = await supabase.from('Boards').insert({

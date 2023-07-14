@@ -72,9 +72,7 @@ export default async function handler(req: NextRequest) {
       .limit(1)
       .single();
 
-    if (user) {
-      
-    } else {
+    if (!user) {
       return new Response(
         JSON.stringify({
           message: 'User not found !',
@@ -92,16 +90,8 @@ export default async function handler(req: NextRequest) {
     const { error: boardError } = await supabase
       .from('Boards')
       .delete()
-      .eq('key', id);
-
-    const removed = user.boards.filter(function (item) {
-      return item.key !== id;
-    });
-
-    const { error: userError } = await supabase
-      .from('Users')
-      .update({ boards: [...removed] })
-      .eq('id', userId);
+      .eq('key', id)
+      .or(`author.eq.${user.id},madeBy.eq.${user.id}`);
 
     if (boardError) {
       console.warn('Board_ERR: ' + boardError);
@@ -109,21 +99,6 @@ export default async function handler(req: NextRequest) {
         JSON.stringify({
           message: 'Error while deleting ! Contact the owner',
           errorCode: "DEL_BOARD_FAIL",
-          status: 500,
-        }),
-        {
-          status: 500,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
-    } else if (userError) {
-      console.warn('User_ERR: ' + userError);
-      return new Response(
-        JSON.stringify({
-          message: 'Error while updating users board ! Contact the owner',
-          errorCode: "UPDATE_USER_FAIL",
           status: 500,
         }),
         {

@@ -25,6 +25,9 @@ import { FetchResponse } from '../api/fetch';
 import { Languages } from '../../utils/types/languages';
 import { MetaTags } from '../../components';
 
+// Auth
+import { useSession } from '@supabase/auth-helpers-react';
+
 // Lazy loading
 
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -43,6 +46,7 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
 
 export default function Bin({ board }: { board: FetchResponse }) {
   const router = useRouter();
+  const session = useSession();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
@@ -109,7 +113,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
-        <Warning />
+        { session?.user?.user_metadata?.provider_id == board.author ? null : <Warning /> }
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <InfoButton metadata={metadata} setMetadata={setMetadata} />

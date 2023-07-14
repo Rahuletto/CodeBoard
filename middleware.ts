@@ -50,7 +50,6 @@ const ratelimit = {
   }),
 };
 
-
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req.nextUrl.pathname;
@@ -91,10 +90,10 @@ export async function middleware(req: NextRequest) {
         auth ? auth : req.ip
       );
 
-      res.headers.set('RateLimit-Limit', limit.toString())
-      res.headers.set('RateLimit-Remaining', remaining.toString())
+      res.headers.set('RateLimit-Limit', limit.toString());
+      res.headers.set('RateLimit-Remaining', remaining.toString());
 
-      if(!success) console.warn("API-KEY: ", auth)
+      if (!success) console.warn('API-KEY: ', auth);
       return success
         ? res
         : new NextResponse(
@@ -129,20 +128,19 @@ export async function middleware(req: NextRequest) {
         .limit(1)
         .single();
 
-      if (!user) {
+      if (!user && session) {
         await supabase.from('Users').insert({
           uid: session?.user?.id,
           id: session?.user?.user_metadata?.provider_id,
           email: PBKDF2(session?.user?.email),
           name: session?.user?.user_metadata?.name,
           image: session?.user?.user_metadata?.avatar_url ?? '',
-          boards: [],
           apiKey: makeid(20),
         });
-
-        console.log('new user created');
       }
     }
+
+    return res;
   }
 }
 

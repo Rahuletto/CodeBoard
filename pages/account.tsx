@@ -11,8 +11,9 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import styles from '../styles/Account.module.css';
 
 // Icons
-import { FaGithub } from 'react-icons-ng/fa';
+import { FaGithub, FaUser } from 'react-icons-ng/fa';
 import { LuRefreshCw } from 'react-icons-ng/lu';
+import { Md2RobotExcited } from 'react-icons-ng/md2';
 
 // Our imports
 import { User } from '../utils/types/user';
@@ -21,7 +22,7 @@ import { User } from '../utils/types/user';
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-export default function Account({ github, boards, id, api }) {
+export default function Account({ github, bds, apiBds, id, api }) {
   const router = useRouter();
 
   const supabaseClient = useSupabaseClient();
@@ -30,12 +31,28 @@ export default function Account({ github, boards, id, api }) {
   const [apiKey, setApiKey] = useState(api);
   const [ratelimit, setRatelimit] = useState(false);
 
+  const [boards, setBoards] = useState(bds);
+  const [mode, setMode] = useState('user');
+  const [isUser, setIsUser] = useState(true);
+
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
+
+  function switchMode() {
+    if (mode == 'user') {
+      setMode('api');
+      setBoards(apiBds);
+      setIsUser(false);
+    } else if (mode == 'api') {
+      setMode('user');
+      setBoards(bds);
+      setIsUser(true);
+    }
+  }
 
   async function deleteBoard(b) {
     const response = await fetch(
@@ -66,7 +83,6 @@ export default function Account({ github, boards, id, api }) {
         }),
       });
       const result = await response.json();
-      console.log(result);
 
       if (result.regen) {
         setApiKey(result.apiKey);
@@ -140,32 +156,70 @@ export default function Account({ github, boards, id, api }) {
             <button
               title="Sign out"
               onClick={() => {
-                supabaseClient.auth.signOut();
                 router.push('/');
+                supabaseClient.auth.signOut();
+                
               }}
               className={styles.signOut}>
               Sign Out
             </button>
           </div>
-          <div className={styles.repo}>
-            <h1>Boards</h1>
-            {boards.map((b) => (
-              <div className={styles.boardList} key={b.title}>
-                <h3>{b.title}</h3>
-                <p>{b.desc}</p>
-                <div className={styles.buttons}>
-                  <a title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
-                    /bin/{b.key}
-                  </a>
-                  <button
-                    title="Delete the board"
-                    onClick={() => deleteBoard(b.key)}>
-                    Delete
-                  </button>
-                </div>
+          <div className={styles.repo} style={!isUser ? { border: '3px solid var(--purple)' } : null}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '12px',
+                justifyContent: 'space-between',
+              }}>
+              <h1>{isUser ? 'Your Boards' : 'Boards by your API'}</h1>
+
+              <div
+                style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <span style={{ fontSize: '26px', color: 'var(--purple)' }}>
+                  <Md2RobotExcited
+                    title="Boards made by your api"
+                    style={{ fontSize: '26px', color: 'var(--purple)' }}
+                  />
+                </span>
+                <label className="switch">
+                  <input
+                    checked={isUser}
+                    onChange={(event) => {
+                      switchMode();
+                    }}
+                    type="checkbox"
+                  />
+                  <span className="boardSlider round"></span>
+                </label>
+                <span style={{ fontSize: '26px', color: 'var(--green)' }}>
+                  <FaUser
+                    title="Boards made by you"
+                    style={{ fontSize: '24px', color: 'var(--green)' }}
+                  />
+                </span>
               </div>
-            ))}
-            {!boards[0] ? <p>No boards found from your account</p> : null}
+            </div>
+
+            {boards &&
+              boards.map((b) => (
+                <div className={styles.boardList} key={b.key}>
+                  <h3>{b.name}</h3>
+                  <p>{b.description}</p>
+                  <div className={styles.buttons}>
+                    <a title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
+                      /bin/{b.key}
+                    </a>
+                    <button
+                      title="Delete the board"
+                      onClick={() => deleteBoard(b.key)}>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            {!boards || !boards[0] ? (
+              <p>No boards found from your account</p>
+            ) : null}
           </div>
         </div>
       </main>
@@ -192,17 +246,34 @@ export const getServerSideProps = async (ctx) => {
   const { data: user }: { data: User } = await supabase
     .from('Users')
     .select()
-    .eq('id', session.user.user_metadata.provider_id)
+    .eq('id', session?.user?.user_metadata?.provider_id)
     .limit(1)
     .single();
 
-  if (!user) {
-    return { redirect: { destination: '/auth/signin', permanent: false } };
-  }
+  // if (!user) {
+  //   return { redirect: { destination: '/auth/signin', permanent: false } };
+  // }
+
+  const {
+    data: boards,
+  }: { data: { key: string; name: string; description: string }[] } =
+    await supabase
+      .from('Boards')
+      .select('key, name, description')
+      .eq('author', session?.user?.user_metadata?.provider_id);
+
+  const {
+    data: apiBds,
+  }: { data: { key: string; name: string; description: string }[] } =
+    await supabase
+      .from('Boards')
+      .select('key, name, description')
+      .eq('madeBy', session?.user?.user_metadata?.provider_id);
 
   return {
     props: {
-      boards: user.boards ?? [],
+      bds: boards ?? [],
+      apibds: apiBds ?? [],
       id: user?.id ?? '',
       api: user?.apiKey ?? '',
       github: session?.user

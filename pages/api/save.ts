@@ -205,22 +205,6 @@ export default async function POST(req: NextRequest) {
         );
       }
 
-      if (token) {
-        const newBoard = {
-          title: body.name,
-          desc: body.description,
-          key: key,
-        };
-
-        const { error } = await supabase
-          .from('Users')
-          .update({ boards: [...token[0].boards, newBoard] })
-          .eq('apiKey', apikey);
-        if (error) {
-          console.error(error);
-        }
-      }
-
       return new Response(
         JSON.stringify({
           message: 'Successfully created a board' + cont,
