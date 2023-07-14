@@ -509,7 +509,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   context.res.setHeader(
     'Cache-Control',
-    'public, s-maxage=360, stale-while-revalidate=480'
+    'public, max-age=31536000'
   );
 
   const promiseBoard = await fetch(
@@ -517,6 +517,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     {
       cache: 'force-cache',
       headers: {
+        'Cache-Control': 'public, max-age=31536000',
         'Content-Type': 'application/json',
         Authorization: process.env.NEXT_PUBLIC_KEY,
       },
@@ -547,5 +548,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
 }
-
-export const runtime = 'experimental-edge';

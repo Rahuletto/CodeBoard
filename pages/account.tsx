@@ -283,5 +283,3 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 };
-
-export const runtime = 'experimental-edge';

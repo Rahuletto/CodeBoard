@@ -1,11 +1,8 @@
-'use client';
-// MillionJS
-import { block } from 'million/react';
 
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
 
-const UnblockedAddFile = ({ files, limit = 2 }) => {
+const AddFile = ({ files, limit = 2 }) => {
   function showDialog() {
     const dialog = document.getElementById('newFile');
 
@@ -25,7 +22,5 @@ const UnblockedAddFile = ({ files, limit = 2 }) => {
     </div>
   );
 };
-
-const AddFile = block(UnblockedAddFile, { ssr: false });
 
 export default AddFile;

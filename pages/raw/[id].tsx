@@ -23,12 +23,19 @@ export default function MyComponent({ text }: { text: string }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   context.res.setHeader(
     'Cache-Control',
-    'public, s-maxage=360, stale-while-revalidate=480'
+    'public, max-age=31536000'
   )
 
   const promiseBoard = await fetch(
     `https://board.is-an.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
+    {
+      cache: 'force-cache',
+      headers: {
+        'Cache-Control': 'public, max-age=31536000',
+        'Content-Type': 'application/json',
+        Authorization: process.env.NEXT_PUBLIC_KEY,
+      },
+    }
   );
 
   if (promiseBoard.status == 200) {
@@ -56,5 +63,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return { props: { text: text } };
   } else return { props: { text: 'Board not found !' } };
 }
-
-export const runtime = 'experimental-edge';

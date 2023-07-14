@@ -115,7 +115,7 @@ export function Embed({ board }: { board: FetchResponse }) {
         }}>
         <div className="file-holder bin-copy">
           <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
-          <div style={{gap: '6px'}} className={boardStyles.copy}>
+          <div style={{ gap: '6px' }} className={boardStyles.copy}>
             <button
               title="Copy the whole program"
               style={{ height: '36px', display: 'flex', alignItems: 'center' }}
@@ -124,7 +124,7 @@ export function Embed({ board }: { board: FetchResponse }) {
               }}>
               Copy
             </button>
-            
+
             <button
               style={{ height: '36px', display: 'flex', alignItems: 'center' }}
               title="Source"
@@ -170,17 +170,14 @@ export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
 });
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  
-  context.res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=360, stale-while-revalidate=480'
-  )
+  context.res.setHeader('Cache-Control', 'public, max-age=31536000');
 
   const promiseBoard = await fetch(
     `https://board.is-an.app/api/fetch?id=${context.params.id}`,
     {
       cache: 'force-cache',
       headers: {
+        'Cache-Control': 'public, max-age=31536000',
         'Content-Type': 'application/json',
         Authorization: process.env.NEXT_PUBLIC_KEY,
       },
@@ -210,5 +207,3 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
 }
-
-export const runtime = 'experimental-edge';

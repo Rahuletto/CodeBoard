@@ -4,9 +4,8 @@ import generalStyles from '../styles/General.module.css'
 // Icons
 import { IoCloseCircleSharp } from 'react-icons-ng/io5';
 import { TiWarning } from 'react-icons-ng/ti';
-import { block } from 'million/react';
 
-const UnblockedWarning: React.FC<{}> = () => {
+const Warning: React.FC<{}> = () => {
   return (
     <div className={[generalStyles.warning, 'warning'].join(' ')}>
       <TiWarning
@@ -43,5 +42,4 @@ const UnblockedWarning: React.FC<{}> = () => {
   );
 };
 
-const Warning = block(UnblockedWarning, { ssr: false });
 export default Warning;

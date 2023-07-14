@@ -5,7 +5,6 @@ import CodeMirror from '@uiw/react-codemirror';
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
 import { tags as t } from '@lezer/highlight';
 
-
 // React
 import React from 'react';
 
@@ -34,7 +33,6 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   return (
     <>
       <CodeMirror
-        
         placeholder="Paste your code here."
         theme={
           theme == 'light'

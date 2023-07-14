@@ -4,10 +4,7 @@ import styles from '../styles/Index.module.css';
 // Icons
 import { BiSolidSave } from 'react-icons-ng/bi';
 
-// MillionJS
-import { block } from 'million/react';
-
-const UnblockedSave = () => {
+const Save = () => {
   return (
     <div className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
       <div
@@ -24,5 +21,4 @@ const UnblockedSave = () => {
   );
 };
 
-const Save = block(UnblockedSave);
 export default Save;

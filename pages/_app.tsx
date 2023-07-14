@@ -1,6 +1,6 @@
 // NextJS Stuff
 import type { AppProps } from 'next/app';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import React from 'react';
 
@@ -11,20 +11,53 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 // Styles
 import '../styles/globals.css';
 import '../styles/mobile.css';
+import '../styles/loader.css'
 import styles from '../styles/Index.module.css';
 
 // Icons
 import { FaHeartBroken } from 'react-icons-ng/fa';
+import { useRouter } from 'next/router';
 
+// Loader
+import NProgress from 'nprogress'
+import Loader from '../components/Loader';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  const router = useRouter();
   const [supabaseClient] = useState(() => createPagesBrowserClient());
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    const handleStart = (url: string) => {
+      console.log(`Loading: ${url}`)
+      NProgress.start()
+      setLoading(true)
+    }
+
+    const handleStop = () => {
+      NProgress.done()
+      setLoading(false)
+    }
+
+    NProgress.configure({ easing: 'ease', speed: 500 });
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleStop)
+      router.events.off('routeChangeError', handleStop)
+    }
+  }, [router])
+  
   return (
     <ErrorBoundary>
       <SessionContextProvider
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}>
+          {loading ? <Loader /> : null }
         <Component {...pageProps} />
         <Analytics />
       </SessionContextProvider>
