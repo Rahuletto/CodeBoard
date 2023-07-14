@@ -17,6 +17,7 @@ import { Md2RobotExcited } from 'react-icons-ng/md2';
 
 // Our imports
 import { User } from '../utils/types/user';
+import { PostgrestError } from '@supabase/supabase-js';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -265,7 +266,7 @@ export const getServerSideProps = async (ctx) => {
   const {
     data: apiBds,
     error: e
-  }: { data: { key: string; name: string; description: string }[], error: string } =
+  }: { data: { key: string; name: string; description: string }[], error: PostgrestError } =
     await supabase
       .from('Boards')
       .select()
