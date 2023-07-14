@@ -178,6 +178,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
               <div className="tooltip">
                 <button
                   className={styles.edit}
+                  disabled={true}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
