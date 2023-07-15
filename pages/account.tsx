@@ -19,73 +19,51 @@ import { Md2RobotExcited } from 'react-icons-ng/md2';
 import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
-import { FetchResponse } from './api/fetch';
-import Skeleton from 'react-loading-skeleton';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-export default function Account({ github, id, api }) {
+export default function Account({ github, bds, apiBds, id, api }) {
   const router = useRouter();
 
   const supabase = useSupabaseClient();
   const session = useSession();
 
-  const [userboards, setUser] = useState<any[]>([]);
-  const [apiboards, setApi] = useState<any[]>([]);
-
   const [apiKey, setApiKey] = useState(api);
   const [ratelimit, setRatelimit] = useState(false);
 
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState(bds);
   const [mode, setMode] = useState('user');
   const [isUser, setIsUser] = useState(true);
 
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  async function getBoards() {
-    const { data: bd } = await supabase
-      .from('Boards')
-      .select('key, name, description')
-      .eq('author', session?.user?.user_metadata?.provider_id); // @ts-ignore
-
-    setUser(bd);
-
-    const { data: apibd } = await supabase
-      .from('Boards')
-      .select()
-      .eq('madeBy', session?.user?.user_metadata?.provider_id); // @ts-ignore
-
-    setApi(apibd);
-
-    return true;
-  }
-
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
-
-    getBoards().then((e) => setBoards(userboards));
   }, []);
 
   function switchMode() {
     if (mode == 'user') {
       setMode('api');
-      setBoards(apiboards);
+      setBoards(apiBds);
       setIsUser(false);
     } else if (mode == 'api') {
       setMode('user');
-      setBoards(userboards);
+      setBoards(bds);
       setIsUser(true);
     }
   }
 
   async function deleteBoard(b) {
-    const { error } = await supabase.from('Boards').delete().eq('key', b);
+    const { error } = await supabase
+      .from('Boards')
+      .delete()
+      .eq('key', b)
 
-    if (!error) router.reload();
-    else console.error(error);
+    if (!error) router.reload()
+    else console.error(error)
   }
 
   async function regenerate() {
@@ -181,9 +159,7 @@ export default function Account({ github, id, api }) {
               Sign Out
             </button>
           </div>
-          <div
-            className={styles.repo}
-            style={!isUser ? { borderColor: 'var(--purple)' } : null}>
+          <div className={styles.repo} style={!isUser ? { borderColor: 'var(--purple)' } : null}>
             <div
               style={{
                 display: 'flex',
@@ -219,7 +195,7 @@ export default function Account({ github, id, api }) {
               </div>
             </div>
 
-            {boards && boards[0] ? (
+            {boards &&
               boards.map((b) => (
                 <div className={styles.boardList} key={b.key}>
                   <h3>{b.name}</h3>
@@ -228,32 +204,17 @@ export default function Account({ github, id, api }) {
                     <Link title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
                       /bin/{b.key}
                     </Link>
-                    {isUser ? (
-                      <button
-                        title="Delete the board"
-                        onClick={() => deleteBoard(b.key)}>
-                        Delete
-                      </button>
-                    ) : null}
+                    {isUser ? (<button
+                      title="Delete the board"
+                      onClick={() => deleteBoard(b.key)}>
+                      Delete
+                    </button>) : null}
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className={styles.boardList}>
-                <h3>
-                  <Skeleton style={{ width: '210px' }} />
-                </h3>
-                <p>
-                  <Skeleton style={{ width: '340px' }} />
-                </p>
-                <div className={styles.buttons}>
-                  <Link title="Loading" href="#">
-                    <Skeleton style={{ width: '120px' }} />
-                  </Link>
-                </div>
-              </div>
-            )}
-            {!boards || !boards[0] ? <p>No boards found</p> : null}
+              ))}
+            {!boards || !boards[0] ? (
+              <p>No boards found</p>
+            ) : null}
           </div>
         </div>
       </main>
@@ -288,8 +249,26 @@ export const getServerSideProps = async (ctx) => {
     return { redirect: { destination: '/auth/signin', permanent: false } };
   }
 
+  const {
+    data: boards,
+  }: { data: { key: string; name: string; description: string }[] } =
+    await supabase
+      .from('Boards')
+      .select('key, name, description')
+      .eq('author', session?.user?.user_metadata?.provider_id);
+
+  const {
+    data: apiBds
+  }: { data: { key: string; name: string; description: string }[], error: PostgrestError } =
+    await supabase
+      .from('Boards')
+      .select()
+      .eq('madeBy', session?.user?.user_metadata?.provider_id);
+
   return {
     props: {
+      bds: boards ?? [],
+      apiBds: apiBds ?? [],
       id: user?.id ?? '',
       api: user?.apiKey ?? '',
       github: session?.user
