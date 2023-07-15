@@ -69,15 +69,17 @@ export default function Bin({ id }: { id: string }) {
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
+  }, []);
 
-    console.log(id);
+  useEffect(() => {
     sudoFetch(supabase, id).then((b) => {
-      console.log(b);
       if (!b) return router.push('/404');
       setBoard(b);
       setFileName(b.files[0].name);
     });
-  }, []);
+
+    return () => { board }
+  }, [])
 
   useEffect(() => {
     if (board) {
