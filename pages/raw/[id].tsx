@@ -1,11 +1,28 @@
 // NextJS Stuff
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetServerSidePropsContext } from 'next';
+import router from 'next/router';
+import { useEffect, useState } from 'react';
+import { sudoFetch } from '../../utils/sudo-fetch';
 
-// Our stuff
-import { AESDecrypt } from '../../utils/aes';
-import { FetchResponse } from '../api/fetch';
+export default function MyComponent({
+  id,
+  file,
+}: {
+  id: string;
+  file: string;
+}) {
+  const supabase = useSupabaseClient();
+  const [text, setText] = useState('');
 
-export default function MyComponent({ text }: { text: string }) {
+  useEffect(() => {
+    sudoFetch(supabase, id).then((b) => {
+      if (!b) return router.push('/404');
+
+      const f = b.files.find((a) => a.name == file)
+      setText(f.value);
+    });
+  });
   return (
     <textarea
       disabled
@@ -21,45 +38,5 @@ export default function MyComponent({ text }: { text: string }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  context.res.setHeader(
-    'Cache-Control',
-    'public, max-age=31536000'
-  )
-
-  const promiseBoard = await fetch(
-    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
-    {
-      cache: 'force-cache',
-      headers: {
-        'Cache-Control': 'public, max-age=31536000',
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-    }
-  );
-
-  if (promiseBoard.status == 200) {
-    const board: FetchResponse = await promiseBoard.json();
-
-    if (
-      Number(board.createdAt) + 86400 * 1000 < Date.now() &&
-      board?.autoVanish
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    let text: string;
-
-    const file = board.files.find((a) => a.name == context.query.file);
-
-    if (!file || !file?.value) return { props: { text: 'File not found !' } };
-
-    text = file.value;
-    
-    return { props: { text: text } };
-  } else return { props: { text: 'Board not found !' } };
+  return { props: { id: context.params.id, file: context.query.file } };
 }

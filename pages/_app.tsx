@@ -12,6 +12,8 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import '../styles/globals.css';
 import '../styles/mobile.css';
 import '../styles/loader.css'
+import 'react-loading-skeleton/dist/skeleton.css';
+
 import styles from '../styles/Index.module.css';
 
 // Icons

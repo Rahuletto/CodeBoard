@@ -391,6 +391,7 @@ button:active {
 }
 
 .codeWrapper {
+  height: 88vh;
   transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   overflow: hidden;
   background: var(--background-light);
@@ -1152,4 +1153,19 @@ code {
 
 .orange {
   color: var(--orange);
+}
+
+.react-loading-skeleton {
+  --base-color: #454a55 !important;
+  --highlight-color: #666b7a !important;
+  --animation-duration: 1.6s !important;
+}
+[data-theme="light"] .react-loading-skeleton {
+  --base-color: var(--background-darker) !important;
+  --highlight-color: var(--background-light) !important;
+  --animation-duration: 1.6s !important;
+}
+
+.react-loading-skeleton:after {
+  animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

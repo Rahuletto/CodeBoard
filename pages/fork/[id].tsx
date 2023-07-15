@@ -18,6 +18,11 @@ import {
   LuTimer,
   LuTimerOff,
 } from 'react-icons-ng/lu';
+import { GoGitBranch } from 'react-icons-ng/go';
+
+// Auth and Database
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
@@ -25,9 +30,8 @@ import { extensions } from '../../utils/extensions';
 import { AddFile, MetaTags } from '../../components';
 import { FetchResponse } from '../api/fetch';
 import makeid from '../../utils/makeid';
-import { GoGitBranch } from 'react-icons-ng/go';
 import { Languages } from '../../utils/types/languages';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { sudoFetch } from '../../utils/sudo-fetch';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -333,12 +337,17 @@ export default function Fork({ board }: { board: FetchResponse }) {
               <p style={{ margin: 0 }}>
                 <GoGitBranch
                   title="Forked Project"
-                  style={{ color: 'var(--green)', marginRight: '12px' }}
+                  style={{ color: 'var(--purple-dark)', marginRight: '12px' }}
                 />{' '}
                 Forked from{' '}
                 <Link
-                  style={{ color: 'var(--purple-dark)' }}
-                  href={`/bin/${board.key}`}>
+                  style={{
+                    background: 'var(--purple-dark)',
+                    color: 'var(--background)',
+                    borderRadius: '8px',
+                    padding: '2px 6px',
+                  }}
+                  href={`/bin/${board?.key}`}>
                   {board.name}
                 </Link>
               </p>
@@ -494,41 +503,15 @@ export default function Fork({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  context.res.setHeader('Cache-Control', 'public, max-age=31536000');
+  const supabase = createPagesServerClient(context);
+  const board = await sudoFetch(supabase, context.params.id as string);
 
-  const promiseBoard = await fetch(
-    `https://board.is-an.app/api/fetch?id=${context.params.id}`,
-    {
-      cache: 'force-cache',
-      headers: {
-        'Cache-Control': 'public, max-age=31536000',
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-    }
-  );
-
-  if (promiseBoard.status == 200) {
-    const board: FetchResponse = await promiseBoard.json();
-
-    if (
-      (Number(board.createdAt) + 86400 * 1000 < Date.now() &&
-        board?.autoVanish) ||
-      board?.files.length == 0
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    return { props: { board: board } };
-  } else
+  if (!board)
     return {
       redirect: {
         permanent: false,
         destination: '/404',
       },
     };
+  return { props: { board: board } };
 }

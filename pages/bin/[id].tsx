@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // Styles
 import generalStyles from '../../styles/General.module.css';
@@ -21,21 +22,17 @@ import { Md2RobotExcited } from 'react-icons-ng/md2';
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
 import { FetchResponse } from '../api/fetch';
-
+import { sudoFetch } from '../../utils/sudo-fetch';
 import { Languages } from '../../utils/types/languages';
 import { MetaTags } from '../../components';
 
 // Auth
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import Link from 'next/link';
-import { sudoFetch } from '../../utils/sudo-fetch';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 
 // Lazy loading
-
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
@@ -63,23 +60,19 @@ export default function Bin({ id }: { id: string }) {
 
   const [board, setBoard] = useState<FetchResponse>(null);
   const [fileName, setFileName] = useState('');
-  const [btns, setBtns] = useState([<Skeleton key={'ok'} />]);
+  const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
-  }, []);
 
-  useEffect(() => {
     sudoFetch(supabase, id).then((b) => {
       if (!b) return router.push('/404');
       setBoard(b);
       setFileName(b.files[0].name);
     });
-
-    return () => { board }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (board) {
@@ -88,7 +81,7 @@ export default function Bin({ id }: { id: string }) {
 
       setLanguage(
         loadLanguage(
-          file.language == 'none' ? 'markdown' : (file.language as Languages)
+          file?.language !== 'none' ? (file?.language as Languages) : 'markdown'
         )
       );
 
@@ -113,8 +106,7 @@ export default function Bin({ id }: { id: string }) {
 
       setBtns(fileButtons);
     }
-    return () => {btns}
-  }, [board]);
+  });
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
@@ -157,7 +149,7 @@ export default function Bin({ id }: { id: string }) {
                 <p style={{ margin: 0 }}>
                   <GoGitBranch
                     title="Forked Project"
-                    style={{ color: 'var(--green)', marginRight: '12px' }}
+                    style={{ color: 'var(--purple-dark)', marginRight: '12px' }}
                   />{' '}
                   Forked from{' '}
                   <Link
@@ -184,7 +176,7 @@ export default function Bin({ id }: { id: string }) {
                       name="project-name"></input>
                   ) : (
                     <h1 style={{ fontSize: '32px' }}>
-                      <Skeleton style={{ width: '140px' }} />
+                      <Skeleton style={{ width: '180px' }} />
                     </h1>
                   )}{' '}
                   {board && board.encrypt ? (
@@ -214,7 +206,7 @@ export default function Bin({ id }: { id: string }) {
                       borderRadius: '18px',
                       height: '160px',
                     }}>
-                    <Skeleton style={{ width: '120px' }} count={2} />
+                    <Skeleton style={{ width: '180px' }} count={2} />
                     <Skeleton style={{ width: '80px' }} />
                   </div>
                 )}
@@ -277,7 +269,17 @@ export default function Bin({ id }: { id: string }) {
             className="codeWrapper"
             style={{ height: '-webkit-fill-available' }}>
             <div className="file-holder bin-copy">
-              <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                {btns[0] ? (
+                  btns
+                ) : (
+                  <div className={'fileSelect active-file'}>
+                    <button title="skeleton">
+                      <Skeleton style={{ width: '100px' }} />
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className={boardStyles.copy}>
                 <button
                   title="Copy URL"
@@ -320,7 +322,7 @@ export default function Bin({ id }: { id: string }) {
                 </button>
               </div>
             ) : null}
-            {file ? (
+            {language ? (
               <CodeBoard
                 language={language}
                 code={file?.value}
@@ -331,11 +333,13 @@ export default function Bin({ id }: { id: string }) {
             ) : (
               <div style={{ padding: '8px 20px' }}>
                 <Skeleton style={{ width: '400px' }} />
+                <br></br>
                 <Skeleton style={{ width: '200px' }} />
                 <Skeleton style={{ width: '300px' }} />
                 <br></br>
                 <Skeleton style={{ width: '600px' }} />
                 <Skeleton style={{ width: '160px' }} />
+                <Skeleton style={{ width: '60px' }} />
               </div>
             )}
           </div>
@@ -346,7 +350,5 @@ export default function Bin({ id }: { id: string }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  context.res.setHeader('Cache-Control', 'public, max-age=31536000');
-
   return { props: { id: context.params.id } };
 }
