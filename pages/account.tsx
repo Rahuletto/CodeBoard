@@ -213,7 +213,7 @@ export default function Account({ github, id, api }) {
               </div>
             </div>
 
-            {boards[0] ? (
+            {boards ? (
               boards.map((b) => (
                 <div className={styles.boardList} key={b.key}>
                   <h3>{b.name}</h3>
