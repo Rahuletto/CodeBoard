@@ -45,22 +45,28 @@ export default function Account({ github, id, api }) {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
+  async function getBoards() {
+    const { data: bd } = await supabase
+      .from('Boards')
+      .select('key, name, description')
+      .eq('author', session?.user?.user_metadata?.provider_id); // @ts-ignore
+
+    setUser(bd);
+
+    const { data: apibd } = await supabase
+      .from('Boards')
+      .select()
+      .eq('madeBy', session?.user?.user_metadata?.provider_id); // @ts-ignore
+
+    setApi(apibd);
+
+    return true;
+  }
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    supabase
-      .from('Boards')
-      .select('key, name, description')
-      .eq('author', session?.user?.user_metadata?.provider_id) // @ts-ignore
-      .then((bd) => setUser(bd));
-
-    supabase
-      .from('Boards')
-      .select()
-      .eq('madeBy', session?.user?.user_metadata?.provider_id) // @ts-ignore
-      .then((bd) => setApi(bd));
-
-    setBoards(userboards);
+    getBoards().then((e) => setBoards(userboards));
   }, []);
 
   function switchMode() {
