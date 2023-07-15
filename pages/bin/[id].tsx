@@ -113,6 +113,7 @@ export default function Bin({ id }: { id: string }) {
 
       setBtns(fileButtons);
     }
+    return () => {btns}
   }, [board]);
 
   function handleCopies(event: MouseEvent, text: string) {
