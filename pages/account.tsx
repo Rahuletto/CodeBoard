@@ -20,7 +20,6 @@ import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { FetchResponse } from './api/fetch';
-import Skeleton from 'react-loading-skeleton';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -38,7 +37,7 @@ export default function Account({ github, id, api }) {
   const [apiKey, setApiKey] = useState(api);
   const [ratelimit, setRatelimit] = useState(false);
 
-  const [boards, setBoards] = useState(null);
+  const [boards, setBoards] = useState([]);
   const [mode, setMode] = useState('user');
   const [isUser, setIsUser] = useState(true);
 
@@ -213,7 +212,7 @@ export default function Account({ github, id, api }) {
               </div>
             </div>
 
-            {boards ? (
+            {boards &&
               boards.map((b) => (
                 <div className={styles.boardList} key={b.key}>
                   <h3>{b.name}</h3>
@@ -231,24 +230,8 @@ export default function Account({ github, id, api }) {
                     ) : null}
                   </div>
                 </div>
-              ))
-            ) : boards !== null ? (
-              <div className={styles.boardList}>
-                <h3>
-                  <Skeleton style={{ width: '180px' }} />
-                </h3>
-                <p>
-                  <Skeleton style={{ width: '180px' }} />
-                </p>
-                <div className={styles.buttons}>
-                  <Link title={`/bin/`} href="#">
-                    <Skeleton style={{ width: '180px' }} />
-                  </Link>
-                </div>
-              </div>
-            ) : (
-              <p>No boards found</p>
-            )}
+              ))}
+            {!boards || !boards[0] ? <p>No boards found</p> : null}
           </div>
         </div>
       </main>
