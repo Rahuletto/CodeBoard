@@ -109,13 +109,13 @@
   width: fit-content;
   padding: 6px 12px;
   border-radius: 50px;
-  color: #81878F;
-  background: rgba(0,0,0,0.4);
+  color: #81878f;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 [data-theme='light'] .repo .boardList a {
   color: #141414;
-  background: rgba(255,255,255,0.6);
+  background: rgba(255, 255, 255, 0.6);
   opacity: 0.8;
 }
 .buttons {
@@ -123,11 +123,12 @@
   gap: 16px;
 }
 
-.buttons button, .signOut {
+.buttons button,
+.signOut {
   margin: 0px;
   background: var(--red);
   margin-top: 8px;
-  color:#17191b;
+  color: #17191b;
   width: fit-content;
   padding: 6px 12px;
   font-weight: 800;
@@ -164,7 +165,7 @@
 }
 
 .secret span {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   transition: 0.15s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   user-select: all;
 }
@@ -192,7 +193,6 @@
     max-width: 50px;
     height: 50px;
     border: 2px solid var(--special-color);
-
   }
 
   .account {
@@ -224,9 +224,8 @@
     min-height: 100vh;
     height: 100%;
   }
-  
+
   .main {
     overflow: auto;
   }
-
 }

@@ -12,6 +12,24 @@
   font-size: 1.3rem;
 }
 
+.themeSwitch:hover {
+  transform: scale(0.95);
+  border: 3px solid var(--background-dark);
+}
+
+.themeSwitch:active {
+  transform: scale(0.85);
+  border: 2px solid var(--background-dark);
+}
+
+[data-theme='light'] .themeSwitch:active:before {
+  transform: rotate(-70deg);
+}
+
+[data-theme='dark'] .themeSwitch:active:before {
+  transform: rotate(20deg);
+}
+
 .themeSwitch input {
   display: none;
 }
@@ -29,7 +47,6 @@
   content: '✨';
   transform: rotate(0deg);
 }
-
 
 @media only screen and (max-width: 750px) {
   .themeSwitch {
