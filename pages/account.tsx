@@ -63,6 +63,7 @@ export default function Account({ github, id, api }) {
   }, []);
 
   function switchMode() {
+    console.log(apiboards, userboards)
     if (mode == 'user') {
       setMode('api');
       setBoards(apiboards);
