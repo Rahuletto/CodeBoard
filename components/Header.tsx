@@ -1,6 +1,9 @@
 // Styles
 import styles from './styles/Header.module.css';
 
+// NextJS
+import Link from 'next/link';
+
 // Component
 import ThemeSwitch from './ThemeSwitch';
 
@@ -25,32 +28,32 @@ const Header: React.FC<MetaTagsProps> = (
   return (
     <header className={drag ? 'dragging' : ''}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <a href="/home" className={styles.title}>
+        <Link href="/home" className={styles.title}>
           CodeBoard
-        </a>
-        <a
+        </Link>
+        <Link
           title="API Documentation"
           href="/docs"
           className={[styles.api, 'pc'].join(' ')}>
           API
-        </a>
+        </Link>
       </div>
       <div className={styles.buttons}>
-        <a href="/" className={[styles.newProject, 'mobile'].join(' ')}>
+        <Link href="/" className={[styles.newProject, 'mobile'].join(' ')}>
           <FaPlus />
-        </a>
-        <a href="/" className={[styles.newProject, 'pc'].join(' ')}>
+        </Link>
+        <Link href="/" className={[styles.newProject, 'pc'].join(' ')}>
           <FaPlus style={{ marginRight: '10px' }} /> New Board
-        </a>
+        </Link>
         {session ? (
           <img title="Account Settings" onClick={() => router.push('/account')} src={session?.user?.user_metadata?.avatar_url} alt="user" className={styles.profile} />
         ) : (
-          <a
+          <Link
             title="Sign in"
-            onClick={() => router.push('/auth/signin')}
+            href="/auth/signin"
             className={[styles.profile].join(' ')}>
             <FaUserAlt title="Sign in" />
-          </a>
+          </Link>
         )}
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>

@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import styles from '../../styles/Docs.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { CodeBoard } from '../../components';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
@@ -45,14 +46,14 @@ const Docs: NextPage = () => {
           <div className={styles.pages}>
             <h4>Contents</h4>
             <div>
-              <a href="/docs">Introduction</a>
-              <a href="/docs/npm">npm Package</a>
-              <a className={styles.active} href="/docs/ping">
+              <Link href="/docs">Introduction</Link>
+              <Link href="/docs/npm">npm Package</Link>
+              <Link className={styles.active} href="/docs/ping">
                 Ping
-              </a>
-              <a href="/docs/teapot">Im a teapot</a>
-              <a href="/docs/save">Save a board</a>
-              <a href="/docs/fetch">Fetch a board</a>
+              </Link>
+              <Link href="/docs/teapot">Im a teapot</Link>
+              <Link href="/docs/save">Save a board</Link>
+              <Link href="/docs/fetch">Fetch a board</Link>
             </div>
           </div>
 
@@ -159,7 +160,7 @@ const Docs: NextPage = () => {
         </div>
 
         <footer style={{ marginTop: '20px' }}>
-          Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
         </footer>
       </main>
       <style>

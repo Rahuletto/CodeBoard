@@ -22,11 +22,10 @@ import { useRouter } from 'next/router';
 import NProgress from 'nprogress'
 import Loader from '../components/Loader';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const router = useRouter();
-  const [supabaseClient] = useState(() => createPagesBrowserClient());
-  const [loading, setLoading] = useState(true)
-
+  const [loading, setLoading] = useState(false)
+  
   useEffect(() => {
     const handleStart = (url: string) => {
       console.log(`Loading: ${url}`)
@@ -39,8 +38,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       setLoading(false)
     }
 
-    NProgress.configure({ easing: 'ease', speed: 500 });
-
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleStop)
     router.events.on('routeChangeError', handleStop)
@@ -52,6 +49,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     }
   }, [router])
   
+  const [supabaseClient] = useState(() => createPagesBrowserClient());
+  
+
   return (
     <ErrorBoundary>
       <SessionContextProvider
@@ -72,7 +72,7 @@ class ErrorBoundary extends React.Component {
   constructor(props: any) {
     super(props);
 
-    this.state = { hasError: false };
+    this.state = { hasError: true };
   }
   static getDerivedStateFromError(error: any) {
     return { hasError: true };
@@ -82,7 +82,7 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      <div className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
+      <div style={{ zIndex: "5000" }} className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
       <div
         className={['details', 'error', 'droppy'].join(' ')}
         style={{ maxWidth: '400px', justifyContent: 'center' }}>

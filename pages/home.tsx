@@ -11,6 +11,7 @@ import styles from '../styles/Home.module.css';
 // Icons
 import { FaPlus } from 'react-icons-ng/fa';
 import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -47,14 +48,14 @@ const Home: NextPage = () => {
               sharing platform thats better in every way.
             </p>
             <div className={styles.buttonHolder}>
-              <a
+              <Link
                 style={{ width: 'fit-content' }}
                 href="/"
                 className={generalStyles.newProject}>
                 <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New
                 board
-              </a>
-              <a
+              </Link>
+              <Link
                 style={{ width: 'fit-content' }}
                 href="/privacy"
                 className={styles.privacy}>
@@ -63,7 +64,7 @@ const Home: NextPage = () => {
                   style={{ marginRight: '10px' }}
                 />{' '}
                 Privacy
-              </a>
+              </Link>
             </div>
           </div>
           <Image
@@ -107,16 +108,16 @@ const Home: NextPage = () => {
 
         <div className={styles.last}>
           <h3>Share your code, inspire others.</h3>
-          <a
+          <Link
             style={{ width: 'fit-content' }}
             href="/"
             className={generalStyles.newProject}>
             <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New
             board
-          </a>
+          </Link>
         </div>
         <footer>
-          Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
         </footer>
       </main>
     </div>

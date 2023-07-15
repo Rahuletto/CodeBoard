@@ -18,6 +18,7 @@ import { Md2RobotExcited } from 'react-icons-ng/md2';
 // Our imports
 import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -124,10 +125,10 @@ export default function Account({ github, bds, apiBds, id, api }) {
               <div className={styles.details}>
                 <h1>{session?.user?.user_metadata?.name}</h1>
                 {github ? (
-                  <a href={github} className={styles.githubURL}>
+                  <Link href={github} className={styles.githubURL}>
                     <FaGithub style={{ marginRight: '6px' }} />
                     {session?.user?.user_metadata?.user_name}{' '}
-                  </a>
+                  </Link>
                 ) : null}
               </div>
             </div>
@@ -207,9 +208,9 @@ export default function Account({ github, bds, apiBds, id, api }) {
                   <h3>{b.name}</h3>
                   <p>{b.description}</p>
                   <div className={styles.buttons}>
-                    <a title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
+                    <Link title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
                       /bin/{b.key}
-                    </a>
+                    </Link>
                     <button
                       title="Delete the board"
                       onClick={() => deleteBoard(b.key)}>

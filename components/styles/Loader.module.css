@@ -86,8 +86,8 @@
 }
 
 .loader {
-  position: absolute;
-  z-index: 1000;
+  position: fixed;
+  z-index: 120;
   left: 0;
   top: 0;
   padding: 0;

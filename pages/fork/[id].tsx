@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
-
+import Link from 'next/link'
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -349,11 +349,11 @@ export default function Fork({ board }: { board: FetchResponse }) {
                   style={{ color: 'var(--green)', marginRight: '12px' }}
                 />{' '}
                 Forked from{' '}
-                <a
+                <Link
                   style={{ color: 'var(--purple-dark)' }}
                   href={`/bin/${board.key}`}>
                   {board.name}
-                </a>
+                </Link>
               </p>
 
               <form

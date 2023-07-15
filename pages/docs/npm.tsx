@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import styles from '../../styles/Docs.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { CodeBoard } from '../../components';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
@@ -39,14 +40,14 @@ const Docs: NextPage = () => {
           <div className={styles.pages}>
             <h4>Contents</h4>
             <div>
-              <a href="/docs">Introduction</a>
-              <a className={styles.active} href="/docs/npm">
+              <Link href="/docs">Introduction</Link>
+              <Link className={styles.active} href="/docs/npm">
                 npm Package
-              </a>
-              <a href="/docs/ping">Ping</a>
-              <a href="/docs/teapot">Im a teapot</a>
-              <a href="/docs/save">Save a board</a>
-              <a href="/docs/fetch">Fetch a board</a>
+              </Link>
+              <Link href="/docs/ping">Ping</Link>
+              <Link href="/docs/teapot">Im a teapot</Link>
+              <Link href="/docs/save">Save a board</Link>
+              <Link href="/docs/fetch">Fetch a board</Link>
             </div>
           </div>
 
@@ -58,7 +59,7 @@ const Docs: NextPage = () => {
               <br></br>
               <br></br>
               If you have questions, feel free to{' '}
-              <a href="/discord">contact us.</a>
+              <Link href="/discord">contact us.</Link>
             </p>
             <br></br>
             <h2>Installation</h2>
@@ -101,7 +102,7 @@ const Docs: NextPage = () => {
               it and should be located inside an{' '}
               <code style={{ color: 'var(--purple)' }}>async</code> function. Or
               your project should be configured to{' '}
-              <a
+              <Link
                 style={{
                   color: 'var(--purple)',
                   background: 'var(--background-dark)',
@@ -110,7 +111,7 @@ const Docs: NextPage = () => {
                 }}
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">
                 top-level await
-              </a>
+              </Link>
             </blockquote>
 
             <h2 id="codeboard">Codeboard class</h2>
@@ -142,9 +143,9 @@ const Docs: NextPage = () => {
               The API Key used to access the privileged endpoints like{' '}
               <code className="red">save</code> and{' '}
               <code className="red">fetch</code>. Get{' '}
-              <a className="green" href="/account">
+              <Link className="green" href="/account">
                 your key here
-              </a>
+              </Link>
             </p>
 
             <h3>Types</h3>
@@ -194,7 +195,7 @@ const Docs: NextPage = () => {
               located inside an{' '}
               <code style={{ color: 'var(--purple)' }}>async</code> function. Or
               your project should be configured to{' '}
-              <a
+              <Link
                 style={{
                   color: 'var(--purple)',
                   background: 'var(--background-dark)',
@@ -203,7 +204,7 @@ const Docs: NextPage = () => {
                 }}
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">
                 top-level await
-              </a>
+              </Link>
             </blockquote>
 
             <h3>Types</h3>
@@ -256,7 +257,7 @@ const Docs: NextPage = () => {
               located inside an{' '}
               <code style={{ color: 'var(--purple)' }}>async</code> function. Or
               your project should be configured to{' '}
-              <a
+              <Link
                 style={{
                   color: 'var(--purple)',
                   background: 'var(--background-dark)',
@@ -265,7 +266,7 @@ const Docs: NextPage = () => {
                 }}
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">
                 top-level await
-              </a>
+              </Link>
             </blockquote>
 
             <h3>Types</h3>
@@ -330,7 +331,7 @@ const Docs: NextPage = () => {
               located inside an{' '}
               <code style={{ color: 'var(--purple)' }}>async</code> function. Or
               your project should be configured to{' '}
-              <a
+              <Link
                 style={{
                   color: 'var(--purple)',
                   background: 'var(--background-dark)',
@@ -339,7 +340,7 @@ const Docs: NextPage = () => {
                 }}
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">
                 top-level await
-              </a>
+              </Link>
             </blockquote>
 
             <h3>Types</h3>
@@ -455,7 +456,7 @@ const Docs: NextPage = () => {
               located inside an{' '}
               <code style={{ color: 'var(--purple)' }}>async</code> function. Or
               your project should be configured to{' '}
-              <a
+              <Link
                 style={{
                   color: 'var(--purple)',
                   background: 'var(--background-dark)',
@@ -464,7 +465,7 @@ const Docs: NextPage = () => {
                 }}
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">
                 top-level await
-              </a>
+              </Link>
             </blockquote>
 
             <h3>Types</h3>
@@ -540,9 +541,9 @@ const Docs: NextPage = () => {
             <div className="splitter"></div>
 
             <h1>Support</h1>
-            <a style={{ width: 'min-content' }} href="/support">
+            <Link style={{ width: 'min-content' }} href="/support">
               Get help: https://board.is-an.app/support
-            </a>
+            </Link>
 
             <p>{"Let's"} build a better community, together.</p>
 
@@ -564,7 +565,7 @@ const Docs: NextPage = () => {
         </div>
 
         <footer style={{ marginTop: '20px' }}>
-          Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
         </footer>
       </main>
       <style>

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 // Styles
 import styles from '../../styles/Docs.module.css';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
@@ -37,14 +38,14 @@ const Docs: NextPage = () => {
           <div className={styles.pages}>
             <h4>Contents</h4>
             <div>
-              <a className={styles.active} href="/docs">
+              <Link className={styles.active} href="/docs">
                 Introduction
-              </a>
-              <a href="/docs/npm">npm Package</a>
-              <a href="/docs/ping">Ping</a>
-              <a href="/docs/teapot">Im a teapot</a>
-              <a href="/docs/save">Save a board</a>
-              <a href="/docs/fetch">Fetch a board</a>
+              </Link>
+              <Link href="/docs/npm">npm Package</Link>
+              <Link href="/docs/ping">Ping</Link>
+              <Link href="/docs/teapot">Im a teapot</Link>
+              <Link href="/docs/save">Save a board</Link>
+              <Link href="/docs/fetch">Fetch a board</Link>
             </div>
           </div>
 
@@ -56,7 +57,7 @@ const Docs: NextPage = () => {
               <br></br>
               <br></br>
               If you have questions, feel free to{' '}
-              <a href="/discord">contact us.</a>
+              <Link href="/discord">contact us.</Link>
             </p>
             <br></br>
             <h3>Endpoints</h3>
@@ -65,16 +66,16 @@ const Docs: NextPage = () => {
             </p>
             <ul>
               <li>
-                <a href="/docs/ping">/ping</a>
+                <Link href="/docs/ping">/ping</Link>
               </li>
               <li>
-                <a href="/docs/teapot">/teapot</a> {'(April fools joke)'}
+                <Link href="/docs/teapot">/teapot</Link> {'(April fools joke)'}
               </li>
               <li>
-                <a href="/docs/save">/save</a>
+                <Link href="/docs/save">/save</Link>
               </li>
               <li>
-                <a href="/docs/fetch">/fetch</a>
+                <Link href="/docs/fetch">/fetch</Link>
               </li>
             </ul>
 
@@ -93,26 +94,26 @@ const Docs: NextPage = () => {
             <p>You can only access</p>
             <ul>
               <li>
-                <a href="/docs/ping">/ping</a>
+                <Link href="/docs/ping">/ping</Link>
               </li>
               <li>
-                <a href="/docs/teapot">/teapot</a>
+                <Link href="/docs/teapot">/teapot</Link>
               </li>
               <li>
-                <a href="/docs/fetch">/fetch</a> {'(Returns an encrypted mess)'}
+                <Link href="/docs/fetch">/fetch</Link> {'(Returns an encrypted mess)'}
               </li>
             </ul>
             <p>
               You should note that{' '}
               <span className="orange">without an API Key</span>,{' '}
-              <a href="/docs/fetch">/fetch</a> endpoint returns encrypted files
+              <Link href="/docs/fetch">/fetch</Link> endpoint returns encrypted files
               instead of an usable decrypted counterpart. So{' '}
               <span className="green">
                 we highly recommend getting an API Key.
               </span>
               <br></br>
               <span className="green">With API Key,</span> you can access all
-              the endpoints provided including <a href="/docs/fetch">/fetch</a>{' '}
+              the endpoints provided including <Link href="/docs/fetch">/fetch</Link>{' '}
               endpoint which returns decrypted files when providing API Key.
             </p>
 
@@ -135,9 +136,9 @@ const Docs: NextPage = () => {
             <h3 className={styles.baseUrl}>https://board.is-an.app/api</h3>
             <p>
               Get your API Key in{' '}
-              <a href="/accounts" className="green">
+              <Link href="/accounts" className="green">
                 Accounts
-              </a>{' '}
+              </Link>{' '}
               page if youve signed in before.
             </p>
             <div className={styles.move}>
@@ -153,7 +154,7 @@ const Docs: NextPage = () => {
         </div>
 
         <footer style={{ marginTop: '20px' }}>
-          Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
         </footer>
       </main>
     </div>

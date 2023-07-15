@@ -27,6 +27,7 @@ import { MetaTags } from '../../components';
 
 // Auth
 import { useSession } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
 
 // Lazy loading
 
@@ -133,7 +134,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     style={{ color: 'var(--green)', marginRight: '12px' }}
                   />{' '}
                   Forked from{' '}
-                  <a
+                  <Link
                     style={{
                       background: 'var(--purple-dark)',
                       color: 'var(--background)',
@@ -142,7 +143,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     }}
                     href={`/bin/${board.fork?.key}`}>
                     {board.fork?.name}
-                  </a>
+                  </Link>
                 </p>
               ) : null}
 

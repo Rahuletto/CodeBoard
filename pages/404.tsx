@@ -9,6 +9,7 @@ import styles from '../styles/Home.module.css';
 
 // Icons
 import { BsQuestionDiamondFill } from 'react-icons-ng/bs';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -76,7 +77,7 @@ const Error: NextPage = () => {
         </div>
 
         <footer style={{ marginTop: '20px' }}>
-        Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+        Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
       </footer>
       </main>
       

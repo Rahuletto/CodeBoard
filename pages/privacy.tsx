@@ -2,12 +2,14 @@
 import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // Styles
 import styles from '../styles/Privacy.module.css';
 
 // Icons
 import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -49,9 +51,9 @@ const Home: NextPage = () => {
             made something thats *spot on* simple yet transparent policy.
           </p>
           <div className={styles.indent}>
-            <a href="#definitions">
+            <Link href="#definitions">
               <h1>Definitions</h1>
-            </a>
+            </Link>
             <div className={styles.indent}>
               <ul>
                 <li>
@@ -81,9 +83,9 @@ const Home: NextPage = () => {
                 </li>
               </ul>
             </div>
-            <a href="#data">
+            <Link href="#data">
               <h1>Your data</h1>
-            </a>
+            </Link>
             <div className={styles.indent}>
               <p>
                 We will{' '}
@@ -105,9 +107,9 @@ const Home: NextPage = () => {
                 personal data
               </p>
             </div>
-            <a href="#liability">
+            <Link href="#liability">
               <h1>Liability</h1>
-            </a>
+            </Link>
             <div className={styles.indent}>
               <p>
                 As this is a code sharing platform, you might come around with
@@ -134,22 +136,22 @@ const Home: NextPage = () => {
                 If you come across a malicious board {'(code snippet)'} then{' '}
                 <b style={{ color: 'var(--green)' }}>PLEASE</b> send the key{' '}
                 {'(or)'} url via{' '}
-                <a className={styles.link} href="mailto: rahulmarban@gmail.com">
+                <Link className={styles.link} href="mailto: support@codeboard.tech">
                   email
-                </a>{' '}
+                </Link>{' '}
                 or{' '}
-                <a
+                <Link
                   target="_blank"
                   rel="noreferrer"
                   className={styles.link}
                   href="/discord">
                   discord
-                </a>
+                </Link>
               </p>
             </div>
-            <a href="#questions">
+            <Link href="#questions">
               <h1 id="questions">Questions or concerns?</h1>
-            </a>
+            </Link>
             <div className={styles.indent}>
               <p>
                 Reading this privacy notice will help you understand your{' '}
@@ -159,17 +161,17 @@ const Home: NextPage = () => {
                 . If you do not agree with our policies and practices, please do
                 not use our Services. If you still have any questions or
                 concerns, please contact me at{' '}
-                <a className={styles.link} href="mailto: rahulmarban@gmail.com">
-                  rahulmarban@gmail.com
-                </a>{' '}
+                <Link className={styles.link} href="mailto: support@codeboard.tech">
+                support@codeboard.tech
+                </Link>{' '}
                 or{' '}
-                <a
+                <Link
                   target="_blank"
                   rel="noreferrer"
                   className={styles.link}
                   href="/discord">
                   at Discord
-                </a>
+                </Link>
                 .
               </p>
             </div>

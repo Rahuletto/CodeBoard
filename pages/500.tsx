@@ -9,6 +9,7 @@ import styles from '../styles/Home.module.css';
 
 // Icons
 import { FaHeartBroken } from 'react-icons-ng/fa';
+import Link from 'next/link';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -50,7 +51,7 @@ const Error: NextPage = () => {
               </h1>
               <p className="error-text" style={{ fontSize: '18px' }}>
                 Uhh. I{"'"}ve encountered some issues with<br></br>our servers.
-                Imma report it to <a id="author" href="https://rahuletto.thedev.id">Rahuletto</a><br></br>
+                Imma report it to <Link id="author" href="https://rahuletto.thedev.id">Rahuletto</Link><br></br>
                 <br></br>Please try again after some time.<br></br>
                 <span
                   style={{
@@ -68,7 +69,7 @@ const Error: NextPage = () => {
           </div>
         </div>
         <footer style={{ marginTop: '20px' }}>
-          Made by <a href="https://rahuletto.thedev.id">Rahuletto</a>
+          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
         </footer>
       </main>
     </div>
