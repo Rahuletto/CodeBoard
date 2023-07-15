@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link'
+import Link from 'next/link';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -23,12 +23,11 @@ import {
 import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
 import { AddFile, MetaTags } from '../../components';
-import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 import makeid from '../../utils/makeid';
 import { GoGitBranch } from 'react-icons-ng/go';
 import { Languages } from '../../utils/types/languages';
-import { useSession } from '@supabase/auth-helpers-react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -61,7 +60,8 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
 export default function Fork({ board }: { board: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
-  
+  const supabase = useSupabaseClient();
+
   // ---------------------------------
   // ---------- S T A T E S ----------
   // ---------------------------------
@@ -255,7 +255,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
       });
     } else encryptedFiles = files;
 
-    const data = {
+    const { error } = await supabase.from('Boards').insert({
       name: title || 'Untitled',
       description: description || 'No Description',
       autoVanish: vanish,
@@ -265,23 +265,10 @@ export default function Fork({ board }: { board: FetchResponse }) {
       key: keyId,
       createdAt: Date.now(),
       author: session ? session?.user?.user_metadata?.provider_id : null,
-    };
+    });
 
-    const JSONdata = JSON.stringify(data);
-    const endpoint = '/api/create';
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-      body: JSONdata,
-    };
-    const response = await fetch(endpoint, options);
-
-    const result = await response.json();
-    if (result) router.push(`/bin/${keyId}`);
+    if (error) router.push('/500');
+    else router.push(`/bin/${keyId}`);
   };
 
   // Find if its File ---------------------------------
@@ -507,10 +494,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  context.res.setHeader(
-    'Cache-Control',
-    'public, max-age=31536000'
-  );
+  context.res.setHeader('Cache-Control', 'public, max-age=31536000');
 
   const promiseBoard = await fetch(
     `https://board.is-an.app/api/fetch?id=${context.params.id}`,

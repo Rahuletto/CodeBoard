@@ -11,18 +11,18 @@ import { AESDecrypt } from '../../utils/aes';
 
 // Types
 export type FetchResponse = {
-  name: string,
-  description: string,
-  files: BoardFile[],
-  key: string,
-  encrypt: boolean,
-  autoVanish: boolean,
-  fork: { status: boolean, key: string, name: string } | undefined,
-  author: string,
-  bot: boolean,
-  createdAt: number,
-  status: number, // HTTPS Status code
-}
+  name: string;
+  description: string;
+  files: BoardFile[];
+  key: string;
+  encrypt: boolean;
+  autoVanish: boolean;
+  fork: { status: boolean; key: string; name: string } | undefined;
+  author: string;
+  bot: boolean;
+  createdAt: number;
+  status: number; // HTTPS Status code
+};
 
 // Edge config
 export const config = {
@@ -48,19 +48,19 @@ export default async function GET(req: NextRequest) {
     .limit(1)
     .single();
 
-    if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
-      return new Response(
-        JSON.stringify({
-          message: 'Not Authorized !',
-          status: 401,
-        }),
-        {
-          status: 401,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      )
+  if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
+    return new Response(
+      JSON.stringify({
+        message: 'Not Authorized !',
+        status: 401,
+      }),
+      {
+        status: 401,
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
 
   const { data: boardRaw }: { data: Board } = await supabase
     .from('Boards')
@@ -84,14 +84,30 @@ export default async function GET(req: NextRequest) {
       }
     );
 
-    if((Number(boardRaw.createdAt) + 86400 * 1000 < Date.now() &&
-    boardRaw?.autoVanish) ||
-    boardRaw?.files.length == 0){
-      const { error: boardError } = await supabase
+  if (
+    (Number(boardRaw.createdAt) + 86400 * 1000 < Date.now() &&
+      boardRaw?.autoVanish) ||
+    boardRaw?.files.length == 0
+  ) {
+    const { error: boardError } = await supabase
       .from('Boards')
       .delete()
       .eq('key', boardRaw.key);
-    }
+
+    return new Response(
+      JSON.stringify({
+        message: 'NOT FOUND. Try a valid board id',
+        status: 404,
+      }),
+      {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+          'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
+        },
+      }
+    );
+  }
 
   let board = {
     name: boardRaw.name,
@@ -101,7 +117,7 @@ export default async function GET(req: NextRequest) {
     encrypt: boardRaw.encrypt,
     autoVanish: boardRaw.autoVanish,
     fork: boardRaw.fork,
-    author: boardRaw?.author?.startsWith('bot') ? "bot" : boardRaw.author,
+    author: boardRaw?.author?.startsWith('bot') ? 'bot' : boardRaw.author,
     bot: boardRaw?.author?.startsWith('bot') ? true : false,
     madeBy: boardRaw.madeBy,
     createdAt: boardRaw.createdAt,
@@ -129,8 +145,8 @@ export default async function GET(req: NextRequest) {
         JSON.stringify({
           message:
             'Server Error while parsing encrypt files ! Contact the owner',
-            errorCode: "ENCRPT_ERR",
-            status: 500,
+          errorCode: 'ENCRPT_ERR',
+          status: 500,
         }),
         {
           status: 500,
@@ -149,4 +165,4 @@ export default async function GET(req: NextRequest) {
       },
     });
   }
-};
+}

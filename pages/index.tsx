@@ -12,7 +12,7 @@ import styles from '../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Auth
-import { useSession } from '@supabase/auth-helpers-react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Icons from React-Icons-NG (Thanks 💖)
 import {
@@ -61,6 +61,7 @@ const Save = dynamic(() => import('../components/Save'), {
 const Index: NextPage = () => {
   const router = useRouter();
   const session = useSession();
+  const supabase = useSupabaseClient();
 
   // ---------------------------------
   // ---------- S T A T E S ----------
@@ -267,7 +268,7 @@ const Index: NextPage = () => {
       });
     } else encryptedFiles = files;
 
-    const data = {
+    const { error } = await supabase.from('Boards').insert({
       name: title || 'Untitled',
       description: description || 'No Description',
       files: encryptedFiles,
@@ -276,22 +277,10 @@ const Index: NextPage = () => {
       encrypt: encrypt,
       createdAt: Date.now(),
       author: session ? session?.user?.user_metadata?.provider_id : null,
-    };
+    });
 
-    const endpoint = '/api/create';
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(endpoint, options);
-    const reply = await response.json()
-    if(reply.created) router.push(reply.board)
-    else router.push('/500')
+    if(error) router.push('/500')
+    else router.push(`/bin/${keyId}`)
   };
 
   // Find if its File ------------------------------------------------

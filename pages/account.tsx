@@ -27,7 +27,7 @@ const Header = dynamic(() => import('../components/Header'), { ssr: true });
 export default function Account({ github, bds, apiBds, id, api }) {
   const router = useRouter();
 
-  const supabaseClient = useSupabaseClient();
+  const supabase = useSupabaseClient();
   const session = useSession();
 
   const [apiKey, setApiKey] = useState(api);
@@ -57,19 +57,13 @@ export default function Account({ github, bds, apiBds, id, api }) {
   }
 
   async function deleteBoard(b) {
-    const response = await fetch(
-      `/api/delete?id=${b}&userId=${session.user.user_metadata.provider_id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.NEXT_PUBLIC_KEY,
-        },
-      }
-    );
-    const result = await response.json();
+    const { error } = await supabase
+      .from('Boards')
+      .delete()
+      .eq('key', b)
 
-    if (result) router.reload();
+    if (!error) router.reload()
+    else console.error(error)
   }
 
   async function regenerate() {
@@ -159,8 +153,7 @@ export default function Account({ github, bds, apiBds, id, api }) {
               title="Sign out"
               onClick={() => {
                 router.push('/');
-                supabaseClient.auth.signOut();
-                
+                supabase.auth.signOut();
               }}
               className={styles.signOut}>
               Sign Out
@@ -211,11 +204,11 @@ export default function Account({ github, bds, apiBds, id, api }) {
                     <Link title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
                       /bin/{b.key}
                     </Link>
-                    <button
+                    {isUser ? (<button
                       title="Delete the board"
                       onClick={() => deleteBoard(b.key)}>
                       Delete
-                    </button>
+                    </button>) : null}
                   </div>
                 </div>
               ))}

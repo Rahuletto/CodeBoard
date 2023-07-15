@@ -25,10 +25,9 @@ import Loader from '../components/Loader';
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false)
-  
+
   useEffect(() => {
     const handleStart = (url: string) => {
-      console.log(`Loading: ${url}`)
       NProgress.start()
       setLoading(true)
     }
@@ -72,7 +71,7 @@ class ErrorBoundary extends React.Component {
   constructor(props: any) {
     super(props);
 
-    this.state = { hasError: true };
+    this.state = { hasError: false };
   }
   static getDerivedStateFromError(error: any) {
     return { hasError: true };
