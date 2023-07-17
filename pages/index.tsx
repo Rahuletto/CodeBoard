@@ -11,6 +11,9 @@ import styles from '../styles/Index.module.css';
 // Load Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
+// Auth
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+
 // Icons from React-Icons-NG (Thanks 💖)
 import {
   LuShieldCheck,
@@ -20,18 +23,17 @@ import {
 } from 'react-icons-ng/lu';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
 import { AddFile, MetaTags } from '../components';
-
+import { AESEncrypt } from '../utils/aes';
+import { Languages } from '../utils/types/languages';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
-  ssr: false,
-});
+const CodeBoard = dynamic(() => import('../components/CodeBoard'));
 const EditModal = dynamic(() => import('../components/EditModal'), {
   ssr: false,
 });
@@ -50,9 +52,14 @@ const CreateModal = dynamic(() => import('../components/CreateModal'), {
 const FileSelect = dynamic(() => import('../components/FileSelect'), {
   ssr: false,
 });
+const Save = dynamic(() => import('../components/Save'), {
+  ssr: false,
+});
 
 const Index: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   // ---------------------------------
   // ---------- S T A T E S ----------
@@ -80,6 +87,9 @@ const Index: NextPage = () => {
   // For Drag and drop ---------------------------------
   const [drag, setDrag] = useState(false);
 
+  // Saving ---------------------------------
+  const [save, setSave] = useState(false);
+
   // Files ---------------------------------
   const [files, setFiles] = useState([
     {
@@ -94,8 +104,9 @@ const Index: NextPage = () => {
 
   // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    loadLanguage(
+      file.language == 'none' ? 'markdown' : (file.language as Languages)
+    )
   );
 
   const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
@@ -124,15 +135,19 @@ const Index: NextPage = () => {
   // Set Language ---------------------------------
   useEffect(() => {
     setLanguage(
-      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+      loadLanguage(
+        file.language == 'none' ? 'markdown' : (file.language as Languages)
+      )
     );
   }, [file.language]);
 
   // Set Themes ---------------------------------
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
+
+  // ---------------------------------------------
 
   // File Selector Effect ---------------------------------
   useEffect(() => {
@@ -180,7 +195,9 @@ const Index: NextPage = () => {
   }
 
   async function uploadFile(fls: FileList) {
-    if (files.length >= 2) return;
+    let limit = 2;
+    if (session) limit = 4;
+    if (files.length >= limit) return;
     if (!fls[0]) return;
 
     if (
@@ -237,8 +254,6 @@ const Index: NextPage = () => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    const { AESEncrypt } = await import('../utils/aes');
-
     let encryptedFiles: BoardFile[] = [];
 
     if (encrypt) {
@@ -251,33 +266,23 @@ const Index: NextPage = () => {
       });
     } else encryptedFiles = files;
 
-    const data = {
+    const { error } = await supabase.from('Boards').insert({
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [{ autoVanish: vanish, encrypt: encrypt }],
       files: encryptedFiles,
       key: keyId,
+      autoVanish: vanish,
+      encrypt: encrypt,
       createdAt: Date.now(),
-    };
+      author: session ? session?.user?.user_metadata?.provider_id : null,
+    });
 
-    const JSONdata = JSON.stringify(data);
-    const endpoint = '/api/create';
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-      body: JSONdata,
-    };
-    const response = await fetch(endpoint, options);
-
-    const result = await response.json();
-    if (result) router.push(`/bin/${keyId}`);
+    if(error) router.push('/500')
+    else router.push(`/bin/${keyId}`)
   };
 
-  // Find if its File ---------------------------------
+  // Find if its File ------------------------------------------------
+
   function isFile(dataTransfer: DataTransfer) {
     if (dataTransfer.types[0] == 'Files') return true;
     else false;
@@ -306,6 +311,7 @@ const Index: NextPage = () => {
           isFile(e.dataTransfer) ? handleDrop(e) : null;
         }}
         className={generalStyles.main}>
+        {save ? <Save /> : null}
         <div
           onClick={() => {
             closeEdit();
@@ -314,7 +320,7 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
-        <DropZone files={files} drag={drag} />
+        <DropZone files={files} drag={drag} limit={session ? 4 : 2} />
 
         <Header drag={drag} theme={theme} setTheme={setTheme} />
 
@@ -343,6 +349,7 @@ const Index: NextPage = () => {
                   <input
                     style={{ fontWeight: '600' }}
                     value={title}
+                    maxLength={25}
                     onChange={(event) => setTitle(event.target.value)}
                     placeholder="Untitled."
                     name="project-name"></input>{' '}
@@ -407,13 +414,11 @@ const Index: NextPage = () => {
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';
+                  setMetadata(false);
+                  setSave(true);
                   const form =
                     document.querySelector<HTMLFormElement>(`.projectDetails`);
                   form.requestSubmit();
-                  const backdrop =
-                    document.querySelector<HTMLFormElement>(`.backdrop`);
-                  backdrop.innerHTML = '<h1>Saving...</h1>';
-                  backdrop.style['display'] = 'block';
                 }}>
                 Save
               </button>
@@ -464,7 +469,7 @@ const Index: NextPage = () => {
             <div className="file-holder bin-copy">
               <div style={{ display: 'flex', gap: '12px' }}>
                 {btns}
-                <AddFile files={files} />
+                <AddFile files={files} limit={session?.user ? 4 : 2} />
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>

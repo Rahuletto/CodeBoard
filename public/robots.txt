@@ -20,5 +20,10 @@ User-agent: *
 Allow: /
 
 User-agent: *
+Allow: /docs
+
+User-agent: *
 Allow: /home
+
+User-agent: *
 Allow: /api/og/*

@@ -1,11 +1,28 @@
 // NextJS Stuff
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetServerSidePropsContext } from 'next';
+import router from 'next/router';
+import { useEffect, useState } from 'react';
+import { sudoFetch } from '../../utils/sudo-fetch';
 
-// Our stuff
-import { AESDecrypt } from '../../utils/aes';
-import { FetchResponse } from '../api/fetch';
+export default function MyComponent({
+  id,
+  file,
+}: {
+  id: string;
+  file: string;
+}) {
+  const supabase = useSupabaseClient();
+  const [text, setText] = useState('');
 
-export default function MyComponent({ text }: { text: string }) {
+  useEffect(() => {
+    sudoFetch(supabase, id).then((b) => {
+      if (!b) return router.push('/404');
+
+      const f = b.files.find((a) => a.name == file)
+      setText(f.value);
+    });
+  });
   return (
     <textarea
       disabled
@@ -20,36 +37,11 @@ export default function MyComponent({ text }: { text: string }) {
   );
 }
 
+// Edge Function
+export const config = {
+  runtime: 'experimental-edge' 
+};
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
-  );
-
-  if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-
-    if (
-      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    let text: string;
-
-    const file = maybeBoard.files.find((a) => a.name == context.query.file);
-
-    if (!file || !file?.value) return { props: { text: 'File not found !' } };
-
-    text = file.value;
-
-    if (maybeBoard.encrypted) text = AESDecrypt(file.value);
-
-    return { props: { text: text } };
-  } else return { props: { text: 'Board not found !' } };
+  return { props: { id: context.params.id, file: context.query.file } };
 }

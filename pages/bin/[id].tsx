@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // Styles
 import generalStyles from '../../styles/General.module.css';
@@ -13,22 +14,29 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode } from 'react-icons-ng/fa';
+import { FaLink, FaCode, FaPencilAlt } from 'react-icons-ng/fa';
 import { LuShieldCheck } from 'react-icons-ng/lu';
 import { GoGitBranch } from 'react-icons-ng/go';
+import { Md2RobotExcited } from 'react-icons-ng/md2';
 
 // Our Imports
-import { BoardFile } from '../../utils/board';
+import { BoardFile } from '../../utils/types/board';
 import { FetchResponse } from '../api/fetch';
+import { sudoFetch } from '../../utils/sudo-fetch';
+import { Languages } from '../../utils/types/languages';
 import { MetaTags } from '../../components';
 
-// Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes';
+// Auth
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+
+// Skeleton
+import Skeleton from 'react-loading-skeleton';
 
 // Lazy loading
-
-// WANTED TO COMBINE ALL LAZY IMPORTS WITH INDEX.TS BUT NEXTJS DONT ALLOW AAA
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
+const BoardLoader = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: true,
+});
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
@@ -42,53 +50,66 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ board }: { board: FetchResponse }) {
+export default function Bin({ id }: { id: string }) {
   const router = useRouter();
-
-  const [theme, setTheme] = useState<'light' | 'dark' | string>();
-
-  useEffect(() => {
-    setTheme(localStorage.getItem('theme') || 'dark');
-  }, []);
-
-  useEffect(() => {
-    if (!board) router.push('/404');
-  }, [board]);
-
-  const [fileName, setFileName] = useState(board.files[0].name);
-  const [btns, setBtns] = useState([]);
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
+  // -----------------------------------------
 
-  let file = board.files.find((a: BoardFile) => a.name == fileName);
-  if (!file) file = board.files[0];
+  const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  let language = loadLanguage(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    file.language == 'none' ? 'markdown' : file.language
-  );
+  const [board, setBoard] = useState<FetchResponse>(null);
+  const [fileName, setFileName] = useState('');
+  const [btns, setBtns] = useState([]);
+  const [file, setFile] = useState<BoardFile>(null);
+  const [language, setLanguage] = useState<any>(null);
 
-  const fileButtons: JSX.Element[] = [];
+  useEffect(() => {
+    setTheme(localStorage.getItem('theme') || 'dark');
 
-  board.files.map((f) => {
-    if (f.language == 'none') {
-      f.name = f.name.split('.')[0] + '.md';
+    sudoFetch(supabase, id).then((b) => {
+      if (!b) return router.push('/404');
+      setBoard(b);
+      setFileName(b.files[0].name);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (board) {
+      setFile(board.files.find((a: BoardFile) => a.name == fileName));
+      if (!file) setFile(board.files[0]);
+
+      setLanguage(
+        loadLanguage(
+          file?.language !== 'none' ? (file?.language as Languages) : 'markdown'
+        )
+      );
+
+      const fileButtons: JSX.Element[] = [];
+
+      board.files.map((f) => {
+        if (f.language == 'none') {
+          f.name = f.name.split('.')[0] + '.md';
+        }
+
+        fileButtons.push(
+          <div key={f.name}>
+            <FileSelect
+              fileName={fileName}
+              file={f}
+              setFileName={setFileName}
+              edit={false}
+            />
+          </div>
+        );
+      });
+
+      setBtns(fileButtons);
     }
-
-    fileButtons.push(
-      <div key={f.name}>
-        <FileSelect
-          fileName={fileName}
-          file={f}
-          setFileName={setFileName}
-          edit={false}
-        />
-      </div>
-    );
   });
-
-  setTimeout(() => setBtns(fileButtons), 20);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
@@ -99,20 +120,24 @@ export default function Bin({ board }: { board: FetchResponse }) {
     }, 5000);
   }
 
-
   return (
     <div className={generalStyles.container}>
-      <MetaTags
-        title={board.name + '/CodeBoard'}
-        description={
-          board.description || 'No Description. Just the source code.'
-        }
-        k={board.key + ''}
-      />
+      {board ? (
+        <MetaTags
+          title={board.name + '/CodeBoard'}
+          description={
+            board.description || 'No Description. Just the source code.'
+          }
+          k={id + ''}
+        />
+      ) : null}
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
-        <Warning />
+        {board &&
+        session?.user?.user_metadata?.provider_id == board.author ? null : (
+          <Warning />
+        )}
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <InfoButton metadata={metadata} setMetadata={setMetadata} />
@@ -123,72 +148,146 @@ export default function Bin({ board }: { board: FetchResponse }) {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
-              {board.fork?.status ? (
+              {board && board.fork?.status ? (
                 <p style={{ margin: 0 }}>
                   <GoGitBranch
                     title="Forked Project"
-                    style={{ color: 'var(--green)', marginRight: '12px' }}
+                    style={{ color: 'var(--purple-dark)', marginRight: '12px' }}
                   />{' '}
                   Forked from{' '}
-                  <a
-                    style={{ color: 'var(--purple-dark)' }}
+                  <Link
+                    style={{
+                      background: 'var(--purple-dark)',
+                      color: 'var(--background)',
+                      borderRadius: '8px',
+                      padding: '2px 6px',
+                    }}
                     href={`/bin/${board.fork?.key}`}>
                     {board.fork?.name}
-                  </a>
+                  </Link>
                 </p>
               ) : null}
 
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
-                  <input
-                    style={{ fontWeight: '600' }}
-                    value={board.name}
-                    readOnly
-                    placeholder="Untitled."
-                    name="project-name"></input>{' '}
-                  {board.encrypted ? (
+                  {board ? (
+                    <input
+                      style={{ fontWeight: '600' }}
+                      value={board.name}
+                      readOnly
+                      placeholder="Untitled."
+                      name="project-name"></input>
+                  ) : (
+                    <h1 style={{ fontSize: '32px' }}>
+                      <Skeleton style={{ width: '180px' }} />
+                    </h1>
+                  )}{' '}
+                  {board && board.encrypt ? (
                     <LuShieldCheck title="Encrypted" className="enc icon" />
                   ) : null}
+                  {board && board.bot ? (
+                    <Md2RobotExcited
+                      title="Created using API"
+                      className="enc icon"
+                      style={{ color: 'var(--purple)' }}
+                    />
+                  ) : null}
                 </div>
-                <textarea
-                  style={{ fontWeight: '500' }}
-                  value={board.description}
-                  readOnly
-                  placeholder="Enter a short description."
-                  maxLength={128}
-                  name="project-desc"></textarea>
+                {board ? (
+                  <textarea
+                    style={{ fontWeight: '500' }}
+                    value={board.description}
+                    readOnly
+                    placeholder="Enter a short description."
+                    maxLength={128}
+                    name="project-desc"></textarea>
+                ) : (
+                  <div
+                    style={{
+                      padding: '16px',
+                      background: 'var(--background-dark)',
+                      borderRadius: '18px',
+                      height: '160px',
+                    }}>
+                    <Skeleton style={{ width: '180px' }} count={2} />
+                    <Skeleton style={{ width: '80px' }} />
+                  </div>
+                )}
               </form>
             </div>
-            <div className="tooltip">
-              <button
-                className={styles.save}
-                onClick={() => router.push(`/fork/${board.key}`)}
-                disabled={board.fork?.status}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <GoGitBranch
-                  title="Fork the board"
-                  style={{ marginRight: '12px' }}
-                />{' '}
-                Fork
-              </button>
-              <span style={{ borderRadius: '12px' }} className="tooltiptext">
-                Fork the board
-              </span>
-            </div>
+            {board &&
+            session?.user?.user_metadata?.provider_id == board.author ? (
+              <div className="tooltip">
+                <button
+                  className={styles.edit}
+                  disabled={true}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <FaPencilAlt
+                    title={'Edit your board'}
+                    style={{ marginRight: '12px' }}
+                  />{' '}
+                  Edit
+                </button>
+                <span style={{ borderRadius: '12px' }} className="tooltiptext">
+                  Coming soon..
+                </span>
+              </div>
+            ) : board ? (
+              <div className="tooltip">
+                <button
+                  className={styles.fork}
+                  onClick={() => router.push(`/fork/${id}`)}
+                  disabled={board.fork?.status || board.bot}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <GoGitBranch
+                    title={
+                      board.fork?.status
+                        ? 'Forked boards cannot get forked again'
+                        : board.bot
+                        ? 'Boards by API cannot get forked'
+                        : 'Fork the board'
+                    }
+                    style={{ marginRight: '12px' }}
+                  />{' '}
+                  Fork
+                </button>
+                <span style={{ borderRadius: '12px' }} className="tooltiptext">
+                  {board.fork?.status
+                    ? 'Forked boards cannot get forked again'
+                    : 'Fork the board'}
+                </span>
+              </div>
+            ) : null}
           </div>
 
-          <div className="codeWrapper">
+          <div
+            className="codeWrapper"
+            style={{ height: '-webkit-fill-available' }}>
             <div className="file-holder bin-copy">
-              <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                {btns[0] ? (
+                  btns
+                ) : (
+                  <div className={'fileSelect active-file'}>
+                    <button title="skeleton">
+                      <Skeleton style={{ width: '100px' }} />
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className={boardStyles.copy}>
                 <button
                   title="Copy URL"
                   onClick={(event) => {
-                    handleCopies(event, `${location.origin}/bin/${board.key}`);
+                    handleCopies(event, `${location.origin}/bin/${id}`);
                   }}>
                   <FaLink title="Copy URL" />
                 </button>
@@ -198,7 +297,7 @@ export default function Bin({ board }: { board: FetchResponse }) {
                     handleCopies(
                       event,
                       `<iframe 
-                    src="${location.origin}/embed/${board.key}" 
+                    src="${location.origin}/embed/${id}" 
                     style="width: 1024px; height: 473px; border:0; transform: scale(1); overflow:hidden;" 
                     sandbox="allow-scripts allow-same-origin">
                   </iframe>`
@@ -208,29 +307,35 @@ export default function Bin({ board }: { board: FetchResponse }) {
                 </button>
               </div>
             </div>
-            <div className={[boardStyles.inCode, 'codeCopy'].join(' ')}>
-              <button
-                title="Copy the whole program"
-                onClick={(event) => {
-                  handleCopies(event, file.value.toString());
-                }}>
-                Copy
-              </button>
-              <button
-                title="Open RAW file"
-                onClick={() => {
-                  router.push(`/raw/${board.key}?file=${file.name}`);
-                }}>
-                Raw
-              </button>
-            </div>
-            <CodeBoard
-              language={language}
-              code={file.value}
-              readOnly={true}
-              theme={theme}
-              onChange={() => 'ok'}
-            />
+            {board ? (
+              <div className={[boardStyles.inCode, 'codeCopy'].join(' ')}>
+                <button
+                  title="Copy the whole program"
+                  onClick={(event) => {
+                    handleCopies(event, file.value.toString());
+                  }}>
+                  Copy
+                </button>
+                <button
+                  title="Open RAW file"
+                  onClick={() => {
+                    router.push(`/raw/${id}?file=${file.name}`);
+                  }}>
+                  Raw
+                </button>
+              </div>
+            ) : null}
+            {language ? (
+              <CodeBoard
+                language={language}
+                code={file?.value}
+                readOnly={true}
+                theme={theme}
+                onChange={() => 'ok'}
+              />
+            ) : (
+              <BoardLoader />
+            )}
           </div>
         </div>
       </main>
@@ -239,61 +344,5 @@ export default function Bin({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
-  );
-
-  if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-    let board: FetchResponse = maybeBoard;
-
-    if (
-      (Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-        maybeBoard?.autoVanish) ||
-      maybeBoard?.files.length == 0
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    if (maybeBoard.encrypted) {
-      try {
-        const decryptedFiles = [];
-
-        maybeBoard.files.forEach((f) => {
-          decryptedFiles.push({
-            name: f.name,
-            language: f.language,
-            value: AESDecrypt(f.value),
-          });
-        });
-
-        board = {
-          name: maybeBoard.name,
-          description: maybeBoard.description,
-          files: decryptedFiles,
-          key: maybeBoard.key,
-          createdAt: maybeBoard.createdAt,
-          status: 200,
-          encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard?.autoVanish || false,
-          fork: maybeBoard.fork || null
-        };
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    return { props: { board: board } };
-  } else
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/404',
-      },
-    };
+  return { props: { id: context.params.id } };
 }

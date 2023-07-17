@@ -5,24 +5,24 @@ import styles from '../styles/Index.module.css';
 import { FaCloudUploadAlt, FaWindowClose } from 'react-icons-ng/fa';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type DropZoneProps = {
   files?: BoardFile[];
   drag?: boolean;
+  limit?: number;
 };
 
-const DropZone: React.FC<DropZoneProps> = ({ files, drag }) => {
-
+const DropZone: React.FC<DropZoneProps> = ({ files, drag, limit = 2 }) => {
   return (
     <div
       className={[styles.dropzone, styles.backdrop, drag ? 'droppy' : ''].join(
         ' '
       )}>
       <div className={[styles.dropNotif, 'dropNotif'].join(' ')}>
-        <h2>{files.length >= 2 ? 'Oh no' : 'Drop it.'}</h2>
+        <h2>{files.length >= limit ? 'Oh no' : 'Drop it.'}</h2>
         <p>
-          {files.length >= 2
+          {files.length >= limit
             ? "You've reached the file limit."
             : "We'll handle the rest !"}
         </p>
@@ -30,12 +30,13 @@ const DropZone: React.FC<DropZoneProps> = ({ files, drag }) => {
           className={styles.fileUploadBox}
           style={{
             border: `3px dashed ${
-              files.length >= 2 ? 'var(--red)' : 'var(--background-darker)'
+              files.length >= limit ? 'var(--red)' : 'var(--background-darker)'
             }`,
-            color: files.length >= 2 ? 'var(--red)' : 'var(--special-color)',
+            color:
+              files.length >= limit ? 'var(--red)' : 'var(--special-color)',
           }}>
           <span style={{ fontSize: '64px', color: 'var(--special-color)' }}>
-            {files.length >= 2 ? (
+            {files.length >= limit ? (
               <FaWindowClose
                 title="Not Allowed"
                 style={{ color: 'var(--red)' }}
@@ -45,8 +46,8 @@ const DropZone: React.FC<DropZoneProps> = ({ files, drag }) => {
             )}
           </span>
           <p>
-            {files.length >= 2
-              ? `There is a limit of 2 files per board at the moment. So we will not process this file. Delete one file and drop again.`
+            {files.length >= limit
+              ? `There is a limit of ${limit} files per board. If you have a CodeBoard account, You can upload up to 3 files. So we will not process this file. Delete one file and drop again.`
               : ` We only accept program files and not images/audio/video. Just
                 drop it we will handle the rest.`}
           </p>

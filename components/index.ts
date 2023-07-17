@@ -6,10 +6,11 @@ import EditModal from "./EditModal"
 import FileSelect from "./FileSelect"
 import Header from "./Header"
 import InfoButton from "./InfoButton"
-import Loader from "./Loader"
 import MetaTags from "./Metatags"
 import PrettierButton from "./PrettierButton"
+import Save from "./Save"
 import ThemeSwitch from "./ThemeSwitch"
+import Warning from "./Warning"
 
 export { 
     AddFile, // MillionJS Block Element
@@ -18,10 +19,11 @@ export {
     DropZone,
     EditModal,
     FileSelect,
-    Header, // MillionJS Block Element
+    Header,
     InfoButton,
-    Loader,
     MetaTags,
     PrettierButton, // MillionJS Block Element
-    ThemeSwitch // MillionJS Block Element
+    Save,
+    ThemeSwitch,
+    Warning // MillionJS Block Element
 }

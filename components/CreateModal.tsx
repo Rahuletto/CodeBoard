@@ -9,7 +9,7 @@ import { FaBackward, FaCloudUploadAlt } from 'react-icons-ng/fa';
 
 // Our Imports
 import { extensions } from '../utils/extensions';
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type CreateModalProps = {
   files: BoardFile[];
@@ -54,9 +54,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
       'language-show'
     )[0] as HTMLElement;
 
-    // @ts-ignore
     if (event.target[0].value == '') return dialog.close();
-    // @ts-ignore
     const name = event.target[0].value;
 
     dialog.close(name);

@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
-
+import Link from 'next/link';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -18,15 +18,20 @@ import {
   LuTimer,
   LuTimerOff,
 } from 'react-icons-ng/lu';
+import { GoGitBranch } from 'react-icons-ng/go';
+
+// Auth and Database
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
-import { BoardFile } from '../../utils/board';
+import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
 import { AddFile, MetaTags } from '../../components';
-import { AESDecrypt } from '../../utils/aes';
 import { FetchResponse } from '../api/fetch';
 import makeid from '../../utils/makeid';
-import { GoGitBranch } from 'react-icons-ng/go';
+import { Languages } from '../../utils/types/languages';
+import { sudoFetch } from '../../utils/sudo-fetch';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -58,6 +63,8 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
 
 export default function Fork({ board }: { board: FetchResponse }) {
   const router = useRouter();
+  const session = useSession();
+  const supabase = useSupabaseClient();
 
   // ---------------------------------
   // ---------- S T A T E S ----------
@@ -76,7 +83,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
   // Inputs ---------------------------------
   const [title, setTitle] = useState(board.name + ' Fork');
   const [description, setDescription] = useState('Fork of ' + board.name);
-  const [encrypt, setEncrypt] = useState(board.encrypted);
+  const [encrypt, setEncrypt] = useState(board.encrypt);
   const [vanish, setVanish] = useState(board.autoVanish);
 
   // Mobile ---------------------------------
@@ -93,8 +100,9 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
   // Language initialization ---------------------------------
   const [language, setLanguage] = useState(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+    loadLanguage(
+      file.language == 'none' ? 'markdown' : (file.language as Languages)
+    )
   );
 
   const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
@@ -123,8 +131,9 @@ export default function Fork({ board }: { board: FetchResponse }) {
   // Set Language ---------------------------------
   useEffect(() => {
     setLanguage(
-      // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-      loadLanguage(file.language == 'none' ? 'markdown' : file.language)
+      loadLanguage(
+        file.language == 'none' ? 'markdown' : (file.language as Languages)
+      )
     );
   }, [file.language]);
 
@@ -250,30 +259,20 @@ export default function Fork({ board }: { board: FetchResponse }) {
       });
     } else encryptedFiles = files;
 
-    const data = {
+    const { error } = await supabase.from('Boards').insert({
       name: title || 'Untitled',
       description: description || 'No Description',
-      options: [{ autoVanish: vanish, encrypt: encrypt, fork: { status: true, key: board.key, name: board.name } }],
+      autoVanish: vanish,
+      encrypt: encrypt,
+      fork: { status: true, key: board.key, name: board.name },
       files: encryptedFiles,
       key: keyId,
       createdAt: Date.now(),
-    };
+      author: session ? session?.user?.user_metadata?.provider_id : null,
+    });
 
-    const JSONdata = JSON.stringify(data);
-    const endpoint = '/api/create';
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: process.env.NEXT_PUBLIC_KEY,
-      },
-      body: JSONdata,
-    };
-    const response = await fetch(endpoint, options);
-
-    const result = await response.json();
-    if (result) router.push(`/bin/${keyId}`);
+    if (error) router.push('/500');
+    else router.push(`/bin/${keyId}`);
   };
 
   // Find if its File ---------------------------------
@@ -335,24 +334,27 @@ export default function Fork({ board }: { board: FetchResponse }) {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
-            <p style={{ margin: 0 }}>
-                  <GoGitBranch
-                    title="Forked Project"
-                    style={{ color: 'var(--green)', marginRight: '12px' }}
-                  />{' '}
-                  Forked from{' '}
-                  <a
-                    style={{ color: 'var(--purple-dark)' }}
-                    href={`/bin/${board.key}`}>
-                    {board.name}
-                  </a>
-                </p>
+              <p style={{ margin: 0 }}>
+                <GoGitBranch
+                  title="Forked Project"
+                  style={{ color: 'var(--purple-dark)', marginRight: '12px' }}
+                />{' '}
+                Forked from{' '}
+                <Link
+                  style={{
+                    background: 'var(--purple-dark)',
+                    color: 'var(--background)',
+                    borderRadius: '8px',
+                    padding: '2px 6px',
+                  }}
+                  href={`/bin/${board?.key}`}>
+                  {board.name}
+                </Link>
+              </p>
 
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
                 onSubmit={(event) => handleSubmit(event)}>
-                
-
                 <div className={styles.name}>
                   <input
                     style={{ fontWeight: '600' }}
@@ -501,61 +503,15 @@ export default function Fork({ board }: { board: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
-  );
+  const supabase = createPagesServerClient(context);
+  const board = await sudoFetch(supabase, context.params.id as string);
 
-  if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-    let board: FetchResponse = maybeBoard;
-
-    if (
-      (Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-        maybeBoard?.autoVanish) ||
-      maybeBoard?.files.length == 0
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    if (maybeBoard.encrypted) {
-      try {
-        const decryptedFiles = [];
-
-        maybeBoard.files.forEach((f) => {
-          decryptedFiles.push({
-            name: f.name,
-            language: f.language,
-            value: AESDecrypt(f.value),
-          });
-        });
-
-        board = {
-          name: maybeBoard.name,
-          description: maybeBoard.description,
-          files: decryptedFiles,
-          key: maybeBoard.key,
-          createdAt: maybeBoard.createdAt,
-          status: 200,
-          encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard?.autoVanish || false,
-          fork: maybeBoard?.fork || null
-        };
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    return { props: { board: board } };
-  } else
+  if (!board)
     return {
       redirect: {
         permanent: false,
         destination: '/404',
       },
     };
+  return { props: { board: board } };
 }

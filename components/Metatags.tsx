@@ -6,9 +6,10 @@ interface MetaTagsProps {
   description?: string;
   k?: string;
   err404?: boolean;
+  docs?: boolean
 }
 
-const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) => {
+const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs }) => {
   return (
     <>
       <Head>
@@ -23,7 +24,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
         />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://cdeboard.vercel.app" />
+        <meta property="og:url" content="https://codeboard.tech" />
         <meta property="og:title" content={title || 'CodeBoard'} />
         <meta property="og:color" content={err404 ? "#ff5656" : "#a95fd6"} />
         <meta name="theme-color" content={err404 ? "#ff5656" : "#a95fd6"} />
@@ -37,16 +38,16 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
         <meta
           property="og:image"
           content={
-            err404
-              ? '/err-og.png'
+            docs
+              ? '/docs-og.png'
               : k
-              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
+              ? `https://codeboard.tech/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://cdeboard.vercel.app" />
+        <meta property="twitter:url" content="https://codeboard.tech" />
         <meta property="twitter:title" content={title || 'CodeBoard'} />
         <meta
           property="twitter:image"
@@ -54,7 +55,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404 }) =>
             err404
               ? '/err-og.png'
               : k
-              ? `https://cdeboard.vercel.app/api/og?title=${title}&desc=${description}&key=${k}`
+              ? `https://codeboard.tech/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />

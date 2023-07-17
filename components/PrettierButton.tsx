@@ -1,7 +1,3 @@
-"use client"
-// MillionJS
-import { block } from 'million/react';
-
 // Icons
 import { SiPrettier } from 'react-icons-ng/si';
 
@@ -9,7 +5,7 @@ import { SiPrettier } from 'react-icons-ng/si';
 import styles from '../styles/Index.module.css';
 
 // Our Imports
-import { BoardFile } from '../utils/board';
+import { BoardFile } from '../utils/types/board';
 
 type PrettierButtonProps = {
   code: string;
@@ -17,7 +13,7 @@ type PrettierButtonProps = {
   setCode: Function;
 };
 
-const UnblockedPrettierButton: React.FC<PrettierButtonProps> = ({
+const PrettierButton: React.FC<PrettierButtonProps> = ({
   code,
   file,
   setCode,
@@ -51,7 +47,7 @@ const UnblockedPrettierButton: React.FC<PrettierButtonProps> = ({
             })
             .catch((err) => {
               (event.target as HTMLElement).style.color = '#ea5e5e';
-              console.log(err);
+              console.warn(err);
             });
         }}>
         <SiPrettier title="Format with Prettier" />
@@ -60,7 +56,6 @@ const UnblockedPrettierButton: React.FC<PrettierButtonProps> = ({
   );
 };
 
-const PrettierButton = block(UnblockedPrettierButton, { ssr: false });
 export default PrettierButton;
 
 // Formatting code with Prettier

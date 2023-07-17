@@ -2,20 +2,22 @@
 
 (Rebranded from SimplyBin)
 
-## A new way to share your code.
+## The ~~future~~ present of code sharing.
 
 CodeBoard is an open-source code sharing platform thats better in every way.
 With beautiful syntax highlighting and integrated with Prettier.
 
+> Released v2 with refreshing UI, API access, Accounts OAuth, Optimizations and more !
+
 # Why CodeBoard ?
 
-- Supports 120+ Languages ! (Previously Supported 20 languages 😂)
+- Supports 120+ Languages!
 - Prettier Formatting support
 - AutoVanish (made-up name) feature
 - Encryption on the line (First in segment)
 - Embed your board (bin in our words) to your website
 - 100% Open Source !
-- No Ads (This became a feature now lol)
+- No Brainwashing with ads
 - Support for Mobile devices !
 
 ### Not just a simple sourcebin. Its a full on code editor

@@ -1,55 +1,75 @@
 // Styles
 import styles from './styles/Header.module.css';
 
+// NextJS
+import Link from 'next/link';
+
 // Component
 import ThemeSwitch from './ThemeSwitch';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
-import { VscGithubInverted } from 'react-icons-ng/vsc';
+import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 
+import { useRouter } from 'next/router';
+import { useSession } from '@supabase/auth-helpers-react';
+import { memo } from 'react';
 
-// MillionJS
-import { block } from 'million/react';
-
-
-type MetaTagsProps = {
+type HeaderProps = {
   theme?: string;
   setTheme?: Function;
-  drag?: boolean
-}
+  drag?: boolean;
+};
 
-const UnblockedHeader: React.FC<MetaTagsProps> = (
-  { theme, setTheme, drag } = { drag: false }
-) => {
+function UnmemoHeader({ theme, setTheme, drag }: HeaderProps) {
+  const router = useRouter();
+  const session = useSession();
+
   return (
-    <header className={drag ? "dragging" : ""}>
+    <header className={drag ? 'dragging' : ''}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <a href="/home" className={styles.title}>
-        CodeBoard
-        </a>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          style={{ height: '42px' }}
-          href="/github"
-          className={[styles.newProject, 'pc'].join(' ')}>
-          <VscGithubInverted style={{ marginRight: '10px' }} /> Github
-        </a>
+        <Link href="/home" className={styles.title}>
+          CodeBoard
+        </Link>
+        <Link
+          title="API Documentation"
+          href="/docs"
+          className={[styles.api, 'pc'].join(' ')}>
+          API
+        </Link>
       </div>
       <div className={styles.buttons}>
-        <a href="/" className={[styles.newProject, 'mobile'].join(' ')}>
+        <Link href="/" className={[styles.newProject, 'mobile'].join(' ')}>
           <FaPlus />
-        </a>
-        <a href="/" className={[styles.newProject, 'pc'].join(' ')}>
-          <FaPlus style={{ marginRight: '10px' }} />{' '}
-          New Board
-        </a>
+        </Link>
+        <Link href="/" className={[styles.newProject, 'pc'].join(' ')}>
+          <FaPlus style={{ marginRight: '10px' }} /> New Board
+        </Link>
+        {session ? (
+          <img
+            title="Account Settings"
+            onClick={() => router.push('/account')}
+            src={session?.user?.user_metadata?.avatar_url}
+            alt="user"
+            className={styles.profile}
+          />
+        ) : (
+          <Link
+            title="Sign in"
+            href="/auth/signin"
+            className={[styles.profile].join(' ')}>
+            <FaUserAlt title="Sign in" />
+          </Link>
+        )}
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
     </header>
   );
-};
+}
 
-const Header = block(UnblockedHeader, { ssr: true })
-export default Header;
+export default memo(function Header({
+  theme,
+  setTheme,
+  drag = false,
+}: HeaderProps) {
+  return <UnmemoHeader theme={theme} setTheme={setTheme} drag={drag} />;
+});

@@ -1,9 +1,9 @@
 {
   "name": "codeboard",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
   "author": "Rahuletto",
-  "homepage": "https://cdeboard.vercel.app",
+  "homepage": "https://codeboard.tech",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {
     "type": "git",
@@ -13,26 +13,32 @@
     "url": "https://github.com/Rahuletto/CodeBoard/issues"
   },
   "scripts": {
-    "dev": "next dev --hostname 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.7.2",
+    "@supabase/auth-helpers-react": "^0.4.0",
+    "@supabase/supabase-js": "^2.26.0",
     "@uiw/codemirror-extensions-hyper-link": "^4.21.2",
     "@uiw/codemirror-extensions-langs": "^4.21.2",
     "@uiw/codemirror-theme-atomone": "^4.21.2",
     "@uiw/codemirror-theme-github": "^4.21.2",
     "@uiw/react-codemirror": "^4.21.2",
+    "@upstash/ratelimit": "^0.4.3",
+    "@upstash/redis": "^1.22.0",
+    "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.5.8",
     "crypto-js": "^4.1.1",
-    "million": "^2.4.9",
-    "mongoose": "^7.2.2",
     "next": "^13.4.7",
+    "nprogress": "^0.2.0",
     "prettier": "^2.8.8",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons-ng": "^4.8.4"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons-ng": "^4.8.5",
+    "react-loading-skeleton": "^3.3.1"
   },
   "devDependencies": {
     "@types/node": "18.0.1",

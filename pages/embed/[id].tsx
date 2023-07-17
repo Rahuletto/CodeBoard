@@ -10,14 +10,23 @@ import boardStyles from '../../styles/Board.module.css';
 // Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
-// Encrypt-Decrypt
-import { AESDecrypt } from '../../utils/aes';
-
 // Our imports
 import { MetaTags } from '../../components';
 import { FetchResponse } from '../api/fetch';
+import { Languages } from '../../utils/types/languages';
+import { sudoFetch } from '../../utils/sudo-fetch';
+import { BoardFile } from '../../utils/types/board';
+
+// Database
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+
+// Skeleton
+import Skeleton from 'react-loading-skeleton';
 
 // Lazy loading
+const BoardLoader = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: true,
+});
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
@@ -25,56 +34,67 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
   ssr: false,
 });
 
-export function Embed({ board }: { board: FetchResponse }) {
+export function Embed({ id }: { id: string }) {
   const router = useRouter();
+  const supabase = useSupabaseClient();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
+  const [board, setBoard] = useState<FetchResponse>(null);
+  const [fileName, setFileName] = useState('');
+  const [btns, setBtns] = useState([]);
+  const [file, setFile] = useState<BoardFile>(null);
+  const [language, setLanguage] = useState<any>(null);
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
+
+    sudoFetch(supabase, id).then((b) => {
+      if (!b) return router.push('/404');
+      setBoard(b);
+      setFileName(b.files[0].name);
+    });
   }, []);
 
   useEffect(() => {
-    if (!board) router.push('/404');
-  }, [board]);
+    if (board) {
+      setFile(board.files.find((a: BoardFile) => a.name == fileName));
+      if (!file) setFile(board.files[0]);
+
+      setLanguage(
+        loadLanguage(
+          file?.language !== 'none' ? (file?.language as Languages) : 'markdown'
+        )
+      );
+
+      const fileButtons: JSX.Element[] = [];
+
+      board.files.map((f) => {
+        if (f.language == 'none') {
+          f.name = f.name.split('.')[0] + '.md';
+        }
+
+        fileButtons.push(
+          <div key={f.name}>
+            <FileSelect
+              fileName={fileName}
+              file={f}
+              setFileName={setFileName}
+              edit={false}
+            />
+          </div>
+        );
+      });
+
+      setBtns(fileButtons);
+    }
+  });
 
   // DARK MODE & LIGHT MODE
-
-  const [fileName, setFileName] = useState(board.files[0].name);
-  const [btns, setBtns] = useState([]);
 
   // Props
   const [height, setHeight] = useState(472);
   const [width, setWidth] = useState(1028);
-
-  let file = board.files.find((a) => a.name == fileName);
-  if (!file) file = board.files[0];
-
-  let language = loadLanguage(
-    // @ts-ignore (Package didnt export a unified type to convert. Rather have 120+ strings)
-    file.language == 'none' ? 'markdown' : file.language
-  );
-
-  const fileButtons = [];
-
-  board.files.map((f) => {
-    if (f.language == 'none') {
-      f.name = f.name.split('.')[0] + '.md';
-    }
-
-    fileButtons.push(
-      <div key={f.name}>
-        <FileSelect
-          fileName={fileName}
-          file={f}
-          setFileName={setFileName}
-          edit={false}
-        />
-      </div>
-    );
-  });
-
-  setTimeout(() => setBtns(fileButtons), 20);
 
   useEffect(() => {
     setHeight(window.innerHeight);
@@ -101,11 +121,13 @@ export function Embed({ board }: { board: FetchResponse }) {
 
   return (
     <div>
-      <MetaTags
-        title="CodeBoard Embeds"
-        description="Embed your code in your desired website as however you want with beautiful iframes"
-        key={board.key}
-      />
+      {board && (
+        <MetaTags
+          title="CodeBoard Embeds"
+          description="Embed your code in your desired website as however you want with beautiful iframes"
+          key={id}
+        />
+      )}
 
       <div
         className="codeWrapper"
@@ -117,46 +139,69 @@ export function Embed({ board }: { board: FetchResponse }) {
           height: height + 'px',
         }}>
         <div className="file-holder bin-copy">
-          <div style={{ display: 'flex', gap: '12px' }}>{btns}</div>
-          <div style={{gap: '6px'}} className={boardStyles.copy}>
-            <button
-              title="Copy the whole program"
-              style={{ height: '36px', display: 'flex', alignItems: 'center' }}
-              onClick={(event) => {
-                handleCopies(event, file.value.toString());
-              }}>
-              Copy
-            </button>
-            
+          <div style={{ display: 'flex', gap: '12px' }}>
+            {btns[0] ? (
+              btns
+            ) : (
+              <div className={'fileSelect active-file'}>
+                <button title="skeleton">
+                  <Skeleton style={{ width: '100px' }} />
+                </button>
+              </div>
+            )}
+          </div>
+          <div style={{ gap: '6px' }} className={boardStyles.copy}>
+            {board && (
+              <button
+                title="Copy the whole program"
+                style={{
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onClick={(event) => {
+                  handleCopies(event, file.value.toString());
+                }}>
+                Copy
+              </button>
+            )}
+
             <button
               style={{ height: '36px', display: 'flex', alignItems: 'center' }}
               title="Source"
               onClick={() => {
-                router.push(`/bin/${board.key}`);
+                router.push(`/bin/${id}`);
               }}>
               Source
             </button>
           </div>
         </div>
 
-        <CodeBoard
-          width={width + 'px'}
-          height={height + 'px'}
-          language={language}
-          code={file.value}
-          readOnly={true}
-          theme={theme}
-          onChange={() => 'ok'}
-        />
+        {language ? (
+          <CodeBoard
+            width={String(width)}
+            height={String(height)}
+            language={language}
+            code={file.value}
+            readOnly={true}
+            theme={theme}
+          />
+        ) : (
+          <BoardLoader />
+        )}
       </div>
 
       <style>
         {`
         html,
         body {
+          overflow: hidden;
           margin: 0;
           background: transparent;
           min-height: 0;
+        }
+        .cm-editor {
+          height: 80vh;
         }
       `}
       </style>
@@ -164,64 +209,10 @@ export function Embed({ board }: { board: FetchResponse }) {
   );
 }
 
-export default memo(function EmbedPage({ board }: { board: FetchResponse }) {
-  return <Embed board={board} />;
+export default memo(function EmbedPage({ id }: { id: string }) {
+  return <Embed id={id} />;
 });
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const promiseBoard = await fetch(
-    `https://cdeboard.vercel.app/api/fetch?id=${context.params.id}`,
-    { cache: 'force-cache' }
-  );
-
-  if (promiseBoard.status == 200) {
-    const maybeBoard: FetchResponse = await promiseBoard.json();
-
-    let board: FetchResponse = maybeBoard;
-
-    if (
-      Number(maybeBoard.createdAt) + 86400 * 1000 < Date.now() &&
-      maybeBoard?.autoVanish
-    )
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      };
-
-    if (maybeBoard.encrypted) {
-      try {
-        const decryptedFiles = [];
-
-        maybeBoard.files.forEach((f) => {
-          decryptedFiles.push({
-            name: f.name,
-            language: f.language,
-            value: AESDecrypt(f.value),
-          });
-        });
-
-        board = {
-          name: maybeBoard.name,
-          description: maybeBoard.description,
-          files: decryptedFiles,
-          key: maybeBoard.key,
-          createdAt: maybeBoard.createdAt,
-          status: 200,
-          encrypted: maybeBoard.encrypted,
-          autoVanish: maybeBoard.autoVanish,
-          fork: maybeBoard.fork || null
-        };
-      } catch (err) {}
-    }
-
-    return { props: { board: board } };
-  } else
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/404',
-      },
-    };
+  return { props: { id: context.params.id } };
 }

@@ -1,12 +1,28 @@
-import million from 'million/compiler';
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverRuntimeConfig: {
-    MONGO: process.env['MONGO'],
-    NEXT_PUBLIC_KEY: process.env['NEXT_PUBLIC_KEY'],
-    NEXT_PUBLIC_ENCRPT: process.env['NEXT_PUBLIC_ENCRPT'],
+  poweredByHeader: false,
+  async rewrites() {
+    return [
+      {
+        source: '/fetch',
+        destination: "/api/fetch"
+      },
+      {
+        source: '/save',
+        destination: "/api/save"
+      },
+      {
+        source: '/ping',
+        destination: "/api/ping"
+      },
+      {
+        source: '/teapot',
+        destination: "/api/teapot"
+      }
+    ]
   },
   webpack: (config) => {
     config.experiments = {
@@ -28,9 +44,14 @@ const nextConfig = {
         destination: 'https://discord.gg/3JzDV9T5Fn',
         permanent: true,
       },
+      {
+        source: '/support',
+        destination: 'https://discord.gg/3JzDV9T5Fn',
+        permanent: true,
+      },
     ]
   },
 
 };
 
-export default million.next(nextConfig);
+export default nextConfig;

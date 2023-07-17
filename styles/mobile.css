@@ -121,4 +121,34 @@
   header {
     padding: 16px 14px;
   }
+
+  .signin-lander, .error-lander {
+    margin: 0px 10px;
+    padding: 10px !important;
+  }
+
+  .signin-lander:after {
+    box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.2);
+  }
+
+  .signin-lander:before {
+    box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.3);
+  }
+
+  .error-lander:after {
+    box-shadow: 0px 0px 220px 100px rgba(238, 70, 70, 0.3);
+    content: '';
+    position: absolute;
+    margin-top: -2rem;
+    opacity: 0.4;
+  }
+  
+  .error-lander:before {
+    box-shadow: 0px 0px 220px 100px rgba(238, 70, 70, 0.2);
+    opacity: 0.4;
+    content: '';
+    position: absolute;
+    right: 110px;
+    margin-top: 8rem;
+  }
 }

@@ -1,46 +1,45 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
+// Edge config
 export const config = {
   runtime: 'edge',
 };
 
-const medium = fetch(
-  new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
+export default async function GET(request: NextRequest) {
+  const medium = fetch(
+    new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
+  
+  const bold = fetch(
+    new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
+  
+  const mono = fetch(
+    new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
 
-const bold = fetch(
-  new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const mono = fetch(
-  new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-
-export default async function OGImage(request: NextRequest) {
+  
   const mediumData = await medium;
   const boldData = await bold;
   const monoData = await mono;
 
   const { searchParams } = new URL(request.url);
- 
-    // ?title=<title>
-    const hasTitle = searchParams.has('title');
-    const title = hasTitle
-      ? searchParams.get('title').replace('/CodeBoard', '')
-      : 'OG Generator';
 
-      const hasDesc = searchParams.has('desc');
-    const desc = hasDesc
-      ? searchParams.get('desc')
-      : 'This api route makes dynamic image for embed in other apps. This is used for board displays. like github does';
+  // ?title=<title>
+  const hasTitle = searchParams.has('title');
+  const title = hasTitle
+    ? searchParams.get('title').replace('/CodeBoard', '')
+    : 'OG Generator';
 
-      const hasKey = searchParams.has('key');
-      const key = hasKey
-        ? searchParams.get('key')
-        : 'A1b2C3';
-  
+  const hasDesc = searchParams.has('desc');
+  const desc = hasDesc
+    ? searchParams.get('desc')
+    : 'This api route makes dynamic image for embed in other apps. This is used for board displays. like github does';
+
+  const hasKey = searchParams.has('key');
+  const key = hasKey ? searchParams.get('key') : 'A1b2C3';
+
   return new ImageResponse(
     (
       <div
@@ -120,7 +119,7 @@ export default async function OGImage(request: NextRequest) {
               fontSize: 36,
               fontFamily: '"DM Sans Bold"',
             }}>
-            cdeboard.vercel.app
+            codeboard.tech
           </h3>
           <svg
             style={{ position: 'absolute', left: 770 }}
@@ -164,10 +163,10 @@ export default async function OGImage(request: NextRequest) {
           style: 'normal',
         },
         {
-          name: "JetBrains Mono",
+          name: 'JetBrains Mono',
           data: monoData,
-          style: 'normal'
-        }
+          style: 'normal',
+        },
       ],
     }
   );
