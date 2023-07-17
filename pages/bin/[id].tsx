@@ -64,11 +64,20 @@ export default function Bin({ id }: { id: string }) {
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
+  const [meta, setMeta] = useState(null);
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
     sudoFetch(supabase, id).then((b) => {
       if (!b) return router.push('/404');
+      setMeta(
+        <MetaTags
+          title={b.name + '/CodeBoard'}
+          description={b.description || 'No Description. Just the source code.'}
+          k={id + ''}
+        />
+      );
       setBoard(b);
       setFileName(b.files[0].name);
     });
@@ -119,15 +128,7 @@ export default function Bin({ id }: { id: string }) {
 
   return (
     <div className={generalStyles.container}>
-      {board ? (
-        <MetaTags
-          title={board.name + '/CodeBoard'}
-          description={
-            board.description || 'No Description. Just the source code.'
-          }
-          k={id + ''}
-        />
-      ) : null}
+      {meta}
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />

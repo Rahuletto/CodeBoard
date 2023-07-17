@@ -43,6 +43,9 @@ const DropZone = dynamic(() => import('../components/DropZone'), {
 const PrettierButton = dynamic(() => import('../components/PrettierButton'), {
   ssr: false,
 });
+const Features = dynamic(() => import('../components/Feature'), {
+  ssr: false,
+});
 const InfoButton = dynamic(() => import('../components/InfoButton'), {
   ssr: false,
 });
@@ -277,8 +280,8 @@ const Index: NextPage = () => {
       author: session ? session?.user?.user_metadata?.provider_id : null,
     });
 
-    if(error) router.push('/500')
-    else router.push(`/bin/${keyId}`)
+    if (error) router.push('/500');
+    else router.push(`/bin/${keyId}`);
   };
 
   // Find if its File ------------------------------------------------
@@ -320,7 +323,7 @@ const Index: NextPage = () => {
           }}
           className={[styles.backdrop, 'backdrop'].join(' ')}></div>
 
-        <DropZone files={files} drag={drag} limit={session ? 4 : 2} />
+        <DropZone files={files} drag={drag} limit={session ? 2 : 1} />
 
         <Header drag={drag} theme={theme} setTheme={setTheme} />
 
@@ -329,6 +332,8 @@ const Index: NextPage = () => {
           setFiles={setFiles}
           uploadFile={uploadFile}
         />
+
+        <Features session={session} />
 
         <div
           className={[generalStyles.grid, 'grid', drag ? 'dragging' : ''].join(
@@ -469,7 +474,7 @@ const Index: NextPage = () => {
             <div className="file-holder bin-copy">
               <div style={{ display: 'flex', gap: '12px' }}>
                 {btns}
-                <AddFile files={files} limit={session?.user ? 4 : 2} />
+                <AddFile files={files} limit={session?.user ? 2 : 1} />
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>

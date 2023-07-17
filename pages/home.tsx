@@ -109,7 +109,7 @@ const Home: NextPage = () => {
         <div className={styles.last}>
           <h3>Share your code, inspire others.</h3>
           <Link
-            style={{ zIndex: "200", width: 'fit-content' }}
+            style={{ zIndex: "10", width: 'fit-content' }}
             href="/"
             className={generalStyles.newProject}>
             <FaPlus title="New Board" style={{ marginRight: '10px' }} /> New

@@ -1,0 +1,82 @@
+.feature {
+  max-width: 85vw;
+  max-height: 95vh;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 28px;
+}
+
+.cardholder {
+  background: var(--background-darker);
+  border-radius: 18px;
+  margin-top: 20px;
+  height: 300px;
+  padding: 20px;
+  display: flex;
+  gap: 18px;
+  width: -webkit-fill-available;
+}
+
+.card {
+  border: 1.2px solid var(--background-slight-dark);
+  background: var(--background);
+  border-radius: 8px;
+  width: 33%;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  transform: scale(0.9);
+  opacity: 0.9;
+}
+
+.card h2,
+.card h4,
+.card ul {
+  margin: 0;
+}
+
+.card h2 {
+  color: var(--special-color);
+  font-family: 'JetBrains Mono';
+}
+
+.card h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.active h2 {
+  color: var(--purple-dark);
+}
+
+.active {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+
+@media only screen and (max-width: 960px) {
+    .cardholder {
+        flex-direction: column;
+        align-items: center;
+        overflow: auto;
+    }
+
+    .card {
+        width: 98%;
+    }
+}
