@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 // Styles
-import generalStyles from '../styles/General.module.css';
-import styles from '../styles/Home.module.css';
+import generalStyles from '../../styles/General.module.css';
+import styles from '../../styles/Home.module.css';
 
 // Icons
 import Link from 'next/link';
