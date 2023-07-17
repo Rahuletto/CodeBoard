@@ -31,6 +31,7 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -47,7 +48,7 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id }: { id: string }) {
+export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -64,20 +65,11 @@ export default function Bin({ id }: { id: string }) {
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
-  const [meta, setMeta] = useState(null);
-
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
     sudoFetch(supabase, id).then((b) => {
       if (!b) return router.push('/404');
-      setMeta(
-        <MetaTags
-          title={b.name + '/CodeBoard'}
-          description={b.description || 'No Description. Just the source code.'}
-          k={id + ''}
-        />
-      );
       setBoard(b);
       setFileName(b.files[0].name);
     });
@@ -128,7 +120,11 @@ export default function Bin({ id }: { id: string }) {
 
   return (
     <div className={generalStyles.container}>
-      {meta}
+      <MetaTags
+          title={bd.name + '/CodeBoard'}
+          description={bd.description || 'No Description. Just the source code.'}
+          k={id + ''}
+        />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
@@ -351,5 +347,9 @@ export default function Bin({ id }: { id: string }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return { props: { id: context.params.id } };
+
+  const supabase = createPagesServerClient(context);
+  const board = await sudoFetch(supabase, context.params.id as string);
+  
+  return { props: { id: context.params.id, bd: board } };
 }
