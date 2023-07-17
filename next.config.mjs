@@ -3,9 +3,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverRuntimeConfig: {
-    NEXT_PUBLIC_KEY: process.env['NEXT_PUBLIC_KEY'],
-    NEXT_PUBLIC_ENCRPT: process.env['NEXT_PUBLIC_ENCRPT'],
+  poweredByHeader: false,
+  async rewrites() {
+    return [
+      {
+        source: '/fetch',
+        destination: "/api/fetch"
+      },
+      {
+        source: '/save',
+        destination: "/api/save"
+      },
+      {
+        source: '/ping',
+        destination: "/api/ping"
+      },
+      {
+        source: '/teapot',
+        destination: "/api/teapot"
+      }
+    ]
   },
   webpack: (config) => {
     config.experiments = {

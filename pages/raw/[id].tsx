@@ -37,6 +37,11 @@ export default function MyComponent({
   );
 }
 
+// Edge Function
+export const config = {
+  runtime: 'experimental-edge' 
+};
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { id: context.params.id, file: context.query.file } };
 }

@@ -1,25 +1,25 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
-const medium = fetch(
-  new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const bold = fetch(
-  new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-const mono = fetch(
-  new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
-).then((res) => res.arrayBuffer());
-
-
 // Edge config
 export const config = {
   runtime: 'edge',
 };
 
 export default async function GET(request: NextRequest) {
+  const medium = fetch(
+    new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
+  
+  const bold = fetch(
+    new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
+  
+  const mono = fetch(
+    new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer());
+
+  
   const mediumData = await medium;
   const boldData = await bold;
   const monoData = await mono;

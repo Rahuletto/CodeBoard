@@ -33,9 +33,7 @@ import { Languages } from '../utils/types/languages';
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
-  ssr: false,
-});
+const CodeBoard = dynamic(() => import('../components/CodeBoard'));
 const EditModal = dynamic(() => import('../components/EditModal'), {
   ssr: false,
 });

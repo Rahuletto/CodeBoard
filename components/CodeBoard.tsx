@@ -1,12 +1,22 @@
-// CodeMirror
-import { atomoneInit } from '@uiw/codemirror-theme-atomone';
-import { githubLightInit } from '@uiw/codemirror-theme-github';
-import CodeMirror from '@uiw/react-codemirror';
-import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
-import { tags as t } from '@lezer/highlight';
-
 // React
-import React from 'react';
+import dynamic from 'next/dynamic';
+import React, { Suspense } from 'react';
+import Skeleton from 'react-loading-skeleton';
+
+const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
+  loading: () => <BoardLoader />,
+  ssr: false,
+});
+const atomoneInit = await (
+  await import('@uiw/codemirror-theme-atomone')
+).atomoneInit;
+const githubLightInit = await (
+  await import('@uiw/codemirror-theme-github')
+).githubLightInit;
+const hyperLink = await (
+  await import('@uiw/codemirror-extensions-hyper-link')
+).hyperLink;
+const t = await (await import('@lezer/highlight')).tags;
 
 // Props
 type CodeBoardProps = {
@@ -17,7 +27,7 @@ type CodeBoardProps = {
   readOnly?: boolean;
   height?: string;
   width?: string;
-  styleProp?: any
+  styleProp?: any;
 };
 
 const CodeBoard: React.FC<CodeBoardProps> = ({
@@ -28,10 +38,10 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   readOnly,
   height,
   width,
-  styleProp
+  styleProp,
 }) => {
   return (
-    <>
+    <Suspense fallback={<BoardLoader />}>
       <CodeMirror
         placeholder="Paste your code here."
         theme={
@@ -64,7 +74,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
                   { tag: t.variableName, color: '#E06C75' },
                   { tag: t.definition(t.variableName), color: '#D19A66' },
                   { tag: t.color, color: '#D19A66' },
-                  { tag: t.bool, color: '#D19A66' }
+                  { tag: t.bool, color: '#D19A66' },
                 ],
               })
         }
@@ -95,8 +105,23 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
           defaultKeymap: true,
         }}
       />
-    </>
+    </Suspense>
   );
 };
 
 export default CodeBoard;
+
+export function BoardLoader() {
+  return (
+    <div style={{ padding: '8px 20px' }}>
+      <Skeleton style={{ width: '400px' }} />
+      <br></br>
+      <Skeleton style={{ width: '200px' }} />
+      <Skeleton style={{ width: '300px' }} />
+      <br></br>
+      <Skeleton style={{ width: '600px' }} />
+      <Skeleton style={{ width: '160px' }} />
+      <Skeleton style={{ width: '60px' }} />
+    </div>
+  );
+}

@@ -12,18 +12,17 @@ import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 
 import { useRouter } from 'next/router';
 import { useSession } from '@supabase/auth-helpers-react';
+import { memo } from 'react';
 
-type MetaTagsProps = {
+type HeaderProps = {
   theme?: string;
   setTheme?: Function;
   drag?: boolean;
 };
 
-const Header: React.FC<MetaTagsProps> = (
-  { theme, setTheme, drag } = { drag: false }
-) => {
-  const router = useRouter()
-  const session = useSession()
+function UnmemoHeader({ theme, setTheme, drag }: HeaderProps) {
+  const router = useRouter();
+  const session = useSession();
 
   return (
     <header className={drag ? 'dragging' : ''}>
@@ -46,7 +45,13 @@ const Header: React.FC<MetaTagsProps> = (
           <FaPlus style={{ marginRight: '10px' }} /> New Board
         </Link>
         {session ? (
-          <img title="Account Settings" onClick={() => router.push('/account')} src={session?.user?.user_metadata?.avatar_url} alt="user" className={styles.profile} />
+          <img
+            title="Account Settings"
+            onClick={() => router.push('/account')}
+            src={session?.user?.user_metadata?.avatar_url}
+            alt="user"
+            className={styles.profile}
+          />
         ) : (
           <Link
             title="Sign in"
@@ -59,6 +64,12 @@ const Header: React.FC<MetaTagsProps> = (
       </div>
     </header>
   );
-};
+}
 
-export default Header;
+export default memo(function Header({
+  theme,
+  setTheme,
+  drag = false,
+}: HeaderProps) {
+  return <UnmemoHeader theme={theme} setTheme={setTheme} drag={drag} />;
+});
