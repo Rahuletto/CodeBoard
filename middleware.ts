@@ -61,7 +61,7 @@ export async function middleware(req: NextRequest) {
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
       path !== '/api' && 
-      path !== '/api/fetch'
+      path !== '/api/og'
     ) {
       return new NextResponse(
         JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", status: 401 }),
