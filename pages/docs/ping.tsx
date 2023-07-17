@@ -17,8 +17,8 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
 const Docs: NextPage = () => {
-  const nodejs = `await fetch('https://board.is-an.app/api/ping')`;
-  const cURL = `curl -X GET https://board.is-an.app/api/ping`;
+  const nodejs = `await fetch('https://codeboard.tech/api/ping')`;
+  const cURL = `curl -X GET https://codeboard.tech/api/ping`;
 
   const [code, setCode] = useState(nodejs);
 

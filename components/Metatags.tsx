@@ -24,7 +24,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
         />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://board.is-an.app" />
+        <meta property="og:url" content="https://codeboard.tech" />
         <meta property="og:title" content={title || 'CodeBoard'} />
         <meta property="og:color" content={err404 ? "#ff5656" : "#a95fd6"} />
         <meta name="theme-color" content={err404 ? "#ff5656" : "#a95fd6"} />
@@ -41,13 +41,13 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
             docs
               ? '/docs-og.png'
               : k
-              ? `https://board.is-an.app/api/og?title=${title}&desc=${description}&key=${k}`
+              ? `https://codeboard.tech/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://board.is-an.app" />
+        <meta property="twitter:url" content="https://codeboard.tech" />
         <meta property="twitter:title" content={title || 'CodeBoard'} />
         <meta
           property="twitter:image"
@@ -55,7 +55,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
             err404
               ? '/err-og.png'
               : k
-              ? `https://board.is-an.app/api/og?title=${title}&desc=${description}&key=${k}`
+              ? `https://codeboard.tech/api/og?title=${title}&desc=${description}&key=${k}`
               : '/home-og.png'
           }
         />

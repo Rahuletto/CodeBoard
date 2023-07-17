@@ -119,7 +119,7 @@ export default async function GET(request: NextRequest) {
               fontSize: 36,
               fontFamily: '"DM Sans Bold"',
             }}>
-            board.is-an.app
+            codeboard.tech
           </h3>
           <svg
             style={{ position: 'absolute', left: 770 }}

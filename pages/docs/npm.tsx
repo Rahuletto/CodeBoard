@@ -542,7 +542,7 @@ const Docs: NextPage = () => {
 
             <h1>Support</h1>
             <Link style={{ width: 'min-content' }} href="/support">
-              Get help: https://board.is-an.app/support
+              Get help: https://codeboard.tech/support
             </Link>
 
             <p>{"Let's"} build a better community, together.</p>

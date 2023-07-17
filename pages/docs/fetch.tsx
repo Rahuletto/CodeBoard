@@ -17,8 +17,8 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
 const Docs: NextPage = () => {
-  const nodejs = `await fetch('https://board.is-an.app/api/fetch?id=cEFTT17h', {\n  method: "GET",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  }\n})`;
-  const cURL = `curl -X GET https://board.is-an.app/api/fetch?id=cEFTT17h -H 'Authorization: API-KEY'`;
+  const nodejs = `await fetch('https://codeboard.tech/api/fetch?id=cEFTT17h', {\n  method: "GET",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  }\n})`;
+  const cURL = `curl -X GET https://codeboard.tech/api/fetch?id=cEFTT17h -H 'Authorization: API-KEY'`;
 
   const [code, setCode] = useState(nodejs);
 
