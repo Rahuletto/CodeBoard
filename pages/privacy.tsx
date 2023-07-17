@@ -10,7 +10,6 @@ import styles from '../styles/Privacy.module.css';
 // Icons
 import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
 
-
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -54,7 +53,7 @@ const Home: NextPage = () => {
             <Link href="#definitions">
               <h1>Definitions</h1>
             </Link>
-            <div className={styles.indent}>
+            <div id="definitions" className={styles.indent}>
               <ul>
                 <li>
                   &quot;Service&quot;, &quot;We&quot;, &quot;The Website&quot;
@@ -86,7 +85,7 @@ const Home: NextPage = () => {
             <Link href="#data">
               <h1>Your data</h1>
             </Link>
-            <div className={styles.indent}>
+            <div id="data" className={styles.indent}>
               <p>
                 We will{' '}
                 <span style={{ fontWeight: 600, color: 'var(--green)' }}>
@@ -95,18 +94,51 @@ const Home: NextPage = () => {
                 for out profits nor selling it. We{' '}
                 <b style={{ color: 'var(--orange)' }}>only</b> store your code{' '}
                 <span
-                  style={{ fontWeight: 600, color: 'var(--special-color)',
-                  fontFamily: 'JetBrains Mono', }}>
+                  style={{
+                    fontWeight: 600,
+                    color: 'var(--special-color)',
+                    fontFamily: 'JetBrains Mono',
+                  }}>
                   {
                     '(If you use Encryption option, We will store only the encrypted code snippet and not your decrypted code snippet)'
                   }
-                </span>, options you provided. if you wish to share with the platform.
+                </span>
+                , options you provided. if you wish to share with the platform.
                 We might use your cache to pre-load our components {'('}website
                 items{')'} to make it very fast. But if you wish to opt-out, You
-                can disable cookies and cache. Damn we don{"'"}t even get your
-                personal data
+                can disable cookies and cache.
               </p>
             </div>
+
+            <Link href="#account">
+              <h1>Account data</h1>
+            </Link>
+            <div id="account" className={styles.indent}>
+              <p>
+                We will{' '}
+                <span style={{ fontWeight: 600, color: 'var(--orange)' }}>
+                  only
+                </span>{' '}
+                access your Username, Profile picture from your GitHub. We will
+                also save your{' '}
+                <span style={{ fontWeight: 600, color: 'var(--red)' }}>
+                  email
+                </span>{' '}
+                not for spam emails but just for future use. But we store your
+                email in{' '}
+                <span style={{ fontWeight: 600, color: 'var(--green)' }}>
+                  encrypted manner
+                </span>{' '}
+                Other than that, nothing much. Want to vanish your existance
+                from CodeBoard ?{' '}
+                <Link
+                  className={styles.link}
+                  href="mailto: support@codeboard.tech">
+                  email us
+                </Link>
+              </p>
+            </div>
+
             <Link href="#liability">
               <h1>Liability</h1>
             </Link>
@@ -136,7 +168,9 @@ const Home: NextPage = () => {
                 If you come across a malicious board {'(code snippet)'} then{' '}
                 <b style={{ color: 'var(--green)' }}>PLEASE</b> send the key{' '}
                 {'(or)'} url via{' '}
-                <Link className={styles.link} href="mailto: support@codeboard.tech">
+                <Link
+                  className={styles.link}
+                  href="mailto: support@codeboard.tech">
                   email
                 </Link>{' '}
                 or{' '}
@@ -161,8 +195,10 @@ const Home: NextPage = () => {
                 . If you do not agree with our policies and practices, please do
                 not use our Services. If you still have any questions or
                 concerns, please contact me at{' '}
-                <Link className={styles.link} href="mailto: support@codeboard.tech">
-                support@codeboard.tech
+                <Link
+                  className={styles.link}
+                  href="mailto: support@codeboard.tech">
+                  support@codeboard.tech
                 </Link>{' '}
                 or{' '}
                 <Link
