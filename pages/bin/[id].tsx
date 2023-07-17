@@ -34,9 +34,6 @@ import Skeleton from 'react-loading-skeleton';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
-const BoardLoader = dynamic(() => import('../../components/CodeBoard'), {
-  ssr: true,
-});
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
@@ -334,7 +331,16 @@ export default function Bin({ id }: { id: string }) {
                 onChange={() => 'ok'}
               />
             ) : (
-              <BoardLoader />
+              <div style={{ padding: '8px 20px' }}>
+                <Skeleton style={{ width: '400px' }} />
+                <br></br>
+                <Skeleton style={{ width: '200px' }} />
+                <Skeleton style={{ width: '300px' }} />
+                <br></br>
+                <Skeleton style={{ width: '600px' }} />
+                <Skeleton style={{ width: '160px' }} />
+                <Skeleton style={{ width: '60px' }} />
+              </div>
             )}
           </div>
         </div>
