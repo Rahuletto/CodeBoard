@@ -34,6 +34,8 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       setLoading(true)
     }
 
+    setTimeout(() => handleStop, 3000)
+    
     const handleStop = () => {
       NProgress.done()
       setLoading(false)
