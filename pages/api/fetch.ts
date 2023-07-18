@@ -8,8 +8,6 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '../../utils/types/user';
 import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
-import redis from '../../utils/redis';
-
 
 // Types
 export type FetchResponse = {
@@ -50,7 +48,7 @@ export default async function GET(req: NextRequest) {
     .limit(1)
     .single();
 
-  if (!token && authorization != process.env.KEY)
+  if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
     return new Response(
       JSON.stringify({
         message: 'Not Authorized !',
@@ -64,21 +62,12 @@ export default async function GET(req: NextRequest) {
       }
     );
 
-  let boardRaw;
-  const cache: string = await redis.get(`cache:${id}`)
-
-  if (cache) boardRaw = JSON.parse(cache)
-  if (!cache) {
-    const { data }: { data: Board } = await supabase
-      .from('Boards')
-      .select()
-      .eq('key', id)
-      .limit(1)
-      .single();
-
-    boardRaw = data;
-    if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 5 * 60 })
-  }
+  const { data: boardRaw }: { data: Board } = await supabase
+    .from('Boards')
+    .select()
+    .eq('key', id)
+    .limit(1)
+    .single();
 
   if (!boardRaw)
     return new Response(
@@ -135,7 +124,7 @@ export default async function GET(req: NextRequest) {
     status: 200,
   };
 
-  if ((token || authorization == process.env.KEY) && boardRaw) {
+  if ((token || authorization == process.env.NEXT_PUBLIC_KEY) && boardRaw) {
     try {
       let decryptedFiles: BoardFile[] = [];
 
