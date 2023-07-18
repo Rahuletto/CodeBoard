@@ -2,18 +2,29 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Board, BoardFile } from './types/board';
 import { AESDecrypt } from './aes';
 import { FetchResponse } from '../pages/api/fetch';
+import redis from './redis';
 
 export function sudoFetch(
   supabase: SupabaseClient,
   id: string
 ): Promise<false | FetchResponse> {
   return new Promise(async (resolve) => {
-    const { data: board }: { data: Board } = await supabase
-      .from('Boards')
-      .select()
-      .eq('key', id)
-      .limit(1)
-      .single();
+    const cache: string = await redis.get(`cache:${id}`)
+
+    let board;
+
+    if (cache) board = cache;
+    if (!cache) {
+      const { data }: { data: Board } = await supabase
+        .from('Boards')
+        .select()
+        .eq('key', id)
+        .limit(1)
+        .single();
+
+      board = data;
+      if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 600 })
+    }
 
     if (!board) resolve(false);
     else {

@@ -7,7 +7,7 @@ import CryptoJS from 'crypto-js';
 // some processing is required.
 
 export default function PBKDF2(text) {
-    return CryptoJS.PBKDF2(text, process.env.NEXT_PUBLIC_SALT, {
+    return CryptoJS.PBKDF2(text, process.env.SALT, {
         keySize: 512 / 32
     }).toString();
 }

@@ -27,7 +27,7 @@ import { Languages } from '../../utils/types/languages';
 import { MetaTags } from '../../components';
 
 // Auth
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
@@ -48,10 +48,9 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
+export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
-  const supabase = useSupabaseClient();
 
   // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
@@ -59,32 +58,25 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  const [board, setBoard] = useState<FetchResponse>(null);
+  const [board, setBoard] = useState(null);
   const [fileName, setFileName] = useState('');
   const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
-  const [language, setLanguage] = useState<any>(null);
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    sudoFetch(supabase, id).then((b) => {
-      if (!b) return router.push('/404');
-      setBoard(b);
-      setFileName(b.files[0].name);
-    });
+    setTimeout(() => {
+      setBoard(bd);
+      setFileName(bd?.files[0]?.name);
+    }, 1200);
+    if (!bd) router.push('/404');
   }, []);
 
   useEffect(() => {
     if (board) {
       setFile(board.files.find((a: BoardFile) => a.name == fileName));
       if (!file) setFile(board.files[0]);
-
-      setLanguage(
-        loadLanguage(
-          file?.language !== 'none' ? (file?.language as Languages) : 'markdown'
-        )
-      );
 
       const fileButtons: JSX.Element[] = [];
 
@@ -107,7 +99,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
       setBtns(fileButtons);
     }
-  });
+  }, [fileName]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
@@ -121,10 +113,10 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   return (
     <div className={generalStyles.container}>
       <MetaTags
-          title={bd.name + '/CodeBoard'}
-          description={bd.description || 'No Description. Just the source code.'}
-          k={id + ''}
-        />
+        title={bd?.name + '/CodeBoard'}
+        description={bd?.description || 'No Description. Just the source code.'}
+        k={id + ''}
+      />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
@@ -319,9 +311,13 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
                 </button>
               </div>
             ) : null}
-            {language ? (
+            {file ? (
               <CodeBoard
-                language={language}
+                language={loadLanguage(
+                  file?.language !== 'none'
+                    ? (file?.language as Languages)
+                    : 'markdown'
+                )}
                 code={file?.value}
                 readOnly={true}
                 theme={theme}
@@ -347,9 +343,8 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
   const supabase = createPagesServerClient(context);
   const board = await sudoFetch(supabase, context.params.id as string);
-  
+
   return { props: { id: context.params.id, bd: board } };
 }

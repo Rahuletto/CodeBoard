@@ -1,14 +1,19 @@
 // Encrypt-Decrypt
 import CryptoJS from 'crypto-js';
 
-export function AESEncrypt(text) {
+export function AESEncrypt(text: string): string {
   return CryptoJS.AES.encrypt(
     JSON.stringify(text),
-    process.env.NEXT_PUBLIC_KEY
+    process.env.ENCRPT
   ).toString();
 }
 
-export function AESDecrypt(text) {
-  const bytes = CryptoJS.AES.decrypt(text, process.env.NEXT_PUBLIC_KEY);
-  return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+export function AESDecrypt(text: string): string {
+  try {
+    const bytes = CryptoJS.AES.decrypt(text, process.env.KEY);
+    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  } catch {
+    const bytes = CryptoJS.AES.decrypt(text, process.env.ENCRPT);
+    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+  }
 }
