@@ -33,14 +33,17 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       NProgress.start()
       setLoading(true)
     }
-
-    setTimeout(() => handleStop, 3000)
     
     const handleStop = () => {
       NProgress.done()
       setLoading(false)
     }
 
+    setTimeout(() => {
+      NProgress.done()
+      setLoading(false)
+    }, 3000)
+    
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleStop)
     router.events.on('routeChangeError', handleStop)
@@ -53,14 +56,13 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   }, [router])
   
   const [supabaseClient] = useState(() => createPagesBrowserClient());
-  
 
   return (
     <ErrorBoundary>
       <SessionContextProvider
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}>
-          {loading ? <Loader /> : null }
+          {loading && <Loader /> }
         <Component {...pageProps} />
         <Analytics />
       </SessionContextProvider>
@@ -85,7 +87,7 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      <div style={{ zIndex: "5000" }} className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
+      <div style={{ zIndex: "2000" }} className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
       <div
         className={['details', 'error', 'droppy'].join(' ')}
         style={{ maxWidth: '400px', justifyContent: 'center' }}>
