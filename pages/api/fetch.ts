@@ -8,6 +8,7 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '../../utils/types/user';
 import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
+import { redis } from '../../middleware';
 
 // Types
 export type FetchResponse = {
@@ -62,12 +63,21 @@ export default async function GET(req: NextRequest) {
       }
     );
 
-  const { data: boardRaw }: { data: Board } = await supabase
-    .from('Boards')
-    .select()
-    .eq('key', id)
-    .limit(1)
-    .single();
+  let boardRaw;
+  const cache: string = await redis.get(`cache:${id}`)
+
+  if (cache) boardRaw = JSON.parse(cache)
+  if (!cache) {
+    const { data }: { data: Board } = await supabase
+      .from('Boards')
+      .select()
+      .eq('key', id)
+      .limit(1)
+      .single();
+
+    boardRaw = data;
+    if (data) redis.set(`cache:${id}`, JSON.stringify(data), { ex: 5 * 60 })
+  }
 
   if (!boardRaw)
     return new Response(

@@ -8,7 +8,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 const cache = new Map();
 
-const redis = new Redis({
+export const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
@@ -61,7 +61,7 @@ export async function middleware(req: NextRequest) {
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
       path !== '/api' && 
-      path !== '/api/fetch'
+      path !== '/api/og' && path !== "/api/test"
     ) {
       return new NextResponse(
         JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", status: 401 }),
@@ -130,14 +130,14 @@ export async function middleware(req: NextRequest) {
         .single();
 
       if (!user && session) {
-        await supabase.from('Users').insert({
+        await supabase.from('Users').upsert({
           uid: session?.user?.id,
           id: session?.user?.user_metadata?.provider_id,
           email: PBKDF2(session?.user?.email),
           name: session?.user?.user_metadata?.name,
           image: session?.user?.user_metadata?.avatar_url ?? '',
           apiKey: makeid(20),
-        });
+        }, { ignoreDuplicates: true });
       }
     }
 

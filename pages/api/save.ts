@@ -9,6 +9,7 @@ import { User } from '../../utils/types/user';
 import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
 import { LanguagesArray } from '../../utils/types/languages';
+import { redis } from '../../middleware';
 
 // Request Body
 type SaveRequestBody = {
@@ -176,7 +177,7 @@ export default async function POST(req: NextRequest) {
       }
 
       const key = makeid(8);
-      const { error } = await supabase.from('Boards').insert({
+      const data = {
         name: body.name || 'Untitled',
         description: body.description || 'No Description',
         encrypt: false,
@@ -187,7 +188,9 @@ export default async function POST(req: NextRequest) {
         author: `bot | ${apikey}`,
         createdAt: Date.now(),
         madeBy: token.id
-      });
+      }
+
+      const { error } = await supabase.from('Boards').upsert(data, { ignoreDuplicates: true });
       if (error) {
         console.error(error);
         return new Response(
@@ -205,6 +208,8 @@ export default async function POST(req: NextRequest) {
         );
       }
 
+      redis.set(`cache:${key}`, JSON.stringify(data), { ex: 5 * 60 })
+
       return new Response(
         JSON.stringify({
           message: 'Successfully created a board' + cont,
@@ -220,7 +225,7 @@ export default async function POST(req: NextRequest) {
         }
       );
     }
-  
+
   } catch (err) {
     console.error(err);
     return new Response(
