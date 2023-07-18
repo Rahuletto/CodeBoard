@@ -23,7 +23,7 @@ export function sudoFetch(
         .single();
 
       board = data;
-      if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 300 })
+      if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 600 })
     }
 
     if (!board) resolve(false);
