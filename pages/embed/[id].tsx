@@ -22,7 +22,6 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -32,13 +31,14 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
   ssr: false,
 });
 
-export function Embed({ id, board }: { id: string; board: FetchResponse }) {
+export function Embed({ id }: { id: string }) {
   const router = useRouter();
   const supabase = useSupabaseClient();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  const [fileName, setFileName] = useState(board?.files[0]?.name);
+  const [board, setBoard] = useState<FetchResponse>(null);
+  const [fileName, setFileName] = useState('');
   const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
@@ -46,7 +46,11 @@ export function Embed({ id, board }: { id: string; board: FetchResponse }) {
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    if (!board) router.push('/404');
+    sudoFetch(supabase, id).then((b) => {
+      if (!b) return router.push('/404');
+      setBoard(b);
+      setFileName(b.files[0].name);
+    });
   }, []);
 
   useEffect(() => {
@@ -181,15 +185,15 @@ export function Embed({ id, board }: { id: string; board: FetchResponse }) {
           />
         ) : (
           <div style={{ padding: '8px 20px' }}>
-            <Skeleton style={{ width: '400px' }} />
-            <br></br>
-            <Skeleton style={{ width: '200px' }} />
-            <Skeleton style={{ width: '300px' }} />
-            <br></br>
-            <Skeleton style={{ width: '600px' }} />
-            <Skeleton style={{ width: '160px' }} />
-            <Skeleton style={{ width: '60px' }} />
-          </div>
+                <Skeleton style={{ width: '400px' }} />
+                <br></br>
+                <Skeleton style={{ width: '200px' }} />
+                <Skeleton style={{ width: '300px' }} />
+                <br></br>
+                <Skeleton style={{ width: '600px' }} />
+                <Skeleton style={{ width: '160px' }} />
+                <Skeleton style={{ width: '60px' }} />
+              </div>
         )}
       </div>
 
@@ -211,19 +215,10 @@ export function Embed({ id, board }: { id: string; board: FetchResponse }) {
   );
 }
 
-export default memo(function EmbedPage({
-  id,
-  board,
-}: {
-  id: string;
-  board: FetchResponse;
-}) {
-  return <Embed id={id} board={board} />;
+export default memo(function EmbedPage({ id }: { id: string }) {
+  return <Embed id={id} />;
 });
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const supabase = createPagesServerClient(context);
-  const board = await sudoFetch(supabase, context.params.id as string);
-
-  return { props: { id: context.params.id, board: board } };
+  return { props: { id: context.params.id } };
 }

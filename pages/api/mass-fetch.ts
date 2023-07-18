@@ -14,7 +14,7 @@ export default async function FETCH(req: NextRequest) {
 
   const authorization = req.headers.get('authorization')
 
-  if (authorization != process.env.KEY)
+  if (authorization != process.env.NEXT_PUBLIC_KEY)
     return new Response(
       JSON.stringify({
         message: 'Not Authorized !',

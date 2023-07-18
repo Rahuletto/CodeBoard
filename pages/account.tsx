@@ -72,11 +72,11 @@ export default function Account({ github, bds, apiBds, id, api }) {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: api,
-        },body: JSON.stringify({
+          Authorization: process.env.NEXT_PUBLIC_KEY,
+        },
+        body: JSON.stringify({
           userId: session.user.user_metadata.provider_id,
         }),
-        
       });
       const result = await response.json();
 

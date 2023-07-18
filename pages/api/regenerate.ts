@@ -32,7 +32,20 @@ export default async function PATCH(req: NextRequest) {
       );
 
     const authorization = req.headers.get('authorization');
-    
+    if (authorization != process.env.NEXT_PUBLIC_KEY)
+      return new Response(
+        JSON.stringify({
+          message: 'Not Authorized !',
+          status: 401,
+        }),
+        {
+          status: 401,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
     const body = await req?.json();
 
     const supabase = createMiddlewareClient({ req, res });
@@ -45,18 +58,7 @@ export default async function PATCH(req: NextRequest) {
       .single();
 
     if (token) {
-      if(token.apiKey != authorization) return new Response(
-        JSON.stringify({
-          message: 'Not authorized !',
-          status: 401,
-        }),
-        {
-          status: 401,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
+      
     } else {
       return new Response(
         JSON.stringify({

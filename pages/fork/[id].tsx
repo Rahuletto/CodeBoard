@@ -250,18 +250,13 @@ export default function Fork({ board }: { board: FetchResponse }) {
     let encryptedFiles: BoardFile[] = [];
 
     if (encrypt) {
-      const enc = await fetch('/api/encrypt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          files: files,
-        }),
+      files.forEach((file) => {
+        encryptedFiles.push({
+          name: file.name,
+          language: file.language,
+          value: String(AESEncrypt(file.value)),
+        });
       });
-
-      const response: { files: BoardFile[] } = await enc.json();
-      encryptedFiles = response.files;
     } else encryptedFiles = files;
 
     const { error } = await supabase.from('Boards').insert({

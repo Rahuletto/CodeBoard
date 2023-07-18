@@ -5,10 +5,13 @@ import makeid from './utils/makeid';
 
 // Ratelimits
 import { Ratelimit } from '@upstash/ratelimit';
-import redis from './utils/redis';
-
+import { Redis } from '@upstash/redis';
 const cache = new Map();
 
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 const ratelimit = {
   save: new Ratelimit({
@@ -30,17 +33,20 @@ const ratelimit = {
     limiter: Ratelimit.slidingWindow(1, '2 m'),
     analytics: true,
     prefix: 'ratelimit:regen',
+    ephemeralCache: cache,
   }),
   delete: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
     analytics: true,
     prefix: 'ratelimit:delete',
+    ephemeralCache: cache,
   }),
   default: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(60, '1 m'),
     prefix: 'ratelimit:default',
+    ephemeralCache: cache,
   }),
 };
 
@@ -48,13 +54,13 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req?.nextUrl?.pathname;
 
-  if (path && path?.startsWith('/api')) {
+  if (path && path.startsWith('/api')) {
     const auth = req.headers.get("authorization");
     if (
       !auth &&
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
-      path !== '/api' &&
+      path !== '/api' && 
       path !== '/api/og'
     ) {
       return new NextResponse(
@@ -66,7 +72,7 @@ export async function middleware(req: NextRequest) {
           },
         }
       );
-    } else if (!auth || auth !== process.env.KEY) {
+    } else if (!auth || auth !== process.env.NEXT_PUBLIC_KEY) {
       let rl: Ratelimit;
       switch (path) {
         case '/api/save':
@@ -92,21 +98,21 @@ export async function middleware(req: NextRequest) {
       return success
         ? res
         : new NextResponse(
-          JSON.stringify({
-            message: 'Ratelimited !',
-            warning:
-              'Repeating this periodically may result of invokation of your API access.',
-            status: 429,
-          }),
-          {
-            status: 429,
-            headers: {
-              'content-type': 'application/json',
-              'RateLimit-Limit': limit.toString(),
-              'Retry-After': reset.toString(),
-            },
-          }
-        );
+            JSON.stringify({
+              message: 'Ratelimited !',
+              warning:
+                'Repeating this periodically may result of invokation of your API access.',
+              status: 429,
+            }),
+            {
+              status: 429,
+              headers: {
+                'content-type': 'application/json',
+                'RateLimit-Limit': limit.toString(),
+                'Retry-After': reset.toString(),
+              },
+            }
+          );
     }
   } else {
     const supabase = createMiddlewareClient({ req, res });
@@ -124,14 +130,14 @@ export async function middleware(req: NextRequest) {
         .single();
 
       if (!user && session) {
-        await supabase.from('Users').upsert({
+        await supabase.from('Users').insert({
           uid: session?.user?.id,
           id: session?.user?.user_metadata?.provider_id,
           email: PBKDF2(session?.user?.email),
           name: session?.user?.user_metadata?.name,
           image: session?.user?.user_metadata?.avatar_url ?? '',
           apiKey: makeid(20),
-        }, { ignoreDuplicates: true });
+        });
       }
     }
 
