@@ -48,7 +48,13 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
+export default function Bin({
+  id,
+  board,
+}: {
+  id: string;
+  board: FetchResponse;
+}) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -59,8 +65,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  const [board, setBoard] = useState<FetchResponse>(null);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(board?.files[0]?.name);
   const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
@@ -68,11 +73,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    sudoFetch(supabase, id).then((b) => {
-      if (!b) return router.push('/404');
-      setBoard(b);
-      setFileName(b.files[0].name);
-    });
+    if (!board) router.push('/404');
   }, []);
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
       setBtns(fileButtons);
     }
-  });
+  }, [board]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
@@ -121,10 +122,10 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   return (
     <div className={generalStyles.container}>
       <MetaTags
-          title={bd.name + '/CodeBoard'}
-          description={bd.description || 'No Description. Just the source code.'}
-          k={id + ''}
-        />
+        title={board?.name + '/CodeBoard'}
+        description={board?.description || 'No Description. Just the source code.'}
+        k={id + ''}
+      />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
@@ -347,9 +348,8 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
   const supabase = createPagesServerClient(context);
   const board = await sudoFetch(supabase, context.params.id as string);
-  
-  return { props: { id: context.params.id, bd: board } };
+
+  return { props: { id: context.params.id, board: board } };
 }

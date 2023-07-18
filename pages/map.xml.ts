@@ -60,7 +60,7 @@ export async function getServerSideProps({ res }) {
   // We make an API call to gather the URLs for our site
   const request = await fetch('https://codeboard.tech/api/mass-fetch', {
     headers: {
-      Authorization: process.env.NEXT_PUBLIC_KEY,
+      Authorization: process.env.KEY,
       'Content-Type': 'application/json',
     },
   });

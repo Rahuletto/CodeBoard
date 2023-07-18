@@ -5,13 +5,10 @@ import makeid from './utils/makeid';
 
 // Ratelimits
 import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
+import redis from './utils/redis';
+
 const cache = new Map();
 
-export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
 
 const ratelimit = {
   save: new Ratelimit({
@@ -33,20 +30,17 @@ const ratelimit = {
     limiter: Ratelimit.slidingWindow(1, '2 m'),
     analytics: true,
     prefix: 'ratelimit:regen',
-    ephemeralCache: cache,
   }),
   delete: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
     analytics: true,
     prefix: 'ratelimit:delete',
-    ephemeralCache: cache,
   }),
   default: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(60, '1 m'),
     prefix: 'ratelimit:default',
-    ephemeralCache: cache,
   }),
 };
 
@@ -54,7 +48,7 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req?.nextUrl?.pathname;
 
-  if (path && path.startsWith('/api')) {
+  if (path && path?.startsWith('/api')) {
     const auth = req.headers.get("authorization");
     if (
       !auth &&
@@ -72,7 +66,7 @@ export async function middleware(req: NextRequest) {
           },
         }
       );
-    } else if (!auth || auth !== process.env.NEXT_PUBLIC_KEY) {
+    } else if (!auth || auth !== process.env.KEY) {
       let rl: Ratelimit;
       switch (path) {
         case '/api/save':

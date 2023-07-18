@@ -9,7 +9,7 @@ import { User } from '../../utils/types/user';
 import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
 import { LanguagesArray } from '../../utils/types/languages';
-import { redis } from '../../middleware';
+import redis from '../../utils/redis';
 
 // Request Body
 type SaveRequestBody = {
@@ -60,7 +60,7 @@ export default async function POST(req: NextRequest) {
       .limit(1)
       .single();
 
-    if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
+    if (!token && authorization != process.env.KEY)
       return new Response(
         JSON.stringify({
           message: 'Not Authorized !',
@@ -208,7 +208,7 @@ export default async function POST(req: NextRequest) {
         );
       }
 
-      redis.set(`cache:${key}`, JSON.stringify(data), { ex: 5 * 60 })
+      await redis.set(`cache:${key}`, JSON.stringify(data), { ex: 5 * 60 })
 
       return new Response(
         JSON.stringify({

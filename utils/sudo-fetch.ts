@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Board, BoardFile } from './types/board';
 import { AESDecrypt } from './aes';
 import { FetchResponse } from '../pages/api/fetch';
-import { redis } from '../middleware';
+import redis from './redis';
 
 export function sudoFetch(
   supabase: SupabaseClient,
@@ -13,7 +13,7 @@ export function sudoFetch(
 
     let board;
 
-    if (cache) board = JSON.parse(cache);
+    if (cache) board = cache;
     if (!cache) {
       const { data }: { data: Board } = await supabase
         .from('Boards')
@@ -23,7 +23,7 @@ export function sudoFetch(
         .single();
 
       board = data;
-      if (data) redis.set(`cache:${id}`, JSON.stringify(data), { ex: 5 * 60 })
+      if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 300 })
     }
 
     if (!board) resolve(false);

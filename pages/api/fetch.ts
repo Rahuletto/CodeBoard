@@ -8,7 +8,8 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '../../utils/types/user';
 import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
-import { redis } from '../../middleware';
+import redis from '../../utils/redis';
+
 
 // Types
 export type FetchResponse = {
@@ -49,7 +50,7 @@ export default async function GET(req: NextRequest) {
     .limit(1)
     .single();
 
-  if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
+  if (!token && authorization != process.env.KEY)
     return new Response(
       JSON.stringify({
         message: 'Not Authorized !',
@@ -76,7 +77,7 @@ export default async function GET(req: NextRequest) {
       .single();
 
     boardRaw = data;
-    if (data) redis.set(`cache:${id}`, JSON.stringify(data), { ex: 5 * 60 })
+    if (data) await redis.set(`cache:${id}`, JSON.stringify(data), { ex: 5 * 60 })
   }
 
   if (!boardRaw)
@@ -134,7 +135,7 @@ export default async function GET(req: NextRequest) {
     status: 200,
   };
 
-  if ((token || authorization == process.env.NEXT_PUBLIC_KEY) && boardRaw) {
+  if ((token || authorization == process.env.KEY) && boardRaw) {
     try {
       let decryptedFiles: BoardFile[] = [];
 
