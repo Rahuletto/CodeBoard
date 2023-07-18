@@ -44,8 +44,8 @@ const Home: NextPage = () => {
               <span className={generalStyles.purple}>code sharing platform</span>
             </h1>
             <p style={{ fontSize: '22px' }}>
-              An <span className={generalStyles.purple}>open-source</span> code
-              sharing platform thats better in every way.
+              A <span className={generalStyles.purple}>community-driven</span> code
+              sharing platform thats built by developers, for developers.
             </p>
             <div className={styles.buttonHolder}>
               <Link

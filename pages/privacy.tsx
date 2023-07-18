@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <MetaTags
         title="CodeBoard"
-        description="Welcome to codeboard ! Codeboard is an open source bin website thats better in every way."
+        description="Welcome to codeboard ! CodeBoard is a community-driven code sharing platform built by developers, for developers."
       />
 
       <main className={styles.main}>

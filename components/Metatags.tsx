@@ -19,7 +19,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
           name="description"
           content={
             description ||
-            'CodeBoard is an open-source code sharing platform thats better in every way. With beautiful syntax highlighting and integrated with Prettier.'
+            'CodeBoard is a community-driven code sharing platform built by developers, for developers. With beautiful syntax highlighting and integrated with Prettier.'
           }
         />
 
@@ -32,7 +32,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
           property="og:description"
           content={
             description ||
-            'CodeBoard is an open-source code sharing platform thats better in every way. With beautiful syntax highlighting and integrated with Prettier.'
+            'CodeBoard is a community-driven code sharing platform built by developers, for developers. With beautiful syntax highlighting and integrated with Prettier.'
           }
         />
         <meta
@@ -63,7 +63,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({ title, description, k, err404, docs
           property="twitter:description"
           content={
             description ||
-            'Codeboard is an open source source code bin website thats better in every way '
+            'CodeBoard is a community-driven code sharing platform built by developers, for developers.'
           }
         />
 
