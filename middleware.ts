@@ -60,8 +60,8 @@ export async function middleware(req: NextRequest) {
       !auth &&
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
-      path !== '/api' && 
-      path !== '/api/og' && path !== "/api/test"
+      path !== '/api' &&
+      path !== '/api/og'
     ) {
       return new NextResponse(
         JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", status: 401 }),
@@ -98,21 +98,21 @@ export async function middleware(req: NextRequest) {
       return success
         ? res
         : new NextResponse(
-            JSON.stringify({
-              message: 'Ratelimited !',
-              warning:
-                'Repeating this periodically may result of invokation of your API access.',
-              status: 429,
-            }),
-            {
-              status: 429,
-              headers: {
-                'content-type': 'application/json',
-                'RateLimit-Limit': limit.toString(),
-                'Retry-After': reset.toString(),
-              },
-            }
-          );
+          JSON.stringify({
+            message: 'Ratelimited !',
+            warning:
+              'Repeating this periodically may result of invokation of your API access.',
+            status: 429,
+          }),
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'RateLimit-Limit': limit.toString(),
+              'Retry-After': reset.toString(),
+            },
+          }
+        );
     }
   } else {
     const supabase = createMiddlewareClient({ req, res });
