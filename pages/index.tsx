@@ -562,21 +562,25 @@ const Index: NextPage = () => {
                 )}
               </Allotment.Pane>
               <Allotment.Pane minSize={20} className={styles.outputPane}>
-                <p className={styles.outputTxt}>LOGS</p>
-                <CodeBoard
-                  styleProp={
-                    drag
-                      ? { pointerEvents: 'none', marginTop: '0px' }
-                      : { pointerEvents: 'auto', marginTop: '0px' }
-                  }
-                  placeHolder={`>_ Share your logs with your code too.`}
-                  code={file.terminal}
-                  output={true}
-                  readOnly={false}
-                  language={loadLanguage('shell')}
-                  theme={theme}
-                  onChange={onTerminal}
-                />
+                {file ? (
+                  <>
+                    <p className={styles.outputTxt}>LOGS</p>
+                    <CodeBoard
+                      styleProp={
+                        drag
+                          ? { pointerEvents: 'none', marginTop: '0px' }
+                          : { pointerEvents: 'auto', marginTop: '0px' }
+                      }
+                      placeHolder={`>_ Share your logs with your code too.`}
+                      code={file.terminal}
+                      output={true}
+                      readOnly={false}
+                      language={loadLanguage('shell')}
+                      theme={theme}
+                      onChange={onTerminal}
+                    />
+                  </>
+                ) : null}
               </Allotment.Pane>
             </Allotment>
           </div>

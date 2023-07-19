@@ -24,9 +24,9 @@ const indentationMarkers = await (
   await import('@replit/codemirror-indentation-markers')
 ).indentationMarkers;
 const keymap = await (await import('@codemirror/view')).keymap;
-const acceptCompletion = await (
-  await import('@codemirror/autocomplete')
-).acceptCompletion;
+const openSearchPanel = await (
+  await import('@codemirror/search')
+).openSearchPanel;
 const colorPicker = await (
   await import('@replit/codemirror-css-color-picker')
 ).colorPicker;
@@ -133,7 +133,7 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         height={height || '200px'}
         readOnly={readOnly}
         extensions={[
-          keymap.of([...vscodeKeymap, { key: 'Tab', run: acceptCompletion }]),
+          keymap.of([...vscodeKeymap, { key: 'Ctrl-Shift-f', run: openSearchPanel }]),
           language,
           hyperLink,
 
@@ -179,7 +179,13 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
 
         <Item
           onClick={() =>
-            formatCode(code, file.language).then((a) => (code = a))
+            window.dispatchEvent(
+              new KeyboardEvent('keydown', {
+                shiftKey: true,
+                altKey: true,
+                key: 'f',
+              })
+            )
           }>
           <SiPrettier style={{ marginRight: '8px' }} /> Format code
         </Item>
