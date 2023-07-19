@@ -21,34 +21,38 @@ const FileSelect: React.FC<FileSelectProps> = ({
     const div = document.getElementsByClassName(
       `edit-${file.name.replaceAll('.', '-')}`
     )[0];
+
+    const input = document.getElementsByClassName(
+      `file-name-${file.name.replaceAll('.', '-')}`
+    )[0];
+
     const back = document.querySelector<HTMLElement>(`.backdrop`);
     (div as HTMLElement).style['display'] = 'flex';
+    (input as HTMLInputElement).focus();
     back.style['display'] = 'block';
   }
 
   return (
     <div
+      onContextMenu={(e) => {
+        e.preventDefault();
+        edit ? showEdit(file) : null;
+      }}
       onClick={() => setFileName(file.name)}
       className={
         file.name === fileName ? 'fileSelect active-file' : 'fileSelect'
       }>
-      <button
-        title={file.name}
-        
-        >
+      <button title={file.name}>
         <div>{file.name}</div>
       </button>
 
       <div>
-          {edit ? (
-            <button
-              className="file"
-              title="Edit"
-              onClick={() => showEdit(file)}>
-              <FaCaretDown title="Edit" />
-            </button>
-          ) : null}
-        </div>
+        {edit ? (
+          <button className="file" title="Edit" onClick={() => showEdit(file)}>
+            <FaCaretDown title="Edit" />
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };

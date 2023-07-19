@@ -146,7 +146,7 @@ const Features = ({ session }) => {
               <span style={{ color: 'var(--purple)' }}>
                 <McCheckCircleFill />
               </span>{' '}
-              Priority support
+              Execute code {'[BETA]'}
             </div>
           </div>
         </div>

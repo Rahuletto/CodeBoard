@@ -73,7 +73,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
 export default MyApp;
 
 class ErrorBoundary extends React.Component {
-  state: Readonly<{ hasError: boolean }>;
+  declare state: Readonly<{ hasError: boolean }>;
   constructor(props: any) {
     super(props);
 

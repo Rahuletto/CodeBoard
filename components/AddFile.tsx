@@ -4,7 +4,8 @@ import { FaPlus } from 'react-icons-ng/fa';
 const AddFile = ({ files, limit = 2 }) => {
   function showDialog() {
     const dialog = document.getElementById('newFile');
-
+    const input = document.getElementById('new-file');
+    (input as HTMLInputElement).focus();
     (dialog as HTMLDialogElement).showModal();
   }
 
@@ -17,6 +18,7 @@ const AddFile = ({ files, limit = 2 }) => {
   return (
     <div className="fileSelect plus active-file">
       <button
+      id="add-file"
         title="New file"
         onClick={() => {
           if (files.length >= limit) showAd();

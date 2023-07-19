@@ -6,7 +6,8 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
 import { User } from '../../utils/types/user';
-import makeid from '../../utils/makeid';
+import generateApiKey from 'generate-api-key';
+import { AESEncrypt } from '../../utils/aes';
 
 // Edge config
 export const config = {
@@ -31,8 +32,21 @@ export default async function PATCH(req: NextRequest) {
         }
       );
 
+    
     const authorization = req.headers.get('authorization');
-    if (authorization != process.env.NEXT_PUBLIC_KEY)
+
+    const apikey = authorization
+
+    const supabase = createMiddlewareClient({ req, res });
+
+    const { data: token }: { data: User } = await supabase
+      .from('Users')
+      .select()
+      .eq('apiKey', apikey)
+      .limit(1)
+      .single();
+
+    if (!token)
       return new Response(
         JSON.stringify({
           message: 'Not Authorized !',
@@ -46,35 +60,7 @@ export default async function PATCH(req: NextRequest) {
         }
       );
 
-    const body = await req?.json();
-
-    const supabase = createMiddlewareClient({ req, res });
-
-    const { data: token }: { data: User } = await supabase
-      .from('Users')
-      .select()
-      .eq('id', body.userId)
-      .limit(1)
-      .single();
-
-    if (token) {
-      
-    } else {
-      return new Response(
-        JSON.stringify({
-          message: 'User not found !',
-          status: 404,
-        }),
-        {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
-    }
-
-    const key = makeid(20);
+    const key = generateApiKey({ method: 'uuidv4', prefix: 'codeboard_api' });
 
     const { error } = await supabase
       .from('Users')

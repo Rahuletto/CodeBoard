@@ -255,6 +255,17 @@
   align-items: center;
 }
 
+.outputTxt {
+  padding: 8px;
+  font-family: 'JetBrains Mono';
+  background: var(--code-editor);
+  margin: 0px;
+}
+
+.outputPane {
+  border-top: 3px solid var(--background-dark) !important;
+}
+
 .dropNotif {
   padding: 12px;
   background: var(--background-slight-dark);

@@ -19,6 +19,7 @@ import { Md2RobotExcited } from 'react-icons-ng/md2';
 import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { AESDecrypt } from '../utils/aes';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -57,13 +58,10 @@ export default function Account({ github, bds, apiBds, id, api }) {
   }
 
   async function deleteBoard(b) {
-    const { error } = await supabase
-      .from('Boards')
-      .delete()
-      .eq('key', b)
+    const { error } = await supabase.from('Boards').delete().eq('key', b);
 
-    if (!error) router.reload()
-    else console.error(error)
+    if (!error) router.reload();
+    else console.error(error);
   }
 
   async function regenerate() {
@@ -72,11 +70,8 @@ export default function Account({ github, bds, apiBds, id, api }) {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: process.env.NEXT_PUBLIC_KEY,
+          Authorization: api,
         },
-        body: JSON.stringify({
-          userId: session.user.user_metadata.provider_id,
-        }),
       });
       const result = await response.json();
 
@@ -159,7 +154,9 @@ export default function Account({ github, bds, apiBds, id, api }) {
               Sign Out
             </button>
           </div>
-          <div className={styles.repo} style={!isUser ? { borderColor: 'var(--purple)' } : null}>
+          <div
+            className={styles.repo}
+            style={!isUser ? { borderColor: 'var(--purple)' } : null}>
             <div
               style={{
                 display: 'flex',
@@ -204,17 +201,17 @@ export default function Account({ github, bds, apiBds, id, api }) {
                     <Link title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
                       /bin/{b.key}
                     </Link>
-                    {isUser ? (<button
-                      title="Delete the board"
-                      onClick={() => deleteBoard(b.key)}>
-                      Delete
-                    </button>) : null}
+                    {isUser ? (
+                      <button
+                        title="Delete the board"
+                        onClick={() => deleteBoard(b.key)}>
+                        Delete
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               ))}
-            {!boards || !boards[0] ? (
-              <p>No boards found</p>
-            ) : null}
+            {!boards || !boards[0] ? <p>No boards found</p> : null}
           </div>
         </div>
       </main>
@@ -258,12 +255,14 @@ export const getServerSideProps = async (ctx) => {
       .eq('author', session?.user?.user_metadata?.provider_id);
 
   const {
-    data: apiBds
-  }: { data: { key: string; name: string; description: string }[], error: PostgrestError } =
-    await supabase
-      .from('Boards')
-      .select()
-      .eq('madeBy', session?.user?.user_metadata?.provider_id);
+    data: apiBds,
+  }: {
+    data: { key: string; name: string; description: string }[];
+    error: PostgrestError;
+  } = await supabase
+    .from('Boards')
+    .select()
+    .eq('madeBy', session?.user?.user_metadata?.provider_id);
 
   return {
     props: {

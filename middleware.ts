@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import PBKDF2 from './utils/encrypt';
-import makeid from './utils/makeid';
+import generateApiKey from 'generate-api-key';
 
 // Ratelimits
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+
+
 const cache = new Map();
 
 const redis = new Redis({
@@ -130,13 +132,15 @@ export async function middleware(req: NextRequest) {
         .single();
 
       if (!user && session) {
+        const key = generateApiKey({ method: 'uuidv4', prefix: 'codeboard_api' });
+        
         await supabase.from('Users').insert({
           uid: session?.user?.id,
           id: session?.user?.user_metadata?.provider_id,
           email: PBKDF2(session?.user?.email),
           name: session?.user?.user_metadata?.name,
           image: session?.user?.user_metadata?.avatar_url ?? '',
-          apiKey: makeid(20),
+          apiKey: key,
         });
       }
     }

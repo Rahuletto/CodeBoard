@@ -117,6 +117,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
           autoComplete="off"
           onChange={(event) => updateLanguage(event)}
           className="file-name"
+          id="new-file"
           name="filename"
           type="text"
           placeholder="untitled.js"></input>

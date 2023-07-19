@@ -184,7 +184,7 @@ export default async function POST(req: NextRequest) {
         fork: null,
         files: files,
         key: key,
-        author: `bot | ${apikey}`,
+        author: `bot | ${token.id}`,
         createdAt: Date.now(),
         madeBy: token.id
       });

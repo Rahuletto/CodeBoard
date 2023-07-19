@@ -30,6 +30,12 @@ import { AddFile, MetaTags } from '../components';
 import { AESEncrypt } from '../utils/aes';
 import { Languages } from '../utils/types/languages';
 
+// Split pane
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
+import { BoardLoader } from '../components/CodeBoard';
+import { formatCode } from '../utils/prettier';
+
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
@@ -99,6 +105,7 @@ const Index: NextPage = () => {
       name: 'untitled.js',
       language: 'javascript',
       value: ``,
+      terminal: ``,
     },
   ]);
 
@@ -117,6 +124,16 @@ const Index: NextPage = () => {
   // ---------------------------------
   // -------- C A L L B A C K --------
   // ---------------------------------
+
+  const onTerminal = React.useCallback(
+    (value: string, viewUpdate: any) => {
+      const changed = files.find((a) => a.name === fileName);
+      changed.terminal = value;
+
+      return;
+    },
+    [fileName]
+  );
 
   const onChange = React.useCallback(
     (value: string, viewUpdate: any) => {
@@ -148,6 +165,32 @@ const Index: NextPage = () => {
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
+
+    window.addEventListener('beforeunload', (event) => {
+      // set a truthy value to property returnValue
+      if (code != '') event.returnValue = true;
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.altKey && event.key.toLowerCase() == 'n') {
+        document.getElementById('add-file').click();
+      } else if (event.key == 'F2') {
+        keybindEdit(file);
+      } else if (
+        event.shiftKey &&
+        event.altKey &&
+        event.key.toLowerCase() == 'f'
+      ) {
+        formatCode(file.value, file.language).then((f) => {
+          setCode(f);
+          file.value = f;
+        });
+      } else if (event.key == 'Enter') {
+        Array.from(document.getElementsByClassName('backdrop')).forEach((a) => {
+          (a as HTMLElement).style.display = 'none';
+        });
+      }
+    });
   }, []);
 
   // ---------------------------------------------
@@ -186,6 +229,22 @@ const Index: NextPage = () => {
   // ---------------------------------
   // ------- F U N C T I O N S -------
   // ---------------------------------
+
+  function keybindEdit(file: BoardFile) {
+    const div = document.getElementsByClassName(
+      `edit-${file.name.replaceAll('.', '-')}`
+    )[0];
+
+    const input = document.getElementsByClassName(
+      `file-name-${file.name.replaceAll('.', '-')}`
+    )[0];
+
+    const back = document.querySelector<HTMLElement>(`.backdrop`);
+    (div as HTMLElement).style['display'] = 'flex';
+    (input as HTMLInputElement).focus();
+
+    back.style['display'] = 'block';
+  }
 
   // Drop Handler ---------------------------------
   function handleDrop(event: React.DragEvent<HTMLElement>) {
@@ -232,6 +291,7 @@ const Index: NextPage = () => {
         name: name,
         language: l,
         value: blob,
+        terminal: ``,
       },
     ]);
   }
@@ -265,6 +325,7 @@ const Index: NextPage = () => {
           name: file.name,
           language: file.language,
           value: String(AESEncrypt(file.value)),
+          terminal: String(AESEncrypt(file.terminal || '')),
         });
       });
     } else encryptedFiles = files;
@@ -279,6 +340,8 @@ const Index: NextPage = () => {
       createdAt: Date.now(),
       author: session ? session?.user?.user_metadata?.provider_id : null,
     });
+
+    navigator.clipboard.writeText(`${location.origin}/bin/${keyId}`);
 
     if (error) router.push('/500');
     else router.push(`/bin/${keyId}`);
@@ -478,16 +541,44 @@ const Index: NextPage = () => {
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
-            <CodeBoard
-              styleProp={
-                drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
-              }
-              code={file.value}
-              readOnly={false}
-              language={language}
-              theme={theme}
-              onChange={onChange}
-            />
+            <Allotment vertical={true} defaultSizes={[460, 40]}>
+              <Allotment.Pane minSize={32} maxSize={460}>
+                {file ? (
+                  <CodeBoard
+                    styleProp={
+                      drag
+                        ? { pointerEvents: 'none' }
+                        : { pointerEvents: 'auto' }
+                    }
+                    code={file.value}
+                    readOnly={false}
+                    language={language}
+                    file={file}
+                    theme={theme}
+                    onChange={onChange}
+                  />
+                ) : (
+                  <BoardLoader />
+                )}
+              </Allotment.Pane>
+              <Allotment.Pane minSize={20} className={styles.outputPane}>
+                <p className={styles.outputTxt}>LOGS</p>
+                <CodeBoard
+                  styleProp={
+                    drag
+                      ? { pointerEvents: 'none', marginTop: '0px' }
+                      : { pointerEvents: 'auto', marginTop: '0px' }
+                  }
+                  placeHolder={`>_ Share your logs with your code too.`}
+                  code={file.terminal}
+                  output={true}
+                  readOnly={false}
+                  language={loadLanguage('shell')}
+                  theme={theme}
+                  onChange={onTerminal}
+                />
+              </Allotment.Pane>
+            </Allotment>
           </div>
         </div>
       </main>

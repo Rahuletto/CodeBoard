@@ -17,10 +17,41 @@ const hyperLink = await (
   await import('@uiw/codemirror-extensions-hyper-link')
 ).hyperLink;
 const t = await (await import('@lezer/highlight')).tags;
+const vscodeKeymap = await (
+  await import('@replit/codemirror-vscode-keymap')
+).vscodeKeymap;
+const indentationMarkers = await (
+  await import('@replit/codemirror-indentation-markers')
+).indentationMarkers;
+const keymap = await (await import('@codemirror/view')).keymap;
+const acceptCompletion = await (
+  await import('@codemirror/autocomplete')
+).acceptCompletion;
+const colorPicker = await (
+  await import('@replit/codemirror-css-color-picker')
+).colorPicker;
+
+import {
+  Menu,
+  Item,
+  Separator,
+  useContextMenu,
+  RightSlot,
+} from 'react-contexify';
+
+import 'react-contexify/dist/ReactContexify.css';
+
+import { BiSearch, BiSolidCopy } from 'react-icons-ng/bi';
+import { FlFillIcFluentCut24Filled } from 'react-icons-ng/fl';
+import { LuClipboardPaste } from 'react-icons-ng/lu';
+import { CoExpand } from 'react-icons-ng/co';
+import { SiPrettier } from 'react-icons-ng/si';
+import { formatCode } from '../utils/prettier';
+import { BoardFile } from '../utils/types/board';
 
 // Props
 type CodeBoardProps = {
-  language?: Function | any;
+  language?: any;
   code?: string;
   theme?: 'light' | 'dark' | string;
   onChange?: Function | any;
@@ -28,6 +59,9 @@ type CodeBoardProps = {
   height?: string;
   width?: string;
   styleProp?: any;
+  placeHolder?: string;
+  output?: boolean;
+  file?: BoardFile;
 };
 
 const CodeBoard: React.FC<CodeBoardProps> = ({
@@ -39,11 +73,26 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   height,
   width,
   styleProp,
+  placeHolder,
+  output,
+  file,
 }) => {
+  const { show } = useContextMenu({
+    id: 'codeboard',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+
   return (
     <Suspense fallback={<BoardLoader />}>
       <CodeMirror
-        placeholder="Paste your code here."
+        id="code"
+        onContextMenu={displayMenu}
+        placeholder={placeHolder || 'Paste your code here.'}
         theme={
           theme == 'light'
             ? githubLightInit({
@@ -83,11 +132,19 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         width={width || 'auto'}
         height={height || '200px'}
         readOnly={readOnly}
-        extensions={[language, hyperLink]}
+        extensions={[
+          keymap.of([...vscodeKeymap, { key: 'Tab', run: acceptCompletion }]),
+          language,
+          hyperLink,
+
+          indentationMarkers(),
+          colorPicker,
+        ]}
         onChange={onChange}
         draggable={false}
         aria-label="code"
         basicSetup={{
+          defaultKeymap: false,
           foldGutter: true,
           closeBrackets: true,
           bracketMatching: true,
@@ -95,16 +152,69 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
           highlightActiveLine: true,
           highlightSpecialChars: true,
           syntaxHighlighting: true,
-          searchKeymap: true,
+          searchKeymap: false,
           dropCursor: false,
           allowMultipleSelections: false,
           indentOnInput: true,
-          lintKeymap: true,
+          lintKeymap: false,
           drawSelection: true,
-          completionKeymap: true,
-          defaultKeymap: true,
+          completionKeymap: false,
+          history: true,
+          historyKeymap: false,
+          lineNumbers: !output,
         }}
       />
+
+      <Menu id={'codeboard'}>
+        <Item
+          onClick={() =>
+            document
+              .getElementById('code')
+              .dispatchEvent(
+                new KeyboardEvent('keydown', { ctrlKey: true, key: 'f' })
+              )
+          }>
+          <BiSearch style={{ marginRight: '8px' }} /> Find
+        </Item>
+
+        <Item
+          onClick={() =>
+            formatCode(code, file.language).then((a) => (code = a))
+          }>
+          <SiPrettier style={{ marginRight: '8px' }} /> Format code
+        </Item>
+
+        <Item onClick={() => document.documentElement.requestFullscreen()}>
+          <CoExpand style={{ marginRight: '8px' }} /> Toggle fullscreen
+        </Item>
+
+        <Separator />
+        <Item onClick={() => document.execCommand('cut')}>
+          <FlFillIcFluentCut24Filled style={{ marginRight: '8px' }} /> Cut{' '}
+          <RightSlot className="key">
+            <span>Ctrl</span> <span>X</span>
+          </RightSlot>
+        </Item>
+        <Item onClick={() => document.execCommand('copy')}>
+          <BiSolidCopy style={{ marginRight: '8px' }} /> Copy{' '}
+          <RightSlot className="key">
+            <span>Ctrl</span> <span>C</span>
+          </RightSlot>
+        </Item>
+        <Item
+          onClick={async () => {
+            document.execCommand(
+              'insertText',
+              true /*no UI*/,
+              await navigator.clipboard.readText()
+            );
+          }}>
+          <LuClipboardPaste style={{ marginRight: '8px' }} /> Paste
+          <RightSlot className="key">
+            <span>Ctrl</span> <span>V</span>
+          </RightSlot>
+        </Item>
+      </Menu>
     </Suspense>
   );
 };

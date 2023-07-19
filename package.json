@@ -19,6 +19,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@replit/codemirror-css-color-picker": "^6.0.0",
+    "@replit/codemirror-indentation-markers": "^6.4.2",
+    "@replit/codemirror-vscode-keymap": "^6.0.2",
     "@supabase/auth-helpers-nextjs": "^0.7.2",
     "@supabase/auth-helpers-react": "^0.4.0",
     "@supabase/supabase-js": "^2.26.0",
@@ -31,11 +34,14 @@
     "@upstash/redis": "^1.22.0",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.5.8",
+    "allotment": "^1.19.2",
     "crypto-js": "^4.1.1",
+    "generate-api-key": "^1.0.2",
     "next": "^13.4.7",
     "nprogress": "^0.2.0",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
+    "react-contexify": "^6.0.0",
     "react-dom": "^18.2.0",
     "react-icons-ng": "^4.8.5",
     "react-loading-skeleton": "^3.3.1"
