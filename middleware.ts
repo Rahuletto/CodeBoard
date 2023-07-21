@@ -61,7 +61,7 @@ export async function middleware(req: NextRequest) {
       path &&
       (path == '/api/ping' || path == '/api/teapot' || path == '/api')
     ) {
-      const { limit, remaining } =
+      const { success, limit, remaining } =
         await ratelimit.default.limit(req.ip);
 
       res.headers.set('RateLimit-Limit', limit.toString());
