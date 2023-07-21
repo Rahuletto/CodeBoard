@@ -1,6 +1,6 @@
 // React
 import dynamic from 'next/dynamic';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
@@ -41,12 +41,14 @@ import {
 
 import 'react-contexify/dist/ReactContexify.css';
 
-import { BiSearch, BiSolidCopy } from 'react-icons-ng/bi';
-import { FlFillIcFluentCut24Filled } from 'react-icons-ng/fl';
+import { BiCommand, BiSearch, BiSolidCopy } from 'react-icons-ng/bi';
+import {
+  FlFillIcFluentCut24Filled,
+  FlFillIcFluentWindow24Filled,
+} from 'react-icons-ng/fl';
 import { LuClipboardPaste } from 'react-icons-ng/lu';
 import { CoExpand } from 'react-icons-ng/co';
 import { SiPrettier } from 'react-icons-ng/si';
-import { formatCode } from '../utils/prettier';
 import { BoardFile } from '../utils/types/board';
 
 // Props
@@ -87,10 +89,62 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
     });
   }
 
+  useEffect(() => {
+    window.addEventListener('fullscreenchange', (ev) => {
+      if (!document.fullscreenElement)
+        document
+          .getElementsByClassName('codeWrapper')[0]
+          .classList.remove('zen');
+    });
+
+    window.addEventListener('keyup', (event) => {
+      Array.from(
+        document.querySelectorAll(
+          ".key span"
+        )
+      ).forEach((a) => {
+        (a as HTMLElement).style.transform = 'scale(1)';
+        (a as HTMLElement).style.opacity = "1"
+      });
+    })
+
+    window.addEventListener('keydown', (event) => {
+      Array.from(
+        document.getElementsByClassName(
+          event.ctrlKey ? 'ctrl' : event.altKey ? 'alt' : event.key
+        )
+      ).forEach((a) => {
+        (a as HTMLElement).style.transform = 'scale(0.9)';
+        (a as HTMLElement).style.opacity = "0.7"
+      });
+
+      if (
+        (event.altKey && event.key.toLowerCase() == 'z') ||
+        event.key == 'F8'
+      ) {
+        if (window.innerHeight == screen.height) {
+          document
+            .getElementsByClassName('codeWrapper')[0]
+            .classList.remove('zen');
+          document.exitFullscreen();
+        } else {
+          document
+            .getElementsByClassName('codeWrapper')[0]
+            .classList.add('zen');
+          document.documentElement.requestFullscreen();
+        }
+      } else if (event.key == 'Escape') {
+        document
+          .getElementsByClassName('codeWrapper')[0]
+          .classList.remove('zen');
+      }
+    });
+  }, []);
+
   return (
     <Suspense fallback={<BoardLoader />}>
       <CodeMirror
-        id="code"
+        id="code-board"
         onContextMenu={displayMenu}
         placeholder={placeHolder || 'Paste your code here.'}
         theme={
@@ -133,16 +187,18 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         height={height || '200px'}
         readOnly={readOnly}
         extensions={[
-          keymap.of([...vscodeKeymap, { key: 'Ctrl-Shift-f', run: openSearchPanel }]),
+          keymap.of([
+            { key: 'Ctrl-Shift-f', run: openSearchPanel },
+            ...vscodeKeymap,
+          ]),
           language,
           hyperLink,
-
           indentationMarkers(),
           colorPicker,
         ]}
         onChange={onChange}
         draggable={false}
-        aria-label="code"
+        aria-label="codeboard"
         basicSetup={{
           defaultKeymap: false,
           foldGutter: true,
@@ -168,29 +224,59 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
       <Menu id={'codeboard'}>
         <Item
           onClick={() =>
-            document
-              .getElementById('code')
-              .dispatchEvent(
-                new KeyboardEvent('keydown', { ctrlKey: true, key: 'f' })
-              )
+            document.getElementsByClassName('cm-content')[0].dispatchEvent(
+              new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                shiftKey: true,
+                key: 'f',
+              })
+            )
           }>
           <BiSearch style={{ marginRight: '8px' }} /> Find
+          <RightSlot className="key">
+            <span className="ctrl">Ctrl</span> <span className="f">F</span>
+          </RightSlot>
         </Item>
 
         <Item
+          disabled={readOnly}
           onClick={() =>
             window.dispatchEvent(
               new KeyboardEvent('keydown', {
-                shiftKey: true,
                 altKey: true,
                 key: 'f',
               })
             )
           }>
           <SiPrettier style={{ marginRight: '8px' }} /> Format code
+          <RightSlot className="key">
+            <span className="alt">Alt</span> <span className="f">F</span>
+          </RightSlot>
         </Item>
 
-        <Item onClick={() => document.documentElement.requestFullscreen()}>
+        <Separator />
+
+        <Item
+          disabled={readOnly}
+          onClick={() =>
+            window.dispatchEvent(
+              new KeyboardEvent('keydown', {
+                key: 'F8',
+              })
+            )
+          }>
+          <FlFillIcFluentWindow24Filled style={{ marginRight: '8px' }} /> Zen
+          Mode
+          <RightSlot className="key">
+            <span className="F8">F8</span>
+          </RightSlot>
+        </Item>
+
+        <Item
+          onClick={() => {
+            if (window.innerHeight == screen.height) document.exitFullscreen();
+            else document.documentElement.requestFullscreen();
+          }}>
           <CoExpand style={{ marginRight: '8px' }} /> Toggle fullscreen
         </Item>
 
@@ -198,16 +284,17 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
         <Item onClick={() => document.execCommand('cut')}>
           <FlFillIcFluentCut24Filled style={{ marginRight: '8px' }} /> Cut{' '}
           <RightSlot className="key">
-            <span>Ctrl</span> <span>X</span>
+            <span className="ctrl">Ctrl</span> <span className="x">X</span>
           </RightSlot>
         </Item>
         <Item onClick={() => document.execCommand('copy')}>
           <BiSolidCopy style={{ marginRight: '8px' }} /> Copy{' '}
           <RightSlot className="key">
-            <span>Ctrl</span> <span>C</span>
+            <span className="ctrl">Ctrl</span> <span className="c">C</span>
           </RightSlot>
         </Item>
         <Item
+          disabled={readOnly}
           onClick={async () => {
             document.execCommand(
               'insertText',
@@ -217,7 +304,23 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
           }}>
           <LuClipboardPaste style={{ marginRight: '8px' }} /> Paste
           <RightSlot className="key">
-            <span>Ctrl</span> <span>V</span>
+            <span className="ctrl">Ctrl</span> <span className="v">V</span>
+          </RightSlot>
+        </Item>
+
+        <Separator />
+        <Item
+          onClick={() => {
+            document.dispatchEvent(
+              new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'k',
+              })
+            );
+          }}>
+          <BiCommand style={{ marginRight: '8px' }} /> Cmd Pallete{' '}
+          <RightSlot className="key">
+            <span className="ctrl">Ctrl</span> <span className="k">K</span>
           </RightSlot>
         </Item>
       </Menu>
@@ -229,7 +332,12 @@ export default CodeBoard;
 
 export function BoardLoader() {
   return (
-    <div style={{ padding: '8px 20px' }}>
+    <div
+      style={{
+        padding: '8px 20px',
+        height: '100%',
+        background: 'var(--code-editor)',
+      }}>
       <Skeleton style={{ width: '400px' }} />
       <br></br>
       <Skeleton style={{ width: '200px' }} />

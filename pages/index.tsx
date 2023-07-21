@@ -38,7 +38,6 @@ import { formatCode } from '../utils/prettier';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
-
 const CodeBoard = dynamic(() => import('../components/CodeBoard'));
 const EditModal = dynamic(() => import('../components/EditModal'), {
   ssr: false,
@@ -166,20 +165,14 @@ const Index: NextPage = () => {
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    window.addEventListener('beforeunload', (event) => {
-      // set a truthy value to property returnValue
-      if (code != '') event.returnValue = true;
-    });
-
     window.addEventListener('keydown', (event) => {
       if (event.altKey && event.key.toLowerCase() == 'n') {
         document.getElementById('add-file').click();
       } else if (event.key == 'F2') {
         keybindEdit(file);
       } else if (
-        event.shiftKey &&
-        event.altKey &&
-        event.key.toLowerCase() == 'f'
+        (event.shiftKey && event.altKey && event.key.toLowerCase() == 'f') ||
+        (event.altKey && event.key.toLowerCase() == 'f')
       ) {
         formatCode(file.value, file.language).then((f) => {
           setCode(f);

@@ -33,6 +33,13 @@ import makeid from '../../utils/makeid';
 import { Languages } from '../../utils/types/languages';
 import { sudoFetch } from '../../utils/sudo-fetch';
 
+// Split window
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
+
+// Loading Skeleton
+import Skeleton from 'react-loading-skeleton';
+
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
@@ -119,6 +126,16 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
       changed.value = value;
       setCode(value);
+      return;
+    },
+    [fileName]
+  );
+
+  const onTerminal = React.useCallback(
+    (value: string, viewUpdate: any) => {
+      const changed = files.find((a) => a.name === fileName);
+      changed.terminal = value;
+
       return;
     },
     [fileName]
@@ -220,6 +237,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
         name: name,
         language: l,
         value: blob,
+        terminal: ``
       },
     ]);
   }
@@ -485,16 +503,50 @@ export default function Fork({ board }: { board: FetchResponse }) {
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
-            <CodeBoard
-              styleProp={
-                drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
-              }
-              language={language}
-              code={file.value}
-              readOnly={false}
-              theme={theme}
-              onChange={onChange}
-            />
+            <Allotment vertical={true} defaultSizes={[460, 40]}>
+              <Allotment.Pane minSize={32} maxSize={460}>
+                {file ? (
+                  <CodeBoard
+                    styleProp={
+                      drag
+                        ? { pointerEvents: 'none' }
+                        : { pointerEvents: 'auto' }
+                    }
+                    language={language}
+                    code={file.value}
+                    readOnly={false}
+                    theme={theme}
+                    onChange={onChange}
+                  />
+                ) : (
+                  <div style={{ padding: '8px 20px' }}>
+                    <Skeleton style={{ width: '400px' }} />
+                    <br></br>
+                    <Skeleton style={{ width: '200px' }} />
+                    <Skeleton style={{ width: '300px' }} />
+                    <br></br>
+                    <Skeleton style={{ width: '600px' }} />
+                    <Skeleton style={{ width: '160px' }} />
+                    <Skeleton style={{ width: '60px' }} />
+                  </div>
+                )}
+              </Allotment.Pane>
+              <Allotment.Pane minSize={20} className={styles.outputPane}>
+                {file ? (
+                  <>
+                    <p className={styles.outputTxt}>LOGS</p>
+                    <CodeBoard
+                      readOnly={false}
+                      placeHolder={`>_ Share your logs with your code too.`}
+                      code={file.terminal}
+                      output={true}
+                      language={loadLanguage('shell')}
+                      theme={theme}
+                    />
+                  </>
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
           </div>
         </div>
       </main>

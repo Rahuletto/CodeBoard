@@ -180,7 +180,7 @@ export default async function POST(req: NextRequest) {
         name: body.name || 'Untitled',
         description: body.description || 'No Description',
         encrypt: false,
-        autoVanish: true,
+        autoVanish: false,
         fork: null,
         files: files,
         key: key,

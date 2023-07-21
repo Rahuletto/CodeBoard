@@ -6,7 +6,7 @@ import { GetServerSidePropsContext } from 'next';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
-
+import styles from '../../styles/Index.module.css';
 // Languages
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
@@ -22,6 +22,10 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
+
+// Split window
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
 
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -174,17 +178,19 @@ export function Embed({ id }: { id: string }) {
           </div>
         </div>
 
-        {language ? (
-          <CodeBoard
-            width={String(width)}
-            height={String(height)}
-            language={language}
-            code={file.value}
-            readOnly={true}
-            theme={theme}
-          />
-        ) : (
-          <div style={{ padding: '8px 20px' }}>
+        <Allotment vertical={true} defaultSizes={[460, 40]}>
+          <Allotment.Pane minSize={32} maxSize={460}>
+            {file ? (
+              <CodeBoard
+                width={String(width)}
+                height={String(height)}
+                language={language}
+                code={file.value}
+                readOnly={true}
+                theme={theme}
+              />
+            ) : (
+              <div style={{ padding: '8px 20px' }}>
                 <Skeleton style={{ width: '400px' }} />
                 <br></br>
                 <Skeleton style={{ width: '200px' }} />
@@ -194,7 +200,24 @@ export function Embed({ id }: { id: string }) {
                 <Skeleton style={{ width: '160px' }} />
                 <Skeleton style={{ width: '60px' }} />
               </div>
-        )}
+            )}
+          </Allotment.Pane>
+          <Allotment.Pane minSize={20} className={styles.outputPane}>
+            {file ? (
+              <>
+                <p className={styles.outputTxt}>LOGS</p>
+                <CodeBoard
+                  readOnly={true}
+                  placeHolder={`No output logs here.`}
+                  code={file.terminal}
+                  output={true}
+                  language={loadLanguage('shell')}
+                  theme={theme}
+                />
+              </>
+            ) : null}
+          </Allotment.Pane>
+        </Allotment>
       </div>
 
       <style>

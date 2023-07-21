@@ -28,11 +28,14 @@ import { MetaTags } from '../../components';
 
 // Auth
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
+// Split window
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -48,7 +51,7 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
+export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -121,10 +124,10 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   return (
     <div className={generalStyles.container}>
       <MetaTags
-          title={bd.name + '/CodeBoard'}
-          description={bd.description || 'No Description. Just the source code.'}
-          k={id + ''}
-        />
+        title={bd.name + '/CodeBoard'}
+        description={bd.description || 'No Description. Just the source code.'}
+        k={id + ''}
+      />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
@@ -319,26 +322,45 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
                 </button>
               </div>
             ) : null}
-            {language ? (
-              <CodeBoard
-                language={language}
-                code={file?.value}
-                readOnly={true}
-                theme={theme}
-                onChange={() => 'ok'}
-              />
-            ) : (
-              <div style={{ padding: '8px 20px' }}>
-                <Skeleton style={{ width: '400px' }} />
-                <br></br>
-                <Skeleton style={{ width: '200px' }} />
-                <Skeleton style={{ width: '300px' }} />
-                <br></br>
-                <Skeleton style={{ width: '600px' }} />
-                <Skeleton style={{ width: '160px' }} />
-                <Skeleton style={{ width: '60px' }} />
-              </div>
-            )}
+            <Allotment vertical={true} defaultSizes={[455, 40]}>
+              <Allotment.Pane minSize={32} maxSize={460}>
+                {file ? (
+                  <CodeBoard
+                    language={language}
+                    code={file?.value}
+                    readOnly={true}
+                    theme={theme}
+                    onChange={() => 'ok'}
+                  />
+                ) : (
+                  <div style={{ padding: '8px 20px' }}>
+                    <Skeleton style={{ width: '400px' }} />
+                    <br></br>
+                    <Skeleton style={{ width: '200px' }} />
+                    <Skeleton style={{ width: '300px' }} />
+                    <br></br>
+                    <Skeleton style={{ width: '600px' }} />
+                    <Skeleton style={{ width: '160px' }} />
+                    <Skeleton style={{ width: '60px' }} />
+                  </div>
+                )}
+              </Allotment.Pane>
+              <Allotment.Pane minSize={20} className={styles.outputPane}>
+                {file ? (
+                  <>
+                    <p className={styles.outputTxt}>LOGS</p>
+                    <CodeBoard
+                      readOnly={true}
+                      placeHolder={`No output logs here.`}
+                      code={file.terminal}
+                      output={true}
+                      language={loadLanguage('shell')}
+                      theme={theme}
+                    />
+                  </>
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
           </div>
         </div>
       </main>
@@ -347,9 +369,8 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
   const supabase = createPagesServerClient(context);
   const board = await sudoFetch(supabase, context.params.id as string);
-  
+  if (!board) return { redirect: { destination: '/404', permanent: false } };
   return { props: { id: context.params.id, bd: board } };
 }
