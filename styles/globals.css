@@ -1039,7 +1039,7 @@ hr {
 }
 
 .signin,
-.error {
+.error, .update {
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
@@ -1056,19 +1056,20 @@ hr {
 }
 
 [data-theme='light'] .signin,
-[data-theme='light'] .error {
+[data-theme='light'] .error,[data-theme='light'] .update {
   background: var(--background-light);
 }
 
 .signin .details,
-.error .details {
+.error .details,
+.update .details {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .signin .details p,
-.error-text {
+.error-text, .update-text {
   padding: 2px 20px;
   text-align: center;
   opacity: 0.7;
@@ -1098,7 +1099,7 @@ hr {
 }
 
 .signin-lander,
-.error-lander {
+.error-lander, .update-lander {
   margin: 0px 30px;
   border-radius: 20px;
   background-image: repeating-linear-gradient(
@@ -1141,6 +1142,23 @@ hr {
   position: absolute;
   right: 110px;
   margin-top: 8rem;
+}
+
+.update-lander:after {
+  box-shadow: 0px 0px 240px 110px #fcba031e;
+  content: '';
+  position: absolute;
+  margin-top: -1rem;
+  opacity: 0.4;
+}
+
+.update-lander:before {
+  box-shadow: 0px 0px 190px 120px  #fcba033a;
+  opacity: 0.4;
+  content: '';
+  position: absolute;
+  right: 90px;
+  margin-top: 11rem;
 }
 
 table {

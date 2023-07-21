@@ -30,35 +30,36 @@ const Error: NextPage = () => {
   return (
     <div className={styles.container}>
       <MetaTags
-        err404={true}
-        title="500: Internal Server Error"
-        description="Uhh. We encountered some issues with our servers. Lets hope its not the rain messing things up"
+        title="Updates"
+        description="New Updates, new features, new experience."
       />
 
       <main className={styles.main}>
         <Header theme={theme} setTheme={setTheme} />
 
         <div
-          className={[generalStyles.lander, 'error-lander'].join(' ')}
+          className={[generalStyles.lander, 'update-lander'].join(' ')}
           style={{
             height: "auto",
             backgroundImage:
               'repeating-linear-gradient(-45deg,#fcba03,#fcba03 1px,transparent 1px,transparent 6px)',
           }}>
-          <div className="error" style={{ maxWidth: '1100px' }}>
+          <div className="update" style={{ maxWidth: '1100px' }}>
             <div className="details">
-            <PiStarFourFill style={{fontSize: "48px", color: "#fcba03", filter: "drop-shadow(0px 0px 20px #fcba03)"}} />
+              <PiStarFourFill style={{ fontSize: "48px", color: "#fcba03", filter: "drop-shadow(0px 0px 20px #fcba03)" }} />
               <h1 style={{ margin: '6px', textAlign: 'center' }}>
                 Updates
               </h1>
-              <p className="error-text" style={{ fontSize: '18px' }}>
+              <p className="update-text" style={{ fontSize: '18px' }}>
                 Check out what{"'"}s new and updated. Catch up and use all of our features without missing them out !
               </p>
-              
             </div>
             <div className={update.grid}>
-                
+              <div className={update.updates}>
+                <h1>Command Pallette</h1>
+                <p className="key">We have introduced the all new Command pallette. If you are familiar with famous IDEs, this would be familiar too ! Get things fast with <span>Ctrl</span> <span>K</span>.</p>
               </div>
+            </div>
           </div>
         </div>
         <footer style={{ marginTop: '20px' }}>

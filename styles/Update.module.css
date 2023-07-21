@@ -4,3 +4,10 @@
     grid-auto-rows: 100px;
     gap: 10px;
 }
+
+.updates {
+    width: auto;
+    min-height: 150px;
+    padding: 12px 16px;
+    border-radius: 12px;
+}

@@ -36,7 +36,6 @@
     "@vercel/og": "^0.5.8",
     "allotment": "^1.19.2",
     "crypto-js": "^4.1.1",
-    "generate-api-key": "^1.0.2",
     "next": "^13.4.7",
     "nprogress": "^0.2.0",
     "prettier": "^2.8.8",
