@@ -30,6 +30,8 @@ import CommandPalette, { filterItems, getItemIndex } from 'react-cmdk';
 import { BiFile, BiRefresh } from 'react-icons-ng/bi';
 import { Md2RobotExcited } from 'react-icons-ng/md2';
 import { SiPrettier } from 'react-icons-ng/si';
+import { IoCloseCircleSharp } from 'react-icons-ng/io5';
+import {PiStarFourFill} from 'react-icons-ng/pi'
 
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const router = useRouter();
@@ -37,10 +39,27 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const [cmd, setCmd] = useState(false);
   const [search, setSearch] = useState('');
 
+  const [announce, setAnnounce] = useState('')
+
   const [theme, setTheme] = useState('');
 
   const filteredItems = filterItems(
     [
+      {
+        heading: "What's new",
+        id: "update",
+        items: [
+          {
+            id: "new",
+            children: "Update Log",
+            icon: PiStarFourFill,
+            closeOnSelect: true,
+            onClick: () => {
+              router.push('/update')
+            }
+          }
+        ]
+      },
       {
         heading: 'Commands',
         id: 'cmd',
@@ -67,7 +86,8 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
           {
             id: 'new-file',
             children: 'New File',
-            disabled: ((router.pathname !== '/') && (router.pathname !== '/fork/[id]')),
+            disabled:
+              router.pathname !== '/' && router.pathname !== '/fork/[id]',
             icon: BiFile,
             closeOnSelect: true,
             onClick: () => {
@@ -77,7 +97,8 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
           {
             id: 'pretty-file',
             children: 'Format File',
-            disabled: ((router.pathname !== '/') && (router.pathname !== '/fork/[id]')),
+            disabled:
+              router.pathname !== '/' && router.pathname !== '/fork/[id]',
             icon: SiPrettier,
             closeOnSelect: true,
             onClick: () => {
@@ -104,7 +125,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
             children: 'Home',
             icon: 'HomeIcon',
             closeOnSelect: true,
-            href: "#",
+            href: '#',
             onClick: () => {
               router.push('/home');
             },
@@ -114,7 +135,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
             children: 'New Board',
             icon: 'PlusIcon',
             closeOnSelect: true,
-            href: "#",
+            href: '#',
             onClick: () => {
               router.push('/');
             },
@@ -124,7 +145,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
             children: 'Privacy policy',
             icon: 'EyeIcon',
             closeOnSelect: true,
-            href: "#",
+            href: '#',
             onClick: () => {
               router.push('/privacy');
             },
@@ -133,7 +154,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
             id: 'docs',
             children: 'API Docs',
             icon: Md2RobotExcited,
-            href: "#",
+            href: '#',
             closeOnSelect: true,
             onClick: () => {
               router.push('/docs');
@@ -143,10 +164,36 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
             id: 'account',
             children: 'Account',
             closeOnSelect: true,
-            href: "#",
+            href: '#',
             icon: FaUserAlt,
             onClick: () => {
               router.push('/account');
+            },
+          },
+        ],
+      },
+      {
+        heading: 'Help',
+        id: 'help',
+        items: [
+          {
+            id: 'support',
+            children: 'Support',
+            icon: 'LifebuoyIcon',
+            closeOnSelect: true,
+            href: '/email',
+            onClick: () => {
+              router.push('/email');
+            },
+          },
+          {
+            id: 'feedback',
+            children: 'Send Feedback',
+            icon: 'FlagIcon',
+            closeOnSelect: true,
+            href: '/discord',
+            onClick: () => {
+              router.push('/discord');
             },
           },
         ],
@@ -166,8 +213,6 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       setLoading(false);
     };
 
-    
-
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleStop);
     router.events.on('routeChangeError', handleStop);
@@ -180,13 +225,14 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   }, [router]);
 
   useEffect(() => {
-
     setTimeout(() => {
       NProgress.done();
       setLoading(false);
     }, 3000);
 
     setTheme(localStorage.getItem('theme'));
+    setAnnounce(localStorage.getItem('announcement'))
+
     function handleKeyDown(event: KeyboardEvent) {
       if (
         (event.ctrlKey && event.shiftKey && event.key.toLowerCase() == 'p') ||
@@ -226,6 +272,26 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
           isOpen={cmd}
           page={'root'}>
           <CommandPalette.Page id="root">
+            {announce !== "done" ? <div className="new-search">
+              <div className="announce">
+              <h2>Welcome to Command Pallete</h2>
+              <p>
+                This is a part of this new update CodeBoard did. We made it so
+                you can interact with everything just with your keyboard. No
+                more mouse yay !
+              </p>
+              </div>
+              <IoCloseCircleSharp
+            title="Close Warning"
+            style={{ cursor: 'pointer', color: '#17191b', width: "40px", height: "28px" }}
+            onClick={() => {
+              (
+                document.getElementsByClassName('new-search')[0] as HTMLElement
+              ).style.display = 'none';
+              localStorage.setItem('announcement', "done")
+            }}
+          />
+            </div> : null}
             {filteredItems.length ? (
               filteredItems.map((list) => (
                 <CommandPalette.List key={list.id} heading={list.heading}>
@@ -239,7 +305,15 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
                 </CommandPalette.List>
               ))
             ) : (
-              <h2>No Results</h2>
+              <h2
+                style={{
+                  textAlign: 'center',
+                  margin: '25px',
+                  fontFamily: 'JetBrains Mono',
+                  color: 'var(--special-color)',
+                }}>
+                No Results
+              </h2>
             )}
           </CommandPalette.Page>
         </CommandPalette>

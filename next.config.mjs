@@ -44,6 +44,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/email',
+        destination: 'mailto:support@codeboard.tech',
+        permanent: true,
+      },
+      {
         source: '/support',
         destination: 'https://discord.gg/3JzDV9T5Fn',
         permanent: true,
