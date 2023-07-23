@@ -14,10 +14,13 @@ User-agent: *
 Disallow: /embed
 
 User-agent: *
-Allow: /bin
+Allow: /bin/*
 
 User-agent: *
 Allow: /
+
+User-agent: *
+Allow: /docs/*
 
 User-agent: *
 Allow: /docs
