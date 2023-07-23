@@ -6,6 +6,7 @@ import { IoCloseCircleSharp } from "react-icons-ng/io5";
 import { Md2RobotExcited } from "react-icons-ng/md2";
 import { PiStarFourFill } from "react-icons-ng/pi";
 import { SiPrettier } from "react-icons-ng/si";
+import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi'
 
 
 const Command = ({ router }) => {
@@ -40,7 +41,7 @@ const Command = ({ router }) => {
                     {
                         id: 'theme',
                         children: 'Change Theme',
-                        icon: theme == 'dark' ? 'SunIcon' : 'MoonIcon',
+                        icon: theme == 'dark' ? HiSun : HiMoon,
                         closeOnSelect: false,
                         onClick: () => {
                             const theme = localStorage.getItem('theme');
@@ -59,6 +60,7 @@ const Command = ({ router }) => {
                     {
                         id: 'new-file',
                         children: 'New File',
+                        shortcut: "Alt N",
                         disabled:
                             router.pathname !== '/' && router.pathname !== '/fork/[id]',
                         icon: BiFile,
@@ -70,6 +72,7 @@ const Command = ({ router }) => {
                     {
                         id: 'pretty-file',
                         children: 'Format File',
+                        shortcut: "Shift Alt F",
                         disabled:
                             router.pathname !== '/' && router.pathname !== '/fork/[id]',
                         icon: SiPrettier,
@@ -81,6 +84,7 @@ const Command = ({ router }) => {
                     {
                         id: 'restart',
                         children: 'Restart',
+                        shortcut: "Ctrl R",
                         icon: BiRefresh,
                         closeOnSelect: true,
                         onClick: () => {
@@ -96,19 +100,17 @@ const Command = ({ router }) => {
                     {
                         id: 'home',
                         children: 'Home',
-                        icon: 'HomeIcon',
+                        icon: HiHome,
                         closeOnSelect: true,
-                        href: '#',
                         onClick: () => {
                             router.push('/home');
                         },
                     },
                     {
-                        id: 'new',
+                        id: 'new-board',
                         children: 'New Board',
-                        icon: 'PlusIcon',
+                        icon: HiPlus,
                         closeOnSelect: true,
-                        href: '#',
                         onClick: () => {
                             router.push('/');
                         },
@@ -116,9 +118,8 @@ const Command = ({ router }) => {
                     {
                         id: 'privacy-policy',
                         children: 'Privacy policy',
-                        icon: 'EyeIcon',
+                        icon: HiEye,
                         closeOnSelect: true,
-                        href: '#',
                         onClick: () => {
                             router.push('/privacy');
                         },
@@ -127,7 +128,6 @@ const Command = ({ router }) => {
                         id: 'docs',
                         children: 'API Docs',
                         icon: Md2RobotExcited,
-                        href: '#',
                         closeOnSelect: true,
                         onClick: () => {
                             router.push('/docs');
@@ -137,7 +137,6 @@ const Command = ({ router }) => {
                         id: 'account',
                         children: 'Account',
                         closeOnSelect: true,
-                        href: '#',
                         icon: FaUserAlt,
                         onClick: () => {
                             router.push('/account');
@@ -152,9 +151,8 @@ const Command = ({ router }) => {
                     {
                         id: 'support',
                         children: 'Support',
-                        icon: 'LifebuoyIcon',
+                        icon: HiLifebuoy,
                         closeOnSelect: true,
-                        href: '/email',
                         onClick: () => {
                             router.push('/email');
                         },
@@ -162,9 +160,8 @@ const Command = ({ router }) => {
                     {
                         id: 'feedback',
                         children: 'Send Feedback',
-                        icon: 'FlagIcon',
+                        icon: HiFlag,
                         closeOnSelect: true,
-                        href: '/discord',
                         onClick: () => {
                             router.push('/discord');
                         },
@@ -225,6 +222,7 @@ const Command = ({ router }) => {
                                 document.getElementsByClassName('new-search')[0] as HTMLElement
                             ).style.display = 'none';
                             localStorage.setItem('announcement', "done")
+                            setAnnounce(localStorage.getItem('announcement'))
                         }}
                     />
                 </div> : null}
@@ -235,8 +233,15 @@ const Command = ({ router }) => {
                                 <CommandPalette.ListItem
                                     key={id}
                                     index={getItemIndex(filteredItems, id)}
-                                    {...rest}
-                                />
+                                >
+                                    <div>{<rest.icon />} {rest.children}</div>
+                                    <p className="key">
+                                        {rest.shortcut &&
+                                            rest.shortcut?.split(' ').map(el => {
+                                                return (<span className={el.toLowerCase()} key={el}>{el}</span>)
+                                            })
+                                        }</p>
+                                </CommandPalette.ListItem>
                             ))}
                         </CommandPalette.List>
                     ))

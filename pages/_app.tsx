@@ -56,6 +56,29 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   }, [router]);
 
   useEffect(() => {
+    window.addEventListener('keydown', (event) => {
+      Array.from(
+        document.getElementsByClassName(
+          event.ctrlKey ? 'ctrl' : event.altKey ? 'alt' : event.shiftKey ? "shift" : event.key
+        )
+      ).forEach((a) => {
+        (a as HTMLElement).style.transform = 'scale(0.9)';
+        (a as HTMLElement).style.opacity = "0.7"
+      });
+    })
+
+    window.addEventListener('keyup', (event) => {
+      Array.from(
+        document.querySelectorAll(
+          ".key span"
+        )
+      ).forEach((a) => {
+        (a as HTMLElement).style.transform = 'scale(1)';
+        (a as HTMLElement).style.opacity = "1"
+      });
+    })
+
+
     setTimeout(() => {
       NProgress.done();
       setLoading(false);

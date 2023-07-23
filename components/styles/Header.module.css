@@ -81,3 +81,10 @@
     width: 40px;
   }
 }
+
+.divider {
+  padding: 1px;
+  background-color: var(--background-darker);
+  border-radius: 10px;
+  height: 100%;
+}

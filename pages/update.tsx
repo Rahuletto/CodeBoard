@@ -59,6 +59,32 @@ const Error: NextPage = () => {
                 <h1>Command Pallette</h1>
                 <p className="key">We have introduced the all new Command pallette. If you are familiar with famous IDEs, this would be familiar too ! Get things fast with <span>Ctrl</span> <span>K</span>.</p>
               </div>
+
+              <div className={update.updates}>
+                <h1>Full fledged code editor</h1>
+                <p className="key">We are not a {'"paste it and share"'} platform anymore, we now have auto-complete, zen mode and everything that you would expect from a standalone IDE.</p>
+              </div>
+
+              <div className={update.updates}>
+                <h1>New in everything</h1>
+                <p className="key">We now use a secure algorithm to encrypt emails, Generate API Keys. Also updated some UI with finishing touches.</p>
+              </div>
+
+              <div className={update.updates}>
+                <h1>Keybinds</h1>
+                <p className="key">Keybinds are here. Throw your mouse because you can control codeboard with just your keyboard.</p>
+              </div>
+
+              <div className={update.updates}>
+                <h1>New Right-Click menu</h1>
+                <p className="key">I sometimes feel lazy to click some buttons thats far apart. But not anymore, right click the code editor and do its useful features.</p>
+              </div>
+
+              <div className={update.updates}>
+                <h1>Logs tab</h1>
+                <p className="key">Some bin just doesnt offer this, rather you paste your errors/logs as a comment or separate bin. Not anymore ! Use the logs panel to paste your logs instead of separate file or bin.</p>
+              </div>
+
             </div>
           </div>
         </div>

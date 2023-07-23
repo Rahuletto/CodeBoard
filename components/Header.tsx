@@ -26,10 +26,11 @@ function UnmemoHeader({ theme, setTheme, drag }: HeaderProps) {
 
   return (
     <header className={drag ? 'dragging' : ''}>
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Link href="/home" className={styles.title}>
           CodeBoard
         </Link>
+        <div className={styles.divider}></div>
         <Link
           title="API Documentation"
           href="/docs"
