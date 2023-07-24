@@ -28,3 +28,10 @@
 .updates h1, .updates p {
     margin: 0;
 }
+
+@media only screen and (max-width: 750px) {
+    .grid {
+        display: flex;
+        flex-direction: column;
+    }
+}
