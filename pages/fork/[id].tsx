@@ -1,9 +1,9 @@
 // NextJS Stuff
-import type { GetServerSidePropsContext, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useState, useEffect, FormEvent } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { FormEvent, useEffect, useState } from 'react';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -20,16 +20,16 @@ const LuTimerOff = dynamic<React.ComponentProps<IconType>>(() => import('react-i
 const GoGitBranch = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
 
 // Auth and Database
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Our Imports
-import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
+import { BoardFile } from '../../utils/types/board';
 
 import makeid from '../../utils/makeid';
-import { Languages } from '../../utils/types/languages';
 import { sudoFetch } from '../../utils/sudo-fetch';
+import { Languages } from '../../utils/types/languages';
 
 import { FetchResponse } from '../api/fetch';
 
@@ -41,9 +41,8 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 
 // Loading Skeleton
-import Skeleton from 'react-loading-skeleton';
-import BoardLoader from '../../components/BoardLoader';
 import { IconType } from 'react-icons-ng';
+import BoardLoader from '../../components/BoardLoader';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });

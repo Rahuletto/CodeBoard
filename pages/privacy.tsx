@@ -1,12 +1,12 @@
 // NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
 // Styles
-import styles from '../styles/Privacy.module.css';
 import { IconType } from 'react-icons-ng';
+import styles from '../styles/Privacy.module.css';
 
 // Icons
 const FlFillIcFluentInprivateAccount24Filled = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })

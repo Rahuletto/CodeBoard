@@ -1,15 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Database
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
-import { User } from '../../utils/types/user';
-import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
-import { LanguagesArray } from '../../utils/types/languages';
 import redis from '../../utils/redis';
+import { BoardFile } from '../../utils/types/board';
+import { LanguagesArray } from '../../utils/types/languages';
+import { User } from '../../utils/types/user';
 
 // Request Body
 type SaveRequestBody = {

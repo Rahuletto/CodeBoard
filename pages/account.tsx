@@ -1,11 +1,11 @@
 // NextJS stuff
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 // Auth and Database
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Styles
 import styles from '../styles/Account.module.css';
@@ -19,10 +19,10 @@ const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('re
 
 
 // Our imports
-import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { IconType } from 'react-icons-ng';
+import { User } from '../utils/types/user';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

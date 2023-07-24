@@ -9,6 +9,7 @@
 }
 
 html {
+  text-rendering: optimizeSpeed !important;
   /* Web browsers should have this by default aaaa */
   overflow-x: hidden;
 }

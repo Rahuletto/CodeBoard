@@ -1,12 +1,12 @@
 // NextJS Stuff
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 
 // Fonts
-import { DM_Sans, JetBrains_Mono } from 'next/font/google'
+import { DM_Sans, JetBrains_Mono } from 'next/font/google';
 const dm = DM_Sans({ fallback: ['system-ui', 'arial'], weight: ['500', '700'], display: "swap", style: ['normal'], subsets: ['latin'], variable: '--root-font' })
 const mono = JetBrains_Mono({ fallback: ['monospace'], weight: ['400', '500', '700'], display: "swap", subsets: ['latin'], style: ['normal'], variable: '--mono-font' })
 

@@ -1,12 +1,12 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 // Styles
-import styles from '../../styles/Docs.module.css';
 import Link from 'next/link';
+import styles from '../../styles/Docs.module.css';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

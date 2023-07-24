@@ -8,8 +8,8 @@ import styles from '../styles/Index.module.css';
 import { formatCode } from '../utils/prettier';
 
 // Our Imports
-import { BoardFile } from '../utils/types/board';
 import { IconType } from 'react-icons-ng';
+import { BoardFile } from '../utils/types/board';
 
 type PrettierButtonProps = {
   code: string;

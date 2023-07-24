@@ -1,8 +1,8 @@
 const FaHeartBroken = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
 
 import dynamic from 'next/dynamic';
-import styles from '../styles/Index.module.css';
 import { IconType } from 'react-icons-ng';
+import styles from '../styles/Index.module.css';
 
 function Error({ statusCode }) {
   return (

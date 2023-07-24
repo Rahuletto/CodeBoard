@@ -4,8 +4,8 @@ const FaCaretDown = dynamic<React.ComponentProps<IconType>>(() => import('react-
 
 
 // Our Imports
-import { BoardFile } from '../utils/types/board';
 import { IconType } from 'react-icons-ng';
+import { BoardFile } from '../utils/types/board';
 
 type FileSelectProps = {
   fileName?: string;

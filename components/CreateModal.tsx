@@ -9,10 +9,10 @@ const FaBackward = dynamic<React.ComponentProps<IconType>>(() => import('react-i
 const FaCloudUploadAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
 
 // Our Imports
-import { extensions } from '../utils/extensions';
-import { BoardFile } from '../utils/types/board';
 import dynamic from 'next/dynamic';
 import { IconType } from 'react-icons-ng';
+import { extensions } from '../utils/extensions';
+import { BoardFile } from '../utils/types/board';
 
 type CreateModalProps = {
   files: BoardFile[];

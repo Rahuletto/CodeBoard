@@ -1,8 +1,8 @@
 // NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 // Styles
 import generalStyles from '../styles/General.module.css';

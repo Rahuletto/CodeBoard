@@ -13,8 +13,8 @@ import ThemeSwitch from './ThemeSwitch';
 const FaPlus = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
 const FaUserAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUserAlt), { ssr: false })
 
-import { useRouter } from 'next/router';
 import { useSession } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { IconType } from 'react-icons-ng';
 

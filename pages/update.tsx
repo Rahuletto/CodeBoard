@@ -1,14 +1,14 @@
 
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 // Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
-import update from '../styles/Update.module.css'
+import update from '../styles/Update.module.css';
 
 // Icons
 import { PiStarFourFill } from 'react-icons-ng/pi';

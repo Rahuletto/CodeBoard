@@ -1,14 +1,14 @@
 // NextJS Stuff
 import { GetServerSidePropsContext } from 'next';
-import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { MouseEvent, useEffect, useState } from 'react';
 
 // Styles
+import boardStyles from '../../styles/Board.module.css';
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
-import boardStyles from '../../styles/Board.module.css';
 
 // CodeMirror Language
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
@@ -25,15 +25,15 @@ const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('re
 const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
 
 // Our Imports
-import { BoardFile } from '../../utils/types/board';
-import { FetchResponse } from '../api/fetch';
-import { sudoFetch } from '../../utils/sudo-fetch';
-import { Languages } from '../../utils/types/languages';
 import MetaTags from '../../components/Metatags';
+import { sudoFetch } from '../../utils/sudo-fetch';
+import { BoardFile } from '../../utils/types/board';
+import { Languages } from '../../utils/types/languages';
+import { FetchResponse } from '../api/fetch';
 
 // Auth
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
@@ -41,8 +41,8 @@ import Skeleton from 'react-loading-skeleton';
 // Split window
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
-import BoardLoader from '../../components/BoardLoader';
 import { IconType } from 'react-icons-ng';
+import BoardLoader from '../../components/BoardLoader';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {

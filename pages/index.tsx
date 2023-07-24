@@ -1,8 +1,8 @@
 // NextJS Stuff
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useState, useEffect, FormEvent } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 // Styles
 import generalStyles from '../styles/General.module.css';
@@ -22,10 +22,10 @@ const LuTimerOff = dynamic<React.ComponentProps<IconType>>(() => import('react-i
 
 
 // Our Imports
-import { BoardFile } from '../utils/types/board';
+import { AESEncrypt } from '../utils/aes';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
-import { AESEncrypt } from '../utils/aes';
+import { BoardFile } from '../utils/types/board';
 import { Languages } from '../utils/types/languages';
 
 import AddFile from '../components/AddFile';
@@ -34,9 +34,9 @@ import MetaTags from '../components/Metatags';
 // Split pane
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
-import BoardLoader from '../components/BoardLoader'
-import { formatCode } from '../utils/prettier';
 import { IconType } from 'react-icons-ng';
+import BoardLoader from '../components/BoardLoader';
+import { formatCode } from '../utils/prettier';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });

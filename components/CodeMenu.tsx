@@ -1,10 +1,10 @@
 
 import dynamic from 'next/dynamic';
 import {
-    Menu,
     Item,
-    Separator,
+    Menu,
     RightSlot,
+    Separator,
 } from 'react-contexify';
 
 import 'react-contexify/dist/ReactContexify.css';

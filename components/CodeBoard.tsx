@@ -1,6 +1,6 @@
 // React
 import dynamic from 'next/dynamic';
-import React, { Suspense, useEffect, memo } from 'react';
+import React, { Suspense, memo, useEffect } from 'react';
 
 // Lazy import
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
@@ -19,9 +19,6 @@ const light = await (
   await import('./utils/LightTheme')
 ).default;
 
-const hyperLink = await (
-  await import('@uiw/codemirror-extensions-hyper-link')
-).hyperLink;
 const vscodeKeymap = await (
   await import('@replit/codemirror-vscode-keymap')
 ).vscodeKeymap;
@@ -49,7 +46,6 @@ const ext = [
     { key: 'Ctrl-Shift-f', run: openSearchPanel },
     ...vscodeKeymap,
   ]),
-  hyperLink,
   indentationMarkers(),
   colorPicker,
 ]

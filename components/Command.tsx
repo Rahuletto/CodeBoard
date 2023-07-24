@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import CommandPalette, { filterItems, getItemIndex } from "react-cmdk";
 import { BiFile, BiRefresh } from "react-icons-ng/bi";
 import { FaUserAlt } from "react-icons-ng/fa";
+import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi';
 import { IoCloseCircleSharp } from "react-icons-ng/io5";
 import { Md2RobotExcited } from "react-icons-ng/md2";
 import { PiStarFourFill } from "react-icons-ng/pi";
 import { SiPrettier } from "react-icons-ng/si";
-import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi'
 
 import { IconType } from "react-icons-ng";
 

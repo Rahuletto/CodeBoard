@@ -7,8 +7,8 @@ const FaCloudUploadAlt = dynamic<React.ComponentProps<IconType>>(() => import('r
 const FaWindowClose = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Our Imports
-import { BoardFile } from '../utils/types/board';
 import { IconType } from 'react-icons-ng';
+import { BoardFile } from '../utils/types/board';
 
 type DropZoneProps = {
   files?: BoardFile[];

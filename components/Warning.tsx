@@ -1,6 +1,6 @@
 // Styles
 import { IconType } from 'react-icons-ng';
-import generalStyles from '../styles/General.module.css'
+import generalStyles from '../styles/General.module.css';
 
 // Icons
 import dynamic from 'next/dynamic';

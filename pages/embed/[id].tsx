@@ -1,8 +1,8 @@
 // NextJS stuff
-import { useRouter } from 'next/router';
-import React, { MouseEvent, memo, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { MouseEvent, memo, useEffect, useState } from 'react';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
@@ -12,10 +12,10 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Our imports
 import { MetaTags } from '../../components';
-import { FetchResponse } from '../api/fetch';
-import { Languages } from '../../utils/types/languages';
 import { sudoFetch } from '../../utils/sudo-fetch';
 import { BoardFile } from '../../utils/types/board';
+import { Languages } from '../../utils/types/languages';
+import { FetchResponse } from '../api/fetch';
 
 // Database
 import { useSupabaseClient } from '@supabase/auth-helpers-react';

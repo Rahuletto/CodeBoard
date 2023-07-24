@@ -1,5 +1,5 @@
 // NextJS Stuff
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // Styles
 import styles from './styles/Loader.module.css';
