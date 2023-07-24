@@ -69,7 +69,7 @@ type CodeBoardProps = {
   file?: BoardFile;
 };
 
-const CodeBoard: React.FC<CodeBoardProps> = memo(({
+const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   language,
   code,
   theme,
@@ -173,6 +173,8 @@ const CodeBoard: React.FC<CodeBoardProps> = memo(({
       <CodeMenu readOnly={readOnly} />
     </Suspense>
   );
-});
+};
 
-export default CodeBoard
+export default memo(function CodeBoard(props: CodeBoardProps) {
+  return <UnmemoCodeBoard {...props} />;
+});
