@@ -1,9 +1,9 @@
 // NextJS Stuff
-import type { GetServerSidePropsContext, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useState, useEffect, FormEvent } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { FormEvent, useEffect, useState } from 'react';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -12,26 +12,37 @@ import styles from '../../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
-import {
-  LuShieldCheck,
-  LuShieldOff,
-  LuTimer,
-  LuTimerOff,
-} from 'react-icons-ng/lu';
-import { GoGitBranch } from 'react-icons-ng/go';
+const LuShieldOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuTimer = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
+const LuTimerOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
+
+const GoGitBranch = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
 
 // Auth and Database
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Our Imports
-import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
-import { AddFile, MetaTags } from '../../components';
-import { FetchResponse } from '../api/fetch';
+import { BoardFile } from '../../utils/types/board';
+
 import makeid from '../../utils/makeid';
-import { Languages } from '../../utils/types/languages';
 import { sudoFetch } from '../../utils/sudo-fetch';
+import { Languages } from '../../utils/types/languages';
+
+import { FetchResponse } from '../api/fetch';
+
+import AddFile from '../../components/AddFile';
+import MetaTags from '../../components/Metatags';
+
+// Split window
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
+
+// Loading Skeleton
+import { IconType } from 'react-icons-ng';
+import BoardLoader from '../../components/BoardLoader';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -119,6 +130,16 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
       changed.value = value;
       setCode(value);
+      return;
+    },
+    [fileName]
+  );
+
+  const onTerminal = React.useCallback(
+    (value: string, viewUpdate: any) => {
+      const changed = files.find((a) => a.name === fileName);
+      changed.terminal = value;
+
       return;
     },
     [fileName]
@@ -220,6 +241,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
         name: name,
         language: l,
         value: blob,
+        terminal: ``
       },
     ]);
   }
@@ -485,16 +507,42 @@ export default function Fork({ board }: { board: FetchResponse }) {
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
-            <CodeBoard
-              styleProp={
-                drag ? { pointerEvents: 'none' } : { pointerEvents: 'auto' }
-              }
-              language={language}
-              code={file.value}
-              readOnly={false}
-              theme={theme}
-              onChange={onChange}
-            />
+            <Allotment vertical={true} defaultSizes={[460, 40]}>
+              <Allotment.Pane minSize={32} maxSize={460}>
+                {file ? (
+                  <CodeBoard
+                    styleProp={
+                      drag
+                        ? { pointerEvents: 'none' }
+                        : { pointerEvents: 'auto' }
+                    }
+                    language={language}
+                    code={file.value}
+                    readOnly={false}
+                    theme={theme}
+                    onChange={onChange}
+                  />
+                ) : (
+                  <BoardLoader />
+                )}
+              </Allotment.Pane>
+              <Allotment.Pane minSize={20} className={styles.outputPane}>
+                {file ? (
+                  <>
+                    <p className={styles.outputTxt}>LOGS</p>
+                    <CodeBoard
+                      readOnly={false}
+                      placeHolder={`>_ Share your logs with your code too.`}
+                      code={file.terminal}
+                      output={true}
+                      language={loadLanguage('shell')}
+                      theme={theme}
+                      onChange={onTerminal}
+                    />
+                  </>
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
           </div>
         </div>
       </main>

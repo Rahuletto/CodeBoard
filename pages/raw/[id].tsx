@@ -16,7 +16,7 @@ export default function MyComponent({
   const [text, setText] = useState('');
 
   useEffect(() => {
-    sudoFetch(supabase, id).then((b) => {
+    sudoFetch(supabase, id, true).then((b) => {
       if (!b) return router.push('/404');
 
       const f = b.files.find((a) => a.name == file)

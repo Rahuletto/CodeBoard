@@ -1,9 +1,9 @@
 // ReactJS stuff
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useEffect } from 'react';
 
 // Our Imports
-import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
+import { BoardFile } from '../utils/types/board';
 
 type FileSelectProps = {
   fileName?: string;
@@ -20,6 +20,14 @@ const EditModal: React.FC<FileSelectProps> = ({
   files,
   setFiles,
 }) => {
+  useEffect(() => {
+    const form = document.getElementsByClassName('editForm')[0];
+    document.getElementById('file-name').onkeydown = function (e) {
+      if (e.key == 'Enter') {
+        (form as HTMLFormElement).requestSubmit();
+      }
+    };
+  }, []);
   function closeEdit() {
     const div = document.querySelectorAll(`div.edit`);
     const back = document.querySelector<HTMLElement>(`.backdrop`);
@@ -32,7 +40,6 @@ const EditModal: React.FC<FileSelectProps> = ({
 
   function edit(event: FormEvent) {
     event.preventDefault();
-    event.stopPropagation();
     closeEdit();
 
     const input = document.querySelector<HTMLInputElement>(
@@ -92,12 +99,13 @@ const EditModal: React.FC<FileSelectProps> = ({
       <form className="editForm" onSubmit={(event) => edit(event)}>
         <input
           onChange={(event) => updateEditLanguage(event, currentFile.name)}
-          className="file-name"
+          className={`file-name-${currentFile.name.replaceAll('.', '-')}`}
           name="filename"
           type="text"
+          id="file-name"
           placeholder={currentFile.name}
           autoComplete="off"></input>
-        <div style={{padding: 0}} className="tooltip">
+        <div style={{ padding: 0 }} className="tooltip">
           <p>
             <span
               className={[
@@ -108,7 +116,12 @@ const EditModal: React.FC<FileSelectProps> = ({
                 currentFile.language.slice(1)}
             </span>
           </p>
-          <span style={{maxWidth: 'auto', left: '28%'}} className="tooltiptext">To change language, just have file extension with file name. Just like you do with normal code editor</span>
+          <span
+            style={{ maxWidth: 'auto', left: '28%' }}
+            className="tooltiptext">
+            To change language, just have file extension with file name. Just
+            like you do with normal code editor
+          </span>
         </div>
 
         <button

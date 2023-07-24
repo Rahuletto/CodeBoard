@@ -1,51 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import PBKDF2 from './utils/encrypt';
-import makeid from './utils/makeid';
 
 // Ratelimits
 import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-const cache = new Map();
+import redis from './utils/redis';
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const cache = new Map();
 
 const ratelimit = {
   save: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(20, '1 m'),
     analytics: true,
-    prefix: 'ratelimit:save',
+    prefix: 'ratelimit@save',
     ephemeralCache: cache,
   }),
   fetch: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(40, '1 m'),
     analytics: true,
-    prefix: 'ratelimit:fetch',
+    prefix: 'ratelimit@fetch',
     ephemeralCache: cache,
   }),
   regen: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(1, '2 m'),
     analytics: true,
-    prefix: 'ratelimit:regen',
+    prefix: 'ratelimit@regen',
     ephemeralCache: cache,
   }),
   delete: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(10, '1 m'),
     analytics: true,
-    prefix: 'ratelimit:delete',
+    prefix: 'ratelimit@delete',
     ephemeralCache: cache,
   }),
   default: new Ratelimit({
     redis: redis,
     limiter: Ratelimit.slidingWindow(60, '1 m'),
-    prefix: 'ratelimit:default',
+    prefix: 'ratelimit@default',
     ephemeralCache: cache,
   }),
 };
@@ -131,21 +126,21 @@ export async function middleware(req: NextRequest) {
       return success
         ? res
         : new NextResponse(
-            JSON.stringify({
-              message: 'Ratelimited !',
-              warning:
-                'Repeating this periodically may result of invokation of your API access.',
-              status: 429,
-            }),
-            {
-              status: 429,
-              headers: {
-                'content-type': 'application/json',
-                'RateLimit-Limit': limit.toString(),
-                'Retry-After': reset.toString(),
-              },
-            }
-          );
+          JSON.stringify({
+            message: 'Ratelimited !',
+            warning:
+              'Repeating this periodically may result of invokation of your API access.',
+            status: 429,
+          }),
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'RateLimit-Limit': limit.toString(),
+              'Retry-After': reset.toString(),
+            },
+          }
+        );
     }
   } else {
     const supabase = createMiddlewareClient({ req, res });
@@ -155,21 +150,31 @@ export async function middleware(req: NextRequest) {
     } = await supabase.auth.getSession();
 
     if (session) {
-      const { data: user } = await supabase
-        .from('Users')
-        .select()
-        .eq('id', session?.user?.user_metadata?.provider_id)
-        .limit(1)
-        .single();
+      const id = session?.user?.user_metadata?.provider_id;
 
+      let user = await redis.get(`user-${id}`)
+      if (!user) {
+        const { data } = await supabase
+          .from('Users')
+          .select()
+          .eq('id', id)
+          .limit(1)
+          .single();
+
+        user = data;
+        if (data) await redis.set(`user-${id}`, data, { ex: 60 * 3 })
+      }
+      
       if (!user && session) {
+        const key = generateUUID()
+
         await supabase.from('Users').insert({
           uid: session?.user?.id,
           id: session?.user?.user_metadata?.provider_id,
           email: PBKDF2(session?.user?.email),
           name: session?.user?.user_metadata?.name,
           image: session?.user?.user_metadata?.avatar_url ?? '',
-          apiKey: makeid(20),
+          apiKey: key,
         });
       }
     }
@@ -181,3 +186,19 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+
+function generateUUID() {
+  var d = new Date().getTime();
+
+  if (window.performance && typeof window.performance.now === "function") {
+    d += performance.now();
+  }
+
+  var uuid = 'codeboard_api.xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+
+  return uuid;
+}

@@ -59,7 +59,7 @@
 }
 
 .pages a {
-    font-family: 'JetBrains Mono';
+    font-family: var(--mono-font);
     padding: 4px 14px;
     border-radius: 8px;
     font-size: 16px;
@@ -98,7 +98,7 @@
 
 .content li a {
     color: var(--purple);
-    font-family: 'JetBrains Mono';
+    font-family: var(--mono-font);
     font-size: 18px;
 }
 
@@ -168,7 +168,7 @@
     font-size: 20px !important;
     user-select: all;
     border-radius: 50px;
-    font-family: 'JetBrains Mono';
+    font-family: var(--mono-font);
  }
  
  .post::before {
@@ -183,7 +183,7 @@
      display: flex;
      align-items: center;
      margin-right: 12px;
-     font-family: 'JetBrains Mono';
+     font-family: var(--mono-font);
  }
 
 .get {
@@ -194,7 +194,7 @@
    font-size: 20px !important;
    user-select: all;
    border-radius: 50px;
-   font-family: 'JetBrains Mono';
+   font-family: var(--mono-font);
 }
 
 .get::before {
@@ -209,7 +209,7 @@
     display: flex;
     align-items: center;
     margin-right: 12px;
-    font-family: 'JetBrains Mono';
+    font-family: var(--mono-font);
 }
 
 .baseUrl {
@@ -220,7 +220,7 @@
     font-size: 20px !important;
     user-select: all;
     border-radius: 50px;
-    font-family: 'JetBrains Mono';
+    font-family: var(--mono-font);
  }
  
  .baseUrl::before {
@@ -235,7 +235,7 @@
      display: flex;
      align-items: center;
      margin-right: 12px;
-     font-family: 'JetBrains Mono';
+     font-family: var(--mono-font);
  }
 
 @media only screen and (max-width: 750px) {

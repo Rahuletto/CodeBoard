@@ -4,7 +4,7 @@
 
 ## The ~~future~~ present of code sharing.
 
-CodeBoard is an open-source code sharing platform thats better in every way.
+CodeBoard is a community-driven code sharing platform built by developers, for developers.
 With beautiful syntax highlighting and integrated with Prettier.
 
 > Released v2 with refreshing UI, API access, Accounts OAuth, Optimizations and more !

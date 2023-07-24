@@ -1,14 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Database
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
-import { User } from '../../utils/types/user';
-import { BoardFile } from '../../utils/types/board';
 import makeid from '../../utils/makeid';
+import redis from '../../utils/redis';
+import { BoardFile } from '../../utils/types/board';
 import { LanguagesArray } from '../../utils/types/languages';
+import { User } from '../../utils/types/user';
 
 // Request Body
 type SaveRequestBody = {
@@ -176,18 +177,23 @@ export default async function POST(req: NextRequest) {
       }
 
       const key = makeid(8);
-      const { error } = await supabase.from('Boards').insert({
+      const data = {
         name: body.name || 'Untitled',
         description: body.description || 'No Description',
         encrypt: false,
-        autoVanish: true,
+        autoVanish: false,
         fork: null,
         files: files,
         key: key,
-        author: `bot | ${apikey}`,
+        author: `bot | ${token.id}`,
         createdAt: Date.now(),
         madeBy: token.id
-      });
+      }
+
+      const { error } = await supabase.from('Boards').insert(data);
+
+      await redis.set(`board-${key}`, data, { ex: 60 * 3 })
+
       if (error) {
         console.error(error);
         return new Response(

@@ -82,7 +82,7 @@
 .repo h1 {
   margin: 0;
   margin-bottom: 6px;
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
 }
 
 .boardList {
@@ -165,7 +165,7 @@
 }
 
 .secret span {
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   transition: 0.15s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   user-select: all;
 }

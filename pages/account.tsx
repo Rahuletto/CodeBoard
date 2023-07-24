@@ -1,24 +1,28 @@
 // NextJS stuff
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 
 // Auth and Database
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Styles
 import styles from '../styles/Account.module.css';
 
 // Icons
-import { FaGithub, FaUser } from 'react-icons-ng/fa';
-import { LuRefreshCw } from 'react-icons-ng/lu';
-import { Md2RobotExcited } from 'react-icons-ng/md2';
+const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
+const FaUser = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUser), { ssr: false })
+
+const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuRefreshCw), { ssr: false })
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+
 
 // Our imports
-import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { IconType } from 'react-icons-ng';
+import { User } from '../utils/types/user';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -57,13 +61,10 @@ export default function Account({ github, bds, apiBds, id, api }) {
   }
 
   async function deleteBoard(b) {
-    const { error } = await supabase
-      .from('Boards')
-      .delete()
-      .eq('key', b)
+    const { error } = await supabase.from('Boards').delete().eq('key', b);
 
-    if (!error) router.reload()
-    else console.error(error)
+    if (!error) router.reload();
+    else console.error(error);
   }
 
   async function regenerate() {
@@ -72,11 +73,8 @@ export default function Account({ github, bds, apiBds, id, api }) {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: process.env.NEXT_PUBLIC_KEY,
+          Authorization: api,
         },
-        body: JSON.stringify({
-          userId: session.user.user_metadata.provider_id,
-        }),
       });
       const result = await response.json();
 
@@ -159,7 +157,9 @@ export default function Account({ github, bds, apiBds, id, api }) {
               Sign Out
             </button>
           </div>
-          <div className={styles.repo} style={!isUser ? { borderColor: 'var(--purple)' } : null}>
+          <div
+            className={styles.repo}
+            style={!isUser ? { borderColor: 'var(--purple)' } : null}>
             <div
               style={{
                 display: 'flex',
@@ -204,17 +204,17 @@ export default function Account({ github, bds, apiBds, id, api }) {
                     <Link title={`/bin/${b.key}`} href={`/bin/${b.key}`}>
                       /bin/{b.key}
                     </Link>
-                    {isUser ? (<button
-                      title="Delete the board"
-                      onClick={() => deleteBoard(b.key)}>
-                      Delete
-                    </button>) : null}
+                    {isUser ? (
+                      <button
+                        title="Delete the board"
+                        onClick={() => deleteBoard(b.key)}>
+                        Delete
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               ))}
-            {!boards || !boards[0] ? (
-              <p>No boards found</p>
-            ) : null}
+            {!boards || !boards[0] ? <p>No boards found</p> : null}
           </div>
         </div>
       </main>
@@ -258,12 +258,14 @@ export const getServerSideProps = async (ctx) => {
       .eq('author', session?.user?.user_metadata?.provider_id);
 
   const {
-    data: apiBds
-  }: { data: { key: string; name: string; description: string }[], error: PostgrestError } =
-    await supabase
-      .from('Boards')
-      .select()
-      .eq('madeBy', session?.user?.user_metadata?.provider_id);
+    data: apiBds,
+  }: {
+    data: { key: string; name: string; description: string }[];
+    error: PostgrestError;
+  } = await supabase
+    .from('Boards')
+    .select()
+    .eq('madeBy', session?.user?.user_metadata?.provider_id);
 
   return {
     props: {

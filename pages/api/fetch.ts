@@ -1,13 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Database
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
-import { User } from '../../utils/types/user';
-import { Board, BoardFile } from '../../utils/types/board';
 import { AESDecrypt } from '../../utils/aes';
+import redis from '../../utils/redis';
+import { Board, BoardFile } from '../../utils/types/board';
+import { User } from '../../utils/types/user';
 
 // Types
 export type FetchResponse = {
@@ -62,12 +63,20 @@ export default async function GET(req: NextRequest) {
       }
     );
 
-  const { data: boardRaw }: { data: Board } = await supabase
-    .from('Boards')
-    .select()
-    .eq('key', id)
-    .limit(1)
-    .single();
+
+  let boardRaw: Board = await redis.get(`board-${id}`)
+
+  if (!boardRaw) {
+    const { data }: { data: Board } = await supabase
+      .from('Boards')
+      .select()
+      .eq('key', id)
+      .limit(1)
+      .single();
+
+    boardRaw = data
+    if (data) await redis.set(`board-${id}`, data, { ex: 60 * 3 })
+  }
 
   if (!boardRaw)
     return new Response(
@@ -93,6 +102,8 @@ export default async function GET(req: NextRequest) {
       .from('Boards')
       .delete()
       .eq('key', boardRaw.key);
+
+      if(boardRaw) await redis.del(`board-${id}`)
 
     return new Response(
       JSON.stringify({

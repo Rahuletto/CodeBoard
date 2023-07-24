@@ -5,9 +5,12 @@ import { ChangeEvent, FormEvent } from 'react';
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaBackward, FaCloudUploadAlt } from 'react-icons-ng/fa';
+const FaBackward = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaBackward), { ssr: false })
+const FaCloudUploadAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
 
 // Our Imports
+import dynamic from 'next/dynamic';
+import { IconType } from 'react-icons-ng';
 import { extensions } from '../utils/extensions';
 import { BoardFile } from '../utils/types/board';
 
@@ -117,6 +120,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
           autoComplete="off"
           onChange={(event) => updateLanguage(event)}
           className="file-name"
+          id="new-file"
           name="filename"
           type="text"
           placeholder="untitled.js"></input>

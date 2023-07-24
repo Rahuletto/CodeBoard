@@ -1,4 +1,5 @@
 // Styles
+import dynamic from 'next/dynamic';
 import styles from './styles/Header.module.css';
 
 // NextJS
@@ -8,11 +9,15 @@ import Link from 'next/link';
 import ThemeSwitch from './ThemeSwitch';
 
 // Icons
-import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
 
-import { useRouter } from 'next/router';
+const FaPlus = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
+const FaUserAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUserAlt), { ssr: false })
+
 import { useSession } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
 import { memo } from 'react';
+import { IconType } from 'react-icons-ng';
+
 
 type HeaderProps = {
   theme?: string;
@@ -26,10 +31,11 @@ function UnmemoHeader({ theme, setTheme, drag }: HeaderProps) {
 
   return (
     <header className={drag ? 'dragging' : ''}>
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
         <Link href="/home" className={styles.title}>
           CodeBoard
         </Link>
+        <div className={styles.divider}></div>
         <Link
           title="API Documentation"
           href="/docs"

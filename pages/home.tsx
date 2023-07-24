@@ -1,17 +1,20 @@
 // NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 // Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+const FaPlus = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
+const FlFillIcFluentInprivateAccount24Filled = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
+
+
 import Link from 'next/link';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -44,8 +47,8 @@ const Home: NextPage = () => {
               <span className={generalStyles.purple}>code sharing platform</span>
             </h1>
             <p style={{ fontSize: '22px' }}>
-              An <span className={generalStyles.purple}>open-source</span> code
-              sharing platform thats better in every way.
+              A <span className={generalStyles.purple}>community-driven</span> code
+              sharing platform thats built by developers, for developers.
             </p>
             <div className={styles.buttonHolder}>
               <Link

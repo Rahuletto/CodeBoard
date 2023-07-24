@@ -1,12 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Database
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 
 // Our Imports
 import { User } from '../../utils/types/user';
-import makeid from '../../utils/makeid';
 
 // Edge config
 export const config = {
@@ -31,8 +30,21 @@ export default async function PATCH(req: NextRequest) {
         }
       );
 
+    
     const authorization = req.headers.get('authorization');
-    if (authorization != process.env.NEXT_PUBLIC_KEY)
+
+    const apikey = authorization
+
+    const supabase = createMiddlewareClient({ req, res });
+
+    const { data: token }: { data: User } = await supabase
+      .from('Users')
+      .select()
+      .eq('apiKey', apikey)
+      .limit(1)
+      .single();
+
+    if (!token)
       return new Response(
         JSON.stringify({
           message: 'Not Authorized !',
@@ -46,35 +58,7 @@ export default async function PATCH(req: NextRequest) {
         }
       );
 
-    const body = await req?.json();
-
-    const supabase = createMiddlewareClient({ req, res });
-
-    const { data: token }: { data: User } = await supabase
-      .from('Users')
-      .select()
-      .eq('id', body.userId)
-      .limit(1)
-      .single();
-
-    if (token) {
-      
-    } else {
-      return new Response(
-        JSON.stringify({
-          message: 'User not found !',
-          status: 404,
-        }),
-        {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
-    }
-
-    const key = makeid(20);
+    const key = generateUUID()
 
     const { error } = await supabase
       .from('Users')
@@ -121,4 +105,20 @@ export default async function PATCH(req: NextRequest) {
       }
     );
   }
+}
+
+function generateUUID() {
+  var d = new Date().getTime();
+
+  if (window.performance && typeof window.performance.now === "function") {
+    d += performance.now();
+  }
+
+  var uuid = 'codeboard_api.xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+
+  return uuid;
 }

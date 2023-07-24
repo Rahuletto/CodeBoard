@@ -12,8 +12,8 @@ import Save from "./Save"
 import ThemeSwitch from "./ThemeSwitch"
 import Warning from "./Warning"
 
-export { 
-    AddFile, // MillionJS Block Element
+export {
+    AddFile,
     CodeBoard,
     CreateModal,
     DropZone,
@@ -22,8 +22,8 @@ export {
     Header,
     InfoButton,
     MetaTags,
-    PrettierButton, // MillionJS Block Element
+    PrettierButton,
     Save,
     ThemeSwitch,
-    Warning // MillionJS Block Element
+    Warning
 }

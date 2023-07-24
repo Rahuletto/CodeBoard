@@ -1,14 +1,14 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 // Styles
-import styles from '../../styles/Docs.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { CodeBoard } from '../../components';
 import Link from 'next/link';
+import { CodeBoard } from '../../components';
+import styles from '../../styles/Docs.module.css';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
@@ -575,21 +575,21 @@ const Docs: NextPage = () => {
           }
 
           h2 {
-            font-family: "JetBrains Mono";
+            font-family: "var(--mono-font)";
             font-size: 32px;
             margin-top: 22px;
             margin-bottom: 8px;
           }
 
           h3 {
-            font-family: "JetBrains Mono";
+            font-family: "var(--mono-font)";
             color: var(--special-color);
           }
 
           h4 {
             margin: 0;
             font-size: 20px;
-            font-family: "DM Sans";
+            font-family: var(--root-font);
           }
 
           .splitter {

@@ -1,15 +1,18 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 // Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { BsQuestionDiamondFill } from 'react-icons-ng/bs';
+const BsQuestionDiamondFill = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/bs').then(mod => mod.BsQuestionDiamondFill), { ssr: false })
+
+
 import Link from 'next/link';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

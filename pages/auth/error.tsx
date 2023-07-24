@@ -1,15 +1,17 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
 // Styles
+import { IconType } from 'react-icons-ng';
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Home.module.css';
 
 // Icons
-import Link from 'next/link';
-import { FaWindowClose } from 'react-icons-ng/fa';
+const FaWindowClose = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

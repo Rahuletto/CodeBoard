@@ -12,7 +12,7 @@
 
 .denyCreate {
   padding: 8px 12px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   color: var(--red);
   border-radius: 50px;
   font-weight: 700;
@@ -54,7 +54,7 @@
   border-radius: 18px;
   border: 0px none;
   padding: 12px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   height: 160px;
   color: var(--special-color);
   font-size: 16px;
@@ -98,7 +98,7 @@
   padding: 12px 24px;
   border: 5px solid #17191b;
   background: var(--green);
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-size: 20px;
   border-radius: 50px;
   margin: 0px 24px;
@@ -129,7 +129,7 @@
   padding: 12px 24px;
   border: 5px solid #17191b;
   background: var(--purple);
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-size: 20px;
   border-radius: 50px;
   margin: 0px 24px;
@@ -160,7 +160,7 @@
   padding: 12px 24px;
   border: 5px solid #17191b;
   background: var(--orange);
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-size: 20px;
   border-radius: 50px;
   margin: 0px 24px;
@@ -201,7 +201,7 @@
   align-items: center;
   color: var(--special-color);
   user-select: none;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-size: 20px;
 }
 
@@ -217,7 +217,7 @@
 }
 
 .prettier button {
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   border: 2px solid var(--background-darker);
   border-radius: 12px;
   font-weight: 800;
@@ -255,6 +255,17 @@
   align-items: center;
 }
 
+.outputTxt {
+  padding: 8px;
+  font-family: var(--mono-font);
+  background: var(--code-editor);
+  margin: 0px;
+}
+
+.outputPane {
+  border-top: 3px solid var(--background-dark) !important;
+}
+
 .dropNotif {
   padding: 12px;
   background: var(--background-slight-dark);
@@ -273,13 +284,13 @@
 
 .dropNotif h2 {
   margin: 0px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   color: var(--special-color);
 }
 
 .dropNotif p {
   margin: 0px;
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
 }
 
 .fileUploadBox {

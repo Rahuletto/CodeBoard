@@ -1,38 +1,48 @@
 // NextJS Stuff
 import { GetServerSidePropsContext } from 'next';
-import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 
 // Styles
+import boardStyles from '../../styles/Board.module.css';
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
-import boardStyles from '../../styles/Board.module.css';
 
 // CodeMirror Language
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode, FaPencilAlt } from 'react-icons-ng/fa';
-import { LuShieldCheck } from 'react-icons-ng/lu';
-import { GoGitBranch } from 'react-icons-ng/go';
-import { Md2RobotExcited } from 'react-icons-ng/md2';
+const FaLink = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaLink), { ssr: false })
+const FaCode = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCode), { ssr: false })
+const FaPencilAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPencilAlt), { ssr: false })
+
+const GoGitBranch = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
+
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
 
 // Our Imports
-import { BoardFile } from '../../utils/types/board';
-import { FetchResponse } from '../api/fetch';
+import MetaTags from '../../components/Metatags';
 import { sudoFetch } from '../../utils/sudo-fetch';
+import { BoardFile } from '../../utils/types/board';
 import { Languages } from '../../utils/types/languages';
-import { MetaTags } from '../../components';
+import { FetchResponse } from '../api/fetch';
 
 // Auth
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
+// Split window
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
+import { IconType } from 'react-icons-ng';
+import BoardLoader from '../../components/BoardLoader';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -48,7 +58,7 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
+export default function Bin({ id, board }: { id: string; board: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -59,23 +69,16 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  const [board, setBoard] = useState<FetchResponse>(null);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(board?.files[0]?.name);
   const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
-
-    sudoFetch(supabase, id).then((b) => {
-      if (!b) return router.push('/404');
-      setBoard(b);
-      setFileName(b.files[0].name);
-    });
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     if (board) {
       setFile(board.files.find((a: BoardFile) => a.name == fileName));
       if (!file) setFile(board.files[0]);
@@ -107,7 +110,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 
       setBtns(fileButtons);
     }
-  });
+  }, [file]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
@@ -121,15 +124,15 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
   return (
     <div className={generalStyles.container}>
       <MetaTags
-          title={bd.name + '/CodeBoard'}
-          description={bd.description || 'No Description. Just the source code.'}
-          k={id + ''}
-        />
+        title={board.name + '/CodeBoard'}
+        description={board.description || 'No Description. Just the source code.'}
+        k={id + ''}
+      />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
         {board &&
-        session?.user?.user_metadata?.provider_id == board.author ? null : (
+          session?.user?.user_metadata?.provider_id == board.author ? null : (
           <Warning />
         )}
 
@@ -210,7 +213,7 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
               </form>
             </div>
             {board &&
-            session?.user?.user_metadata?.provider_id == board.author ? (
+              session?.user?.user_metadata?.provider_id == board.author ? (
               <div className="tooltip">
                 <button
                   className={styles.edit}
@@ -246,8 +249,8 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
                       board.fork?.status
                         ? 'Forked boards cannot get forked again'
                         : board.bot
-                        ? 'Boards by API cannot get forked'
-                        : 'Fork the board'
+                          ? 'Boards by API cannot get forked'
+                          : 'Fork the board'
                     }
                     style={{ marginRight: '12px' }}
                   />{' '}
@@ -319,26 +322,36 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
                 </button>
               </div>
             ) : null}
-            {language ? (
-              <CodeBoard
-                language={language}
-                code={file?.value}
-                readOnly={true}
-                theme={theme}
-                onChange={() => 'ok'}
-              />
-            ) : (
-              <div style={{ padding: '8px 20px' }}>
-                <Skeleton style={{ width: '400px' }} />
-                <br></br>
-                <Skeleton style={{ width: '200px' }} />
-                <Skeleton style={{ width: '300px' }} />
-                <br></br>
-                <Skeleton style={{ width: '600px' }} />
-                <Skeleton style={{ width: '160px' }} />
-                <Skeleton style={{ width: '60px' }} />
-              </div>
-            )}
+            <Allotment vertical={true} defaultSizes={[455, 40]}>
+              <Allotment.Pane minSize={32} maxSize={460}>
+                {file ? (
+                  <CodeBoard
+                    language={language}
+                    code={file?.value}
+                    readOnly={true}
+                    theme={theme}
+                    onChange={() => 'ok'}
+                  />
+                ) : (
+                  <BoardLoader />
+                )}
+              </Allotment.Pane>
+              <Allotment.Pane minSize={20} className={styles.outputPane}>
+                {file ? (
+                  <>
+                    <p className={styles.outputTxt}>LOGS</p>
+                    <CodeBoard
+                      readOnly={true}
+                      placeHolder={`No output logs here.`}
+                      code={file.terminal}
+                      output={true}
+                      language={loadLanguage('shell')}
+                      theme={theme}
+                    />
+                  </>
+                ) : null}
+              </Allotment.Pane>
+            </Allotment>
           </div>
         </div>
       </main>
@@ -347,9 +360,14 @@ export default function Bin({ id, bd }: { id: string, bd: FetchResponse }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-
   const supabase = createPagesServerClient(context);
   const board = await sudoFetch(supabase, context.params.id as string);
-  
-  return { props: { id: context.params.id, bd: board } };
+  if (!board)
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
+  return { props: { id: context.params.id, board: board } };
 }

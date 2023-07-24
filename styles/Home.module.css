@@ -44,7 +44,7 @@
 .newProject {
   font-size: 18px;
   background: var(--background-dark);
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   color: var(--special-color);
   padding: 6px 24px;
   border-radius: 50px;
@@ -70,7 +70,7 @@
   border-radius: 50px;
   display: flex;
   align-items: center;
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   font-weight: 900;
 }
 
@@ -210,7 +210,7 @@
   color: var(--special-color);
   text-align: center;
   font-size: 34px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-style: normal;
   font-weight: 700;
   line-height: normal;

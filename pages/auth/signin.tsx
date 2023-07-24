@@ -1,16 +1,17 @@
 import dynamic from 'next/dynamic';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Styles
 import generalStyles from '../../styles/General.module.css';
 
 // Icons
-import { FaGithub } from 'react-icons-ng/fa';
+const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
 
 // Auth
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

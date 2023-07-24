@@ -1,9 +1,6 @@
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  poweredByHeader: false,
   async rewrites() {
     return [
       {
@@ -42,6 +39,11 @@ const nextConfig = {
       {
         source: '/discord',
         destination: 'https://discord.gg/3JzDV9T5Fn',
+        permanent: true,
+      },
+      {
+        source: '/email',
+        destination: 'mailto:support@codeboard.tech',
         permanent: true,
       },
       {

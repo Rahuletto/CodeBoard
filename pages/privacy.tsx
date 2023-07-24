@@ -1,14 +1,15 @@
 // NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
 // Styles
+import { IconType } from 'react-icons-ng';
 import styles from '../styles/Privacy.module.css';
 
 // Icons
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+const FlFillIcFluentInprivateAccount24Filled = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <MetaTags
         title="CodeBoard"
-        description="Welcome to codeboard ! Codeboard is an open source bin website thats better in every way."
+        description="Welcome to codeboard ! CodeBoard is a community-driven code sharing platform built by developers, for developers."
       />
 
       <main className={styles.main}>
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
                     style={{
                       color: 'var(--special-color)',
                       fontWeight: 600,
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: "var(--mono-font)",
                     }}>
                     CodeBoard
                   </span>
@@ -97,7 +98,7 @@ const Home: NextPage = () => {
                   style={{
                     fontWeight: 600,
                     color: 'var(--special-color)',
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: "var(--mono-font)",
                   }}>
                   {
                     '(If you use Encryption option, We will store only the encrypted code snippet and not your decrypted code snippet)'

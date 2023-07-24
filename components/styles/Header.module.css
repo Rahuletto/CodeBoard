@@ -7,7 +7,7 @@
 .newProject {
   font-size: 18px;
   background: var(--background-dark);
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   color: var(--special-color);
   padding: 6px 24px;
   border-radius: 50px;
@@ -19,7 +19,7 @@
 
 .title {
   margin: 0px;
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   font-size: 36px;
   color: var(--special-color);
 }
@@ -51,7 +51,7 @@
   background: var(--purple);
   border-radius: 10px;
   border-right: 4px solid var(--purple-dark);
-  font-family: 'JetBrains Mono';
+  font-family: var(--mono-font);
   height: 34px;
   display: flex;
   align-items: center;
@@ -80,4 +80,11 @@
     height: 40px;
     width: 40px;
   }
+}
+
+.divider {
+  padding: 1px;
+  background-color: var(--background-darker);
+  border-radius: 10px;
+  height: 100%;
 }

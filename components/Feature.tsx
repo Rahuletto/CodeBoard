@@ -1,8 +1,11 @@
 // Styles
+import dynamic from 'next/dynamic';
+import { IconType } from 'react-icons-ng';
 import styles from '../styles/Index.module.css';
 import feature from './styles/Feature.module.css';
 
-import { McCheckCircleFill, McForbidCircleLine } from 'react-icons-ng/mc';
+const McCheckCircleFill = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McCheckCircleFill), { ssr: false })
+const McForbidCircleLine = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McForbidCircleLine), { ssr: false })
 
 const Features = ({ session }) => {
   return (
@@ -116,7 +119,7 @@ const Features = ({ session }) => {
             <h4>
               <span
                 style={{
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: "var(--mono-font)",
                   color: 'var(--purple-dark)',
                   fontSize: '22px',
                 }}>
@@ -146,7 +149,7 @@ const Features = ({ session }) => {
               <span style={{ color: 'var(--purple)' }}>
                 <McCheckCircleFill />
               </span>{' '}
-              Priority support
+              Execute code {'[BETA]'}
             </div>
           </div>
         </div>

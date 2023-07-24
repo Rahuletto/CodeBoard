@@ -15,4 +15,5 @@ export type BoardFile = {
   name: string;
   language: string;
   value: string; // The Code
+  terminal?: string; // New terminal
 };

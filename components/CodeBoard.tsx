@@ -1,26 +1,57 @@
 // React
 import dynamic from 'next/dynamic';
-import React, { Suspense } from 'react';
-import Skeleton from 'react-loading-skeleton';
+import React, { Suspense, memo, useEffect } from 'react';
 
+// Lazy import
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
   loading: () => <BoardLoader />,
   ssr: false,
 });
-const atomoneInit = await (
-  await import('@uiw/codemirror-theme-atomone')
-).atomoneInit;
-const githubLightInit = await (
-  await import('@uiw/codemirror-theme-github')
-).githubLightInit;
-const hyperLink = await (
-  await import('@uiw/codemirror-extensions-hyper-link')
-).hyperLink;
-const t = await (await import('@lezer/highlight')).tags;
+const CodeMenu = dynamic(() => import('./CodeMenu'), {
+  ssr: false,
+});
+
+// Themes
+const dark = await (
+  await import('./utils/DarkTheme')
+).default;
+const light = await (
+  await import('./utils/LightTheme')
+).default;
+
+const vscodeKeymap = await (
+  await import('@replit/codemirror-vscode-keymap')
+).vscodeKeymap;
+const indentationMarkers = await (
+  await import('@replit/codemirror-indentation-markers')
+).indentationMarkers;
+const keymap = await (await import('@codemirror/view')).keymap;
+const openSearchPanel = await (
+  await import('@codemirror/search')
+).openSearchPanel;
+const colorPicker = await (
+  await import('@replit/codemirror-css-color-picker')
+).colorPicker;
+
+
+import { BoardFile } from '../utils/types/board';
+
+import { useContextMenu } from 'react-contexify';
+import BoardLoader from './BoardLoader';
+
+
+const ext = [
+  keymap.of([
+    { key: 'Ctrl-Shift-f', run: openSearchPanel },
+    ...vscodeKeymap,
+  ]),
+  indentationMarkers(),
+  colorPicker,
+]
 
 // Props
 type CodeBoardProps = {
-  language?: Function | any;
+  language?: any;
   code?: string;
   theme?: 'light' | 'dark' | string;
   onChange?: Function | any;
@@ -28,9 +59,12 @@ type CodeBoardProps = {
   height?: string;
   width?: string;
   styleProp?: any;
+  placeHolder?: string;
+  output?: boolean;
+  file?: BoardFile;
 };
 
-const CodeBoard: React.FC<CodeBoardProps> = ({
+const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   language,
   code,
   theme,
@@ -39,89 +73,103 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
   height,
   width,
   styleProp,
+  placeHolder,
+  output,
 }) => {
+  const setup = {
+    defaultKeymap: false,
+    foldGutter: true,
+    closeBrackets: true,
+    bracketMatching: true,
+    autocompletion: true,
+    highlightActiveLine: true,
+    highlightSpecialChars: true,
+    syntaxHighlighting: true,
+    searchKeymap: false,
+    dropCursor: false,
+    allowMultipleSelections: false,
+    indentOnInput: true,
+    lintKeymap: false,
+    drawSelection: true,
+    completionKeymap: false,
+    history: true,
+    historyKeymap: false,
+    lineNumbers: !output,
+  }
+
+  const { show } = useContextMenu({
+    id: 'codeboard',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+
+  function fsc() {
+    if (!document.fullscreenElement)
+      document
+        .getElementsByClassName('codeWrapper')[0]
+        .classList.remove('zen');
+  }
+
+  function kdc(event) {
+    if (
+      (event.altKey && event.key.toLowerCase() == 'z') ||
+      event.key == 'F8'
+    ) {
+      if (window.innerHeight == screen.height) {
+        document
+          .getElementsByClassName('codeWrapper')[0]
+          .classList.remove('zen');
+        document.exitFullscreen();
+      } else {
+        document
+          .getElementsByClassName('codeWrapper')[0]
+          .classList.add('zen');
+        document.documentElement.requestFullscreen();
+      }
+    } else if (event.key == 'Escape') {
+      document
+        .getElementsByClassName('codeWrapper')[0]
+        .classList.remove('zen');
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('fullscreenchange', fsc);
+    window.addEventListener('keydown', kdc);
+  }, []);
+
   return (
     <Suspense fallback={<BoardLoader />}>
       <CodeMirror
-        placeholder="Paste your code here."
+        id="code-board"
+        onContextMenu={displayMenu}
+        placeholder={placeHolder || 'Paste your code here.'}
         theme={
           theme == 'light'
-            ? githubLightInit({
-                settings: {
-                  background: '#F6F6F6',
-                  gutterBackground: '#F1F1F1',
-                },
-              })
-            : atomoneInit({
-                settings: {
-                  foreground: '#ABB2BF',
-                  selection: '#646464',
-                  selectionMatch: '#646464',
-                  caret: '#C6C6C6',
-                  fontFamily: 'JetBrains Mono',
-                },
-                styles: [
-                  { tag: t.content, color: '#7D8799' },
-                  { tag: t.processingInstruction, color: '#98C379' },
-                  { tag: t.name, color: '#61AFEF' },
-                  { tag: t.variableName, color: '#D19A66' },
-                  { tag: t.definitionOperator, color: '#56B6C2' },
-                  { tag: t.propertyName, color: '#E06C75' },
-                  { tag: t.punctuation, color: '#C678DD' },
-                  { tag: t.brace, color: '#ABB2BF' },
-                  { tag: t.paren, color: '#ABB2BF' },
-                  { tag: t.angleBracket, color: '#ABB2BF' },
-                  { tag: t.variableName, color: '#E06C75' },
-                  { tag: t.definition(t.variableName), color: '#D19A66' },
-                  { tag: t.color, color: '#D19A66' },
-                  { tag: t.bool, color: '#D19A66' },
-                ],
-              })
+            ? light
+            : dark
         }
         style={styleProp || { pointerEvents: 'auto' }}
         value={code}
         width={width || 'auto'}
         height={height || '200px'}
         readOnly={readOnly}
-        extensions={[language, hyperLink]}
+        extensions={[...ext, language]}
         onChange={onChange}
         draggable={false}
-        aria-label="code"
-        basicSetup={{
-          foldGutter: true,
-          closeBrackets: true,
-          bracketMatching: true,
-          autocompletion: true,
-          highlightActiveLine: true,
-          highlightSpecialChars: true,
-          syntaxHighlighting: true,
-          searchKeymap: true,
-          dropCursor: false,
-          allowMultipleSelections: false,
-          indentOnInput: true,
-          lintKeymap: true,
-          drawSelection: true,
-          completionKeymap: true,
-          defaultKeymap: true,
-        }}
+        aria-label="codeboard"
+        basicSetup={setup}
       />
+
+      <CodeMenu readOnly={readOnly} />
     </Suspense>
   );
 };
 
-export default CodeBoard;
-
-export function BoardLoader() {
-  return (
-    <div style={{ padding: '8px 20px' }}>
-      <Skeleton style={{ width: '400px' }} />
-      <br></br>
-      <Skeleton style={{ width: '200px' }} />
-      <Skeleton style={{ width: '300px' }} />
-      <br></br>
-      <Skeleton style={{ width: '600px' }} />
-      <Skeleton style={{ width: '160px' }} />
-      <Skeleton style={{ width: '60px' }} />
-    </div>
-  );
-}
+export default memo(function CodeBoard(props: CodeBoardProps) {
+  return <UnmemoCodeBoard {...props} />;
+});

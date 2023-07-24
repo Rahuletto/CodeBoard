@@ -1,13 +1,13 @@
 //NextJS stuff
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Link from 'next/link'
+import { useEffect, useState } from 'react';
 // Styles
-import styles from '../../styles/Docs.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { CodeBoard } from '../../components';
+import styles from '../../styles/Docs.module.css';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
@@ -101,7 +101,7 @@ const Docs: NextPage = () => {
             </div>
             <br></br>
             <h3>Example</h3>
-            <p style={{ fontFamily: 'JetBrains Mono' }}>Request</p>
+            <p style={{ fontFamily: "var(--mono-font)" }}>Request</p>
             <div
               style={{
                 border: '5px solid var(--background-dark)',
@@ -154,7 +154,7 @@ const Docs: NextPage = () => {
             </div>
 
             <br></br>
-            <p style={{ fontFamily: 'JetBrains Mono' }}>Response JSON</p>
+            <p style={{ fontFamily: "var(--mono-font)" }}>Response JSON</p>
 
             <div
               style={{
