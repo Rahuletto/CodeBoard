@@ -22,8 +22,8 @@ export {
     Header,
     InfoButton,
     MetaTags,
-    PrettierButton, // MillionJS Block Element
+    PrettierButton,
     Save,
     ThemeSwitch,
-    Warning // MillionJS Block Element
+    Warning
 }

@@ -26,6 +26,7 @@ import Skeleton from 'react-loading-skeleton';
 // Split window
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
+import BoardLoader from '../../components/BoardLoader';
 
 // Lazy loading
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -190,16 +191,7 @@ export function Embed({ id }: { id: string }) {
                 theme={theme}
               />
             ) : (
-              <div style={{ padding: '8px 20px' }}>
-                <Skeleton style={{ width: '400px' }} />
-                <br></br>
-                <Skeleton style={{ width: '200px' }} />
-                <Skeleton style={{ width: '300px' }} />
-                <br></br>
-                <Skeleton style={{ width: '600px' }} />
-                <Skeleton style={{ width: '160px' }} />
-                <Skeleton style={{ width: '60px' }} />
-              </div>
+              <BoardLoader />
             )}
           </Allotment.Pane>
           <Allotment.Pane minSize={20} className={styles.outputPane}>

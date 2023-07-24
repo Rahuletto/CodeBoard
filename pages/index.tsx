@@ -25,9 +25,11 @@ const LuTimerOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuT
 import { BoardFile } from '../utils/types/board';
 import { extensions } from '../utils/extensions';
 import makeid from '../utils/makeid';
-import { AddFile, MetaTags } from '../components';
 import { AESEncrypt } from '../utils/aes';
 import { Languages } from '../utils/types/languages';
+
+import AddFile from '../components/AddFile';
+import MetaTags from '../components/Metatags';
 
 // Split pane
 import { Allotment } from 'allotment';
@@ -83,7 +85,7 @@ const Index: NextPage = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
   // Inputs ---------------------------------
-  const [title, setTitle] = useState('Untitled');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [encrypt, setEncrypt] = useState(true);
   const [vanish, setVanish] = useState(false);

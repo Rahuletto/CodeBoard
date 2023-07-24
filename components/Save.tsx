@@ -5,7 +5,7 @@ import styles from '../styles/Index.module.css';
 import dynamic from 'next/dynamic';
 const BiSolidSave = dynamic(() => import('react-icons-ng/bi').then(mod => mod.BiSolidSave), { ssr: false })
 
-const Save = () => {
+const Save: React.FC = () => {
   return (
     <div className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
       <div

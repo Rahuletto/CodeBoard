@@ -29,7 +29,7 @@ import { BoardFile } from '../../utils/types/board';
 import { FetchResponse } from '../api/fetch';
 import { sudoFetch } from '../../utils/sudo-fetch';
 import { Languages } from '../../utils/types/languages';
-import { MetaTags } from '../../components';
+import MetaTags from '../../components/Metatags';
 
 // Auth
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
@@ -41,6 +41,7 @@ import Skeleton from 'react-loading-skeleton';
 // Split window
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
+import BoardLoader from '../../components/BoardLoader';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -338,16 +339,7 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
                     onChange={() => 'ok'}
                   />
                 ) : (
-                  <div style={{ padding: '8px 20px' }}>
-                    <Skeleton style={{ width: '400px' }} />
-                    <br></br>
-                    <Skeleton style={{ width: '200px' }} />
-                    <Skeleton style={{ width: '300px' }} />
-                    <br></br>
-                    <Skeleton style={{ width: '600px' }} />
-                    <Skeleton style={{ width: '160px' }} />
-                    <Skeleton style={{ width: '60px' }} />
-                  </div>
+                  <BoardLoader />
                 )}
               </Allotment.Pane>
               <Allotment.Pane minSize={20} className={styles.outputPane}>
@@ -376,6 +368,12 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const supabase = createPagesServerClient(context);
   const board = await sudoFetch(supabase, context.params.id as string);
-  if (!board) return { redirect: { destination: '/404', permanent: false } };
+  if (!board)
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
+    };
   return { props: { id: context.params.id, bd: board } };
 }

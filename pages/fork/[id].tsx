@@ -26,11 +26,15 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
 import { extensions } from '../../utils/extensions';
-import { AddFile, MetaTags } from '../../components';
-import { FetchResponse } from '../api/fetch';
+
 import makeid from '../../utils/makeid';
 import { Languages } from '../../utils/types/languages';
 import { sudoFetch } from '../../utils/sudo-fetch';
+
+import { FetchResponse } from '../api/fetch';
+
+import AddFile from '../../components/AddFile';
+import MetaTags from '../../components/Metatags';
 
 // Split window
 import { Allotment } from 'allotment';
@@ -38,6 +42,7 @@ import 'allotment/dist/style.css';
 
 // Loading Skeleton
 import Skeleton from 'react-loading-skeleton';
+import BoardLoader from '../../components/BoardLoader';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -518,16 +523,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
                     onChange={onChange}
                   />
                 ) : (
-                  <div style={{ padding: '8px 20px' }}>
-                    <Skeleton style={{ width: '400px' }} />
-                    <br></br>
-                    <Skeleton style={{ width: '200px' }} />
-                    <Skeleton style={{ width: '300px' }} />
-                    <br></br>
-                    <Skeleton style={{ width: '600px' }} />
-                    <Skeleton style={{ width: '160px' }} />
-                    <Skeleton style={{ width: '60px' }} />
-                  </div>
+                  <BoardLoader />
                 )}
               </Allotment.Pane>
               <Allotment.Pane minSize={20} className={styles.outputPane}>
@@ -541,6 +537,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
                       output={true}
                       language={loadLanguage('shell')}
                       theme={theme}
+                      onChange={onTerminal}
                     />
                   </>
                 ) : null}
