@@ -33,7 +33,7 @@ import { Languages } from '../utils/types/languages';
 // Split pane
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
-import { BoardLoader } from '../components/CodeBoard';
+import BoardLoader from '../components/BoardLoader'
 import { formatCode } from '../utils/prettier';
 
 // Lazy loading

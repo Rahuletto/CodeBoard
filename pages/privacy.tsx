@@ -62,7 +62,7 @@ const Home: NextPage = () => {
                     style={{
                       color: 'var(--special-color)',
                       fontWeight: 600,
-                      fontFamily: 'JetBrains Mono',
+                      fontFamily: 'var(--mono-font)',
                     }}>
                     CodeBoard
                   </span>
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
                   style={{
                     fontWeight: 600,
                     color: 'var(--special-color)',
-                    fontFamily: 'JetBrains Mono',
+                    fontFamily: 'var(--mono-font)',
                   }}>
                   {
                     '(If you use Encryption option, We will store only the encrypted code snippet and not your decrypted code snippet)'

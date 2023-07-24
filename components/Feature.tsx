@@ -116,7 +116,7 @@ const Features = ({ session }) => {
             <h4>
               <span
                 style={{
-                  fontFamily: 'JetBrains Mono',
+                  fontFamily: 'var(--mono-font)',
                   color: 'var(--purple-dark)',
                   fontSize: '22px',
                 }}>

@@ -575,21 +575,21 @@ const Docs: NextPage = () => {
           }
 
           h2 {
-            font-family: "JetBrains Mono";
+            font-family: "var(--mono-font)";
             font-size: 32px;
             margin-top: 22px;
             margin-bottom: 8px;
           }
 
           h3 {
-            font-family: "JetBrains Mono";
+            font-family: "var(--mono-font)";
             color: var(--special-color);
           }
 
           h4 {
             margin: 0;
             font-size: 20px;
-            font-family: "DM Sans";
+            font-family: var(--root-font);
           }
 
           .splitter {

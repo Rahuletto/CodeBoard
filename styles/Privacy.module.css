@@ -42,7 +42,7 @@
 
 .privacyLander h1 {
   font-size: 32px;
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   color: var(--special-color);
   text-decoration: 2px underline var(--background-darker);
   transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);

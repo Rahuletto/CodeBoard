@@ -217,7 +217,7 @@
 }
 
 .prettier button {
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   border: 2px solid var(--background-darker);
   border-radius: 12px;
   font-weight: 800;
@@ -257,7 +257,7 @@
 
 .outputTxt {
   padding: 8px;
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   background: var(--code-editor);
   margin: 0px;
 }
@@ -290,7 +290,7 @@
 
 .dropNotif p {
   margin: 0px;
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
 }
 
 .fileUploadBox {

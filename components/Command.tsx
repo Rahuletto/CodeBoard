@@ -7,6 +7,7 @@ import { Md2RobotExcited } from "react-icons-ng/md2";
 import { PiStarFourFill } from "react-icons-ng/pi";
 import { SiPrettier } from "react-icons-ng/si";
 import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi'
+import { IconType } from "react-icons-ng";
 
 
 const Command = ({ router }) => {
@@ -60,7 +61,6 @@ const Command = ({ router }) => {
                     {
                         id: 'new-file',
                         children: 'New File',
-                        shortcut: "Alt N",
                         disabled:
                             router.pathname !== '/' && router.pathname !== '/fork/[id]',
                         icon: BiFile,
@@ -72,7 +72,6 @@ const Command = ({ router }) => {
                     {
                         id: 'pretty-file',
                         children: 'Format File',
-                        shortcut: "Shift Alt F",
                         disabled:
                             router.pathname !== '/' && router.pathname !== '/fork/[id]',
                         icon: SiPrettier,
@@ -84,7 +83,7 @@ const Command = ({ router }) => {
                     {
                         id: 'restart',
                         children: 'Restart',
-                        shortcut: "Ctrl R",
+
                         icon: BiRefresh,
                         closeOnSelect: true,
                         onClick: () => {
@@ -171,6 +170,13 @@ const Command = ({ router }) => {
         ],
         search
     );
+
+
+    const map = [
+        { id: "new-file", shortcut: "Alt N" },
+        { id: "restart", shortcut: "Ctrl R" },
+        { id: "pretty-file", shortcut: "Shift Alt F" }
+    ]
     useEffect(() => {
         setAnnounce(localStorage.getItem('announcement'))
 
@@ -234,13 +240,14 @@ const Command = ({ router }) => {
                                     key={id}
                                     index={getItemIndex(filteredItems, id)}
                                 >
-                                    <div>{<rest.icon />} {rest.children}</div>
+                                    <div>{(rest.icon as IconType)({ title: rest.children.toString() })} {rest.children}</div>
                                     <p className="key">
-                                        {rest.shortcut &&
-                                            rest.shortcut?.split(' ').map(el => {
+                                        {map.find(m => id == m.id) &&
+                                            map.find(m => id == m.id).shortcut?.split(' ').map(el => {
                                                 return (<span className={el.toLowerCase()} key={el}>{el}</span>)
                                             })
-                                        }</p>
+                                        }
+                                        </p>
                                 </CommandPalette.ListItem>
                             ))}
                         </CommandPalette.List>
@@ -250,7 +257,7 @@ const Command = ({ router }) => {
                         style={{
                             textAlign: 'center',
                             margin: '25px',
-                            fontFamily: 'JetBrains Mono',
+                            fontFamily: 'var(--mono-font)',
                             color: 'var(--special-color)',
                         }}>
                         No Results

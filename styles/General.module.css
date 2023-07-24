@@ -19,7 +19,7 @@
 .newProject {
   font-size: 20px;
   background: var(--background-dark);
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   color: var(--special-color);
   padding: 6px 26px;
   border-radius: 50px;
@@ -83,7 +83,7 @@
 }
 
 .warnText div h3 {
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   margin: 0;
   color: var(--orange);
 }
@@ -91,7 +91,7 @@
 .warnText p {
   font-weight: 400;
   font-size: 16px;
-  font-family: 'JetBrains Mono';
+  font-family: 'var(--mono-font)';
   margin: 0;
 }
 
