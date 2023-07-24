@@ -35,18 +35,15 @@ const Command = dynamic(() => import('../components/Command'), { ssr: false });
 
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
     const handleStart = (url: string) => {
       NProgress.start();
-      setLoading(true);
     };
 
     const handleStop = () => {
       NProgress.done();
-      setLoading(false);
     };
 
     router.events.on('routeChangeStart', handleStart);
@@ -85,10 +82,6 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
 
   }, []);
 
-  setTimeout(() => {
-    setLoading(false);
-  }, 3000);
-  
   const [supabaseClient] = useState(() => createPagesBrowserClient());
 
   return (
@@ -96,7 +89,6 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       <SessionContextProvider
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}>
-        {loading && <Loader />}
         <Command router={router} />
         <style jsx global>
           {`

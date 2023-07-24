@@ -9,7 +9,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        
         <Script strategy="beforeInteractive" id="dark-mode">
           {`
         const theme = localStorage.getItem('theme');
