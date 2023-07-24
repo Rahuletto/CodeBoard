@@ -36,10 +36,8 @@ const colorPicker = await (
 
 import { BoardFile } from '../utils/types/board';
 
-
 import { useContextMenu } from 'react-contexify';
 import BoardLoader from './BoardLoader';
-
 
 const ext = [
   keymap.of([
@@ -108,7 +106,7 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
     });
   }
 
-  function fsc(ev) {
+  function fsc() {
     if (!document.fullscreenElement)
       document
         .getElementsByClassName('codeWrapper')[0]
@@ -171,6 +169,6 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   );
 };
 
-export default memo(function CodeBoard(props: CodeBoardProps) {
+export default memo((props: CodeBoardProps) => {
   return <UnmemoCodeBoard {...props} />;
 });

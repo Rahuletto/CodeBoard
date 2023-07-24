@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
@@ -78,7 +78,7 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     if (board) {
       setFile(board.files.find((a: BoardFile) => a.name == fileName));
       if (!file) setFile(board.files[0]);
@@ -110,7 +110,7 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
 
       setBtns(fileButtons);
     }
-  });
+  }, [file]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;
