@@ -20,8 +20,7 @@ import Link from 'next/link';
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-const Error: NextPage = () => {
-  const router = useRouter();
+const Update: NextPage = () => {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
@@ -98,4 +97,4 @@ const Error: NextPage = () => {
   );
 };
 
-export default Error;
+export default Update;

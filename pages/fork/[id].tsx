@@ -563,3 +563,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   return { props: { board: board } };
 }
+export const config = { runtime: "experimental-edge" }

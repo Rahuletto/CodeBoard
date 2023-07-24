@@ -171,12 +171,6 @@ const Command = ({ router }) => {
         search
     );
 
-
-    const map = [
-        { id: "new-file", shortcut: "Alt N" },
-        { id: "restart", shortcut: "Ctrl R" },
-        { id: "pretty-file", shortcut: "Shift Alt F" }
-    ]
     useEffect(() => {
         setAnnounce(localStorage.getItem('announcement'))
 
@@ -239,16 +233,8 @@ const Command = ({ router }) => {
                                 <CommandPalette.ListItem
                                     key={id}
                                     index={getItemIndex(filteredItems, id)}
-                                >
-                                    <div>{(rest.icon as IconType)({ title: rest.children.toString() })} {rest.children}</div>
-                                    <p className="key">
-                                        {map.find(m => id == m.id) &&
-                                            map.find(m => id == m.id).shortcut?.split(' ').map(el => {
-                                                return (<span className={el.toLowerCase()} key={el}>{el}</span>)
-                                            })
-                                        }
-                                        </p>
-                                </CommandPalette.ListItem>
+                                    {...rest}
+                                />
                             ))}
                         </CommandPalette.List>
                     ))

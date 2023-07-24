@@ -2,7 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Board, BoardFile } from './types/board';
 import { AESDecrypt } from './aes';
 import { FetchResponse } from '../pages/api/fetch';
-import redis from './redis';
+import { Redis } from '@upstash/redis/nodejs';
 
 export function sudoFetch(
   supabase: SupabaseClient,
@@ -11,7 +11,11 @@ export function sudoFetch(
 ): Promise<false | FetchResponse> {
   return new Promise(async (resolve) => {
 
-    let board: Board = client ? null : await redis.get(`board-${id}`)
+    let redis: Redis;
+
+    if (!client) redis = (await import('./redis')).default
+
+    let board: Board = redis ? await redis.get(`board-${id}`) : null
 
     if (!board) {
       const { data }: { data: Board } = await supabase
@@ -22,7 +26,7 @@ export function sudoFetch(
         .single();
 
       board = data
-      if (data && !client) await redis.set(`board-${id}`, data, { ex: 60 * 3 })
+      if (data && redis) await redis.set(`board-${id}`, data, { ex: 60 * 3 })
     }
 
     if (!board) resolve(false);

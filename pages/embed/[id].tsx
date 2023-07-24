@@ -2,7 +2,7 @@
 import { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { MouseEvent, memo, useEffect, useState } from 'react';
+import { MouseEvent, memo, useEffect, useMemo, useState } from 'react';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
@@ -58,7 +58,7 @@ export function Embed({ id }: { id: string }) {
     });
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     if (board) {
       setFile(board.files.find((a: BoardFile) => a.name == fileName));
       if (!file) setFile(board.files[0]);
@@ -90,7 +90,7 @@ export function Embed({ id }: { id: string }) {
 
       setBtns(fileButtons);
     }
-  });
+  }, [file]);
 
   // DARK MODE & LIGHT MODE
 
@@ -237,3 +237,4 @@ export default memo(function EmbedPage({ id }: { id: string }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { id: context.params.id } };
 }
+export const config = { runtime: "experimental-edge" }
