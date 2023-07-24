@@ -237,4 +237,3 @@ export default memo(function EmbedPage({ id }: { id: string }) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { id: context.params.id } };
 }
-export const config = { runtime: "experimental-edge" }

@@ -13,7 +13,7 @@ export function sudoFetch(
 
     let redis: Redis;
 
-    if (!client) redis = (await import('./redis')).default
+    if (!client && process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_TOKEN) redis = (await import('./redis')).default
 
     let board: Board = redis ? await redis.get(`board-${id}`) : null
 
