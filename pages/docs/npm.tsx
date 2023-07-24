@@ -15,7 +15,7 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
-
+const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 const Docs: NextPage = () => {
   const router = useRouter();
   // DARK MODE & LIGHT MODE
@@ -564,9 +564,7 @@ const Docs: NextPage = () => {
           </div>
         </div>
 
-        <footer style={{ marginTop: '20px' }}>
-          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
-        </footer>
+        <Footer />
       </main>
       <style>
         {`

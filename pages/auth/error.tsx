@@ -1,7 +1,6 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -18,6 +17,7 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
+const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 
 const Error: NextPage = () => {
   const router = useRouter();
@@ -64,9 +64,7 @@ const Error: NextPage = () => {
           </div>
         </div>
 
-        <footer style={{ marginTop: '20px' }}>
-          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
-        </footer>
+        <Footer />
       </main>
     </div>
   );
