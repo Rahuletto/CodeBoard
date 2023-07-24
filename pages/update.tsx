@@ -45,7 +45,7 @@ const Update: NextPage = () => {
             backgroundImage:
               'repeating-linear-gradient(-45deg,#fcba03,#fcba03 1px,transparent 1px,transparent 6px)',
           }}>
-          <div className="update" style={{ maxWidth: '1100px' }}>
+          <div className="update">
             <div className="details">
               <PiStarFourFill style={{ fontSize: "48px", color: "#fcba03", filter: "drop-shadow(0px 0px 20px #fcba03)" }} />
               <h1 style={{ margin: '6px', textAlign: 'center' }}>
