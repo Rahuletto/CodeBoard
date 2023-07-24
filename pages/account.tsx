@@ -23,6 +23,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { IconType } from 'react-icons-ng';
 import { User } from '../utils/types/user';
+import redis from '../utils/redis';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -238,12 +239,18 @@ export const getServerSideProps = async (ctx) => {
       },
     };
 
-  const { data: user }: { data: User } = await supabase
-    .from('Users')
-    .select()
-    .eq('id', session?.user?.user_metadata?.provider_id)
-    .limit(1)
-    .single();
+  const id = session?.user?.user_metadata?.provider_id
+  let user: User = await redis.get(`user-${id}`)
+  if (!user) {
+    const { data }: { data: User } = await supabase
+      .from('Users')
+      .select()
+      .eq('id', session?.user?.user_metadata?.provider_id)
+      .limit(1)
+      .single();
+    user = data;
+    if (data) await redis.set(`user-${id}`, data)
+  }
 
   if (!user) {
     return { redirect: { destination: '/auth/signin', permanent: false } };
@@ -279,3 +286,5 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 };
+
+export const config = { runtime: "experimental-edge" }

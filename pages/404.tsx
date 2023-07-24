@@ -79,9 +79,7 @@ const Error: NextPage = () => {
           </div>
         </div>
 
-        <footer style={{ marginTop: '20px' }}>
-        Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
-      </footer>
+        
       </main>
       
     </div>

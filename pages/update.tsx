@@ -2,7 +2,6 @@
 //NextJS stuff
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 // Styles
@@ -14,14 +13,14 @@ import update from '../styles/Update.module.css';
 import { PiStarFourFill } from 'react-icons-ng/pi';
 
 
-import Link from 'next/link';
+
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
+const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
 
-const Error: NextPage = () => {
-  const router = useRouter();
+const Update: NextPage = () => {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
@@ -90,12 +89,10 @@ const Error: NextPage = () => {
             </div>
           </div>
         </div>
-        <footer style={{ marginTop: '20px' }}>
-          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
-        </footer>
+        <Footer />
       </main>
     </div>
   );
 };
 
-export default Error;
+export default Update;

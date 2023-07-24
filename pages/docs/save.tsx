@@ -14,6 +14,7 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
+const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 
 const Docs: NextPage = () => {
   const nodejs = `const body = {\n  name: "Board name",\n  description: "The description of board",\n  files: [\n    {\n      name: "untitled.js",\n      language: "javascript",\n      value: "console.log('hello world')"\n    }\n  ]\n}\nconst JSONBody = JSON.stringify(body)\n\nawait fetch('https://codeboard.tech/api/save', {\n  method: "POST",\n  headers: {\n    "Content-Type": 'application/json',\n    "Authorization": "API-KEY"\n  },\n  body: JSONBody\n})`;
@@ -189,9 +190,7 @@ const Docs: NextPage = () => {
           </div>
         </div>
 
-        <footer style={{ marginTop: '20px' }}>
-          Made by <Link href="https://rahuletto.thedev.id">Rahuletto</Link>
-        </footer>
+        <Footer />
       </main>
       <style>
         {`

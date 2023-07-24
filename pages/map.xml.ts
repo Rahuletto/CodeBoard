@@ -81,3 +81,4 @@ export async function getServerSideProps({ res }) {
 }
 
 export default SiteMap;
+export const config = { runtime: "experimental-edge" }
