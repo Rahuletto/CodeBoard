@@ -1073,6 +1073,10 @@ hr {
   box-shadow: 0px 0px 50px 10px var(--background-darker);
 }
 
+.update {
+  max-width: 1100px !important;
+}
+
 [data-theme='light'] .signin,
 [data-theme='light'] .error,
 [data-theme='light'] .update {
@@ -1130,6 +1134,8 @@ hr {
       transparent 6px);
   background-size: 4px 4px;
 }
+
+
 
 .signin-lander:after {
   box-shadow: 0px 0px 220px 100px rgba(141, 64, 188, 0.42);
