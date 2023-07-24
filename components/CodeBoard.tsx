@@ -1,6 +1,6 @@
 // React
 import dynamic from 'next/dynamic';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, memo } from 'react';
 
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
   loading: () => <BoardLoader />,
@@ -68,7 +68,7 @@ type CodeBoardProps = {
   file?: BoardFile;
 };
 
-const CodeBoard: React.FC<CodeBoardProps> = ({
+const CodeBoard: React.FC<CodeBoardProps> = memo(({
   language,
   code,
   theme,
@@ -172,6 +172,6 @@ const CodeBoard: React.FC<CodeBoardProps> = ({
       <CodeMenu readOnly={readOnly} />
     </Suspense>
   );
-};
+});
 
 export default CodeBoard

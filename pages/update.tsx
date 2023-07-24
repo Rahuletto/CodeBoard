@@ -66,8 +66,8 @@ const Error: NextPage = () => {
               </div>
 
               <div className={update.updates}>
-                <h1>New in everything</h1>
-                <p className="key">We now use a secure algorithm to encrypt emails, Generate API Keys. Also updated some UI with finishing touches.</p>
+                <h1>Optimization++</h1>
+                <p className="key">We optimized most of the things to give performance boost for client and the server side as well.</p>
               </div>
 
               <div className={update.updates}>
