@@ -39,6 +39,7 @@ import { BoardFile } from '../utils/types/board';
 import { useContextMenu } from 'react-contexify';
 import BoardLoader from './BoardLoader';
 
+
 const ext = [
   keymap.of([
     { key: 'Ctrl-Shift-f', run: openSearchPanel },
@@ -169,6 +170,6 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   );
 };
 
-export default memo((props: CodeBoardProps) => {
+export default memo(function CodeBoard(props: CodeBoardProps) {
   return <UnmemoCodeBoard {...props} />;
 });
