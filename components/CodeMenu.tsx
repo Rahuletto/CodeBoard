@@ -1,4 +1,5 @@
 
+import dynamic from 'next/dynamic';
 import {
     Menu,
     Item,
@@ -7,11 +8,19 @@ import {
 } from 'react-contexify';
 
 import 'react-contexify/dist/ReactContexify.css';
-import { BiCommand, BiSearch, BiSolidCopy } from 'react-icons-ng/bi';
-import { CoExpand } from 'react-icons-ng/co';
-import { FlFillIcFluentWindow24Filled, FlFillIcFluentCut24Filled } from 'react-icons-ng/fl';
-import { LuClipboardPaste } from 'react-icons-ng/lu';
-import { SiPrettier } from 'react-icons-ng/si';
+
+const BiCommand = dynamic(() => import('react-icons-ng/bi').then(mod => mod.BiCommand ), { ssr: false })
+const BiSearch = dynamic(() => import('react-icons-ng/bi').then(mod => mod.BiSearch ), { ssr: false })
+const BiSolidCopy = dynamic(() => import('react-icons-ng/bi').then(mod => mod.BiSolidCopy ), { ssr: false })
+
+const CoExpand = dynamic(() => import('react-icons-ng/co').then(mod => mod.CoExpand ), { ssr: false })
+
+const FlFillIcFluentWindow24Filled = dynamic(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentWindow24Filled ), { ssr: false })
+const FlFillIcFluentCut24Filled = dynamic(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentCut24Filled ), { ssr: false })
+
+const LuClipboardPaste = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuClipboardPaste ), { ssr: false })
+
+const SiPrettier = dynamic(() => import('react-icons-ng/si').then(mod => mod.SiPrettier ), { ssr: false })
 
 const CodeMenu = ({ readOnly }) => {
 

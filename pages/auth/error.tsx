@@ -3,13 +3,14 @@ import type { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Home.module.css';
 
 // Icons
-import Link from 'next/link';
-import { FaWindowClose } from 'react-icons-ng/fa';
+const FaWindowClose = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

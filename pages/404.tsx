@@ -8,7 +8,9 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { BsQuestionDiamondFill } from 'react-icons-ng/bs';
+const BsQuestionDiamondFill = dynamic(() => import('react-icons-ng/bs').then(mod => mod.BsQuestionDiamondFill), { ssr: false })
+
+
 import Link from 'next/link';
 
 // Lazy loading

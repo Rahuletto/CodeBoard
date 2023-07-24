@@ -5,11 +5,13 @@ import { ChangeEvent, FormEvent } from 'react';
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaBackward, FaCloudUploadAlt } from 'react-icons-ng/fa';
+const FaBackward = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaBackward), { ssr: false })
+const FaCloudUploadAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
 
 // Our Imports
 import { extensions } from '../utils/extensions';
 import { BoardFile } from '../utils/types/board';
+import dynamic from 'next/dynamic';
 
 type CreateModalProps = {
   files: BoardFile[];

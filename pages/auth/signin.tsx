@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import generalStyles from '../../styles/General.module.css';
 
 // Icons
-import { FaGithub } from 'react-icons-ng/fa';
+const FaGithub = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
 
 // Auth
 import { useSupabaseClient } from '@supabase/auth-helpers-react';

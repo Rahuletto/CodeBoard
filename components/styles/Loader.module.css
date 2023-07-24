@@ -109,7 +109,7 @@
 }
 
 .loadTitle {
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   color: var(--special-color);
   opacity: 0.8;
   font-weight: 600;

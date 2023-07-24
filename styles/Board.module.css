@@ -5,7 +5,7 @@
 }
 
 .copy button {
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   border: 2px solid var(--background-darker);
   border-radius: 12px;
   font-weight: 800;
@@ -50,7 +50,7 @@
 .inCode button {
   color: var(--special-color);
   border-radius: 9px;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
 }
 
 .inCode button:hover {

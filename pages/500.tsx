@@ -8,7 +8,9 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaHeartBroken } from 'react-icons-ng/fa';
+const FaHeartBroken = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
+
+
 import Link from 'next/link';
 
 // Lazy loading

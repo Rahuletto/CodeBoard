@@ -12,6 +12,8 @@ import update from '../styles/Update.module.css'
 
 // Icons
 import { PiStarFourFill } from 'react-icons-ng/pi';
+
+
 import Link from 'next/link';
 
 // Lazy loading

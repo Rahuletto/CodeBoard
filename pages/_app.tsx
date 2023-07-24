@@ -5,6 +5,11 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
+// Fonts
+import { DM_Sans, JetBrains_Mono } from 'next/font/google'
+const dm = DM_Sans({ fallback: ['system-ui', 'arial'], weight: ['500', '700'], display: "swap", style: ['normal'], subsets: ['latin'], variable: '--root-font' })
+const mono = JetBrains_Mono({ fallback: ['monospace'], weight: ['400', '500', '700'], display: "swap", subsets: ['latin'], style: ['normal'], variable: '--mono-font' })
+
 // Auth
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
@@ -19,7 +24,7 @@ import '../styles/mobile.css';
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaHeartBroken } from 'react-icons-ng/fa';
+const FaHeartBroken = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
 
 // Loader
 import NProgress from 'nprogress';
@@ -78,13 +83,12 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
       });
     })
 
-
-    setTimeout(() => {
-      NProgress.done();
-      setLoading(false);
-    }, 3000);
   }, []);
 
+  setTimeout(() => {
+    setLoading(false);
+  }, 3000);
+  
   const [supabaseClient] = useState(() => createPagesBrowserClient());
 
   return (
@@ -94,7 +98,15 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         initialSession={pageProps.initialSession}>
         {loading && <Loader />}
         <Command router={router} />
-        <Component {...pageProps} />
+        <style jsx global>
+          {`
+          html {
+            --root-font: ${dm.style.fontFamily};
+            --mono-font: ${mono.style.fontFamily};
+          }
+          `}
+        </style>
+        <Component className={dm.variable} {...pageProps} />
         <Analytics />
       </SessionContextProvider>
     </ErrorBoundary>

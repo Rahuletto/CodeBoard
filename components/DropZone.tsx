@@ -1,8 +1,10 @@
 // Styles
+import dynamic from 'next/dynamic';
 import styles from '../styles/Index.module.css';
 
 // Icons
-import { FaCloudUploadAlt, FaWindowClose } from 'react-icons-ng/fa';
+const FaCloudUploadAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
+const FaWindowClose = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

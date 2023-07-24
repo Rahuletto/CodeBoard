@@ -12,13 +12,12 @@ import styles from '../../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons from React-Icons-NG (Thanks 💖)
-import {
-  LuShieldCheck,
-  LuShieldOff,
-  LuTimer,
-  LuTimerOff,
-} from 'react-icons-ng/lu';
-import { GoGitBranch } from 'react-icons-ng/go';
+const LuShieldOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
+const LuShieldCheck = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuTimer = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
+const LuTimerOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
+
+const GoGitBranch = dynamic(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
 
 // Auth and Database
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';

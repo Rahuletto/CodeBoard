@@ -1,5 +1,7 @@
 // Icons
-import { FaCaretDown } from 'react-icons-ng/fa';
+import dynamic from 'next/dynamic';
+const FaCaretDown = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCaretDown), { ssr: false })
+
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

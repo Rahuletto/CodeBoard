@@ -15,12 +15,11 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Icons from React-Icons-NG (Thanks 💖)
-import {
-  LuShieldCheck,
-  LuShieldOff,
-  LuTimer,
-  LuTimerOff,
-} from 'react-icons-ng/lu';
+const LuShieldOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
+const LuShieldCheck = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuTimer = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
+const LuTimerOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
+
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';

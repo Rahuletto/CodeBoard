@@ -1,4 +1,5 @@
 // Styles
+import dynamic from 'next/dynamic';
 import styles from './styles/Header.module.css';
 
 // NextJS
@@ -8,11 +9,14 @@ import Link from 'next/link';
 import ThemeSwitch from './ThemeSwitch';
 
 // Icons
-import { FaPlus, FaUserAlt } from 'react-icons-ng/fa';
+
+const FaPlus = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
+const FaUserAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaUserAlt), { ssr: false })
 
 import { useRouter } from 'next/router';
 import { useSession } from '@supabase/auth-helpers-react';
 import { memo } from 'react';
+
 
 type HeaderProps = {
   theme?: string;

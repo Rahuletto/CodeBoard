@@ -14,10 +14,15 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-import { FaLink, FaCode, FaPencilAlt } from 'react-icons-ng/fa';
-import { LuShieldCheck } from 'react-icons-ng/lu';
-import { GoGitBranch } from 'react-icons-ng/go';
-import { Md2RobotExcited } from 'react-icons-ng/md2';
+const FaLink = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaLink), { ssr: false })
+const FaCode = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCode), { ssr: false })
+const FaPencilAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaPencilAlt), { ssr: false })
+
+const GoGitBranch = dynamic(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
+
+const Md2RobotExcited = dynamic(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+
+const LuShieldCheck = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
@@ -132,7 +137,7 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
         {board &&
-        session?.user?.user_metadata?.provider_id == board.author ? null : (
+          session?.user?.user_metadata?.provider_id == board.author ? null : (
           <Warning />
         )}
 
@@ -213,7 +218,7 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
               </form>
             </div>
             {board &&
-            session?.user?.user_metadata?.provider_id == board.author ? (
+              session?.user?.user_metadata?.provider_id == board.author ? (
               <div className="tooltip">
                 <button
                   className={styles.edit}
@@ -249,8 +254,8 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
                       board.fork?.status
                         ? 'Forked boards cannot get forked again'
                         : board.bot
-                        ? 'Boards by API cannot get forked'
-                        : 'Fork the board'
+                          ? 'Boards by API cannot get forked'
+                          : 'Fork the board'
                     }
                     style={{ marginRight: '12px' }}
                   />{' '}

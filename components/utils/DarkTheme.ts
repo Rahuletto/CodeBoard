@@ -9,7 +9,7 @@ const DarkTheme = atomoneInit({
         selection: '#646464',
         selectionMatch: '#646464',
         caret: '#C6C6C6',
-        fontFamily: 'var(--mono-font)',
+        fontFamily: "var(--mono-font)",
     },
     styles: [
         { tag: t.content, color: '#7D8799' },

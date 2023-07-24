@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import React, { Suspense, useEffect, memo } from 'react';
 
+// Lazy import
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
   loading: () => <BoardLoader />,
   ssr: false,

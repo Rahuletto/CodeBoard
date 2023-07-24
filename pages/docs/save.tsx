@@ -101,7 +101,7 @@ const Docs: NextPage = () => {
             </div>
             <br></br>
             <h3>Example</h3>
-            <p style={{ fontFamily: 'var(--mono-font)' }}>Request</p>
+            <p style={{ fontFamily: "var(--mono-font)" }}>Request</p>
             <div
               style={{
                 border: '5px solid var(--background-dark)',
@@ -154,7 +154,7 @@ const Docs: NextPage = () => {
             </div>
 
             <br></br>
-            <p style={{ fontFamily: 'var(--mono-font)' }}>Response JSON</p>
+            <p style={{ fontFamily: "var(--mono-font)" }}>Response JSON</p>
 
             <div
               style={{

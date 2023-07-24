@@ -7,8 +7,8 @@ import { Md2RobotExcited } from "react-icons-ng/md2";
 import { PiStarFourFill } from "react-icons-ng/pi";
 import { SiPrettier } from "react-icons-ng/si";
 import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi'
-import { IconType } from "react-icons-ng";
 
+import { IconType } from "react-icons-ng";
 
 const Command = ({ router }) => {
     const [cmd, setCmd] = useState(false);
@@ -257,7 +257,7 @@ const Command = ({ router }) => {
                         style={{
                             textAlign: 'center',
                             margin: '25px',
-                            fontFamily: 'var(--mono-font)',
+                            fontFamily: "var(--mono-font)",
                             color: 'var(--special-color)',
                         }}>
                         No Results

@@ -52,7 +52,7 @@ html {
 
   .cm-tooltip li {
     color: var(--special-color);
-    font-family: 'var(--mono-font)';
+    font-family: var(--mono-font);
     font-size: 14px;
     border-radius: 5px;
     padding: 2px 4px;
@@ -101,7 +101,7 @@ html {
 
   .cm-tooltip li {
     color: var(--special-color);
-    font-family: 'var(--mono-font)';
+    font-family: var(--mono-font);
     font-size: 14px;
     border-radius: 5px;
     padding: 2px 4px;
@@ -186,7 +186,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   color: var(--font-color);
   scrollbar-width: thin;
   scrollbar-color: var(--background-darker) var(--code-editor);
@@ -201,7 +201,7 @@ h4,
 button,
 a,
 p {
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -337,7 +337,7 @@ input {
   border-radius: 50px;
   color: var(--special-color) !important;
   background: var(--background-light);
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   border: 2px solid var(--background-light) !important;
 }
 
@@ -349,7 +349,7 @@ input {
   color: var(--special-color);
   background: var(--background-dark);
   font-size: 18px;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   margin: 0;
   font-weight: 700;
   height: 40px;
@@ -364,7 +364,7 @@ input::placeholder {
 
 .edit form button {
   padding: 6px 12px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   background: var(--red);
   border-radius: 50px;
   font-weight: 700;
@@ -396,12 +396,12 @@ button:active {
 }
 
 .cm-editor {
-  font-family: 'var(--mono-font)' !important;
+  font-family: var(--mono-font) !important;
   height: 77.3vh;
 }
 
 .cm-scroller {
-  font-family: 'var(--mono-font)' !important;
+  font-family: var(--mono-font) !important;
   font-size: 14px;
 }
 
@@ -474,7 +474,7 @@ button {
 .fileSelect .file {
   user-select: none;
   color: var(--special-color);
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   font-weight: 600;
   font-size: 18px;
 }
@@ -538,7 +538,7 @@ dialog div {
 
 dialog form button {
   padding: 6px 12px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   background: var(--green);
   border-radius: 50px;
   font-weight: 700;
@@ -578,7 +578,7 @@ dialog form p {
   color: var(--special-color);
   background: var(--background-dark);
   font-size: 18px;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   margin: 0;
   font-weight: 700;
   height: 40px;
@@ -604,7 +604,7 @@ dialog::backdrop {
   background: var(--background-slight-dark) !important;
   border: 2px solid transparent !important;
   border-radius: 8px !important;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   color: var(--special-color) !important;
   text-transform: capitalize;
 }
@@ -847,7 +847,7 @@ footer {
   justify-content: center;
   font-size: 22px;
   color: var(--special-color);
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   gap: 8px;
   border-top: 2px solid var(--purple-dark);
   padding-top: 10px;
@@ -867,7 +867,7 @@ footer a,
 #author {
   font-size: 22px;
   color: var(--special-color);
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   transition: 0.3s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   background: var(--background-darker);
   padding: 2px 9px;
@@ -899,7 +899,7 @@ hr {
 
 [data-theme='dark'] .cm-tooltip li {
   color: var(--special-color);
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   font-size: 14px;
   border-radius: 5px;
   padding: 2px 4px;
@@ -924,7 +924,7 @@ hr {
 
 [data-theme='light'] .cm-tooltip li {
   color: var(--special-color);
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   font-size: 14px;
   border-radius: 5px;
   padding: 2px 4px;
@@ -1089,7 +1089,7 @@ hr {
 
   padding: 0;
   text-align: left;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
 }
 
 .signin button,
@@ -1098,7 +1098,7 @@ hr {
   padding: 12px 24px;
   border-radius: 14px;
   color: white;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   display: flex;
   align-items: center;
   font-size: 18px;
@@ -1180,7 +1180,7 @@ table th {
   background: var(--background-dark);
   border: 1px solid var(--background-darker);
   color: var(--special-color);
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
 }
 
 table td {
@@ -1206,7 +1206,7 @@ table tr:last-child td:last-child {
 }
 
 code {
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
 }
 
 .green {
@@ -1270,7 +1270,7 @@ input[type='color']::-moz-color-swatch {
   border-radius: 4px;
   padding: 0px 4px;
   margin: 0px 3px;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   font-size: 14px;
 }
 
@@ -1282,7 +1282,7 @@ input[type='color']::-moz-color-swatch {
   border-radius: 4px;
   padding: 0px 4px;
   margin: 0px 3px;
-  font-family: 'var(--mono-font)';
+  font-family: var(--mono-font);
   font-size: 14px;
 }
 
@@ -1348,7 +1348,7 @@ input[type='color']::-moz-color-swatch {
 .flex .w-full .items-center .space-x-2\.5 {
   justify-content: space-between;
   font-size: 18px;
-  font-family: 'DM Sans';
+  font-family: var(--root-font);
   transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 

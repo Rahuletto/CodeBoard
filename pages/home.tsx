@@ -9,8 +9,10 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+const FaPlus = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
+const FlFillIcFluentInprivateAccount24Filled = dynamic(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
+
+
 import Link from 'next/link';
 
 // Lazy loading

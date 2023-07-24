@@ -8,7 +8,7 @@ import Link from 'next/link';
 import styles from '../styles/Privacy.module.css';
 
 // Icons
-import { FlFillIcFluentInprivateAccount24Filled } from 'react-icons-ng/fl';
+const FlFillIcFluentInprivateAccount24Filled = dynamic(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
                     style={{
                       color: 'var(--special-color)',
                       fontWeight: 600,
-                      fontFamily: 'var(--mono-font)',
+                      fontFamily: "var(--mono-font)",
                     }}>
                     CodeBoard
                   </span>
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
                   style={{
                     fontWeight: 600,
                     color: 'var(--special-color)',
-                    fontFamily: 'var(--mono-font)',
+                    fontFamily: "var(--mono-font)",
                   }}>
                   {
                     '(If you use Encryption option, We will store only the encrypted code snippet and not your decrypted code snippet)'

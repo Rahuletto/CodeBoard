@@ -1,5 +1,6 @@
 // Icons
-import { FaPlus } from 'react-icons-ng/fa';
+import dynamic from 'next/dynamic';
+const FaPlus = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaPlus), { ssr: false })
 
 const AddFile = ({ files, limit = 2 }) => {
   function showDialog() {

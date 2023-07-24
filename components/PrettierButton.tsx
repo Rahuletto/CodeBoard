@@ -1,5 +1,7 @@
 // Icons
-import { SiPrettier } from 'react-icons-ng/si';
+import dynamic from 'next/dynamic';
+const SiPrettier = dynamic(() => import('react-icons-ng/si').then(mod => mod.SiPrettier), { ssr: false })
+
 
 // Styles
 import styles from '../styles/Index.module.css';
