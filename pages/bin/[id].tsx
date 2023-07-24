@@ -57,7 +57,7 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
+export default function Bin({ id, board }: { id: string; board: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -68,20 +68,13 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  const [board, setBoard] = useState<FetchResponse>(null);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState(board?.files[0]?.name);
   const [btns, setBtns] = useState([]);
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
-
-    sudoFetch(supabase, id).then((b) => {
-      if (!b) return router.push('/404');
-      setBoard(b);
-      setFileName(b.files[0].name);
-    });
   }, []);
 
   useEffect(() => {
@@ -130,8 +123,8 @@ export default function Bin({ id, bd }: { id: string; bd: FetchResponse }) {
   return (
     <div className={generalStyles.container}>
       <MetaTags
-        title={bd.name + '/CodeBoard'}
-        description={bd.description || 'No Description. Just the source code.'}
+        title={board.name + '/CodeBoard'}
+        description={board.description || 'No Description. Just the source code.'}
         k={id + ''}
       />
 
@@ -375,5 +368,5 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         destination: '/404',
       },
     };
-  return { props: { id: context.params.id, bd: board } };
+  return { props: { id: context.params.id, board: board } };
 }

@@ -4,15 +4,9 @@ import PBKDF2 from './utils/encrypt';
 
 // Ratelimits
 import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-
+import redis from './utils/redis';
 
 const cache = new Map();
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
 
 const ratelimit = {
   save: new Ratelimit({
@@ -92,8 +86,6 @@ export async function middleware(req: NextRequest) {
         auth ? auth : req.ip
       );
 
-      console.log(await redis.get('a'))
-
       res.headers.set('RateLimit-Limit', limit.toString());
       res.headers.set('RateLimit-Remaining', remaining.toString());
 
@@ -125,13 +117,21 @@ export async function middleware(req: NextRequest) {
     } = await supabase.auth.getSession();
 
     if (session) {
-      const { data: user } = await supabase
-        .from('Users')
-        .select()
-        .eq('id', session?.user?.user_metadata?.provider_id)
-        .limit(1)
-        .single();
+      const id = session?.user?.user_metadata?.provider_id;
 
+      let user = await redis.get(`user-${id}`)
+      if (!user) {
+        const { data } = await supabase
+          .from('Users')
+          .select()
+          .eq('id', id)
+          .limit(1)
+          .single();
+
+        user = data;
+        if (data) await redis.set(`user-${id}`, data, { ex: 60 * 3 })
+      }
+      
       if (!user && session) {
         const key = generateUUID()
 

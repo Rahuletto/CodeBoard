@@ -51,7 +51,7 @@ export function Embed({ id }: { id: string }) {
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
-    sudoFetch(supabase, id).then((b) => {
+    sudoFetch(supabase, id, true).then((b) => {
       if (!b) return router.push('/404');
       setBoard(b);
       setFileName(b.files[0].name);
