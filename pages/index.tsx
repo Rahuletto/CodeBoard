@@ -586,4 +586,3 @@ const Index: NextPage = () => {
 };
 
 export default Index;
-export const config = { runtime: "experimental-edge" }
