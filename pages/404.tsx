@@ -8,10 +8,11 @@ import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
 
 // Icons
-const BsQuestionDiamondFill = dynamic(() => import('react-icons-ng/bs').then(mod => mod.BsQuestionDiamondFill), { ssr: false })
+const BsQuestionDiamondFill = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/bs').then(mod => mod.BsQuestionDiamondFill), { ssr: false })
 
 
 import Link from 'next/link';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

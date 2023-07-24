@@ -1,6 +1,6 @@
 // Icons
 import dynamic from 'next/dynamic';
-const SiPrettier = dynamic(() => import('react-icons-ng/si').then(mod => mod.SiPrettier), { ssr: false })
+const SiPrettier = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/si').then(mod => mod.SiPrettier), { ssr: false })
 
 
 // Styles
@@ -9,6 +9,7 @@ import { formatCode } from '../utils/prettier';
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';
+import { IconType } from 'react-icons-ng';
 
 type PrettierButtonProps = {
   code: string;

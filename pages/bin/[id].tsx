@@ -14,15 +14,15 @@ import boardStyles from '../../styles/Board.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-const FaLink = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaLink), { ssr: false })
-const FaCode = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCode), { ssr: false })
-const FaPencilAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaPencilAlt), { ssr: false })
+const FaLink = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaLink), { ssr: false })
+const FaCode = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCode), { ssr: false })
+const FaPencilAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPencilAlt), { ssr: false })
 
-const GoGitBranch = dynamic(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
+const GoGitBranch = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
 
-const Md2RobotExcited = dynamic(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
 
-const LuShieldCheck = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
 
 // Our Imports
 import { BoardFile } from '../../utils/types/board';
@@ -42,6 +42,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import BoardLoader from '../../components/BoardLoader';
+import { IconType } from 'react-icons-ng';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {

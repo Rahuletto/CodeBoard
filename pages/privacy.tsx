@@ -6,9 +6,10 @@ import Link from 'next/link';
 
 // Styles
 import styles from '../styles/Privacy.module.css';
+import { IconType } from 'react-icons-ng';
 
 // Icons
-const FlFillIcFluentInprivateAccount24Filled = dynamic(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
+const FlFillIcFluentInprivateAccount24Filled = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fl').then(mod => mod.FlFillIcFluentInprivateAccount24Filled), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

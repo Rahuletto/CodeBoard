@@ -15,10 +15,10 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Icons from React-Icons-NG (Thanks 💖)
-const LuShieldOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
-const LuShieldCheck = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
-const LuTimer = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
-const LuTimerOff = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
+const LuShieldOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuTimer = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
+const LuTimerOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
 
 
 // Our Imports
@@ -36,6 +36,7 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import BoardLoader from '../components/BoardLoader'
 import { formatCode } from '../utils/prettier';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });

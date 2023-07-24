@@ -11,17 +11,18 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import styles from '../styles/Account.module.css';
 
 // Icons
-const FaGithub = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
-const FaUser = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaUser), { ssr: false })
+const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
+const FaUser = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUser), { ssr: false })
 
-const LuRefreshCw = dynamic(() => import('react-icons-ng/lu').then(mod => mod.LuRefreshCw), { ssr: false })
-const Md2RobotExcited = dynamic(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuRefreshCw), { ssr: false })
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
 
 
 // Our imports
 import { User } from '../utils/types/user';
 import { PostgrestError } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });

@@ -1,9 +1,10 @@
 // Styles
+import { IconType } from 'react-icons-ng';
 import styles from '../styles/Index.module.css';
 
 // Icons
 import dynamic from 'next/dynamic';
-const BiSolidSave = dynamic(() => import('react-icons-ng/bi').then(mod => mod.BiSolidSave), { ssr: false })
+const BiSolidSave = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/bi').then(mod => mod.BiSolidSave), { ssr: false })
 
 const Save: React.FC = () => {
   return (

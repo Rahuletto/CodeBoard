@@ -3,11 +3,12 @@ import dynamic from 'next/dynamic';
 import styles from '../styles/Index.module.css';
 
 // Icons
-const FaCloudUploadAlt = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
-const FaWindowClose = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
+const FaCloudUploadAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCloudUploadAlt), { ssr: false })
+const FaWindowClose = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';
+import { IconType } from 'react-icons-ng';
 
 type DropZoneProps = {
   files?: BoardFile[];

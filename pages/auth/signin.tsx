@@ -5,12 +5,13 @@ import { useState, useEffect } from 'react';
 import generalStyles from '../../styles/General.module.css';
 
 // Icons
-const FaGithub = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
+const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
 
 // Auth
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/router';
+import { IconType } from 'react-icons-ng';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

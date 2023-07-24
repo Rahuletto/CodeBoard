@@ -24,11 +24,11 @@ import '../styles/mobile.css';
 import styles from '../styles/Index.module.css';
 
 // Icons
-const FaHeartBroken = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
+const FaHeartBroken = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
 
 // Loader
 import NProgress from 'nprogress';
-import Loader from '../components/Loader';
+import { IconType } from 'react-icons-ng';
 
 // Command Pallete
 const Command = dynamic(() => import('../components/Command'), { ssr: false });

@@ -1,10 +1,11 @@
 // Icons
 import dynamic from 'next/dynamic';
-const FaCaretDown = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaCaretDown), { ssr: false })
+const FaCaretDown = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCaretDown), { ssr: false })
 
 
 // Our Imports
 import { BoardFile } from '../utils/types/board';
+import { IconType } from 'react-icons-ng';
 
 type FileSelectProps = {
   fileName?: string;

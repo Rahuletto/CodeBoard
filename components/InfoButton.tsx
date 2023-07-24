@@ -1,8 +1,8 @@
 
 // Icons
 import dynamic from 'next/dynamic';
-
-const GoGear = dynamic(() => import('react-icons-ng/go').then(mod => mod.GoGear), { ssr: false })
+import { IconType } from 'react-icons-ng';
+const GoGear = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGear), { ssr: false })
 
 interface MetaTagsProps {
   metadata?: boolean;

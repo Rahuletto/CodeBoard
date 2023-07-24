@@ -8,9 +8,10 @@ import Link from 'next/link';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Home.module.css';
+import { IconType } from 'react-icons-ng';
 
 // Icons
-const FaWindowClose = dynamic(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
+const FaWindowClose = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaWindowClose), { ssr: false })
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {

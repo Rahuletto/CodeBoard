@@ -1,10 +1,11 @@
 // Styles
+import { IconType } from 'react-icons-ng';
 import generalStyles from '../styles/General.module.css'
 
 // Icons
 import dynamic from 'next/dynamic';
-const IoCloseCircleSharp = dynamic(() => import('react-icons-ng/io5').then(mod => mod.IoCloseCircleSharp), { ssr: false })
-const TiWarning = dynamic(() => import('react-icons-ng/ti').then(mod => mod.TiWarning), { ssr: false })
+const IoCloseCircleSharp = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/io5').then(mod => mod.IoCloseCircleSharp), { ssr: false })
+const TiWarning = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/ti').then(mod => mod.TiWarning), { ssr: false })
 
 
 const Warning: React.FC<{}> = () => {

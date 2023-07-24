@@ -2,9 +2,10 @@
 import dynamic from 'next/dynamic';
 import styles from '../styles/Index.module.css';
 import feature from './styles/Feature.module.css';
+import { IconType } from 'react-icons-ng';
 
-const McCheckCircleFill = dynamic(() => import('react-icons-ng/mc').then(mod => mod.McCheckCircleFill), { ssr: false })
-const McForbidCircleLine = dynamic(() => import('react-icons-ng/mc').then(mod => mod.McForbidCircleLine), { ssr: false })
+const McCheckCircleFill = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McCheckCircleFill), { ssr: false })
+const McForbidCircleLine = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McForbidCircleLine), { ssr: false })
 
 const Features = ({ session }) => {
   return (
