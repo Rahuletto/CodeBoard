@@ -165,10 +165,12 @@ export default function Bin({
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
-        {board &&
-        session?.user?.user_metadata?.provider_id == board.author ? null : (
+        {!session ||
+        (board &&
+          session &&
+          session?.user?.user_metadata?.provider_id !== board.author) ? (
           <Warning />
-        )}
+        ) : null}
 
         <div className={[generalStyles.grid, 'grid'].join(' ')}>
           <InfoButton metadata={metadata} setMetadata={setMetadata} />
@@ -267,7 +269,7 @@ export default function Bin({
                       <span
                         style={{
                           display: 'flex',
-                          fontFamily: "var(--mono-font)",
+                          fontFamily: 'var(--mono-font)',
                           color: 'var(--purple-dark)',
                         }}>
                         {madeBy.name}
@@ -289,11 +291,15 @@ export default function Bin({
               </form>
             </div>
             {board &&
+            session &&
             session?.user?.user_metadata?.provider_id == board.author ? (
               <div className="tooltip">
                 <button
                   className={styles.edit}
-                  disabled={true}
+                  onClick={() => router.push(`/edit/${id}`)}
+                  disabled={
+                    session?.user?.user_metadata?.provider_id != board.author
+                  }
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -419,7 +425,7 @@ export default function Bin({
                     <CodeBoard
                       readOnly={true}
                       placeHolder={`No output logs here.`}
-                      code={file.terminal}
+                      code={file.terminal || ''}
                       output={true}
                       language={loadLanguage('shell')}
                       theme={theme}

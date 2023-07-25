@@ -18,7 +18,6 @@ const mono = fetch(
   new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
 ).then((res) => res.arrayBuffer());
 
-
 export default async function GET(request: NextRequest) {
   const mediumData = await medium;
   const boldData = await bold;

@@ -48,6 +48,8 @@ export function Embed({ id }: { id: string }) {
   const [file, setFile] = useState<BoardFile>(null);
   const [language, setLanguage] = useState<any>(null);
 
+
+
   useEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
 
@@ -202,7 +204,7 @@ export function Embed({ id }: { id: string }) {
                 <CodeBoard
                   readOnly={true}
                   placeHolder={`No output logs here.`}
-                  code={file.terminal}
+                  code={file.terminal || ""}
                   output={true}
                   language={loadLanguage('shell')}
                   theme={theme}

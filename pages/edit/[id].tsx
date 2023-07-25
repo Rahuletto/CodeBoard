@@ -1,7 +1,6 @@
 // NextJS Stuff
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useState } from 'react';
 // Styles
@@ -42,7 +41,6 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { extensions } from '../../utils/extensions';
 import { BoardFile } from '../../utils/types/board';
 
-import makeid from '../../utils/makeid';
 import { sudoFetch } from '../../utils/sudo-fetch';
 import { Languages } from '../../utils/types/languages';
 
@@ -65,13 +63,13 @@ const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
   ssr: false,
 });
+const Features = dynamic(() => import('../../components/Feature'), {
+  ssr: false,
+});
 const EditModal = dynamic(() => import('../../components/EditModal'), {
   ssr: false,
 });
 const DropZone = dynamic(() => import('../../components/DropZone'), {
-  ssr: false,
-});
-const Features = dynamic(() => import('../../components/Feature'), {
   ssr: false,
 });
 const PrettierButton = dynamic(
@@ -93,7 +91,7 @@ const Save = dynamic(() => import('../../components/Save'), {
   ssr: false,
 });
 
-export default function Fork({ board }: { board: FetchResponse }) {
+export default function Edit({ board }: { board: FetchResponse }) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -112,14 +110,14 @@ export default function Fork({ board }: { board: FetchResponse }) {
   // Themes ---------------------------------
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  // Inputs ---------------------------------
-  const [title, setTitle] = useState(board.name + ' Fork');
-  const [description, setDescription] = useState('Fork of ' + board.name);
-  const [encrypt, setEncrypt] = useState(board.encrypt);
-  const [vanish, setVanish] = useState(board.autoVanish);
-
   // Saving ---------------------------------
   const [save, setSave] = useState(false);
+
+  // Inputs ---------------------------------
+  const [title, setTitle] = useState(board.name);
+  const [description, setDescription] = useState(board.name);
+  const [encrypt, setEncrypt] = useState(board.encrypt);
+  const [vanish, setVanish] = useState(board.autoVanish);
 
   // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
@@ -139,8 +137,6 @@ export default function Fork({ board }: { board: FetchResponse }) {
       file.language == 'none' ? 'markdown' : (file.language as Languages)
     )
   );
-
-  const keyId = makeid(8); // Assigning here so you cant spam a board to be saved with multiple keys
 
   // ---------------------------------
   // -------- C A L L B A C K --------
@@ -306,20 +302,23 @@ export default function Fork({ board }: { board: FetchResponse }) {
       });
     } else encryptedFiles = files;
 
-    const { error } = await supabase.from('Boards').insert({
-      name: title || 'Untitled',
-      description: description || 'No Description',
-      autoVanish: vanish,
-      encrypt: encrypt,
-      fork: { status: true, key: board.key, name: board.name },
-      files: encryptedFiles,
-      key: keyId,
-      createdAt: Date.now(),
-      author: session ? session?.user?.user_metadata?.provider_id : null,
-    });
+    const { error } = await supabase
+      .from('Boards')
+      .update({
+        name: title || 'Untitled',
+        description: description || 'No Description',
+        autoVanish: vanish,
+        encrypt: encrypt,
+        fork: board.fork,
+        files: encryptedFiles,
+        key: board.key,
+        createdAt: board.createdAt,
+        author: session ? session?.user?.user_metadata?.provider_id : null,
+      })
+      .eq('key', board.key);
 
     if (error) router.push('/500');
-    else router.push(`/bin/${keyId}`);
+    else router.push(`/bin/${board.key}`);
   };
 
   // Find if its File ---------------------------------
@@ -332,7 +331,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
   return (
     <div className={generalStyles.container}>
-      <MetaTags title={'Forking'} description={'Forking a board'} />
+      <MetaTags title={'Editing'} description={'Editing a board'} />
 
       <main
         onDragEnter={(e) => {
@@ -384,24 +383,6 @@ export default function Fork({ board }: { board: FetchResponse }) {
               metadata ? 'show' : null,
             ].join(' ')}>
             <div className={[styles.details, 'details'].join(' ')}>
-              <p style={{ margin: 0 }}>
-                <GoGitBranch
-                  title="Forked Project"
-                  style={{ color: 'var(--purple-dark)', marginRight: '12px' }}
-                />{' '}
-                Forked from{' '}
-                <Link
-                  style={{
-                    background: 'var(--purple-dark)',
-                    color: 'var(--background)',
-                    borderRadius: '8px',
-                    padding: '2px 6px',
-                  }}
-                  href={`/bin/${board?.key}`}>
-                  {board.name}
-                </Link>
-              </p>
-
               <form
                 className={[styles.detailsForm, 'projectDetails'].join(' ')}
                 onSubmit={(event) => handleSubmit(event)}>
@@ -468,8 +449,8 @@ export default function Fork({ board }: { board: FetchResponse }) {
             </div>
             <div className="tooltip">
               <button
-                title="Save the board"
-                className={styles.fork}
+                title="Save the edited board"
+                className={styles.edit}
                 disabled={code == ''}
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
@@ -479,7 +460,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
                     document.querySelector<HTMLFormElement>(`.projectDetails`);
                   form.requestSubmit();
                 }}>
-                Publish Fork
+                Save
               </button>
               <span
                 style={{ borderRadius: '12px' }}
@@ -577,13 +558,25 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const supabase = createPagesServerClient(context);
-  const board = await sudoFetch(supabase, context.params.id as string);
 
-  if (!board)
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session)
     return {
       redirect: {
         permanent: false,
-        destination: '/404',
+        destination: `/bin/${context.params.id as string}`,
+      },
+    };
+  const board = await sudoFetch(supabase, context.params.id as string);
+
+  if (!board || board.author != session?.user?.user_metadata?.provider_id)
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/bin/${context.params.id as string}`,
       },
     };
   return { props: { board: board } };

@@ -36,12 +36,12 @@ export function sudoFetch(
           board?.autoVanish) ||
         board?.files.length == 0
       ) {
-        const { error: boardError } = await supabase
+        const { error } = await supabase
           .from('Boards')
           .delete()
           .eq('key', board.key);
-
-        if (boardError) console.warn(boardError);
+          
+        if (error) console.warn(error);
 
         resolve(false);
       } else {
