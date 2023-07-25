@@ -110,7 +110,7 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
 
       setBtns(fileButtons);
     }
-  }, [file]);
+  }, [fileName]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;

@@ -90,7 +90,7 @@ export function Embed({ id }: { id: string }) {
 
       setBtns(fileButtons);
     }
-  }, [file]);
+  }, [fileName]);
 
   // DARK MODE & LIGHT MODE
 
