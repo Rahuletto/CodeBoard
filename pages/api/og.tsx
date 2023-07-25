@@ -6,20 +6,20 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function GET(request: NextRequest) {
-  const medium = fetch(
-    new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer());
-  
-  const bold = fetch(
-    new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer());
-  
-  const mono = fetch(
-    new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
-  ).then((res) => res.arrayBuffer());
+const medium = fetch(
+  new URL('../../assets/DMSans-Medium.ttf', import.meta.url)
+).then((res) => res.arrayBuffer());
 
-  
+const bold = fetch(
+  new URL('../../assets/DMSans-Bold.ttf', import.meta.url)
+).then((res) => res.arrayBuffer());
+
+const mono = fetch(
+  new URL('../../assets/JetBrainsMono-SemiBold.ttf', import.meta.url)
+).then((res) => res.arrayBuffer());
+
+
+export default async function GET(request: NextRequest) {
   const mediumData = await medium;
   const boldData = await bold;
   const monoData = await mono;
@@ -29,7 +29,7 @@ export default async function GET(request: NextRequest) {
   // ?title=<title>
   const hasTitle = searchParams.has('title');
   const title = hasTitle
-    ? searchParams.get('title').replace('/CodeBoard', '')
+    ? searchParams.get('title').replace(' | CodeBoard', '')
     : 'OG Generator';
 
   const hasDesc = searchParams.has('desc');

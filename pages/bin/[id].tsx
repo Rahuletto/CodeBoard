@@ -2,6 +2,7 @@
 import { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useMemo, useState } from 'react';
 
@@ -14,15 +15,33 @@ import styles from '../../styles/Index.module.css';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 
 // Icons
-const FaLink = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaLink), { ssr: false })
-const FaCode = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaCode), { ssr: false })
-const FaPencilAlt = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaPencilAlt), { ssr: false })
+const FaLink = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaLink),
+  { ssr: false }
+);
+const FaCode = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaCode),
+  { ssr: false }
+);
+const FaPencilAlt = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaPencilAlt),
+  { ssr: false }
+);
 
-const GoGitBranch = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/go').then(mod => mod.GoGitBranch), { ssr: false })
+const GoGitBranch = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/go').then((mod) => mod.GoGitBranch),
+  { ssr: false }
+);
 
-const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/md2').then((mod) => mod.Md2RobotExcited),
+  { ssr: false }
+);
 
-const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuShieldCheck),
+  { ssr: false }
+);
 
 // Our Imports
 import MetaTags from '../../components/Metatags';
@@ -33,7 +52,7 @@ import { FetchResponse } from '../api/fetch';
 
 // Auth
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession } from '@supabase/auth-helpers-react';
 
 // Skeleton
 import Skeleton from 'react-loading-skeleton';
@@ -43,6 +62,7 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
+import { HiCheckBadge } from 'react-icons-ng/hi';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -58,10 +78,22 @@ const InfoButton = dynamic(() => import('../../components/InfoButton'), {
   ssr: false,
 });
 
-export default function Bin({ id, board }: { id: string; board: FetchResponse }) {
+export default function Bin({
+  id,
+  board,
+  madeBy,
+}: {
+  id: string;
+  board: FetchResponse;
+  madeBy: {
+    verified: boolean;
+    id: string;
+    name: string;
+    image: string;
+  } | null;
+}) {
   const router = useRouter();
   const session = useSession();
-  const supabase = useSupabaseClient();
 
   // Mobile ---------------------------------
   const [metadata, setMetadata] = useState(false);
@@ -124,15 +156,17 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
   return (
     <div className={generalStyles.container}>
       <MetaTags
-        title={board.name + '/CodeBoard'}
-        description={board.description || 'No Description. Just the source code.'}
+        title={board.name + ' | CodeBoard'}
+        description={
+          board.description || 'No Description. Just the source code.'
+        }
         k={id + ''}
       />
 
       <main className={generalStyles.main}>
         <Header theme={theme} setTheme={setTheme} />
         {board &&
-          session?.user?.user_metadata?.provider_id == board.author ? null : (
+        session?.user?.user_metadata?.provider_id == board.author ? null : (
           <Warning />
         )}
 
@@ -210,10 +244,52 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
                     <Skeleton style={{ width: '80px' }} />
                   </div>
                 )}
+
+                {madeBy ? (
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                      gap: '12px',
+                    }}>
+                    <Image
+                      width={32}
+                      height={32}
+                      style={{
+                        borderRadius: 50,
+                        border: '2px solid var(--purple-dark)',
+                      }}
+                      alt={'Made by user'}
+                      src={madeBy.image}
+                    />
+                    <p style={{ margin: 0 }}>
+                      Made by
+                      <span
+                        style={{
+                          display: 'flex',
+                          fontFamily: "var(--mono-font)",
+                          color: 'var(--purple-dark)',
+                        }}>
+                        {madeBy.name}
+                        {madeBy.verified ? (
+                          <HiCheckBadge
+                            title="Verified"
+                            style={{
+                              marginLeft: '4px',
+                              marginTop: '2px',
+                              fontSize: '18px',
+                              color: 'var(--purple-dark)',
+                            }}
+                          />
+                        ) : null}
+                      </span>
+                    </p>
+                  </div>
+                ) : null}
               </form>
             </div>
             {board &&
-              session?.user?.user_metadata?.provider_id == board.author ? (
+            session?.user?.user_metadata?.provider_id == board.author ? (
               <div className="tooltip">
                 <button
                   className={styles.edit}
@@ -249,8 +325,8 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
                       board.fork?.status
                         ? 'Forked boards cannot get forked again'
                         : board.bot
-                          ? 'Boards by API cannot get forked'
-                          : 'Fork the board'
+                        ? 'Boards by API cannot get forked'
+                        : 'Fork the board'
                     }
                     style={{ marginRight: '12px' }}
                   />{' '}
@@ -369,5 +445,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         destination: '/404',
       },
     };
-  return { props: { id: context.params.id, board: board } };
+
+  let madeBy = null;
+
+  if (board && board.author && board.author !== 'bot') {
+    const { data: user } = await supabase
+      .from('Users')
+      .select('id, name, image, verified')
+      .eq('id', board.author)
+      .limit(1)
+      .single();
+    if (user) madeBy = user;
+  }
+
+  return { props: { id: context.params.id, board: board, madeBy: madeBy } };
 }
