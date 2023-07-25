@@ -36,9 +36,8 @@ const FileSelect = dynamic(() => import('../../components/FileSelect'), {
   ssr: false,
 });
 
-export function Embed() {
+export function Embed({ id }: { id: string }) {
   const router = useRouter();
-  const id = router.query.id
   const supabase = useSupabaseClient();
 
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
@@ -241,6 +240,10 @@ export function Embed() {
   );
 }
 
-export default memo(function EmbedPage() {
-  return <Embed />;
+export default memo(function EmbedPage({ id }: { id: string }) {
+  return <Embed id={id} />;
 });
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return { props: { id: context.params.id } };
+}
