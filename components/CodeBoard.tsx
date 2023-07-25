@@ -148,7 +148,7 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
         onContextMenu={displayMenu}
         placeholder={placeHolder || 'Paste your code here.'}
         theme={
-          theme == 'light'
+          theme == 'light' || localStorage?.getItem('theme') == 'light'
             ? light
             : dark
         }
