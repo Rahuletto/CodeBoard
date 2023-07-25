@@ -11,12 +11,23 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import styles from '../styles/Account.module.css';
 
 // Icons
-const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
-const FaUser = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUser), { ssr: false })
+const FaGithub = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaGithub),
+  { ssr: false }
+);
+const FaUser = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaUser),
+  { ssr: false }
+);
 
-const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuRefreshCw), { ssr: false })
-const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
-
+const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuRefreshCw),
+  { ssr: false }
+);
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/md2').then((mod) => mod.Md2RobotExcited),
+  { ssr: false }
+);
 
 // Our imports
 import { PostgrestError } from '@supabase/supabase-js';
@@ -117,7 +128,15 @@ export default function Account({ github, bds, apiBds, id, api, verified }) {
               />
 
               <div className={styles.details}>
-                <h1>{session?.user?.user_metadata?.name}{verified ? <HiCheckBadge title="Verified" style={{ marginLeft: "8px", color: "var(--purple-dark)" }} /> : null}</h1>
+                <h1>
+                  {session?.user?.user_metadata?.name}
+                  {verified ? (
+                    <HiCheckBadge
+                      title="Verified"
+                      style={{ marginLeft: '8px', color: 'var(--purple-dark)' }}
+                    />
+                  ) : null}
+                </h1>
                 {github ? (
                   <Link href={github} className={styles.githubURL}>
                     <FaGithub style={{ marginRight: '6px' }} />
@@ -208,6 +227,14 @@ export default function Account({ github, bds, apiBds, id, api, verified }) {
                     </Link>
                     {isUser ? (
                       <button
+                        style={{ background: 'var(--orange)' }}
+                        title="Edit the board"
+                        onClick={() => router.push(`/edit/${b.key}`)}>
+                        Edit
+                      </button>
+                    ) : null}
+                    {isUser ? (
+                      <button
                         title="Delete the board"
                         onClick={() => deleteBoard(b.key)}>
                         Delete
@@ -240,8 +267,8 @@ export const getServerSideProps = async (ctx) => {
       },
     };
 
-  const id = session?.user?.user_metadata?.provider_id
-  let user: User = await redis.get(`user-${id}`)
+  const id = session?.user?.user_metadata?.provider_id;
+  let user: User = await redis.get(`user-${id}`);
   if (!user) {
     const { data }: { data: User } = await supabase
       .from('Users')
@@ -250,7 +277,7 @@ export const getServerSideProps = async (ctx) => {
       .limit(1)
       .single();
     user = data;
-    if (data) await redis.set(`user-${id}`, data)
+    if (data) await redis.set(`user-${id}`, data);
   }
 
   if (!user) {
@@ -289,4 +316,4 @@ export const getServerSideProps = async (ctx) => {
   };
 };
 
-export const config = { runtime: "experimental-edge" }
+export const config = { runtime: 'experimental-edge' };
