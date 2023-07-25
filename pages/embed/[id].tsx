@@ -232,7 +232,7 @@ export function Embed({ id }: { id: string }) {
           min-height: 0;
         }
         .cm-editor {
-          height: 80vh;
+          height: 89vh;
         }
       `}
       </style>
