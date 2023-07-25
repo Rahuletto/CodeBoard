@@ -35,7 +35,6 @@ const colorPicker = await (
 
 
 import { BoardFile } from '../utils/types/board';
-
 import { useContextMenu } from 'react-contexify';
 import BoardLoader from './BoardLoader';
 
@@ -158,7 +157,7 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
         width={width || 'auto'}
         height={height || '200px'}
         readOnly={readOnly}
-        extensions={[...ext, language]}
+        extensions={language ? [...ext, language] : ext}
         onChange={onChange}
         draggable={false}
         aria-label="codeboard"

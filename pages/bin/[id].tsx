@@ -71,7 +71,7 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
 
   const [fileName, setFileName] = useState(board?.files[0]?.name);
   const [btns, setBtns] = useState([]);
-  const [file, setFile] = useState<BoardFile>(null);
+  const [file, setFile] = useState<BoardFile>(board?.files[0]);
   const [language, setLanguage] = useState<any>(null);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export default function Bin({ id, board }: { id: string; board: FetchResponse })
 
       setBtns(fileButtons);
     }
-  }, [file]);
+  }, [file, fileName]);
 
   function handleCopies(event: MouseEvent, text: string) {
     var target = event.currentTarget;

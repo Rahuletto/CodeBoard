@@ -68,6 +68,7 @@ export function sudoFetch(
               name: f.name,
               language: f.language,
               value: AESDecrypt(f.value),
+              terminal: f.terminal ? AESDecrypt(f?.terminal) : null
             });
           });
         } else decryptedFiles = board.files;
