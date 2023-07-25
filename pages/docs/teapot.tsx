@@ -5,9 +5,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 // Styles
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
+import { langs } from '@uiw/codemirror-extensions-langs';
 import Link from 'next/link';
-import { CodeBoard } from '../../components';
 import styles from '../../styles/Docs.module.css';
 
 // Lazy loading
@@ -16,13 +15,15 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 });
 const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
+  ssr: true,
+});
 
 const Docs: NextPage = () => {
   const nodejs = `await fetch('https://codeboard.tech/api/teapot')`;
   const cURL = `curl -X GET https://codeboard.tech/api/teapot`;
 
   const [code, setCode] = useState(nodejs);
-
 
   const router = useRouter();
   // DARK MODE & LIGHT MODE
@@ -63,7 +64,9 @@ const Docs: NextPage = () => {
             <p>
               Im a teapot, or Teapot status code is an old april fools joke
               which annoyed most of the developers. So we brought it to annoy
-              you lol. This is just like ping endpoint but returns the status code <code>418</code>. This is a <span className="green">GET</span> method
+              you lol. This is just like ping endpoint but returns the status
+              code <code>418</code>. This is a{' '}
+              <span className="green">GET</span> method
               <br></br>This runs in an edge function.
             </p>
 
@@ -74,7 +77,7 @@ const Docs: NextPage = () => {
             <p>No Parameters</p>
 
             <h3>Example</h3>
-            <p style={{ fontFamily: "var(--mono-font)" }}>Request</p>
+            <p style={{ fontFamily: 'var(--mono-font)' }}>Request</p>
             <div
               style={{
                 border: '5px solid var(--background-dark)',
@@ -119,14 +122,14 @@ const Docs: NextPage = () => {
                 readOnly={true}
                 language={
                   code == cURL
-                    ? loadLanguage('shell')
-                    : loadLanguage('javascript')
+                    ? langs.shell()
+                    : langs.javascript()
                 }
                 theme={theme}
               />
             </div>
             <br></br>
-            <p style={{ fontFamily: "var(--mono-font)" }}>Response Output</p>
+            <p style={{ fontFamily: 'var(--mono-font)' }}>Response Output</p>
 
             <div
               style={{
@@ -140,7 +143,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`Im a teapot`}
                 readOnly={true}
-                language={loadLanguage('shell')}
+                language={langs.shell()}
                 theme={theme}
               />
             </div>

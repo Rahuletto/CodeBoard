@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   poweredByHeader: false,
   swcMinify: true,
   reactStrictMode: true,
+  compress: true,
   images: {
     domains: ['avatars.githubusercontent.com'],
   },
@@ -58,6 +59,6 @@ const nextConfig = {
       },
     ];
   },
-};
+}
 
-export default nextConfig;
+export default config

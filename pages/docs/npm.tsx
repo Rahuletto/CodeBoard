@@ -3,17 +3,19 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // Styles
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import Link from 'next/link';
-import { CodeBoard } from '../../components';
 import styles from '../../styles/Docs.module.css';
+
+import { langs } from '@uiw/codemirror-extensions-langs';
+
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {ssr: true});
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 const Docs: NextPage = () => {
@@ -75,7 +77,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`npm install @codeboard/api`}
                 readOnly={true}
-                language={loadLanguage('shell')}
+                language={langs.shell()}
                 theme={theme}
               />
             </div>
@@ -132,7 +134,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`const { CodeBoard } = require("@codeboard/api");\n\nconst board = new CodeBoard("API_KEY");`}
                 readOnly={true}
-                language={loadLanguage('javascript')}
+                language={langs.javascript()}
                 theme={theme}
               />
             </div>
@@ -163,7 +165,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`new CodeBoard(key: string): CodeBoard`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -185,7 +187,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`const { CodeBoard } = require("@codeboard/api");\nconst board = new CodeBoard("API_KEY");\n\nawait board.ping();`}
                 readOnly={true}
-                language={loadLanguage('javascript')}
+                language={langs.javascript()}
                 theme={theme}
               />
             </div>
@@ -222,7 +224,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`async ping(): Promise<number>`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -247,7 +249,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`const { CodeBoard } = require("@codeboard/api");\nconst board = new CodeBoard("API_KEY");\n\nawait board.teapot();`}
                 readOnly={true}
-                language={loadLanguage('javascript')}
+                language={langs.javascript()}
                 theme={theme}
               />
             </div>
@@ -284,7 +286,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`async teapot(): Promise<"Im a teapot">`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -321,7 +323,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`const { CodeBoard } = require("@codeboard/api");\nconst board = new CodeBoard("API_KEY");\n\nawait board.save({\n  name: "BOARD_NAME",\n  description: "BOARD_DESC",\n  files: [\n    {\n      name: "FILE_NAME",\n      language: "FILE_LANGUAGE_IN_FULLNAME",\n      value: "CODE_SNIPPET",\n    },\n  ],\n});`}
                 readOnly={true}
-                language={loadLanguage('javascript')}
+                language={langs.javascript()}
                 theme={theme}
               />
             </div>
@@ -358,7 +360,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`async save(body: SaveBody): Promise<SaveResponse>`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -383,7 +385,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`{\r\n  name: string;\r\n  description?: string;\r\n  files: BoardFile[];\r\n}`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -408,7 +410,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`{\r\n  message: string;\r\n  board: string;\r\n  status: number;\r\n  created: boolean;\r\n  url: string;\r\n}`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -446,7 +448,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`const { CodeBoard } = require("@codeboard/api");\nconst board = new CodeBoard("API_KEY");\n\nawait board.fetch("BOARD_ID");`}
                 readOnly={true}
-                language={loadLanguage('javascript')}
+                language={langs.javascript()}
                 theme={theme}
               />
             </div>
@@ -483,7 +485,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`async fetch(id: string): Promise<FetchBody>`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -508,7 +510,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`{\r\n  name: string;\r\n  description: string;\r\n  files: BoardFile[]; \/\/ BoardFile type shown below\r\n  url: string;\r\n  key: string;\r\n  createdAt: number;\r\n  encrypt: boolean;\r\n  autoVanish: boolean;\r\n  fork: {\r\n    status: boolean;\r\n    key: string;\r\n    name: string;\r\n  };\r\n  author?: string | null;\r\n  bot: boolean;\r\n  status: number; \/\/ HTTP Status Code\r\n}`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>
@@ -533,7 +535,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`{\r\n  name: string;\r\n  language: string;\r\n  value: string;\r\n}`}
                 readOnly={true}
-                language={loadLanguage('typescript')}
+                language={langs.typescript()}
                 theme={theme}
               />
             </div>

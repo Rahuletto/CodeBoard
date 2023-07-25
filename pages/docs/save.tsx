@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // Styles
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { CodeBoard } from '../../components';
 import styles from '../../styles/Docs.module.css';
+
+import { langs } from '@uiw/codemirror-extensions-langs';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {ssr: true});
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 
@@ -96,7 +97,7 @@ const Docs: NextPage = () => {
                 code={`{\n  "name": "Board name",\n  "description": "The description of board",\n  "files": [\n    {\n      "name": "untitled.js",\n      "language": "javascript",\n      "value": "console.log('hello world')"\n    }\n  ]\n}
               `}
                 readOnly={true}
-                language={loadLanguage('json')}
+                language={langs.json()}
                 theme={theme}
               />
             </div>
@@ -147,8 +148,8 @@ const Docs: NextPage = () => {
                 readOnly={true}
                 language={
                   code == cURL
-                    ? loadLanguage('shell')
-                    : loadLanguage('javascript')
+                    ? langs.shell()
+                    : langs.javascript()
                 }
                 theme={theme}
               />
@@ -169,7 +170,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`{\n  "message": "Successfully created a board",\n  "board": "/bin/{key}",\n  "status": 201,\n  "created": true\n}`}
                 readOnly={true}
-                language={loadLanguage('json')}
+                language={langs.json()}
                 theme={theme}
               />
             </div>

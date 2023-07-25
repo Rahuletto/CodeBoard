@@ -5,9 +5,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 // Styles
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
+import { langs } from '@uiw/codemirror-extensions-langs';
 import Link from 'next/link';
-import { CodeBoard } from '../../components';
 import styles from '../../styles/Docs.module.css';
 
 // Lazy loading
@@ -16,7 +15,7 @@ const MetaTags = dynamic(() => import('../../components/Metatags'), {
 });
 const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
-
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {ssr: true});
 const Docs: NextPage = () => {
   const nodejs = `await fetch('https://codeboard.tech/api/ping')`;
   const cURL = `curl -X GET https://codeboard.tech/api/ping`;
@@ -118,8 +117,8 @@ const Docs: NextPage = () => {
                 readOnly={true}
                 language={
                   code == cURL
-                    ? loadLanguage('shell')
-                    : loadLanguage('javascript')
+                    ? langs.shell()
+                    : langs.javascript()
                 }
                 theme={theme}
               />
@@ -139,7 +138,7 @@ const Docs: NextPage = () => {
               <CodeBoard
                 code={`Pong!`}
                 readOnly={true}
-                language={loadLanguage('shell')}
+                language={langs.shell()}
                 theme={theme}
               />
             </div>
