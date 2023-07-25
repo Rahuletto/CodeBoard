@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
+  swcMinify: true,
   reactStrictMode: true,
   images: {
     domains: ['avatars.githubusercontent.com'],
@@ -8,26 +10,26 @@ const nextConfig = {
     return [
       {
         source: '/fetch',
-        destination: "/api/fetch"
+        destination: '/api/fetch',
       },
       {
         source: '/save',
-        destination: "/api/save"
+        destination: '/api/save',
       },
       {
         source: '/ping',
-        destination: "/api/ping"
+        destination: '/api/ping',
       },
       {
         source: '/teapot',
-        destination: "/api/teapot"
-      }
-    ]
+        destination: '/api/teapot',
+      },
+    ];
   },
   webpack: (config) => {
     config.experiments = {
       topLevelAwait: true,
-      layers: true
+      layers: true,
     };
     return config;
   },
@@ -54,9 +56,8 @@ const nextConfig = {
         destination: 'https://discord.gg/3JzDV9T5Fn',
         permanent: true,
       },
-    ]
+    ];
   },
-
 };
 
 export default nextConfig;
