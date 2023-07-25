@@ -54,6 +54,7 @@ export function Embed({ id }: { id: string }) {
     sudoFetch(supabase, id, true).then((b) => {
       if (!b) return router.push('/404');
       setBoard(b);
+      setFile(b.files[0])
       setFileName(b.files[0].name);
     });
   }, []);
@@ -90,7 +91,7 @@ export function Embed({ id }: { id: string }) {
 
       setBtns(fileButtons);
     }
-  }, [fileName]);
+  }, [file, fileName]);
 
   // DARK MODE & LIGHT MODE
 
@@ -179,9 +180,9 @@ export function Embed({ id }: { id: string }) {
           </div>
         </div>
 
-        <Allotment vertical={true} defaultSizes={[460, 40]}>
+        {file && file.terminal ? (<Allotment vertical={true} defaultSizes={[460, 40]}>
           <Allotment.Pane minSize={32} maxSize={460}>
-            {file ? (
+            {file && language ? (
               <CodeBoard
                 width={String(width)}
                 height={String(height)}
@@ -209,7 +210,16 @@ export function Embed({ id }: { id: string }) {
               </>
             ) : null}
           </Allotment.Pane>
-        </Allotment>
+        </Allotment>) : file ? (
+          <CodeBoard
+            width={String(width)}
+            height={String(height)}
+            language={language}
+            code={file.value}
+            readOnly={true}
+            theme={theme}
+          />
+        ) : <BoardLoader />}
       </div>
 
       <style>

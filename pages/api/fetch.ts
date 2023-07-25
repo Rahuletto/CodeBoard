@@ -145,7 +145,7 @@ export default async function GET(req: NextRequest) {
             name: f.name,
             language: f.language,
             value: AESDecrypt(f.value),
-            terminal: AESDecrypt(f.terminal)
+            terminal: f.terminal ? AESDecrypt(f?.terminal) : null
           });
         });
       } else decryptedFiles = boardRaw.files;
