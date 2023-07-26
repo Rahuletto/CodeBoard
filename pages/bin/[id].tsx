@@ -63,6 +63,7 @@ import 'allotment/dist/style.css';
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
 import { HiCheckBadge } from 'react-icons-ng/hi';
+import {AiFillBug} from 'react-icons-ng/ai'
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -90,6 +91,7 @@ export default function Bin({
     id: string;
     name: string;
     image: string;
+    bug: boolean;
   } | null;
 }) {
   const router = useRouter();
@@ -283,6 +285,16 @@ export default function Bin({
                               color: 'var(--purple-dark)',
                             }}
                           />
+                        ) : madeBy.bug ? (
+                          <AiFillBug
+                            title="Bug Hunter"
+                            style={{
+                              marginLeft: '4px',
+                              marginTop: '2px',
+                              fontSize: '18px',
+                              color: 'var(--purple-dark)',
+                            }}
+                          />
                         ) : null}
                       </span>
                     </p>
@@ -457,7 +469,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (board && board.author && board.author !== 'bot') {
     const { data: user } = await supabase
       .from('Users')
-      .select('id, name, image, verified')
+      .select('id, name, image, verified, bug')
       .eq('id', board.author)
       .limit(1)
       .single();
