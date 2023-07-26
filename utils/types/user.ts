@@ -4,4 +4,5 @@ export type User = {
   name: string;
   image: string; // Profile pic
   apiKey: string;
+  verified?: boolean;
 };

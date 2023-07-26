@@ -11,12 +11,23 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import styles from '../styles/Account.module.css';
 
 // Icons
-const FaGithub = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaGithub), { ssr: false })
-const FaUser = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaUser), { ssr: false })
+const FaGithub = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaGithub),
+  { ssr: false }
+);
+const FaUser = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaUser),
+  { ssr: false }
+);
 
-const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuRefreshCw), { ssr: false })
-const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/md2').then(mod => mod.Md2RobotExcited), { ssr: false })
-
+const LuRefreshCw = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuRefreshCw),
+  { ssr: false }
+);
+const Md2RobotExcited = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/md2').then((mod) => mod.Md2RobotExcited),
+  { ssr: false }
+);
 
 // Our imports
 import { PostgrestError } from '@supabase/supabase-js';
@@ -24,12 +35,13 @@ import Link from 'next/link';
 import { IconType } from 'react-icons-ng';
 import { User } from '../utils/types/user';
 import redis from '../utils/redis';
+import { HiCheckBadge } from 'react-icons-ng/hi';
 
 // Lazy loading
 const MetaTags = dynamic(() => import('../components/Metatags'), { ssr: true });
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
 
-export default function Account({ github, bds, apiBds, id, api }) {
+export default function Account({ github, bds, apiBds, id, api, verified }) {
   const router = useRouter();
 
   const supabase = useSupabaseClient();
@@ -116,7 +128,15 @@ export default function Account({ github, bds, apiBds, id, api }) {
               />
 
               <div className={styles.details}>
-                <h1>{session?.user?.user_metadata?.name}</h1>
+                <h1>
+                  {session?.user?.user_metadata?.name}
+                  {verified ? (
+                    <HiCheckBadge
+                      title="Verified"
+                      style={{ marginLeft: '8px', color: 'var(--purple-dark)' }}
+                    />
+                  ) : null}
+                </h1>
                 {github ? (
                   <Link href={github} className={styles.githubURL}>
                     <FaGithub style={{ marginRight: '6px' }} />
@@ -207,6 +227,14 @@ export default function Account({ github, bds, apiBds, id, api }) {
                     </Link>
                     {isUser ? (
                       <button
+                        style={{ background: 'var(--orange)' }}
+                        title="Edit the board"
+                        onClick={() => router.push(`/edit/${b.key}`)}>
+                        Edit
+                      </button>
+                    ) : null}
+                    {isUser ? (
+                      <button
                         title="Delete the board"
                         onClick={() => deleteBoard(b.key)}>
                         Delete
@@ -239,8 +267,8 @@ export const getServerSideProps = async (ctx) => {
       },
     };
 
-  const id = session?.user?.user_metadata?.provider_id
-  let user: User = await redis.get(`user-${id}`)
+  const id = session?.user?.user_metadata?.provider_id;
+  let user: User = await redis.get(`user-${id}`);
   if (!user) {
     const { data }: { data: User } = await supabase
       .from('Users')
@@ -249,7 +277,7 @@ export const getServerSideProps = async (ctx) => {
       .limit(1)
       .single();
     user = data;
-    if (data) await redis.set(`user-${id}`, data)
+    if (data) await redis.set(`user-${id}`, data);
   }
 
   if (!user) {
@@ -280,6 +308,7 @@ export const getServerSideProps = async (ctx) => {
       apiBds: apiBds ?? [],
       id: user?.id ?? '',
       api: user?.apiKey ?? '',
+      verified: user?.verified ?? false,
       github: session?.user
         ? 'https://github.com/' + session.user.user_metadata.user_name
         : '',
@@ -287,4 +316,4 @@ export const getServerSideProps = async (ctx) => {
   };
 };
 
-export const config = { runtime: "experimental-edge" }
+export const config = { runtime: 'experimental-edge' };

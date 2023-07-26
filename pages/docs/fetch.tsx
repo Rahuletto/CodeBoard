@@ -3,17 +3,17 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // Styles
-import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import Link from 'next/link';
-import { CodeBoard } from '../../components';
 import styles from '../../styles/Docs.module.css';
 
+import { langs } from '@uiw/codemirror-extensions-langs';
 // Lazy loading
 const MetaTags = dynamic(() => import('../../components/Metatags'), {
   ssr: true,
 });
+const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {ssr: true});
 const Footer = dynamic(() => import('../../components/Footer'), { ssr: false });
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 
@@ -146,8 +146,8 @@ const Docs: NextPage = () => {
                 readOnly={true}
                 language={
                   code == cURL
-                    ? loadLanguage('shell')
-                    : loadLanguage('javascript')
+                    ? langs.shell()
+                    : langs.javascript()
                 }
                 theme={theme}
               />
@@ -169,7 +169,7 @@ const Docs: NextPage = () => {
                 code={`{\n  "name": "Board name",\n  "description": "The description of board",\n  "files": [\n    {\n      "name": "untitled.js",\n      "language": "javascript",\n      "value": "console.log('hello world')"\n    }\n  ],\n  "key": "cEFTT17h",\n  "createdAt": 1687764312780,\n  "encrypt": true,\n  "autoVanish": false,\n  "fork": false,\n  "status": 200,\n}
               `}
                 readOnly={true}
-                language={loadLanguage('json')}
+                language={langs.json()}
                 theme={theme}
               />
             </div>
