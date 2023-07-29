@@ -324,7 +324,7 @@ export default function Bin({
                   Edit
                 </button>
                 <span style={{ borderRadius: '12px' }} className="tooltiptext">
-                  Coming soon..
+                  Edit your board [BETA]
                 </span>
               </div>
             ) : board ? (
