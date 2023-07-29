@@ -49,9 +49,38 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req?.nextUrl?.pathname;
 
+  const auth = req.headers.get('authorization');
+  
   if (path && path.startsWith('/api')) {
-    const auth = req.headers.get("authorization");
     if (
+      path &&
+      (path == '/api/ping' || path == '/api/teapot' || path == '/api')
+    ) {
+      const { success, limit, remaining, reset } =
+        await ratelimit.default.limit(req.ip);
+
+      res.headers.set('RateLimit-Limit', limit.toString());
+      res.headers.set('RateLimit-Remaining', remaining.toString());
+
+      return success
+        ? res
+        : new NextResponse(
+            JSON.stringify({
+              message: 'Ratelimited !',
+              warning:
+                'Repeating this periodically may result of blacklisting of your ip',
+              status: 429,
+            }),
+            {
+              status: 429,
+              headers: {
+                'content-type': 'application/json',
+                'RateLimit-Limit': limit.toString(),
+                'Retry-After': reset.toString(),
+              },
+            }
+          );
+    } else if (
       !auth &&
       path !== '/api/ping' &&
       path !== '/api/teapot' &&
@@ -59,7 +88,11 @@ export async function middleware(req: NextRequest) {
       path !== '/api/og'
     ) {
       return new NextResponse(
-        JSON.stringify({ message: 'Not Authorized !!', from: "MIDDLEWARE", status: 401 }),
+        JSON.stringify({
+          message: 'Not Authorized !!',
+          from: 'MIDDLEWARE',
+          status: 401,
+        }),
         {
           status: 401,
           headers: {

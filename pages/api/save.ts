@@ -60,7 +60,7 @@ export default async function POST(req: NextRequest) {
       .limit(1)
       .single();
 
-    if (!token && authorization != process.env.NEXT_PUBLIC_KEY)
+    if (!token)
       return new Response(
         JSON.stringify({
           message: 'Not Authorized !',
