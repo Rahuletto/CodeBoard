@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 // Styles
 import generalStyles from '../styles/General.module.css';
@@ -40,7 +40,7 @@ import { formatCode } from '../utils/prettier';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
-const CodeBoard = dynamic(() => import('../components/CodeBoard'));
+const CodeBoard = dynamic(() => import('../components/CodeBoard'), { ssr: false });
 const EditModal = dynamic(() => import('../components/EditModal'), {
   ssr: false,
 });
@@ -130,7 +130,6 @@ const Index: NextPage = () => {
     (value: string, viewUpdate: any) => {
       const changed = files.find((a) => a.name === fileName);
       changed.terminal = value;
-
       return;
     },
     [fileName]
@@ -191,7 +190,7 @@ const Index: NextPage = () => {
   // ---------------------------------------------
 
   // File Selector Effect ---------------------------------
-  useEffect(() => {
+  useMemo(() => {
     const fileButtons: JSX.Element[] = [];
 
     const tmpFiles = [...files];
@@ -473,7 +472,7 @@ const Index: NextPage = () => {
               <button
                 title="Save the board"
                 className={styles.save}
-                disabled={code == ''}
+                disabled={file?.value == ''}
                 onClick={(event) => {
                   (event.target as HTMLButtonElement).disabled = true;
                   (event.target as HTMLElement).style.background = 'var(--red)';
@@ -563,10 +562,10 @@ const Index: NextPage = () => {
                     <CodeBoard
                       styleProp={
                         drag
-                          ? { pointerEvents: 'none', marginTop: '0px' }
-                          : { pointerEvents: 'auto', marginTop: '0px' }
+                          ? { pointerEvents: 'none', marginTop: '0px', height: "76vh" }
+                          : { pointerEvents: 'auto', marginTop: '0px', height: "76vh" }
                       }
-                      placeHolder={`>_ Share your logs with your code too.`}
+                      placeHolder={`\n>_ Share your logs with your code too.`}
                       code={file.terminal}
                       output={true}
                       readOnly={false}

@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 // Styles
 import generalStyles from '../styles/General.module.css';
 import styles from '../styles/Home.module.css';
@@ -23,7 +23,7 @@ const Error: NextPage = () => {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 

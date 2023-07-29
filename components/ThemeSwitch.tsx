@@ -1,5 +1,5 @@
 // NextJS stuff
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useLayoutEffect } from 'react';
 
 // Styles
 import styles from './styles/ThemeSwitcher.module.css';
@@ -31,8 +31,7 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   }
 
   // To let window to load
-  useEffect(() => {
-
+  useLayoutEffect(() => {
       if (!window || !window.matchMedia) return;
       else if (
         window &&
@@ -48,9 +47,6 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
       } else if (theme == 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
-    
-
-  
   }, []);
 
   return (

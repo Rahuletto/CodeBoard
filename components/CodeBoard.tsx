@@ -139,6 +139,12 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   useEffect(() => {
     window.addEventListener('fullscreenchange', fsc);
     window.addEventListener('keydown', kdc);
+
+    return () => {
+      window.removeEventListener('fullscreenchange', fsc);
+      window.removeEventListener('keydown', kdc);
+  
+    }
   }, []);
 
   return (

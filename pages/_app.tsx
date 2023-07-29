@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
 
 
   useEffect(() => {
-    const handleStart = (url: string) => {
+    const handleStart = () => {
       NProgress.start();
     };
 

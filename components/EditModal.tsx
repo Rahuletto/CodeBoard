@@ -28,6 +28,7 @@ const EditModal: React.FC<FileSelectProps> = ({
       }
     };
   }, []);
+  
   function closeEdit() {
     const div = document.querySelectorAll(`div.edit`);
     const back = document.querySelector<HTMLElement>(`.backdrop`);

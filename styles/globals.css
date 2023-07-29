@@ -396,9 +396,18 @@ button:active {
   transform: scale(0.93);
 }
 
+.cm-theme {
+  height: -webkit-fill-available !important;
+}
 .cm-editor {
   font-family: var(--mono-font) !important;
-  height: 77.3vh;
+  height: 100%;
+  overflow: auto !important;
+}
+
+.allotment-module_splitView__L-yRc.allotment-module_vertical__WSwwa > .allotment-module_splitViewContainer__rQnVa > .allotment-module_splitViewView__MGZ6O {
+  background: var(--code-editor);
+  cursor: text;
 }
 
 .cm-scroller {
@@ -429,11 +438,16 @@ button:active {
 }
 
 .file-holder {
+  z-index: 5;
   transition: 0.2s cubic-bezier(0.51, 0.69, 0.46, 0.96);
   padding: 10px;
   border-bottom: 5px solid var(--background-dark);
   display: flex;
   gap: 14px;
+}
+
+.allotment-module_splitView__L-yRc {
+  height: 77vh !important;
 }
 
 button {

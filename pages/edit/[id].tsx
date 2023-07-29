@@ -2,7 +2,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useLayoutEffect, useEffect, useState } from 'react';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -179,12 +179,12 @@ export default function Edit({ board }: { board: FetchResponse }) {
   }, [file.language]);
 
   // Set Themes ---------------------------------
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
   // File Selector Effect ---------------------------------
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fileButtons: JSX.Element[] = [];
 
     const tmpFiles = [...files];

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useLayoutEffect, useMemo, useState } from 'react';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
@@ -108,7 +108,7 @@ export default function Bin({
   const [file, setFile] = useState<BoardFile>(board?.files[0]);
   const [language, setLanguage] = useState<any>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
