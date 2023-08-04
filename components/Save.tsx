@@ -8,7 +8,7 @@ const BiSolidSave = dynamic<React.ComponentProps<IconType>>(() => import('react-
 
 const Save: React.FC = () => {
   return (
-    <div className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
+    <div onContextMenu={(e) => {e.preventDefault()}} className={[styles.dropzone, styles.backdrop, 'droppy'].join(' ')}>
       <div
         className={['details', 'error', 'droppy'].join(' ')}
         style={{ maxWidth: '400px', justifyContent: 'center' }}>

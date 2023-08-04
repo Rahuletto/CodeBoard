@@ -58,6 +58,7 @@ import 'allotment/dist/style.css';
 // Loading Skeleton
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
+import { useContextMenu } from 'react-contexify';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -94,6 +95,17 @@ const Save = dynamic(() => import('../../components/Save'), {
 });
 
 export default function Fork({ board }: { board: FetchResponse }) {
+
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+  
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -407,6 +419,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
                 onSubmit={(event) => handleSubmit(event)}>
                 <div className={styles.name}>
                   <input
+                  onContextMenu={displayMenu}
                     style={{ fontWeight: '600' }}
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
@@ -442,6 +455,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
 
                     <label className="switch">
                       <input
+                      onContextMenu={() => setVanish(!vanish)}
                         checked={vanish}
                         onChange={() => setVanish(!vanish)}
                         type="checkbox"
@@ -454,6 +468,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
                     <p>Encryption</p>
                     <label className="switch">
                       <input
+                      onContextMenu={() => setEncrypt(!encrypt)}
                         checked={encrypt}
                         onChange={() => {
                           setEncrypt(!encrypt);

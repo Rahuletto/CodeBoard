@@ -1,5 +1,6 @@
 // ReactJS stuff
 import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { useContextMenu } from 'react-contexify';
 
 // Our Imports
 import { extensions } from '../utils/extensions';
@@ -20,6 +21,16 @@ const EditModal: React.FC<FileSelectProps> = ({
   files,
   setFiles,
 }) => {
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+  
   useEffect(() => {
     const form = document.getElementsByClassName('editForm')[0];
     document.getElementById('file-name').onkeydown = function (e) {
@@ -110,6 +121,7 @@ const EditModal: React.FC<FileSelectProps> = ({
       {' '}
       <form className="editForm" onSubmit={(event) => edit(event)}>
         <input
+          onContextMenu={displayMenu}
           onChange={(event) => updateEditLanguage(event, currentFile.name)}
           className={`file-name-${currentFile.name.replaceAll('.', '-')}`}
           name="filename"

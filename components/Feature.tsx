@@ -15,7 +15,8 @@ const Features = ({ session }) => {
         elem.style.display = 'none';
       }}
       id="feature"
-      className={[styles.backdrop, 'backdrop'].join(' ')}>
+      className={[styles.backdrop, 'backdrop'].join(' ')}
+      onContextMenu={(e) => {e.preventDefault()}} >
       <div
         className={['details', 'error', 'droppy', feature.feature].join(' ')}>
         <h1 style={{ margin: '6px', textAlign: 'center' }}>Limit exceeded</h1>

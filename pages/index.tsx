@@ -2,7 +2,14 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, {
+  FormEvent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useContextMenu } from 'react-contexify';
 
 // Styles
 import generalStyles from '../styles/General.module.css';
@@ -15,11 +22,22 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 // Icons from React-Icons-NG (Thanks 💖)
-const LuShieldOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldOff), { ssr: false })
-const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuShieldCheck), { ssr: false })
-const LuTimer = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimer), { ssr: false })
-const LuTimerOff = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/lu').then(mod => mod.LuTimerOff), { ssr: false })
-
+const LuShieldOff = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuShieldOff),
+  { ssr: false }
+);
+const LuShieldCheck = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuShieldCheck),
+  { ssr: false }
+);
+const LuTimer = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuTimer),
+  { ssr: false }
+);
+const LuTimerOff = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/lu').then((mod) => mod.LuTimerOff),
+  { ssr: false }
+);
 
 // Our Imports
 import { AESEncrypt } from '../utils/aes';
@@ -40,7 +58,9 @@ import { formatCode } from '../utils/prettier';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
-const CodeBoard = dynamic(() => import('../components/CodeBoard'), { ssr: false });
+const CodeBoard = dynamic(() => import('../components/CodeBoard'), {
+  ssr: false,
+});
 const EditModal = dynamic(() => import('../components/EditModal'), {
   ssr: false,
 });
@@ -350,6 +370,16 @@ const Index: NextPage = () => {
 
   // ------------------------------------------------------------------
 
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+
   return (
     <div className={generalStyles.container}>
       <MetaTags />
@@ -409,6 +439,7 @@ const Index: NextPage = () => {
                 onSubmit={(event) => handleSubmit(event)}>
                 <div className={styles.name}>
                   <input
+                    onContextMenu={displayMenu}
                     style={{ fontWeight: '600' }}
                     value={title}
                     maxLength={25}
@@ -426,6 +457,7 @@ const Index: NextPage = () => {
                   )}
                 </div>
                 <textarea
+                  onContextMenu={displayMenu}
                   style={{ fontWeight: '500' }}
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
@@ -444,6 +476,7 @@ const Index: NextPage = () => {
 
                     <label className="switch">
                       <input
+                        onContextMenu={() => setVanish(!vanish)}
                         checked={vanish}
                         onChange={() => setVanish(!vanish)}
                         type="checkbox"
@@ -456,6 +489,9 @@ const Index: NextPage = () => {
                     <p>Encryption</p>
                     <label className="switch">
                       <input
+                        onContextMenu={() => {
+                          setEncrypt(!encrypt);
+                        }}
                         checked={encrypt}
                         onChange={() => {
                           setEncrypt(!encrypt);
@@ -562,8 +598,16 @@ const Index: NextPage = () => {
                     <CodeBoard
                       styleProp={
                         drag
-                          ? { pointerEvents: 'none', marginTop: '0px', height: "76vh" }
-                          : { pointerEvents: 'auto', marginTop: '0px', height: "76vh" }
+                          ? {
+                              pointerEvents: 'none',
+                              marginTop: '0px',
+                              height: '76vh',
+                            }
+                          : {
+                              pointerEvents: 'auto',
+                              marginTop: '0px',
+                              height: '76vh',
+                            }
                       }
                       placeHolder={`\n>_ Share your logs with your code too.`}
                       code={file.terminal}

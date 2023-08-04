@@ -199,6 +199,7 @@ export default function Account({ github, bds, apiBds, id, api, verified }) {
                 </span>
                 <label className="switch">
                   <input
+                    onContextMenu={() => {}}
                     checked={isUser}
                     onChange={(event) => {
                       switchMode();

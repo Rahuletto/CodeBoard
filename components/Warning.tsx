@@ -10,7 +10,7 @@ const TiWarning = dynamic<React.ComponentProps<IconType>>(() => import('react-ic
 
 const Warning: React.FC<{}> = () => {
   return (
-    <div className={[generalStyles.warning, 'warning'].join(' ')}>
+    <div onContextMenu={(e) => {e.preventDefault()}} className={[generalStyles.warning, 'warning'].join(' ')}>
       <TiWarning
         title="Warning"
         style={{

@@ -7,7 +7,7 @@ const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
   loading: () => <BoardLoader />,
   ssr: false,
 });
-const CodeMenu = dynamic(() => import('./CodeMenu'), {
+const CodeMenu = dynamic(() => import('./menus/CodeMenu'), {
   ssr: false,
 });
 
