@@ -120,6 +120,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
           autoComplete="off"
           onChange={(event) => updateLanguage(event)}
           className="file-name"
+          pattern='^[\w,\s-]+\.[A-Za-z]{3}$'
           id="new-file"
           name="filename"
           type="text"

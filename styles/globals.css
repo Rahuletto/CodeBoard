@@ -371,7 +371,7 @@ input::placeholder {
   font-weight: 700;
   height: 38px;
   color: #17191b;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .edit form button:hover {
