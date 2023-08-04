@@ -7,8 +7,22 @@ import React, { useEffect, useState } from 'react';
 
 // Fonts
 import { DM_Sans, JetBrains_Mono } from 'next/font/google';
-const dm = DM_Sans({ fallback: ['system-ui', 'arial'], weight: ['500', '700'], display: "swap", style: ['normal'], subsets: ['latin'], variable: '--root-font' })
-const mono = JetBrains_Mono({ fallback: ['monospace'], weight: ['400', '500', '700'], display: "swap", subsets: ['latin'], style: ['normal'], variable: '--mono-font' })
+const dm = DM_Sans({
+  fallback: ['system-ui', 'arial'],
+  weight: ['500', '700'],
+  display: 'swap',
+  style: ['normal'],
+  subsets: ['latin'],
+  variable: '--root-font',
+});
+const mono = JetBrains_Mono({
+  fallback: ['monospace'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  subsets: ['latin'],
+  style: ['normal'],
+  variable: '--mono-font',
+});
 
 // Auth
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
@@ -24,7 +38,10 @@ import '../styles/mobile.css';
 import styles from '../styles/Index.module.css';
 
 // Icons
-const FaHeartBroken = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/fa').then(mod => mod.FaHeartBroken), { ssr: false })
+const FaHeartBroken = dynamic<React.ComponentProps<IconType>>(
+  () => import('react-icons-ng/fa').then((mod) => mod.FaHeartBroken),
+  { ssr: false }
+);
 
 // Loader
 import NProgress from 'nprogress';
@@ -33,12 +50,16 @@ import { IconType } from 'react-icons-ng';
 // Command Pallete
 const Command = dynamic(() => import('../components/Command'), { ssr: false });
 
+// Context
+const InputMenu = dynamic(() => import('../components/menus/InputMenu'), {
+  ssr: false,
+});
+
 function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
   const router = useRouter();
 
-
   useEffect(() => {
-    const handleStart = (url: string) => {
+    const handleStart = () => {
       NProgress.start();
     };
 
@@ -61,25 +82,26 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
     window.addEventListener('keydown', (event) => {
       Array.from(
         document.getElementsByClassName(
-          event.ctrlKey ? 'ctrl' : event.altKey ? 'alt' : event.shiftKey ? "shift" : event.key
+          event.ctrlKey
+            ? 'ctrl'
+            : event.altKey
+            ? 'alt'
+            : event.shiftKey
+            ? 'shift'
+            : event.key
         )
       ).forEach((a) => {
         (a as HTMLElement).style.transform = 'scale(0.9)';
-        (a as HTMLElement).style.opacity = "0.7"
+        (a as HTMLElement).style.opacity = '0.7';
       });
-    })
+    });
 
     window.addEventListener('keyup', (event) => {
-      Array.from(
-        document.querySelectorAll(
-          ".key span"
-        )
-      ).forEach((a) => {
+      Array.from(document.querySelectorAll('.key span')).forEach((a) => {
         (a as HTMLElement).style.transform = 'scale(1)';
-        (a as HTMLElement).style.opacity = "1"
+        (a as HTMLElement).style.opacity = '1';
       });
-    })
-
+    });
   }, []);
 
   const [supabaseClient] = useState(() => createPagesBrowserClient());
@@ -92,12 +114,13 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         <Command router={router} />
         <style jsx global>
           {`
-          html {
-            --root-font: ${dm.style.fontFamily};
-            --mono-font: ${mono.style.fontFamily};
-          }
+            html {
+              --root-font: ${dm.style.fontFamily};
+              --mono-font: ${mono.style.fontFamily};
+            }
           `}
         </style>
+        <InputMenu />
         <Component className={dm.variable} {...pageProps} />
         <Analytics />
       </SessionContextProvider>

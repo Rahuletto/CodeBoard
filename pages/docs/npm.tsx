@@ -2,7 +2,7 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import Link from 'next/link';
 
 // Styles
@@ -23,7 +23,7 @@ const Docs: NextPage = () => {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 

@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { IconType } from 'react-icons-ng';
 import { extensions } from '../utils/extensions';
 import { BoardFile } from '../utils/types/board';
+import { useContextMenu } from 'react-contexify';
 
 type CreateModalProps = {
   files: BoardFile[];
@@ -77,6 +78,16 @@ const CreateModal: React.FC<CreateModalProps> = ({
     }
   }
 
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+
   return (
     <dialog id="newFile" open={false}>
       <div>
@@ -102,6 +113,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
           }}
           className={styles.upload}>
           <input
+            onContextMenu={displayMenu}
             type="file"
             id="file-upload"
             title="Upload"
@@ -117,9 +129,11 @@ const CreateModal: React.FC<CreateModalProps> = ({
 
       <form method="dialog" onSubmit={(event) => newFile(event)}>
         <input
+          onContextMenu={displayMenu}
           autoComplete="off"
           onChange={(event) => updateLanguage(event)}
           className="file-name"
+          pattern='^[\w,\s-]+\.[A-Za-z]{3}$'
           id="new-file"
           name="filename"
           type="text"

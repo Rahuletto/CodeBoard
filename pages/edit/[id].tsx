@@ -2,7 +2,7 @@
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useLayoutEffect, useEffect, useState } from 'react';
 // Styles
 import generalStyles from '../../styles/General.module.css';
 import styles from '../../styles/Index.module.css';
@@ -56,6 +56,7 @@ import 'allotment/dist/style.css';
 // Loading Skeleton
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
+import { useContextMenu } from 'react-contexify';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -92,6 +93,16 @@ const Save = dynamic(() => import('../../components/Save'), {
 });
 
 export default function Edit({ board }: { board: FetchResponse }) {
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -179,12 +190,12 @@ export default function Edit({ board }: { board: FetchResponse }) {
   }, [file.language]);
 
   // Set Themes ---------------------------------
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
   // File Selector Effect ---------------------------------
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fileButtons: JSX.Element[] = [];
 
     const tmpFiles = [...files];
@@ -388,6 +399,7 @@ export default function Edit({ board }: { board: FetchResponse }) {
                 onSubmit={(event) => handleSubmit(event)}>
                 <div className={styles.name}>
                   <input
+                    onContextMenu={displayMenu}
                     style={{ fontWeight: '600' }}
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
@@ -423,6 +435,7 @@ export default function Edit({ board }: { board: FetchResponse }) {
 
                     <label className="switch">
                       <input
+                        onContextMenu={() => setVanish(!vanish)}
                         checked={vanish}
                         onChange={() => setVanish(!vanish)}
                         type="checkbox"
@@ -435,6 +448,9 @@ export default function Edit({ board }: { board: FetchResponse }) {
                     <p>Encryption</p>
                     <label className="switch">
                       <input
+                        onContextMenu={() => {
+                          setEncrypt(!encrypt);
+                        }}
                         checked={encrypt}
                         onChange={() => {
                           setEncrypt(!encrypt);

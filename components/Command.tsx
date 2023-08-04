@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CommandPalette, { filterItems, getItemIndex } from "react-cmdk";
+
 import { BiFile, BiRefresh } from "react-icons-ng/bi";
 import { FaUserAlt } from "react-icons-ng/fa";
 import { HiEye, HiFlag, HiHome, HiLifebuoy, HiMoon, HiPlus, HiSun } from 'react-icons-ng/hi';
@@ -7,8 +8,6 @@ import { IoCloseCircleSharp } from "react-icons-ng/io5";
 import { Md2RobotExcited } from "react-icons-ng/md2";
 import { PiStarFourFill } from "react-icons-ng/pi";
 import { SiPrettier } from "react-icons-ng/si";
-
-import { IconType } from "react-icons-ng";
 
 const Command = ({ router }) => {
     const [cmd, setCmd] = useState(false);
@@ -178,7 +177,7 @@ const Command = ({ router }) => {
             if (
                 (event.ctrlKey && event.shiftKey && event.key.toLowerCase() == 'p') ||
                 (event.ctrlKey && event.key.toLowerCase() == 'g') ||
-                (event.ctrlKey && event.key.toLowerCase() == 'k') ||
+                (event.ctrlKey && event.key.toLowerCase() == 'k' && !event.shiftKey) ||
                 event.key.toLowerCase() == 'f10'
             ) {
                 event.preventDefault();

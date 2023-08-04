@@ -15,7 +15,7 @@ interface ThemeSwitchProps {
 
 const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
   // Theme switcher
-  function switchTheme(e: ChangeEvent<HTMLInputElement>) {
+  function switchTheme(e: ChangeEvent<HTMLInputElement> | any) {
     const toggleSwitch = e.target;
     if (e.target.checked) {
       localStorage.setItem('theme', 'dark');
@@ -32,7 +32,6 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
 
   // To let window to load
   useEffect(() => {
-
       if (!window || !window.matchMedia) return;
       else if (
         window &&
@@ -48,15 +47,16 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = ({ theme, setTheme }) => {
       } else if (theme == 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
-    
-
-  
   }, []);
 
   return (
     <>
       <label className={styles.themeSwitch}>
         <input
+          onContextMenu={(e) => {
+            e.preventDefault()
+            switchTheme(e)
+          }}
           title="Switch theme"
           onChange={(event) => switchTheme(event)}
           type="checkbox"

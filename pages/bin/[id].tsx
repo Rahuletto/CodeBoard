@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useLayoutEffect, useMemo, useState } from 'react';
 
 // Styles
 import boardStyles from '../../styles/Board.module.css';
@@ -64,6 +64,7 @@ import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
 import { HiCheckBadge } from 'react-icons-ng/hi';
 import {AiFillBug} from 'react-icons-ng/ai'
+import { useContextMenu } from 'react-contexify';
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
 const CodeBoard = dynamic(() => import('../../components/CodeBoard'), {
@@ -94,6 +95,16 @@ export default function Bin({
     bug: boolean;
   } | null;
 }) {
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+  
   const router = useRouter();
   const session = useSession();
 
@@ -108,7 +119,7 @@ export default function Bin({
   const [file, setFile] = useState<BoardFile>(board?.files[0]);
   const [language, setLanguage] = useState<any>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
@@ -206,7 +217,8 @@ export default function Bin({
               <form className={styles.detailsForm}>
                 <div className={styles.name}>
                   {board ? (
-                    <input
+                    <input onContextMenu={displayMenu}
+
                       style={{ fontWeight: '600' }}
                       value={board.name}
                       readOnly

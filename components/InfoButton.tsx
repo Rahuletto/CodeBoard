@@ -13,6 +13,7 @@ const InfoButton: React.FC<MetaTagsProps> = ({ metadata, setMetadata } = {metada
   return (
     <>
       <button
+        onContextMenu={(e) => {e.preventDefault()}}
         title="More info about the project"
         className={['info', 'mobile', metadata ? 'opened' : null].join(' ')}
         onClick={() => {

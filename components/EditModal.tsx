@@ -1,5 +1,6 @@
 // ReactJS stuff
 import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { useContextMenu } from 'react-contexify';
 
 // Our Imports
 import { extensions } from '../utils/extensions';
@@ -20,6 +21,16 @@ const EditModal: React.FC<FileSelectProps> = ({
   files,
   setFiles,
 }) => {
+  const { show } = useContextMenu({
+    id: 'input',
+  });
+
+  function displayMenu(e) {
+    show({
+      event: e,
+    });
+  }
+  
   useEffect(() => {
     const form = document.getElementsByClassName('editForm')[0];
     document.getElementById('file-name').onkeydown = function (e) {
@@ -28,6 +39,7 @@ const EditModal: React.FC<FileSelectProps> = ({
       }
     };
   }, []);
+
   function closeEdit() {
     const div = document.querySelectorAll(`div.edit`);
     const back = document.querySelector<HTMLElement>(`.backdrop`);
@@ -42,27 +54,29 @@ const EditModal: React.FC<FileSelectProps> = ({
     event.preventDefault();
     closeEdit();
 
-    const input = document.querySelector<HTMLInputElement>(
-      `.edit-${fileName.replaceAll('.', '-')}.edit form input`
-    );
-    if (!input) return;
-    const name = input.value;
+    try {
+      const input = document.querySelector<HTMLInputElement>(
+        `.edit-${fileName.replaceAll('.', '-')}.edit form input`
+      );
+      if (!input) return;
+      const name = input.value;
 
-    const file = files.find((a) => a.name == fileName);
+      const file = files.find((a) => a.name == fileName);
 
-    const box = document.getElementsByClassName(`${fileName}-language`)[0];
+      const box = document.getElementsByClassName(`${fileName}-language`)[0];
 
-    if (!name) return;
-    if (files.find((a) => a.name === name))
-      return alert('Name already taken !');
-    else {
-      file.name = name;
-      file.language = (
-        (box as HTMLElement).innerText || box.textContent
-      ).toLowerCase();
+      if (!name) return;
+      if (files.find((a) => a.name === name))
+        return alert('Name already taken !');
+      else {
+        file.name = name;
+        file.language = (
+          (box as HTMLElement).innerText || box.textContent
+        ).toLowerCase();
 
-      setFileName(name);
-    }
+        setFileName(name);
+      }
+    } catch {}
   }
 
   function updateEditLanguage(e: ChangeEvent<HTMLInputElement>, old) {
@@ -84,13 +98,22 @@ const EditModal: React.FC<FileSelectProps> = ({
   }
 
   function deleteFile(name: string) {
-    const removed = files.filter(function (item) {
-      return item.name !== name;
-    });
+    let text = `Are you sure to delete ${currentFile.name} ?\nThis is irreversible (Can't Undo)`;
+    if (confirm(text) == true) {
+      const removed = files.filter(function (item) {
+        return item.name !== name;
+      });
 
-    setFileName(removed[0].name);
+      setFileName(removed[0].name);
 
-    setFiles(removed);
+      setFiles(removed);
+      (
+        document.getElementsByClassName('editForm')[0] as HTMLFormElement
+      ).requestSubmit();
+    } else
+      (
+        document.getElementsByClassName('editForm')[0] as HTMLFormElement
+      ).requestSubmit();
   }
 
   return (
@@ -98,6 +121,7 @@ const EditModal: React.FC<FileSelectProps> = ({
       {' '}
       <form className="editForm" onSubmit={(event) => edit(event)}>
         <input
+          onContextMenu={displayMenu}
           onChange={(event) => updateEditLanguage(event, currentFile.name)}
           className={`file-name-${currentFile.name.replaceAll('.', '-')}`}
           name="filename"
@@ -127,7 +151,11 @@ const EditModal: React.FC<FileSelectProps> = ({
         <button
           title="Delete the file"
           disabled={files.length == 1}
-          onClick={() => setTimeout(() => deleteFile(currentFile.name), 400)}>
+          className="deletePrompt"
+          onClick={(e) => {
+            e.preventDefault();
+            setTimeout(() => deleteFile(currentFile.name), 400);
+          }}>
           Delete
         </button>
       </form>

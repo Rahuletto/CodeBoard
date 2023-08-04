@@ -7,7 +7,7 @@ const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), {
   loading: () => <BoardLoader />,
   ssr: false,
 });
-const CodeMenu = dynamic(() => import('./CodeMenu'), {
+const CodeMenu = dynamic(() => import('./menus/CodeMenu'), {
   ssr: false,
 });
 
@@ -139,6 +139,12 @@ const UnmemoCodeBoard: React.FC<CodeBoardProps> = ({
   useEffect(() => {
     window.addEventListener('fullscreenchange', fsc);
     window.addEventListener('keydown', kdc);
+
+    return () => {
+      window.removeEventListener('fullscreenchange', fsc);
+      window.removeEventListener('keydown', kdc);
+  
+    }
   }, []);
 
   return (

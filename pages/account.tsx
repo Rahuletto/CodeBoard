@@ -1,7 +1,7 @@
 // NextJS stuff
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
 // Auth and Database
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
@@ -57,7 +57,7 @@ export default function Account({ github, bds, apiBds, id, api, verified }) {
   // DARK MODE & LIGHT MODE
   const [theme, setTheme] = useState<'light' | 'dark' | string>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTheme(localStorage.getItem('theme') || 'dark');
   }, []);
 
@@ -199,6 +199,7 @@ export default function Account({ github, bds, apiBds, id, api, verified }) {
                 </span>
                 <label className="switch">
                   <input
+                    onContextMenu={() => {}}
                     checked={isUser}
                     onChange={(event) => {
                       switchMode();
