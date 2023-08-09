@@ -40,6 +40,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding-bottom: 32px;
+  z-index: 200;
 }
 
 .detailsForm,
