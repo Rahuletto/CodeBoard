@@ -278,12 +278,10 @@ export const getServerSideProps = async (ctx) => {
       .limit(1)
       .single();
     user = data;
-    if (data) await redis.set(`user-${id}`, data);
+    if (data) await redis.set(`user-${id}`, data)
+    else return { redirect: { destination: '/auth/signin', permanent: false } };
   }
 
-  if (!user) {
-    return { redirect: { destination: '/auth/signin', permanent: false } };
-  }
 
   const {
     data: boards,
