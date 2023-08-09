@@ -276,6 +276,14 @@ export const getServerSideProps = async (ctx) => {
       .eq('id', session?.user?.user_metadata?.provider_id)
       .limit(1)
       .single();
+  
+  if(!user) return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      }
+  }
+
 
   const {
     data: boards,
