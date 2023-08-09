@@ -123,6 +123,8 @@
   gap: 16px;
 }
 
+
+
 .buttons button,
 .signOut {
   margin: 0px;
@@ -183,6 +185,11 @@
 }
 
 @media only screen and (max-width: 750px) {
+  .buttons {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
   .lander {
     display: flex;
     flex-direction: column;
