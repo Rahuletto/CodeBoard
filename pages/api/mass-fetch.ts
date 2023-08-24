@@ -12,6 +12,20 @@ export const config = {
 export default async function FETCH(req: NextRequest) {
   const res = NextResponse.next();
 
+  if (req.method != 'GET')
+      return new Response(
+        JSON.stringify({
+          message: 'Invaid Method ! EXPECTED: GET method.',
+          status: 405,
+        }),
+        {
+          status: 405,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+      
   const authorization = req.headers.get('authorization')
 
   if (authorization != process.env.NEXT_PUBLIC_KEY)
