@@ -269,17 +269,19 @@ export const getServerSideProps = async (ctx) => {
     };
 
   const id = session?.user?.user_metadata?.provider_id;
-  let user: User = await redis.get(`user-${id}`);
-  if (!user) {
-    const { data }: { data: User } = await supabase
+
+    const { data: user }: { data: User } = await supabase
       .from('Users')
       .select()
       .eq('id', session?.user?.user_metadata?.provider_id)
       .limit(1)
       .single();
-    user = data;
-    if (data) await redis.set(`user-${id}`, data)
-    else return { redirect: { destination: '/auth/signin', permanent: false } };
+  
+  if(!user) return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      }
   }
 
 
