@@ -40,7 +40,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding-bottom: 32px;
-  z-index: 200;
+  z-index: 10;
 }
 
 .detailsForm,
@@ -261,7 +261,7 @@
   font-family: var(--mono-font);
   background: var(--code-editor);
   position: sticky;
-  z-index: 12;
+  z-index: 2;
   top: 0;
   display: revert;
   margin: 0px;
@@ -269,6 +269,12 @@
 
 .outputPane {
   border-top: 3px solid var(--background-dark) !important;
+}
+
+.outputBox {
+  display: flex;
+  height: -webkit-fill-available;
+  flex-direction: column;
 }
 
 .dropNotif {

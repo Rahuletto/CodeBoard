@@ -4,6 +4,7 @@ export const config = {
 };
 
 export default async function Index() {
+  
   return new Response(JSON.stringify(
     {
       info: 'Welcome to CodeBoard API. You have 4 endpoint to use with CodeBoard',

@@ -37,6 +37,20 @@ export default async function POST(req: NextRequest) {
 
     const apikey = authorization || searchParams.get('key');
 
+    if (!authorization.startsWith('codeboard_api.'))
+      return new Response(
+        JSON.stringify({
+          message: 'Not Authorized !',
+          status: 401,
+        }),
+        {
+          status: 401,
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      );
+
     if (req.method != 'POST')
       return new Response(
         JSON.stringify({
@@ -187,12 +201,12 @@ export default async function POST(req: NextRequest) {
         key: key,
         author: `bot | ${token.id}`,
         createdAt: Date.now(),
-        madeBy: token.id
-      }
+        madeBy: token.id,
+      };
 
       const { error } = await supabase.from('Boards').insert(data);
 
-      await redis.set(`board-${key}`, data, { ex: 60 * 3 })
+      await redis.set(`board-${key}`, data, { ex: 60 * 3 });
 
       if (error) {
         console.error(error);
@@ -226,7 +240,6 @@ export default async function POST(req: NextRequest) {
         }
       );
     }
-  
   } catch (err) {
     console.error(err);
     return new Response(

@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import React, {
   FormEvent,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -571,8 +570,8 @@ const Index: NextPage = () => {
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
-            <Allotment vertical={true} defaultSizes={[460, 40]}>
-              <Allotment.Pane minSize={32} maxSize={460}>
+            <Allotment vertical={true} defaultSizes={[420, 80]}>
+              <Allotment.Pane minSize={62} maxSize={420}>
                 {file ? (
                   <CodeBoard
                     styleProp={
@@ -591,9 +590,9 @@ const Index: NextPage = () => {
                   <BoardLoader />
                 )}
               </Allotment.Pane>
-              <Allotment.Pane minSize={20} className={styles.outputPane}>
+              <Allotment.Pane minSize={80} className={styles.outputPane}>
                 {file ? (
-                  <>
+                  <div className={styles.outputBox}>
                     <p className={styles.outputTxt}>LOGS</p>
                     <CodeBoard
                       styleProp={
@@ -617,7 +616,7 @@ const Index: NextPage = () => {
                       theme={theme}
                       onChange={onTerminal}
                     />
-                  </>
+                  </div>
                 ) : null}
               </Allotment.Pane>
             </Allotment>
