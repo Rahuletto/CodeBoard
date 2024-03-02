@@ -268,7 +268,7 @@ export default function Index ({ madeBy }: {madeBy: User | null}) {
   }
 
   async function uploadFile(fls: FileList) {
-    let limit = session ? 5 : 2;
+    let limit = madeBy.verified ? 10 : (session ? 5 : 2);
     if (files.length >= limit) return;
     if (!fls[0]) return;
 

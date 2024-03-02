@@ -79,7 +79,7 @@ const Features = ({ session, user } : {session: Session, user: User | null }) =>
             title={
               session ? 'You are in this tier' : 'This is a higher tier than yours'
             }
-            className={[feature.card, session ? feature.active : null].join(
+            className={[feature.card, !user?.verified && session ? feature.active : null].join(
               ' '
             )}>
             <h2>User</h2>
