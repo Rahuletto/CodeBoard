@@ -5,6 +5,7 @@
   margin-top: auto;
   margin-bottom: auto;
   padding: 28px;
+  z-index: 10;
 }
 
 .cardholder {

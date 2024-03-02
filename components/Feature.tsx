@@ -3,11 +3,13 @@ import dynamic from 'next/dynamic';
 import { IconType } from 'react-icons-ng';
 import styles from '../styles/Index.module.css';
 import feature from './styles/Feature.module.css';
+import { User } from '../utils/types/user';
+import { Session } from '@supabase/supabase-js';
 
 const McCheckCircleFill = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McCheckCircleFill), { ssr: false })
 const McForbidCircleLine = dynamic<React.ComponentProps<IconType>>(() => import('react-icons-ng/mc').then(mod => mod.McForbidCircleLine), { ssr: false })
 
-const Features = ({ session }) => {
+const Features = ({ session, user } : {session: Session, user: User | null }) => {
   return (
     <div
       onClick={() => {
@@ -47,7 +49,7 @@ const Features = ({ session }) => {
                 <span style={{ color: 'var(--purple)' }}>
                   <McCheckCircleFill />
                 </span>{' '}
-                1 file per board
+                2 files per board
               </div>
 
               <div className={feature.list}>
@@ -68,7 +70,7 @@ const Features = ({ session }) => {
                 <span style={{ color: 'var(--red)' }}>
                   <McForbidCircleLine />
                 </span>{' '}
-                Cant manage boards
+                Can{"'"}t manage boards
               </div>
             </div>
           </div>
@@ -80,14 +82,14 @@ const Features = ({ session }) => {
             className={[feature.card, session ? feature.active : null].join(
               ' '
             )}>
-            <h2>Hobby</h2>
-            <h4>Users with account with encryption and more files</h4>
+            <h2>User</h2>
+            <h4>Users with account can manage their boards</h4>
 
             <div className={feature.list}>
               <span style={{ color: 'var(--purple)' }}>
                 <McCheckCircleFill />
               </span>{' '}
-              2 files per board
+              5 files per board
             </div>
 
             <div className={feature.list}>
@@ -113,38 +115,23 @@ const Features = ({ session }) => {
           </div>
 
           <div
-            title="Coming soon"
-            className={feature.card}
-            style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+            title="Verified | DM me with the reason to verify and get verified!"
+            className={[feature.card, user?.verified ? feature.active : null].join(
+              ' '
+            )} >
             <h2>Pro</h2>
-            <h4>
-              <span
-                style={{
-                  fontFamily: "var(--mono-font)",
-                  color: 'var(--purple-dark)',
-                  fontSize: '22px',
-                }}>
-                $5
-              </span>
-              /month
-            </h4>
+            <h4>Verified Users get the perks of pro. No subscription.</h4>
             <div className={feature.list}>
               <span style={{ color: 'var(--purple)' }}>
                 <McCheckCircleFill />
               </span>{' '}
-              4 files per board
+              10 files per board
             </div>
             <div className={feature.list}>
               <span style={{ color: 'var(--purple)' }}>
                 <McCheckCircleFill />
               </span>{' '}
-              Lower API ratelimits
-            </div>
-            <div className={feature.list}>
-              <span style={{ color: 'var(--purple)' }}>
-                <McCheckCircleFill />
-              </span>{' '}
-              Password protection
+              Nearly No API ratelimits
             </div>
             <div className={feature.list}>
               <span style={{ color: 'var(--purple)' }}>

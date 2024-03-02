@@ -1,13 +1,8 @@
 // NextJS Stuff
-import type { NextPage } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, {
-  FormEvent,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useContextMenu } from 'react-contexify';
 
 // Styles
@@ -54,6 +49,8 @@ import 'allotment/dist/style.css';
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../components/BoardLoader';
 import { formatCode } from '../utils/prettier';
+import { createServerClient } from '@supabase/ssr';
+import { User } from '../utils/types/user';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -85,7 +82,7 @@ const Save = dynamic(() => import('../components/Save'), {
   ssr: false,
 });
 
-const Index: NextPage = () => {
+export default function Index ({ madeBy }: {madeBy: User}) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -270,8 +267,7 @@ const Index: NextPage = () => {
   }
 
   async function uploadFile(fls: FileList) {
-    let limit = 2;
-    if (session) limit = 4;
+    let limit = session ? 5 : 2;
     if (files.length >= limit) return;
     if (!fls[0]) return;
 
@@ -419,7 +415,7 @@ const Index: NextPage = () => {
           uploadFile={uploadFile}
         />
 
-        <Features session={session} />
+        <Features session={session} user={madeBy} />
 
         <div
           className={[generalStyles.grid, 'grid', drag ? 'dragging' : ''].join(
@@ -566,7 +562,7 @@ const Index: NextPage = () => {
             <div className="file-holder bin-copy">
               <div style={{ display: 'flex', gap: '12px' }}>
                 {btns}
-                <AddFile files={files} limit={session?.user ? 2 : 1} />
+                <AddFile files={files} limit={session?.user ? 5 : 2} />
               </div>
               <PrettierButton code={code} file={file} setCode={setCode} />
             </div>
@@ -627,4 +623,32 @@ const Index: NextPage = () => {
   );
 };
 
-export default Index;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return context.req.cookies[name];
+        },
+      },
+    }
+  )
+
+  const { data, error } = await supabase.auth.getUser();
+  let madeBy = null;
+
+  if (data?.user) {
+    const { data: user } = await supabase
+      .from('Users')
+      .select('id, name, image, verified, bug')
+      .eq('id', data?.user?.id)
+      .limit(1)
+      .single();
+    if (user) madeBy = user;
+  }
+
+  return { props: { madeBy: madeBy } };
+}

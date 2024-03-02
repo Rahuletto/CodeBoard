@@ -50,7 +50,7 @@ const DropZone: React.FC<DropZoneProps> = ({ files, drag, limit = 2 }) => {
           </span>
           <p>
             {files.length >= limit
-              ? `There is a limit of ${limit} files per board. If you have a CodeBoard account, You can upload up to 3 files. So we will not process this file. Delete one file and drop again.`
+              ? `There is a limit of ${limit} files per board. If you have a CodeBoard account, You can upload up to 5 files. So we will not process this file. Delete one file and drop again.`
               : ` We only accept program files and not images/audio/video. Just
                 drop it we will handle the rest.`}
           </p>
