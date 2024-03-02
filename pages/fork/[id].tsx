@@ -59,6 +59,7 @@ import 'allotment/dist/style.css';
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
 import { useContextMenu } from 'react-contexify';
+import { User } from '../../utils/types/user';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -94,7 +95,7 @@ const Save = dynamic(() => import('../../components/Save'), {
   ssr: false,
 });
 
-export default function Fork({ board }: { board: FetchResponse }) {
+export default function Fork({ board, madeBy }: { board: FetchResponse, madeBy: User }) {
 
   const { show } = useContextMenu({
     id: 'input',
@@ -382,7 +383,7 @@ export default function Fork({ board }: { board: FetchResponse }) {
           uploadFile={uploadFile}
         />
 
-        <Features session={session} />
+        <Features session={session} user={madeBy} />
 
         <div
           className={[generalStyles.grid, 'grid', drag ? 'dragging' : ''].join(
@@ -601,5 +602,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         destination: '/404',
       },
     };
-  return { props: { board: board } };
+
+    const {
+      data
+    } = await supabase.auth.getUser();
+
+  let madeBy = null;
+  if (data?.user) {
+    const { data: user } = await supabase
+      .from('Users')
+      .select('id, name, image, verified, bug')
+      .eq('id', data?.user?.id)
+      .limit(1)
+      .single();
+    if (user) madeBy = user;
+  }
+
+  return { props: { board: board, madeBy: madeBy } };
 }

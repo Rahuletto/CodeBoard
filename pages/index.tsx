@@ -51,6 +51,7 @@ import BoardLoader from '../components/BoardLoader';
 import { formatCode } from '../utils/prettier';
 import { createServerClient } from '@supabase/ssr';
 import { User } from '../utils/types/user';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 // Lazy loading
 const Header = dynamic(() => import('../components/Header'), { ssr: true });
@@ -82,7 +83,7 @@ const Save = dynamic(() => import('../components/Save'), {
   ssr: false,
 });
 
-export default function Index ({ madeBy }: {madeBy: User}) {
+export default function Index ({ madeBy }: {madeBy: User | null}) {
   const router = useRouter();
   const session = useSession();
   const supabase = useSupabaseClient();
@@ -625,19 +626,12 @@ export default function Index ({ madeBy }: {madeBy: User}) {
 
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return context.req.cookies[name];
-        },
-      },
-    }
-  )
+  const supabase = createPagesServerClient(context);
 
-  const { data, error } = await supabase.auth.getUser();
+  const {
+    data
+  } = await supabase.auth.getUser();
+
   let madeBy = null;
 
   if (data?.user) {

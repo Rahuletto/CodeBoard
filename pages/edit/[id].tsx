@@ -57,6 +57,7 @@ import 'allotment/dist/style.css';
 import { IconType } from 'react-icons-ng';
 import BoardLoader from '../../components/BoardLoader';
 import { useContextMenu } from 'react-contexify';
+import { User } from '../../utils/types/user';
 
 // Lazy loading
 const Header = dynamic(() => import('../../components/Header'), { ssr: true });
@@ -92,7 +93,7 @@ const Save = dynamic(() => import('../../components/Save'), {
   ssr: false,
 });
 
-export default function Edit({ board }: { board: FetchResponse }) {
+export default function Edit({ board, madeBy }: { board: FetchResponse, madeBy: User | null }) {
   const { show } = useContextMenu({
     id: 'input',
   });
@@ -380,7 +381,7 @@ export default function Edit({ board }: { board: FetchResponse }) {
           uploadFile={uploadFile}
         />
 
-        <Features session={session} />
+        <Features session={session} user={madeBy}/>
 
         <div
           className={[generalStyles.grid, 'grid', drag ? 'dragging' : ''].join(
@@ -576,24 +577,36 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const supabase = createPagesServerClient(context);
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data
+  } = await supabase.auth.getUser();
 
-  if (!session)
-    return {
-      redirect: {
-        permanent: false,
+  let madeBy = null;
+  
+  if (!data)
+  return {
+redirect: {
+  permanent: false,
         destination: `/bin/${context.params.id as string}`,
       },
     };
   const board = await sudoFetch(supabase, context.params.id as string);
+  
+  if (!board || board.author != data?.user?.user_metadata?.provider_id)
+  return {
+redirect: {
+  permanent: false,
+  destination: `/bin/${context.params.id as string}`,
+},
+};
 
-  if (!board || board.author != session?.user?.user_metadata?.provider_id)
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/bin/${context.params.id as string}`,
-      },
-    };
-  return { props: { board: board } };
+  if (data?.user) {
+    const { data: user } = await supabase
+      .from('Users')
+      .select('id, name, image, verified, bug')
+      .eq('id', data?.user?.id)
+      .limit(1)
+      .single();
+    if (user) madeBy = user;
+  }
+return { props: { board: board, madeBy: madeBy } };
 }
