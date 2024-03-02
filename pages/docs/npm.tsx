@@ -575,14 +575,14 @@ const Docs: NextPage = () => {
           }
 
           h2 {
-            font-family: "var(--mono-font)";
+            font-family: var(--mono-font);
             font-size: 32px;
             margin-top: 22px;
             margin-bottom: 8px;
           }
 
           h3 {
-            font-family: "var(--mono-font)";
+            font-family: var(--mono-font);
             color: var(--special-color);
           }
 
